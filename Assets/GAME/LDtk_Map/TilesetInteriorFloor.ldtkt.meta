@@ -1,0 +1,5626 @@
+fileFormatVersion: 2
+guid: 3f28cb255838ceb46b0678d771f07ce9
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f3268c876daf4890b6af6cd462063137, type: 3}
+  _reimportOnDependencyChange: 1
+  _pixelsPerUnit: 16
+  _overrideTexture: {instanceID: 0}
+  _sprites:
+  - name: TilesetInteriorFloor_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 7be61085a83adfe488a3025d71df3a5e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 256
+      width: 16
+      height: 16
+    spriteID: fccc76f11d7ce0248b17c47ba66a2590
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 193a2d6925f0cf54f8ff9932bd9274a9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 256
+      width: 16
+      height: 16
+    spriteID: cacb5baca1905b2468b239cb0979f207
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 9a58bfaa3dd2f0e47b5b5995a4e0fd68
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 8fe7722e085cc7a4fa30075af08b5c3c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 657e5841b4efbb5469e854a0f6143c38
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 0c1c437ffde66c646a985dfb3b06cc5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 256
+      width: 16
+      height: 16
+    spriteID: ebc67990dc5979d46998d84ad83ea093
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 256
+      width: 16
+      height: 16
+    spriteID: e8c8f9916c1e47a4f967f294f9741ce6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_10
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 7e402f75fae1f7043b7f53759c4eb9c1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_11
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 258112c5dc6a18c40a11418abd5df118
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_12
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 067a1cdda5071b943bc8750bc7731a74
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_13
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 79f70351d8ec5b74e85aa5a5a28bcbaf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_14
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 256
+      width: 16
+      height: 16
+    spriteID: e8f9d419fd960984e839a881b2e55455
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_15
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 256
+      width: 16
+      height: 16
+    spriteID: ce4acd06622f8424da3aa99a607fad64
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_16
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 5c267361af2c7604fae845334f86765f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_17
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 52a7bb46762611a46ae6b2772ba0ec13
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_18
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 256
+      width: 16
+      height: 16
+    spriteID: b5f8847349f93db45af8d9f7cd0ef681
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_19
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 256
+      width: 16
+      height: 16
+    spriteID: a95f9ff36f7abfe4c826a4d22659635a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_20
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 3959526567054094993570c8d7504b4b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_21
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 3d2c1035486bb5b4ba30da48c1418efc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_22
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 550dfe0e5f479a847a25767d77136672
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_23
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 358538d476389f547bc3c407c5f680cd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_24
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 240
+      width: 16
+      height: 16
+    spriteID: f053d25d689856046b3b08f9913287a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_25
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 8629a574f7137844493c61699c063e54
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_26
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 240
+      width: 16
+      height: 16
+    spriteID: c9a6ff2ca0a106644abb0f705e40db63
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_27
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 240
+      width: 16
+      height: 16
+    spriteID: ae33e6a377f47ac43a016183ef4aff41
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_28
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 240
+      width: 16
+      height: 16
+    spriteID: de0a3aeeae93a6a468dace6fed1ec58d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_29
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 2ff978121b0ea034bb8e4158dd754e76
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_30
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 9d037096c65213c4c871de252eae45bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_31
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 240
+      width: 16
+      height: 16
+    spriteID: f4bafbb2f303cb24da4a989bc7ca7bf0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_32
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 240
+      width: 16
+      height: 16
+    spriteID: fcaa764a36ac7924fb309a27b83cf122
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_33
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 240
+      width: 16
+      height: 16
+    spriteID: a1554a6d556feb3438417f0535e0ddfe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_34
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 240
+      width: 16
+      height: 16
+    spriteID: e3bf2141d5eaf0b4b8c3d058bb5378ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_35
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 240
+      width: 16
+      height: 16
+    spriteID: e993e7e3ee7ba674b9c63706599c22a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_36
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 1ef78ca4ba4b0cf42931b642c653ae0d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_37
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 16713676a7878604fb70b719b2415c33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_38
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 240
+      width: 16
+      height: 16
+    spriteID: ee7498ba710c173438cc83e85c361279
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_39
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 3c2987c295d6e8a44844833acda64e1f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_40
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 27cbb49654a936448be2d4186f1b0ff4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_41
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 4b285dcc94e629b4c875e69baac653b6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_42
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 41cdc97771a7d264a943e9b9b0344cf3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_43
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 240
+      width: 16
+      height: 16
+    spriteID: aa45893d20b8576449df49121c50b969
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_44
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 63d21be0247cb0040bc7de0683e34c3e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_45
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 9093c6e8fa697cb4ca75c68fca64bd95
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_46
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 689c3aa04cebcdc4d91bfa17c111eb73
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_47
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 5295607444ab905469b00957c6fff07f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_48
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 224
+      width: 16
+      height: 16
+    spriteID: b4ceb67662710b8438630e84836a154c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_49
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 224
+      width: 16
+      height: 16
+    spriteID: e980993ee2b43de44a7e69963314d457
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_50
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 37bf28b4a868b2e44a0f480662718ed2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_51
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 49de1fc8c87654249bcd9518e1dc9952
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_52
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 9a38eecefe9502a44aee909cad2729d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_53
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 7141c97794c221a41a2f201a54d8b978
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_54
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 224
+      width: 16
+      height: 16
+    spriteID: a59c50b833becfb4ca45f485e0ea0111
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_55
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 9b516e0e5c9d6fb44a7b04d418950118
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_56
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 224
+      width: 16
+      height: 16
+    spriteID: e2d28dd38320d544c9ad11174412e85d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_57
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 224
+      width: 16
+      height: 16
+    spriteID: aa76196b47e1768448d15a6fc12616e4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_58
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 224
+      width: 16
+      height: 16
+    spriteID: c3dfafcfb4aeed64c8be40238f728760
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_59
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 224
+      width: 16
+      height: 16
+    spriteID: e4ede6932f18a82458129d1ce6f3ecb3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_60
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 224
+      width: 16
+      height: 16
+    spriteID: fc9b29f5fdab65e4ca4bb851bb7ed5c1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_61
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 02d5514fe9710364bb96b6d31ac507cf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_62
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 224
+      width: 16
+      height: 16
+    spriteID: b2ea2ccfe1f00e948afc49e86a178985
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_63
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 877d2ed76288d244e812dd8c0f818fbd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_64
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 2431b67cd0a6b43439d7e8414d18fc1e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_65
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 8f41a08abe849fb42b5378b938223483
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_66
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 21b12106dd97b5742a8dc467296af788
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_67
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 0a66f5205816f80428a03773a8e2649d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_68
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 208
+      width: 16
+      height: 16
+    spriteID: b7b459e1751f1834596f6d8b5491d5b6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_69
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 8de5440f663262045a5aa5cf2f853a6b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_70
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 01eb2b3f236cd1249a9503d9af9aadcb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_71
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 56880c24f1bde0c4bbe6f62f25be7e1f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_72
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 208
+      width: 16
+      height: 16
+    spriteID: a12ecdd7834f44b4dba7307149e1cddb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_73
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 39a770b31b2f1b844bc2ad84f8257bff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_74
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 0922606dba5f526408f2611b731d369f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_75
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 4dae175e8ffdf4e4fb3f97741df35bed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_76
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 208
+      width: 16
+      height: 16
+    spriteID: a295ae517de6f81488edfe5af8209276
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_77
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 208
+      width: 16
+      height: 16
+    spriteID: b3ca98c11549faa4793a30094b176ae8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_78
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 63ba58feab2aebd46ba1e90e441fc4a3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 208
+      width: 16
+      height: 16
+    spriteID: ce6bd4e2f00b2fd498e2ff00f569b41f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_80
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 208
+      width: 16
+      height: 16
+    spriteID: bfe8357dff4d68d47b02f4a76918a926
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_81
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 1786826f71c79b146bfa2a229e8e3231
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_82
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 208
+      width: 16
+      height: 16
+    spriteID: dab6ff66ddd10814e8290a2b84705fc8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_83
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 2f9f54780d24fdf448323d438e707107
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_84
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 208
+      width: 16
+      height: 16
+    spriteID: b3f4eb7ed737b0745b7797bf49928d43
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 4fc68423017f59e4c9082de00ad480b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_86
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 208
+      width: 16
+      height: 16
+    spriteID: c843ba7ae20047548b78c84ac7fa057d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_87
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 208
+      width: 16
+      height: 16
+    spriteID: d3b0f450f42ab40469a844ab75ade483
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_88
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 192
+      width: 16
+      height: 16
+    spriteID: f10a912db247199408000e551dc8fff2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_89
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 192
+      width: 16
+      height: 16
+    spriteID: c30f25d1c2946bb4f82daf598b88ee3a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_90
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 192
+      width: 16
+      height: 16
+    spriteID: e99146ae51ef254408d82bceafc830ba
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_91
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 192
+      width: 16
+      height: 16
+    spriteID: e0d1170c03fa4e8418b7b1d03ac3bb8d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_92
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 94841e664aeecd747937f6439fc7c41c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_93
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 192
+      width: 16
+      height: 16
+    spriteID: d0f94be0cf1ae8047b514ad98e12f0d1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_94
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 16333e55d8cdd824d8e52b104b23d0bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_95
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 46ea48f7fbade0d41917c08e207b2dab
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_96
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 5a189f70f01b2d944a09be6ff2a1b735
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_97
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 56311334f9e59e04891b488d9ba79b84
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_98
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 3f17eec348860cb4a910853847e1113c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_99
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 66cc737704a923149ad950d0c13efac0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_100
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 51b3a71f3051ece49957fd0896d3969b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_101
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 192
+      width: 16
+      height: 16
+    spriteID: cd432e927118c0146baf5c616864191f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_102
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 192
+      width: 16
+      height: 16
+    spriteID: b60348f6635999f40bc972024adff706
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_103
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 5561bb9aa3f364f4284f59298d282ee3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_104
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 192
+      width: 16
+      height: 16
+    spriteID: b584e4ba88503e845b1970665d62cca0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_105
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 6c0158ec7ae08db458232e582eab55a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 1a64d7dfd0fa41a478ce31c1178c762c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_107
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 8c1503636083099428be4066d72b1251
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_108
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 22ab90de0f6eddf4582ced3b1436fa2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_109
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 835b1d3b037b0a7448884505a652fad0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_110
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 3e8bec070bfc1284e9bc967c8714b819
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_111
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c8d0ade06e965a14abd7458a89f5f16b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_112
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 81a00dbf76c66834aacbe60288044d7a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_113
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 311797fcdfa85cd40b41869cc302c134
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_114
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 176
+      width: 16
+      height: 16
+    spriteID: ad9d85975cc971d4c824abc432e791d3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_115
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 8d272ed5496239449b7881975b73e18a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_116
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 176
+      width: 16
+      height: 16
+    spriteID: a66f6b2b48b74dc46b4a1f69f9083240
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 176
+      width: 16
+      height: 16
+    spriteID: a1a220ebe4c394e4ca97951ba66ceb4e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 2aede802f28d818418aa7b1c1a3d6403
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_119
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 6b53e88898490284798feea82152106a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_120
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 05f50f40417c10142950804f90216ead
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_121
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 176
+      width: 16
+      height: 16
+    spriteID: e13a71df25d59524b92a4459d8f78458
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_122
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 176
+      width: 16
+      height: 16
+    spriteID: a43d2f0a63cc95647849fed5f2af0fd5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_123
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 176
+      width: 16
+      height: 16
+    spriteID: cad109ad2807fb740baef1e752ec1438
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_124
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c634f75973c727244a6a5d34463455a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_125
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 8e5150e011ad45f40b5964d135751f6b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_126
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 176
+      width: 16
+      height: 16
+    spriteID: a14044af54f6c7040b1cb6c0652dee7f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 74f4f26807421f848bcc6195d9aeefdb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 95e187e101d623b499899df2c181a055
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 447409f9255f96c4f81d6ac22f360e2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 176
+      width: 16
+      height: 16
+    spriteID: a4895f38dafe8f2468d3fb25e7268dc3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 304e583d235b8e846a387dc69cad8075
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 160
+      width: 16
+      height: 16
+    spriteID: be51e031b08524c40a5ca61d35c32680
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_133
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 160
+      width: 16
+      height: 16
+    spriteID: ee730230f4cd61144a140583be639640
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_134
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 14ea8d4e1a81b1b4ea1ae03ca684c96b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_135
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 160
+      width: 16
+      height: 16
+    spriteID: ea34ee3b9b18e87418317e6c2185394d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_136
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 35e5d5c8bc3b5ce45ab5fa5983804705
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_137
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 1e03c715a1b1ca84ab97e6b364448863
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_138
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 160
+      width: 16
+      height: 16
+    spriteID: d019884643a1adc4182bf50f6d17d223
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_139
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 160
+      width: 16
+      height: 16
+    spriteID: be1d68bf6defe0f4bb6b520bfb916b2a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_140
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 160
+      width: 16
+      height: 16
+    spriteID: b73a8f7b992265143a778ee2b532e6b2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_141
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 93b4c6c1dc9b4df4fb339e5f18b75fa0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_142
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4c9609149b96c1845865cbc19cdf8f26
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_143
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 6ba350fe08a939d498cfb3b43acc86b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_144
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 84474b12713e6fb4595b742a66e31d92
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_145
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 7617caa1a03b4a54e8109023c35619f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_146
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 1925a6b2fa511f240a784c51e0df29c5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_147
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 196b83f390452da4cbf63581f01461dd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_148
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 160
+      width: 16
+      height: 16
+    spriteID: a92c297d73efdbb43a143e9b26bc8a45
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_149
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 015a51aafd15c6c4c8184f027a7ad13d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_150
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 160
+      width: 16
+      height: 16
+    spriteID: b021018fb77e2e84d9e0a7fe4fa6a432
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_151
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 80b6d1c2138e18a4c8f81302f6c9ddf3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_152
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 5370814ec6fcb054483af81dceee3055
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_153
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 3f5e1f5be84be5249a0858c2bdf207a5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_154
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 137f70ed76b896d45992167eca9a8338
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_155
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 89b8e0db0f86dea41a6c91bfdc329c7c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_156
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 144
+      width: 16
+      height: 16
+    spriteID: e85cee35721752048bad8c0b1ea66fb8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_157
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 329cad1917c0c6c4e9bb9d768d6adef2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_158
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 144
+      width: 16
+      height: 16
+    spriteID: c3063b83a1e1bef4fb1686284aa6c60a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_159
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 0c309ef05cd25064898552bc23f1a854
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_160
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 144
+      width: 16
+      height: 16
+    spriteID: b787dcd4708532a47a3cae1fa85f1b1d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_161
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 9d524de30e640724493445dd473b2999
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_162
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 71da7dbc582a360408db7b23165842ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_163
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 76d341e1d13f03140a55edfc33a515bc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_164
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 11c3d3599c1d95f4abc31c8ba4712da3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_165
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 8217780b3138d7448a3efa9a9ee1f6fa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_166
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 144
+      width: 16
+      height: 16
+    spriteID: c129878e6f8b4764f8320b372bbae730
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_167
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 11cf3149c044e9e4a862a7e9d8889a34
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_168
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 291ab44d5051c784f874665e2334cd8f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_169
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 3c61ce82b6e0dc549bda7db1d8f968ed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_170
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 144
+      width: 16
+      height: 16
+    spriteID: aad09fc62cd215f45b3732ba74ea5352
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_171
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 144
+      width: 16
+      height: 16
+    spriteID: b46079b48ee90ee4da95f0fdda4d579a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_172
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 451970473a56e6f4c94d5805d4db310e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_173
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 144
+      width: 16
+      height: 16
+    spriteID: fd1e5661f8bf42844963c7ed25e39fe0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_174
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 144
+      width: 16
+      height: 16
+    spriteID: dafd38ce2d458c44e9c2facbb9942d25
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_175
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 144
+      width: 16
+      height: 16
+    spriteID: c07d98ba95cbd744e9651ba0f20d72ce
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_176
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 7f8f2edbabac84e47b64b3a4b0f0403e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_177
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 128
+      width: 16
+      height: 16
+    spriteID: fe6a47d1a6e8cfa438e2fc8d470b6380
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_178
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 6066053e0f35b194e931454b57d5129c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_179
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 1a2ee4f16896b7c4488c0ac0afb5e1db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_180
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 8460dc13d72f48043b1b90fff90e8b44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_181
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c2c337037486fdb488db759ca5feba51
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_182
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 128
+      width: 16
+      height: 16
+    spriteID: ab06c321a00de9348b7a3442529e4442
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_183
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 94f911718a556714a86c9af144b1f5c3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_184
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c4a58b7827d356542aa7a342cf8316ae
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_185
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 76806f995461e324ab75e2b35487430e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_186
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 4f5f57dbba4ea0d459a0d285f0fc1271
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_187
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 4eead7edacbeec34a84a2a329927b521
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_188
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 128
+      width: 16
+      height: 16
+    spriteID: a7d8ff4d2b58a584e83ee4df2fbdc936
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_189
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 4456d02c893bc804788e82a4379bf2ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_190
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 97f1e54030582054bb191f70a5ae1c06
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_191
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 79566be271fded94980f8c36a975a3ed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_192
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 25291dbd589cb0e4fb17cab028299c9b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_193
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 9bd9b00c46e5d5e489058f9d5d575eaa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_194
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 02fdf7cd0fb8ad340bced8a5f6b39098
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_195
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 07d761e41b90638479a73ed952b3e2b2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_196
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 128
+      width: 16
+      height: 16
+    spriteID: e03dc99e3a0c6c74b9e9f7b5d25c9cde
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_197
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 86af8100209c66740b239618917e2963
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_198
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 542759c22420fe04baf678b655b1b7a8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_199
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 112
+      width: 16
+      height: 16
+    spriteID: a09f76c76927f844d8da176d39de757e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_200
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 6e06710561cf44849afd4b42a5c9822e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_201
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 7c5f747d38a97444d916b839cb8a85e6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_202
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 112
+      width: 16
+      height: 16
+    spriteID: b69e7a07365edea448562213cd8ca34d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_203
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 112
+      width: 16
+      height: 16
+    spriteID: d65c6b17fc803c64a88a68e9fd1eae42
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_204
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 39b05f0ecda2d4345b335bfa242a54c3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_205
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 112
+      width: 16
+      height: 16
+    spriteID: f25c9919c2d33d54387de8e212c6cc1d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_206
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 112
+      width: 16
+      height: 16
+    spriteID: eed185d8e7ec83a49888fb1c61e2f4ee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_207
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 112
+      width: 16
+      height: 16
+    spriteID: fe59b0c8dbb1c26498f16d2d596779ee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_208
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c59ac382e2202c74695914f1d1a2a422
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_209
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 112
+      width: 16
+      height: 16
+    spriteID: cbc93165fbe2a594bbb9ed5e09c94c60
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_210
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c84d8bdab731d2b4cba1e9cbbdff9cb2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_211
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c28c73177b0055a4a900fa2cfcfe73e3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_212
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 112
+      width: 16
+      height: 16
+    spriteID: e90f9bc860c0a8949b98997d1cb7db94
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_213
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 1146011f97f11724cae11dc1d24203f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_214
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 53aa5c85ed732ee4f83c28b8f2ba3094
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_215
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 8662cb73bf2dba04bbc2a52f2ac22b15
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_216
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 112
+      width: 16
+      height: 16
+    spriteID: dbd69f4021d6da445989f46545062c1c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_217
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 112
+      width: 16
+      height: 16
+    spriteID: ca3859658b4e81c41ad23a97c474f7b1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_218
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 70c85f0e71af1e242a70d38bc1f420fb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_219
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 4a99b320485cf24408044dd4495f5453
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_220
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5faf3cc00a99c7343b390abf19a30227
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_221
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 96
+      width: 16
+      height: 16
+    spriteID: cd85df17887cbd541a958f3344aac95e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_222
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 96
+      width: 16
+      height: 16
+    spriteID: ea83ff09269cc8a4ba02f860512ae93b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_223
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1a1ae5db0c7707744b6c8015927914c2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_224
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5b6b1e54d65432c438c162e22cd059d7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_225
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 96
+      width: 16
+      height: 16
+    spriteID: e0db08fa393a3734d9a7dd1b42835b8d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_226
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 77a581cc0b4ba884c96703f084ac612f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_227
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 96
+      width: 16
+      height: 16
+    spriteID: bb5c6f0b5dd020e4c913fdad3904ee05
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_228
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 0fae8dc5defd86d48b8784da6181b595
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_229
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 975d9f182ea4c104884bec44177da0e9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_230
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 01e4a626960898d46a3aeb863947c4a9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_231
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 96
+      width: 16
+      height: 16
+    spriteID: ffbc5d098cc67714699c4c494030fcae
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_232
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 96
+      width: 16
+      height: 16
+    spriteID: b9c6a1da0114df64fb653ebe22b9e4e1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_233
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 67a9103e4abefd343bb4ec5f65c202f4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_234
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 865272f9f84bf3349a5d216dddc71bb3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_235
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5102100b8d3ef8643afe91ea933d2230
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_236
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5122f6db64f2c5e4a846cf8c57297ef6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_237
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 0ef4781f66f65ad4e858369de32528b1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_238
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 098dc46b56089c144873937555a5160d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_239
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1192eb36952d8e84ca59ff776ee6d8c2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_240
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 7af834793b994df40914b8179a90adec
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_241
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 2ea32d478a64ff24898c068608acc9f9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_242
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1f9419ec7aeaa8742a9310dd17cac634
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_243
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f081438ee3ddff148b5328858a556efd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_244
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 4ffb2cfcc67a1924e93918fd607b235f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_245
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 315536b4c848e4a4c974612856e03293
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_246
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 640471ce1a21cb34988f8796f47d5cf8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_247
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 80
+      width: 16
+      height: 16
+    spriteID: d02d9f09ca9732340ad0acb5c4601ab0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_248
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 32112c36bb0b88a459cd4d713196a71a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_249
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 80
+      width: 16
+      height: 16
+    spriteID: b1b36a0e71ec4ac48be8c3d29efa0bc3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_250
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 33f6a02b6c13afc4e9c2575e4be5a927
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_251
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 15b547a33adef284d863689fcec3469d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_252
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 66641237d253d374d95b1c6548f1343b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_253
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1e5b78b4b81597c4381adbb89210a15b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_254
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 80
+      width: 16
+      height: 16
+    spriteID: b23455a95054dc343bd7f146d4ae624f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_255
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 867ae3a94df4b9f43bdd64cb79be8b0d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_256
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 26063a5d6b5f39d4b92a20268969c8f6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_257
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 5dce69b7ff67cd84c8c329c9c1db1614
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_258
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 37b65e4321ebd904a92c6c4770dacdbc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_259
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 9c45daecc91af8341b53d92e07f9c7bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_260
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f4dd8e212b982b64b867877cd638aa68
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_261
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f3a8a0e7069c1e443b019da5891db291
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_262
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 2bb0803720845694985720f2b7ef91cb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_263
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 820065b91e33c3546862095e172bbe8f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_264
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 64
+      width: 16
+      height: 16
+    spriteID: a20ad1b88438ea84187a4dd28380a3ef
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_265
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 2da81dd7a4fedc7478307d3f7b4746da
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_266
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 7088fad55f20fce4da890e0b96708afb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_267
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 71241f6af37b262419c659804e5978bb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_268
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 64
+      width: 16
+      height: 16
+    spriteID: da166277fac3a8e4b8ffa7db84a6b74f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_269
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b7c594537193b844ca8f3e916a852efd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_270
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 64
+      width: 16
+      height: 16
+    spriteID: aa25dadecbb1bf7428540d631c2271f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_271
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 64
+      width: 16
+      height: 16
+    spriteID: bf36684cc4bd1374b9751ea0cfd6e46a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_272
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 9a8790811d8c94f43b4219392ed687c7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_273
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 64
+      width: 16
+      height: 16
+    spriteID: ba9164fac0136ca45bb8b69e841aba04
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_274
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 1d339a547a43bd243bed6720f8ca8565
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_275
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 64
+      width: 16
+      height: 16
+    spriteID: af85d49ae7b062e4892a53f8fa1f441a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_276
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 96b4df547a990d54182d6cd6399c6de3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_277
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 3b9e3cc24743f7644b95a8a451e6643b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_278
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 295f9421223c6ad438c3aa5f75d0d8d8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_279
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 66ea1c7beb3316e4f83117a44eed7f47
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_280
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 3d441a248b1e5814890d6bd54b3cadde
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_281
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 5b977c6e4645d67468b225821ee23ab9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_282
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 8822564f732449d42828d566deccb408
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_283
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 64
+      width: 16
+      height: 16
+    spriteID: edef25bccb0ebb94e8cdc552996ba28d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_284
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b5e70714c9c107c4cb90b2d9c8d51c5a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_285
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 807f9032c3f183a43b1881a0815308b9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_286
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 3b312fc0034e3aa4593ce85673b879f0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_287
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 3d18a5ed545a8174e9eece36efd863d6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_288
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 48
+      width: 16
+      height: 16
+    spriteID: d58563f41d22a3f4aab6f4be82a2ef75
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_289
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 72effe9ca59d1404ea3c158c211040ab
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_290
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 39fdf353cbe7c8240bc17af580760a2c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_291
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 48
+      width: 16
+      height: 16
+    spriteID: c44d6daa25ccc5b4bbb6b05693989439
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_292
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 48
+      width: 16
+      height: 16
+    spriteID: ec96ccf1f8daaca4586479261fa44627
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_293
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 5a53b970f2a48904491564a9a82e4d80
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_294
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 15b50f0ebbbde7f4a8cc34d17090928b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_295
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 48
+      width: 16
+      height: 16
+    spriteID: f7856e923d31a4346bec0c3d33901dce
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_296
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 4aba7852d8845434b816e52242bcf65c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_297
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b5e1fc3fc090b48469052b8c54105f5c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_298
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 37f86e657924b4744b63a91700869844
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_299
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 59ff0e3c760e4b540aeb26e8330fb359
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_300
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b59f1bc41654e1244a4b35c1046a3d32
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_301
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 1f6c897eb3584534d8097b640c94b3e2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_302
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 48
+      width: 16
+      height: 16
+    spriteID: ce384e599c77de645abbd42435a8013b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_303
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 48
+      width: 16
+      height: 16
+    spriteID: e2914141d20ddc04c9e65ae7163a7c9e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_304
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 89a803b42d23c984e852899f188ea303
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_305
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 9214513298fa65f43a782e61e939051b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_306
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 48
+      width: 16
+      height: 16
+    spriteID: edbd4166ad1901e40a305cd2d7e19f05
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_307
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 48
+      width: 16
+      height: 16
+    spriteID: e2b4167128f962845a15d7b4bd6fe5a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_308
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 6b1dd06af7f80d040abdd7d81790879e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_309
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 38971a1fe1581884ab56aa9ba7fbb6a0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_310
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 32
+      width: 16
+      height: 16
+    spriteID: ff4260fd3c47ed349a9aa3a32b98dceb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_311
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 451c76bdc4c5b99418d2d5d5f8383896
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_312
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 54304efd39fb2b447a9f1e6fae525643
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_313
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 37da5c16176305048a4eef89519fb60e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_314
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 32
+      width: 16
+      height: 16
+    spriteID: fd534dce2fb61ff4fb1bcc45271f1698
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_315
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 32
+      width: 16
+      height: 16
+    spriteID: d192cbda8c9ad9a4c9b86cc6c8d80bb9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_316
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 36eb31d4e892c7347af72eb2740fffc7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_317
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 32
+      width: 16
+      height: 16
+    spriteID: dfd0c622e1768d34498582078c3f8aac
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_318
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 99abe079f3278c7419ee49832c10e1db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_319
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 0b9444c9767547943a98f3eed6d08197
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_320
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 1b5bf5945f408554e9ce138eb7aebaba
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_321
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 32
+      width: 16
+      height: 16
+    spriteID: bd6d6683e8189c64eb72af2dad17548e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_322
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 32
+      width: 16
+      height: 16
+    spriteID: bc21facfd66e5af418644fd4d5704aec
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_323
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 5baba177a790cf54cbf5b53418878d39
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_324
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 059a27130bb769f4897cfdd7015db4b5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_325
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 52a9d54184a37b04ca471c0566e05fc4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_326
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 258f0bbe53c8f6e41b1141eb63262cfe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_327
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 23f512d834b0c7641909c352fd81c0e8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_328
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 1ce4648bad30e7d4590b25ac32c3b991
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_329
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 32
+      width: 16
+      height: 16
+    spriteID: b0fc94b5cc168624f964a2e22f40f4a6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_330
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 84bab56de6506ee4ba7ec8ae8be2ffc1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_331
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 2bf5bd2b15e8fc042b3d194ddc894b94
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_332
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 16
+      width: 16
+      height: 16
+    spriteID: bf32b310d81b90d48b81398da339626e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_333
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 16
+      width: 16
+      height: 16
+    spriteID: ab947706efb71b94b8d949a24270d8ec
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_334
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 4e1e1c67037fd0d4abd44a25b6d45dba
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_335
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 79209ed879561ea44926894631348e48
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_336
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6ecfae950256a02439ecf76d170186c1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_337
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9f73abf48a28ca14ebc3a0ac15c96ac5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_338
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 5a80d76b2f0c9f342ad2c80175668f40
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_339
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 7b71e2b87076a554baf21d87babb06ad
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_340
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 80640e7ebbe08d44fb7b4a22d1900e6f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_341
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 7c86497990c19574dbd90930d0e66d40
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_342
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 16
+      width: 16
+      height: 16
+    spriteID: f813d4de58aa2114b8fc2d4eefb890c9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_343
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 7dff36c4a7c794d408aa15308aa880f1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_344
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 277208612880d184dbf01997acf8137c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_345
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 16
+      width: 16
+      height: 16
+    spriteID: fde5731a958819949852e26a1004fcfe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_346
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 79d9cd423f2d0b54c871486ba132e397
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_347
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 0989193dcfdad5d439b8f77265018530
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_348
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 53911cc7027c2aa47acc394f9bd0c4a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_349
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6d3ad0d0c8d43354c838e84a0913f3e4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_350
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6e3dccddbe6d28b488f5b41c8a235cd0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_351
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 72e365a2fa83dda408aafa37dd0736c0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_352
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: 16
+    spriteID: cb52077316c5a4145ac4d6f2e51a66a3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_353
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 03edf30c6c29b744a8ac02bcfc3aa2f4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_354
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 17d53d2d1cb79ee41b6a876449901b90
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_355
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 34f63e95429b65341ac9b180e8dd7642
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_356
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 23abb8a5a62b3a449ace38a806942b54
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_357
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 0
+      width: 16
+      height: 16
+    spriteID: d14029e1905d4574a864c91865efe170
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_358
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 3f3fe273d4629794bb1d5f28fba0e260
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_359
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 3aa973b42961df942abb8a921541d3cc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_360
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2218c3757506c7e4b8278bed282ab2a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_361
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 76faad0bc43b63349b6e01ef30a6b9ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_362
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 68bbc1324216d1049a837aa742558718
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_363
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 108b79913ae7e6947a218e3923e5a0b6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_364
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 0
+      width: 16
+      height: 16
+    spriteID: f47c1bffb1baaf141840186b03ed69f5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_365
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 0
+      width: 16
+      height: 16
+    spriteID: def4e08e02e07f44aa188929fd5ded2b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_366
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 030a56d24a5d7ca4f893c2a2852e9e93
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_367
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 387133f992cb46e45a1d125175b44422
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_368
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 1dc002b63b7fbfe48bf50291a1ea67a8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_369
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 169e7b5978fb045478e38bdc9e9e01b7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_370
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 988159ca7cfa2ed44863bba47162af5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_371
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 08db1974edf0d554ebd902da9988aea9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_372
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 0
+      width: 16
+      height: 16
+    spriteID: b460fefdf9137544daa4f9a450d600af
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetInteriorFloor_373
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 0
+      width: 16
+      height: 16
+    spriteID: b9f00e1ee71d9424c9efa475db6b1f5f
+    spriteOutline: []
+    tessellationDetail: 0
+  _secondaryTextures: []
+  _artifacts: {instanceID: 0}
