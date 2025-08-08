@@ -11,13 +11,12 @@ public class Enemy_HealthBarManager : MonoBehaviour
 
     void Start()
     {
-        //choose prefab
+        /* choose prefab */
         GameObject prefab = isBoss ? bossBarPrefab : mobBarPrefab;
         if (prefab == null) { Debug.LogWarning($"{name} missing health-bar prefab"); return; }
 
-        //spawn bar as child
+        /* spawn bar as child */
         GameObject bar = Instantiate(prefab, transform);
-        // centred on enemy
-        bar.transform.localPosition = Vector3.zero;      
+        bar.transform.localPosition = Vector3.zero;      // centred on enemy
     }
 }

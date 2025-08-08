@@ -1,0 +1,287 @@
+ 
+// ----- File: ExpManager.cs ----- 
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System;
+
+public class ExpManager : MonoBehaviour
+{
+    public int level;
+    public int totalKills;
+    public float playTime;
+    public int currentExp;
+    public int expToLevel = 10;
+    public float expMultilier = 1.2f;
+    public Slider expSlider;
+    public TMP_Text currentLevelText;
+    public static ExpManager Instance;
+
+
+    public static event Action<int> OnLevelUp;
+
+    void Start()
+    {
+        UpdateUI();
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            GainExperience(1);
+        }
+        playTime += Time.deltaTime;
+    }
+
+    private void OnEnable()
+    {
+        Enemy_Health.OnMonsterDefeated += GainExperience;
+    }
+    private void OnDisable()
+    {
+        Enemy_Health.OnMonsterDefeated -= GainExperience;
+    }
+
+    
+    public void GainExperience(int amount)
+    {
+        totalKills++;
+        currentExp += amount;    
+        if (currentExp >= expToLevel)
+        {
+            LevelUp();
+        }       
+        UpdateUI();
+    }
+
+    private void LevelUp()
+    {
+        level++;
+        currentExp -= expToLevel;
+        expToLevel = Mathf.RoundToInt(expToLevel * expMultilier);
+        OnLevelUp?.Invoke(1);
+    }
+
+    public void UpdateUI()
+    {
+        expSlider.maxValue = expToLevel;
+        expSlider.value = currentExp;
+        currentLevelText.text = "Level: " + level;
+
+    }
+}
+ 
+// ----- File: PlayerHealth.cs ----- 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class PlayerHealth : MonoBehaviour
+{
+    public static System.Action OnPlayerDeath;
+    public TMP_Text healthText;
+
+    [Header("Hit Flash")] 
+    public float flashTime = 0.1f;
+    private SpriteRenderer sr;
+
+    private void Start()
+    {
+        healthText.text = StatsManager.Instance.currentHealth + " / " + StatsManager.Instance.maxHealth;
+        
+        sr = GetComponent<SpriteRenderer>();
+        if (sr == null) 
+        {
+            Debug.LogWarning("PlayerHealth: No SpriteRenderer found on " + gameObject.name + ". Flash effect won't work.");
+        }
+    }
+
+    public void Changehealth(int amount)
+    {
+        StatsManager.Instance.currentHealth += amount;
+        healthText.text = StatsManager.Instance.currentHealth + " / " + StatsManager.Instance.maxHealth;
+
+        Debug.Log($"Player health changed by {amount}. Current: {StatsManager.Instance.currentHealth}/{StatsManager.Instance.maxHealth}");
+
+        // Only flash if taking damage amount < 0
+        if (amount < 0 && sr != null)
+        {
+            StartCoroutine(Flash());
+        }
+
+        if (StatsManager.Instance.currentHealth <= 0)
+        {
+            Debug.Log("Player health <= 0. Invoking OnPlayerDeath event.");
+            OnPlayerDeath?.Invoke();
+
+            // Disable specific components instead of deactivating the entire GameObject
+            if (sr != null) sr.enabled = false;
+            Collider2D collider = GetComponent<Collider2D>();
+            if (collider != null) collider.enabled = false;
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (rb != null) rb.simulated = false;
+            PlayerMovement movement = GetComponent<PlayerMovement>();
+            if (movement != null) movement.enabled = false;
+            // Add similar disables for other player components if needed (e.g., Animator, custom combat scripts)
+        }
+    }
+
+    private IEnumerator Flash()
+    {
+        sr.color = Color.red;
+        yield return new WaitForSeconds(flashTime);
+        sr.color = Color.white;
+    }
+} 
+// ----- File: PlayerMovement.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
+public class PlayerMovement : MonoBehaviour
+{
+    [Header("Visual")]
+    public int facingDirection = 1;          // 1 = right, -1 = left
+
+    [Header("Runtime")]
+    public Vector2 lastMove = Vector2.right; // where the body is facing
+
+    Rigidbody2D rb;
+    Animator    anim;
+
+    Vector2 input;           // latest raw WASD input
+    bool    isKnockedBack;
+
+    const float deadZone = 0.001f;   // tiny stick drift / tap filter
+
+    /* --------------------------------------------------- */
+    void Awake()
+    {
+        rb   = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+    }
+
+    /* -------- read input, drive animator, face sprite -------- */
+    void Update()
+    {
+        if (isKnockedBack) return;
+
+        /* 1. Read WASD / arrow keys (no smoothing) */
+        input = new Vector2(
+            Input.GetAxisRaw("Horizontal"),
+            Input.GetAxisRaw("Vertical"));
+
+        bool moving = input.sqrMagnitude > deadZone;
+
+        if (moving)
+            lastMove = input.normalized;
+
+        /* 2. Animator parameters */
+        anim.SetBool ("isMoving", moving);
+        anim.SetFloat("moveX",   moving ? input.normalized.x : 0);
+        anim.SetFloat("moveY",   moving ? input.normalized.y : 0);
+        anim.SetFloat("idleX",  !moving ? lastMove.x : 0);
+        anim.SetFloat("idleY",  !moving ? lastMove.y : 0);
+
+        /* 3. Flip sprite on X axis */
+        if (input.x > 0 && transform.localScale.x < 0 ||
+            input.x < 0 && transform.localScale.x > 0)
+            Flip();
+    }
+
+    /* -------- apply physics at a steady 50 Hz -------- */
+    void FixedUpdate()
+    {
+        if (isKnockedBack) return;
+
+        rb.linearVelocity = input.normalized * StatsManager.Instance.speed;
+    }
+
+    /* ---------------- helpers ---------------- */
+    void Flip()
+    {
+        facingDirection *= -1;
+        Vector3 s = transform.localScale;
+        s.x *= -1;
+        transform.localScale = s;
+    }
+
+    /* ---------- Knock-back ---------- */
+    public void Knockback(Transform enemy, float force, float stunTime)
+    {
+        isKnockedBack = true;
+
+        Vector2 dir = ((Vector2)transform.position - (Vector2)enemy.position).normalized;
+        rb.linearVelocity = dir * force;
+
+        StartCoroutine(KnockbackCounter(stunTime));
+    }
+
+    IEnumerator KnockbackCounter(float stunTime)
+    {
+        yield return new WaitForSeconds(stunTime);
+        rb.linearVelocity   = Vector2.zero;
+        isKnockedBack = false;
+    }
+}
+ 
+// ----- File: StatsManager.cs ----- 
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
+
+public class StatsManager : MonoBehaviour
+{
+    public static StatsManager Instance;
+    public TMP_Text healthText;
+
+    [Header("Combat Stats")]
+    public int baseDamage = 1;
+    public float weaponRange;
+    public float knockbackForce;
+    public float knockbackTime;
+    public float stunTime;
+
+    [Header("Movement Stats")]
+    public int speed;
+
+    [Header("Health Stats")]
+    public int maxHealth;
+    public int currentHealth;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void UpdateMaxHealth(int amount)
+    {
+        maxHealth += amount;
+        healthText.text = "HP: " + currentHealth + "/" + maxHealth;
+    }
+
+
+}
+ 

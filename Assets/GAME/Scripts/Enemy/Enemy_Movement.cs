@@ -32,6 +32,8 @@ public class Enemy_Movement : MonoBehaviour
     }
 
 
+
+
     // Update is called once per frame
     void Update()
     {
@@ -58,6 +60,7 @@ public class Enemy_Movement : MonoBehaviour
     }
 
 
+
     void Chase()
     {
         if (player.position.x > transform.position.x && facingDirection == -1 ||
@@ -70,6 +73,9 @@ public class Enemy_Movement : MonoBehaviour
         rb.linearVelocity = direction * speed;
     }
 
+
+
+
     void Flip()
     {
         /* facingDirection *= -1;
@@ -79,6 +85,7 @@ public class Enemy_Movement : MonoBehaviour
     }
 
 
+
     private void CheckForPlayer()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(detectionPoint.position, playerDetectRange, playerLayer);
@@ -86,7 +93,7 @@ public class Enemy_Movement : MonoBehaviour
         if (hits.Length > 0)
         {
             player = hits[0].transform;
-            //if the player is in the attack range AND cooldown is ready
+            //if the player is in the attac range AND cooldown is ready
             if (Vector2.Distance(transform.position, player.position) <= attackRange && attackCooldownTimer <= 0)
             {
                 attackCooldownTimer = attackCooldown;
@@ -105,6 +112,8 @@ public class Enemy_Movement : MonoBehaviour
             ChangeState(EnemyState.Idle);
         }        
     }
+
+
 
 
     public void ChangeState(EnemyState newState)
@@ -129,12 +138,14 @@ public class Enemy_Movement : MonoBehaviour
         { anim.SetBool("isAttacking", true); }
     }
 
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(detectionPoint.position, playerDetectRange);
     }
 }
+
 
 public enum EnemyState
 {

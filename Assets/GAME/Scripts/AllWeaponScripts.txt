@@ -1,0 +1,526 @@
+ 
+// ----- File: Arrow.cs ----- 
+using UnityEngine;
+
+public class Arrow : MonoBehaviour
+{
+    public Rigidbody2D rb;
+    public Vector2 direction = Vector2.right;
+    public float lifeSpawn = 2;
+    public float speed;
+
+    public LayerMask enemyLayer;
+
+    public int damage;
+    public float knockbackForce;
+    public float knockbackTime;
+    public float stunTime;
+
+    void Start()
+    {
+        rb.linearVelocity = direction * speed;
+        RotateArrow();
+        Destroy(gameObject, lifeSpawn);
+    }
+
+    private void RotateArrow()
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((enemyLayer.value & (1 << collision.gameObject.layer)) > 0)
+        {
+            collision.gameObject.GetComponent<Enemy_Health>()?.TakeHit(damage, transform, knockbackForce, stunTime);
+
+        }
+    }
+
+}
+ 
+// ----- File: AttackHitbox.cs ----- 
+using UnityEngine;
+
+public class AttackHitbox : MonoBehaviour
+{
+    public WeaponSO weaponSO;
+
+    void Start()        // runs once when the prefab spawns
+    {
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        col.isTrigger     = true;
+        if (weaponSO != null && weaponSO.spriteInHand != null)
+        {
+            Vector2 size = weaponSO.spriteInHand.bounds.size;
+            // scale collider
+            col.size = size;                    
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Enemy"))
+        {
+            return;
+        }
+
+        Enemy_Health enemyHealth = other.GetComponent<Enemy_Health>();
+        if (enemyHealth == null)
+        {
+            return;
+        }
+
+        float totalDamage = StatsManager.Instance.baseDamage * weaponSO.weaponDamage;
+        enemyHealth.TakeHit(totalDamage, transform, weaponSO.knockbackForce, weaponSO.stunTime);
+    }
+}
+ 
+// ----- File: AttackSpriteSMB.cs ----- 
+using UnityEngine;
+
+public class AttackSpriteSMB : StateMachineBehaviour
+{
+    WeaponManager wm;
+
+    // called the very first frame the state becomes active
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (wm == null) wm = animator.GetComponent<WeaponManager>();
+        Vector2 dir = new Vector2(animator.GetFloat("attackX"), animator.GetFloat("attackY"));
+        if (dir.sqrMagnitude < 0.01f) dir = wm.GetInputDir();   // fallback
+        wm.spriteHelper.Show(dir, -1f);                         // stay until Exit
+    }
+
+    //called the very first frame the state is *no longer* active
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (wm == null) wm = animator.GetComponent<WeaponManager>();
+        wm.spriteHelper.Hide();
+    }
+}
+ 
+// ----- File: Stategies.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+/// <summary>Holds every run-time reference a strategy needs.</summary>
+public readonly struct WeaponContext
+{
+    public readonly Transform owner;            // player or enemy root
+    public readonly WeaponSO data;        // stats, icon, prefab
+    public readonly WeaponSpriteHelper vis;     // sprite helper
+    public readonly Animator bodyAnim;          // drive attack clip
+    public readonly LayerMask enemyMask;        // who to hit
+
+    public WeaponContext(
+        Transform owner,
+        WeaponSO data,
+        WeaponSpriteHelper vis,
+        Animator bodyAnim,
+        LayerMask enemyMask)
+    {
+        this.owner     = owner;
+        this.data      = data;
+        this.vis       = vis;
+        this.bodyAnim  = bodyAnim;
+        this.enemyMask = enemyMask;
+    }
+}
+
+
+public interface IWeaponStrategy
+{
+
+    void Use(WeaponContext ctx, Vector2 dir);
+}
+
+
+public static class StrategyFactory
+{
+    static readonly IWeaponStrategy melee = new MeleeStrategy();
+    static readonly IWeaponStrategy projectile = new ProjectileStrategy();
+    static readonly IWeaponStrategy barehand = new BarehandStrategy();
+
+    public static IWeaponStrategy Get(AttackStyle s) =>
+        s == AttackStyle.Melee ? melee :
+        s == AttackStyle.Projectile ? projectile : barehand;
+}
+
+
+/// Static helper called by every IWeaponStrategy to drive the body attack animation
+/// and reset the “isAttacking” flag when the clip finishes.
+
+public static class AttackAnimHelper
+{
+    public static void Play(WeaponContext ctx, Vector2 dir, float clipTime)
+    {
+        Vector2 snapped = Snap(dir);
+        Animator anim   = ctx.bodyAnim;
+
+        anim.SetFloat("attackX",  snapped.x);
+        anim.SetFloat("attackY",  snapped.y);
+        anim.SetBool ("isAttacking", true);
+        anim.SetTrigger("Attack");
+
+        // Use an existing MonoBehaviour (WeaponManager) to run the coroutine.
+        ctx.owner.GetComponent<WeaponManager>()
+                 .StartCoroutine(ResetAttackFlag(anim, clipTime));
+    }
+
+    
+    static Vector2 Snap(Vector2 d)
+    {
+        if (Mathf.Abs(d.x) >= Mathf.Abs(d.y))
+            return Mathf.Abs(d.x) > 0.1f ? new Vector2(Mathf.Sign(d.x), 0) : Vector2.down;
+        else
+            return Mathf.Abs(d.y) > 0.1f ? new Vector2(0, Mathf.Sign(d.y)) : Vector2.down;
+    }
+
+    static IEnumerator ResetAttackFlag(Animator anim, float t)
+    {
+        yield return new WaitForSeconds(t);
+        anim.SetBool("isAttacking", false);
+    }
+}
+
+
+public class MeleeStrategy : IWeaponStrategy
+{
+    float cooldownTimer;
+    public void Use(WeaponContext ctx, Vector2 dir)
+    {
+        if (Time.time < cooldownTimer) return;
+        cooldownTimer = Time.time + ctx.data.cooldown;
+
+        AttackAnimHelper.Play(ctx, dir, 0.25f);
+        // spawn hitbox 
+        WeaponManager wm = ctx.owner.GetComponent<WeaponManager>();
+        if (wm == null || wm.meleeHitboxPrefab == null) return;
+
+        Transform pivot = wm.attackPoint != null ? wm.attackPoint : ctx.owner;
+        float reach = ctx.data.offsetDistance > 0 ? ctx.data.offsetDistance : 0.6f;
+
+        Vector3 pos = pivot.position + (Vector3)(dir.normalized * reach);
+        GameObject hb  = Object.Instantiate(wm.meleeHitboxPrefab,
+                                            pos, 
+                                            Quaternion.identity);
+
+        hb.GetComponent<AttackHitbox>().weaponSO = ctx.data;
+
+        float life = 0.05f;
+        Object.Destroy(hb, life);
+    }
+}
+
+
+public class ProjectileStrategy : IWeaponStrategy
+{
+    float cooldownTimer;
+
+    public void Use(WeaponContext ctx, Vector2 dir)
+    {
+        if (Time.time < cooldownTimer) return;
+        cooldownTimer = Time.time + ctx.data.cooldown;
+
+        AttackAnimHelper.Play(ctx, dir, 0.25f);
+
+        //spawn projectile 
+        if (ctx.data.projectilePrefab == null) return;
+
+        GameObject go = Object.Instantiate(ctx.data.projectilePrefab,
+                                           ctx.owner.position,
+                                           Quaternion.identity);
+
+        Arrow arrow          = go.GetComponent<Arrow>();
+        arrow.direction       = dir.normalized;
+        arrow.damage          = Mathf.RoundToInt(StatsManager.Instance.baseDamage
+                                                 * ctx.data.weaponDamage);
+        arrow.knockbackForce  = ctx.data.knockbackForce;
+        arrow.knockbackTime   = 0.05f;
+        arrow.stunTime        = ctx.data.stunTime;
+    }
+}
+
+
+
+public class BarehandStrategy : IWeaponStrategy
+{
+    float cooldownTimer;
+    public void Use(WeaponContext ctx, Vector2 dir)
+    {
+        if (Time.time < cooldownTimer) return;
+        cooldownTimer = Time.time + ctx.data.cooldown;          // reuse stat
+
+        AttackAnimHelper.Play(ctx, dir, 0.25f);                 // new utility
+        Vector2 where = ctx.owner.position + (Vector3)(dir * .3f);
+        foreach (var hit in Physics2D.OverlapCircleAll(where, 0.4f, ctx.enemyMask))
+        {
+            Enemy_Health enemyHealth = hit.GetComponent<Enemy_Health>();
+            if (enemyHealth != null)
+            {
+                float damage = Mathf.RoundToInt(StatsManager.Instance.baseDamage * ctx.data.weaponDamage);
+                enemyHealth.TakeHit(damage, ctx.owner, ctx.data.knockbackForce, ctx.data.stunTime);
+            }
+        }
+    }
+}
+
+ 
+// ----- File: WeaponManager.cs ----- 
+using UnityEngine;
+using System.Collections.Generic;
+
+public class WeaponManager : MonoBehaviour
+{
+    [Header("Player HUD (optional)")]
+    public WeaponSlot[] slotUIs = new WeaponSlot[10];
+
+    [Header("Startup Load-out (new)")]
+    public WeaponSO barehandAction;
+    public WeaponSO[] autoUnlock;
+
+    [Header("Helpers")]
+    public WeaponSpriteHelper spriteHelper;
+    public LayerMask enemyMask = ~0;         // default “everything”
+    public Transform attackPoint;
+    public GameObject meleeHitboxPrefab;
+
+    // runtime
+    WeaponSO currentAction;
+    IWeaponStrategy currentStrategy;
+    public WeaponSO GetCurrentAction() => currentAction;
+
+    readonly Dictionary<int, WeaponSO> inventory = new();
+    Animator bodyAnim;
+    bool isPlayer;
+
+    public static event System.Action<WeaponSO> OnWeaponEquipped;   // HUD update
+
+    void Awake()
+    {
+        isPlayer = CompareTag("Player");
+        bodyAnim = GetComponent<Animator>();
+
+        if (isPlayer)
+        {
+            for (int i = 1; i < slotUIs.Length; i++)
+                slotUIs[i].gameObject.SetActive(false);
+        }
+    }
+
+    // defer until every Awake has finished
+    void Start()
+    {
+        if (barehandAction != null)
+        {
+            inventory[barehandAction.slotIndex] = barehandAction;          // add
+            if (isPlayer) slotUIs[0].SetWeapon(barehandAction);            // fill HUD
+            Equip(barehandAction);                                         // arm fist
+        }
+        foreach (var w in autoUnlock) if (w != null) AddWeapon(w);
+        if (isPlayer && barehandAction != null)
+        slotUIs[barehandAction.slotIndex].SetWeapon(barehandAction);   // fill slot 0
+
+    }
+
+    // Loot / shop calls this
+    public void AddWeapon(WeaponSO a)
+    {
+        inventory[a.slotIndex] = a;
+        if (isPlayer) slotUIs[a.slotIndex].SetWeapon(a);  // reveal
+        Equip(a);                                        // auto-equip
+    }
+
+    // Switch active weapon
+    public void Equip(WeaponSO a)
+    {
+        currentAction = a;
+        currentStrategy = StrategyFactory.Get(a.style);
+        spriteHelper.Configure(a);
+
+        OnWeaponEquipped?.Invoke(a);    // notify all slots
+    }
+
+    // input
+    void Update()
+    {
+        if (!isPlayer) return;
+        HandleHotkeys();
+        HandleAttack();
+    }
+
+    void HandleHotkeys()
+    {
+        for (int i = 0; i <= 9; i++)
+            if (Input.GetKeyDown(KeyCode.Alpha0 + i) && inventory.ContainsKey(i))
+                Equip(inventory[i]);
+    }
+
+    void HandleAttack()
+    {
+        if (currentAction == null) return;
+
+        Vector2 dir = GetInputDir();
+        if (Input.GetButtonDown("Attack"))
+        {
+            var ctx = new WeaponContext(transform, currentAction,
+                                        spriteHelper, bodyAnim, enemyMask);
+            currentStrategy.Use(ctx, dir);
+        }
+    }
+
+    // Same helper your old logic used
+    public Vector2 GetInputDir()
+    {
+        float h = Input.GetAxisRaw("Horizontal"),
+              v = Input.GetAxisRaw("Vertical");
+        return Mathf.Abs(h) + Mathf.Abs(v) < 0.01f
+            ? GetComponent<PlayerMovement>().lastMove
+            : new Vector2(h, v).normalized;
+    }
+
+}
+ 
+// ----- File: WeaponSlot.cs ----- 
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System;
+
+public class WeaponSlot : MonoBehaviour
+{
+    [Header("UI")]
+    public Image    iconImage;        // drag WeaponIcon
+    public TMP_Text hotkeyText;       // drag Hotkey (TMP)
+
+    [Header("Data")]
+    public WeaponSO action;         // set by WeaponManager
+    public bool     unlocked;         // slot shows when true
+
+    
+
+    static WeaponSO WeaponManagerCurrent() => GameObject.FindWithTag("Player")?.GetComponent<WeaponManager>()?.GetCurrentAction();         // create this getter
+
+    void OnEnable () => WeaponManager.OnWeaponEquipped += HandleEquip;
+    void OnDisable() => WeaponManager.OnWeaponEquipped -= HandleEquip;
+
+    void HandleEquip(WeaponSO equipped)
+    {
+        iconImage.color = (action == equipped) ? Color.white : Color.gray;
+    }
+
+    // henever you tweak slot in Inspector,
+    // the sprite / label refresh automatically – same pattern SkillSlot uses.
+    private void OnValidate()
+    {
+        if (action != null) UpdateUI();
+    }
+
+    public void SetWeapon(WeaponSO a)
+    {
+        action   = a;
+        unlocked = true;
+        UpdateUI();
+        HandleEquip(WeaponManagerCurrent());   // helper in next step
+    }
+
+
+    void UpdateUI()
+    {
+        iconImage.sprite = action != null ? action.icon : null;
+        hotkeyText.text  = action != null ? action.slotIndex.ToString() : "";
+        gameObject.SetActive(unlocked);
+    }
+}
+ 
+// ----- File: WeaponSO.cs ----- 
+using UnityEngine;
+
+// 0️⃣  Attack styles drive which strategy gets picked.
+public enum AttackStyle { Barehand, Melee, Projectile }
+
+    [System.Serializable]
+public struct DirOffset
+{
+    public Vector2 up;
+    public Vector2 down;
+    public Vector2 left;
+    public Vector2 right;
+}
+
+    [CreateAssetMenu(menuName = "Weapons/Weapon Action")]   // shows in Create menu
+public class WeaponSO : ScriptableObject          // data-only asset
+{
+    [Header("Meta")]
+    public string weaponName;
+    public AttackStyle style;
+    [Range(0, 9)] public int slotIndex;                 // hot-key
+
+    [Header("Combat")]
+    public float weaponDamage = 1f;
+    public float knockbackForce = 2f;
+    public float stunTime = 0.2f;
+    public bool moveLock = false;
+
+    [Header("Visual")]
+    public Sprite icon;
+    public Sprite spriteInHand;
+    public DirOffset dirOffset;       // reuse the same struct as WeaponSO
+
+    [Tooltip("Fallback push-out distance if dirOffset entry = (0,0)")]
+    public float offsetDistance = 0.8f;
+
+    [Header("Stats")]
+    public float baseDamage = 1f;
+    public float cooldown = 0.3f;
+
+    [Header("Projectile (Projectile style only)")]
+    public GameObject projectilePrefab;
+}
+ 
+// ----- File: WeaponSpriteHelper.cs ----- 
+using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+public class WeaponSpriteHelper : MonoBehaviour
+{
+    SpriteRenderer sr;
+    DirOffset bank;                     // cached from WeaponActionSO
+    WeaponSO data;
+
+    void Awake() => sr = GetComponent<SpriteRenderer>();
+
+    public void Configure(WeaponSO so)
+    {
+        if (sr == null) sr = GetComponent<SpriteRenderer>();  // safety
+        sr.sprite  = so.spriteInHand;
+        bank       = so.dirOffset;
+        sr.enabled = false;
+        data       = so;
+    }
+
+    public void Show(Vector2 dir, float autoHide = -1f)
+    {
+        if (sr.sprite == null) return;  // bare-hand → nothing to draw
+        sr.enabled = true;
+
+        transform.rotation = Quaternion.FromToRotation(Vector2.down, dir);
+        // position – choose override or fallback to distance * dir
+        Vector2 offset = ChooseOffset(dir);
+        if (offset == Vector2.zero)             // no override supplied
+            offset = dir * data.offsetDistance; // use single distance
+
+        transform.localPosition = offset;
+        if (autoHide > 0) Invoke(nameof(Hide), autoHide);
+    }
+    public void Hide() => sr.enabled = false;
+
+    Vector2 ChooseOffset(Vector2 d) => d.y > 0.1f ? bank.up
+                                   : d.y < -0.1f ? bank.down
+                                   : d.x < 0 ? bank.left
+                                   : bank.right;
+                                   
+    
+}
+ 

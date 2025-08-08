@@ -1,0 +1,49 @@
+ 
+// ----- File: AudioManager.cs ----- 
+using UnityEngine;  
+
+public class AudioManager : MonoBehaviour  
+{  
+    public static AudioManager Instance;  
+    private AudioSource bgmSource;  
+
+    private void Awake()  
+    {  
+        if (Instance == null)  
+        {  
+            Instance = this;  
+        }  
+        else  
+        {  
+            Destroy(gameObject);  
+            return;  
+        }  
+        bgmSource = gameObject.AddComponent<AudioSource>();  
+        bgmSource.loop = true;  
+    }  
+
+    public void PlayMusic(AudioClip clip)  
+    {  
+        if (bgmSource.clip != clip)  
+        {  
+            bgmSource.Stop();  
+            bgmSource.clip = clip;  
+            bgmSource.Play();  
+        }  
+    }  
+}   
+// ----- File: MusicTrigger.cs ----- 
+using UnityEngine;  
+
+public class MusicTrigger : MonoBehaviour  
+{  
+    [SerializeField] private AudioClip musicClip;  
+
+    private void OnTriggerEnter2D(Collider2D other)  
+    {  
+        if (other.CompareTag("Player"))  
+        {  
+            AudioManager.Instance.PlayMusic(musicClip);  
+        }  
+    }  
+}   

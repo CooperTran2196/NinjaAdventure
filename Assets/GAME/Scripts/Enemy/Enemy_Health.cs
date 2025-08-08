@@ -4,7 +4,7 @@ using System;
 
 public class Enemy_Health : MonoBehaviour
 {
-    
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Header("Boss Settings")]
     [SerializeField] private bool isFinalBoss = false;
 
@@ -20,7 +20,6 @@ public class Enemy_Health : MonoBehaviour
     [Header("Hit flash")]
     public float flashTime = 0.1f;
     SpriteRenderer sr;
-
 
     public void Start()
     {
