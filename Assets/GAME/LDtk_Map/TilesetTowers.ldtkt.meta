@@ -1,0 +1,2176 @@
+fileFormatVersion: 2
+guid: b4938f9e930b70145aba3e0f8f3e527e
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f3268c876daf4890b6af6cd462063137, type: 3}
+  _reimportOnDependencyChange: 1
+  _pixelsPerUnit: 16
+  _overrideTexture: {instanceID: 0}
+  _sprites:
+  - name: TilesetTowers_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 932f58111fd53534ba8205f784ff3286
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 80
+      width: 16
+      height: 16
+    spriteID: b776bd8f19e715f45acddeedcadeeb1e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 16cd04a1a2bdfbc47a21ca885233fc05
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1cb604808a9fadd42ad059055eb986d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1ad43fa54fb871046b5008bcf0e636fd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 80
+      width: 16
+      height: 16
+    spriteID: fa5597267f2ee4d4d992295479ae2205
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 77894061388ec9542b31c225904cde7f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 9ae40de5192a5a548b6eaaa0c517cc19
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 80
+      width: 16
+      height: 16
+    spriteID: d54f99a2fab152f4eb5e77a4a4fd7fee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 80
+      width: 16
+      height: 16
+    spriteID: c77ef70a58471774699406c0330d9fb4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_10
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 93c31f956452f0e4380d3d6625db5fe3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_11
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 7e1e0fd815564884b8e17be069ee5091
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_12
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 2659b92328a9a414d851c4cef1bc2579
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_13
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 80
+      width: 16
+      height: 16
+    spriteID: a84419d6a8cfdb44bb698559015ed3db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_14
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 8122f14e256ff6349af1864437de01ca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_15
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f0c8eff702fea2f42a3b0ccfbed64c96
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_16
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 8e486c8d756cf344e92836c8463d7959
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_17
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 80
+      width: 16
+      height: 16
+    spriteID: fa5920b787aea06419a948f13492c11a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_18
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 3f1bce6d432545042b98de07e3594a31
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_19
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f8a4ed863c295ef4294ac2142ca24d6f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_20
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 80
+      width: 16
+      height: 16
+    spriteID: d67a7e428f7364e4586c4b65b6fd5181
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_21
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 80
+      width: 16
+      height: 16
+    spriteID: ded8a80f91df09f4a89f65a0293c36cd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_22
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 80
+      width: 16
+      height: 16
+    spriteID: e0b22c910caf763408d6711425b0874a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_23
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 985e69bb96a5c324d912d59768930d81
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_24
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 64
+      width: 16
+      height: 16
+    spriteID: a153214a85f0aee418462895a28304d3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_25
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 77ceac444321ad948abf734ffee829bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_26
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 9b12d45f45edf4b498ab88b0329cd80b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_27
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 64
+      width: 16
+      height: 16
+    spriteID: a187107bd17c9d740821e990fba6ba74
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_28
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 9f74253f98e7fdd4a92eee103cd8343f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_29
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 4ce6c64f39c86e94bad57411b39e52a5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_30
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 64
+      width: 16
+      height: 16
+    spriteID: c9a67d0d534ba4349a6fa3e3c909e195
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_31
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 45756c75514e3784db875ebbfcfe0927
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_32
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 825f30722ca5a9546a4b26f309f62aa3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_33
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 70e6549c862054b4889f5e2305d645a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_34
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 7263ab1e750a5dc458c12f09445c2d6d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_35
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 64
+      width: 16
+      height: 16
+    spriteID: d82063d85451fd14980609fd224be103
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_36
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 084e4ce4b7149764888f9a2e475e3e8a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_37
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 84840891ef24ff145a492c2b5cbe8f38
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_38
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 3ab7324109f74834997ad1bd346d461f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_39
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b05d7816b771f1d45a95dbc1f4eacde4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_40
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 11d5ee12f7f317e499d65daf90805cca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_41
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 4a03843b9a30eaa4b981225d26103d58
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_42
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 64
+      width: 16
+      height: 16
+    spriteID: d4adcd850b3d5f2448265f2978e62dbc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_43
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 47e21fb17731dd04cbe51176c7a752c4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_44
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 09beb525e678aff44994f369e6d5e09c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_45
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 7f62cc2c9a12a1b4fb01ba296b5b687b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_46
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 6e6d6d25788d73042932c27ecf58cf10
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_47
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 64
+      width: 16
+      height: 16
+    spriteID: cf0288aaaf958fd409b771983cbd1838
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_48
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 435153c4ea11f484d878144012708054
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_49
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 48
+      width: 16
+      height: 16
+    spriteID: e050069361405e9458b15dd9168a3ceb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_50
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 4ed766f376b3db84391a438dd8b5196b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_51
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 6d5e1d4041763a6459050dc4fc8c13db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_52
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 9ae2d9bc816325e48a4fd1b7feeed614
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_53
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 72294de1d50bfc94d958746af8a256d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_54
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 82637401ac1b5b44f8de7c06f018d4af
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_55
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 48
+      width: 16
+      height: 16
+    spriteID: c58c1a8bc990e974287facce9821faa5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_56
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 0cc8738b7d4da5342888c358559bc296
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_57
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 48
+      width: 16
+      height: 16
+    spriteID: fa2274327fc10b14ba33532abd668469
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_58
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 48
+      width: 16
+      height: 16
+    spriteID: a0e69db5460abb74399452f1cff69524
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_59
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 7f621cafa05d61940815e028e80f1df2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_60
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 48
+      width: 16
+      height: 16
+    spriteID: fa10944dcf9c210408262572468452de
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_61
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 92791d68cc63f334f94d137965454171
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_62
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 329b5719cc64f49429d241cd3ea07262
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_63
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 5c06adeec621473438d6962eb171b5fd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_64
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 6308eea6ddd05fa40af1ff5d3475e94d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_65
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b28f8241509ecbf41ac6b3fb4f5163c8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_66
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 14928157daf430d4e84d22c16aee445e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_67
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 5360709853f8d0847b14e2de6f6bae4e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_68
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 48
+      width: 16
+      height: 16
+    spriteID: ed212129820ac5f47a800d5703f8a9f0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_69
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 40bcba0110d2cd046888a52d3b2b3ac9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_70
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 63727a86cb23966429a930f6e6bc8f8a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_71
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 6a172976f4092ca42913d29388b23885
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_72
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 03fc3140223133a4abcb3af37a5600fd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_73
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 87f44a9761bba3843ac88c01dc5b1b38
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_74
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 0b3fc5e419d1c8b40ba91d1297ef8d4e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_75
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 8da33931147cb274dbd60dcaa1a6e0aa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_76
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 033603c9824b1ce4283125767cee5bf5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_77
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 12753ee2cf4e1234dae25c0d637941ba
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_78
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 32
+      width: 16
+      height: 16
+    spriteID: ac4e5812f6f096f4595acd7c40e9fc85
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 37ec3180a4b86154e94a64fe49698461
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_80
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 3f2599b540fc2f94ea363d4c95d4a741
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_81
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 42348584a5273b64e9b7abed653673b1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_82
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 32
+      width: 16
+      height: 16
+    spriteID: c541c3d59ad045f498d706fa2758e13e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_83
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 28441e91fa5b53a45bbcd2a6488e1ad6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_84
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 9d13d1b3633a8c4468a7b534331c437a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 09adcafec204d2e42a207c4822ad2377
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_86
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 32
+      width: 16
+      height: 16
+    spriteID: a3f2bb7dd1a47e344949723aac4f851e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_87
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 68d78b20eb5dbf740a9a31cfe942955e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_88
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 25d4fdf3827cc08438f9bcbf01fcfb2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_89
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 96250484a46ff8141b543b0be6ab4d14
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_90
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 32
+      width: 16
+      height: 16
+    spriteID: c8e9ef305554618438a28bf22711d18c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_91
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 80255a466ef45124e966a34fd6f8a5f1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_92
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 8586cddc483d53e458e085d6c2e1c2d6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_93
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 6f392d6db770ff64699639d45ddb3c14
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_94
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 975bbd69f93fab54cba35c4ba5bc9a0a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_95
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 7a0e958968433664a9d19e9589921302
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_96
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 16
+      width: 16
+      height: 16
+    spriteID: ce0427c6da985474192047cdb81703ef
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_97
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 16
+      height: 16
+    spriteID: a563bcc6c263f494ebacb6cb2aefa57c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_98
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 16
+      width: 16
+      height: 16
+    spriteID: d084f1dee5c7bcd47a598ab7e84ff157
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_99
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 00e3d66fdeaecf341adc579c64e4ff23
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_100
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 80877858d22be4846840dd30aade54a5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_101
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6aa1beeff5d013b4bad952cc048e949b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_102
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 16
+      width: 16
+      height: 16
+    spriteID: bbfb6683764ad1f4c9b9251b6be838eb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_103
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 44ccc04ba050dbc4dbef9e7f480092df
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_104
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 16
+      width: 16
+      height: 16
+    spriteID: df5fbd1a228d87e4b80bcf6316bfc886
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_105
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 56acb4cc657c06c4099653513d05b61a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 2a66a08b590c1ec4bac9b675a0335ae1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_107
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 7c0ab6e511f51ec4494c5b9392e9a411
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_108
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 3c388aa975445524bb4520c22cce03be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_109
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 3d320063b11b8ae439bd7dce1d09322d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_110
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 16
+      width: 16
+      height: 16
+    spriteID: bf860fe4c983f8b478fc7746ec6c5a6f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_111
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 5fea1105b08b10d49bb026468c60b40d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_112
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 16
+      width: 16
+      height: 16
+    spriteID: fe2e1ceafa04d8043a976b6bcb9582d6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_113
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 16
+      width: 16
+      height: 16
+    spriteID: db218780db64cfd4f871ce7fae0d9f20
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_114
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 16
+      width: 16
+      height: 16
+    spriteID: ac55da6962bd8fd40903c5456da1eb7b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_115
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6c2115beeed1f4b4ab740dcf282d0fae
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_116
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 858f4b96162409c429aa1c1433f330ad
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 16
+      width: 16
+      height: 16
+    spriteID: afaa2058a0f68244b95bcd54a6514b2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 16
+      width: 16
+      height: 16
+    spriteID: a6f038229c6bb0f4da46c91254d45ca1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_119
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 191052baeee594b4595f736ab6875549
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_120
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: 16
+    spriteID: fdc41f5e3078e3149959a12cdf3b5297
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_121
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 385943fb867e5cd4eafd6e0d1b9d5ec4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_122
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 99a1ad1a3c7bf18498a29d112f654b1f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_123
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 0
+      width: 16
+      height: 16
+    spriteID: d861931a730afdd459f2a9322615c409
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_124
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 7ae23dc685f33be4981b560829fbeb46
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_125
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 1c1178bf0672a5f4a96a2bc35a57104b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_126
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 269eea14faa647841811f9ae12f47765
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 0dc9b92f5708bb34c96ec0217727f981
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 4a25e1aca36f6d94b8ef0101a3ce4e76
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 844c584e2515b344291c8d5403a0f5d5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 87fc5ddf5ee95cc478843277c826710c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 8703df60e81f3e74dbf074a3b4ee8ec0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 4f263dbae624ae848a219457e1636a9c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_133
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 410824d8e152b83439c935575cd0776d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_134
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 93f297ee16287fc4889f8961674719be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_135
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 0
+      width: 16
+      height: 16
+    spriteID: d1adb80ad519a59468e90b04d888b54c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_136
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 0
+      width: 16
+      height: 16
+    spriteID: c5e7c82d32daea541bc2689d32a04847
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_137
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 9d31bc628b2a2194da7fab1c7e26a012
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_138
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 0
+      width: 16
+      height: 16
+    spriteID: c158a12e311f7964d8983b86096ae578
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_139
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 5d87d621e26025447b6c1fb2b4a27efb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_140
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 320
+      y: 0
+      width: 16
+      height: 16
+    spriteID: c473bdb027b2401409561fe7a37c7c22
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_141
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 10f6def3e03f0a441b2199fea36b9509
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_142
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 352
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2f9d4a0a42ad9d44abc4e23f65a795fa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetTowers_143
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 368
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 028046f23e0023a49b170d8af82ab28f
+    spriteOutline: []
+    tessellationDetail: 0
+  _secondaryTextures: []
+  _artifacts: {instanceID: 0}

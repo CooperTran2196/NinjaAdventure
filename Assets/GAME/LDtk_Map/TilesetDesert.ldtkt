@@ -1,0 +1,33 @@
+{
+  "Rects": null,
+  "Def": {
+    "__cHei": 12,
+    "__cWid": 20,
+    "cachedPixelData": {
+      "opaqueTiles": "000000011001111001000100101111111111110000001000100011111110000010010000001000100000001110000000000000000011110110111111000111001000001111111111110000000011101000011000000110111011000000000000000100101100000000000001000000000000000000010000",
+      "averageColors": "69a3cab369a369a3cab369a3dca9fca8fb98dca9dca9fca8fc98fca8fc98dca9dca9fca8dca90000d9a6f9a5d9a5d9a6f9a4d9a5fca9fca8fb98fca9fca9fc98fca8fc97fb86fca8fca8fc86fca80000cdcae754cdbacdcbfeddcdbaedb9e754fdb9edb9edb9e865fecafdbafc98fca9fca9fc98fca9eca99b979b97edcbddcafeeeddcbec98fca9eca94baa000000000000edb9fdb9edb9edb9e985fdb9edb9cdbacdba6cbbcdcbe765cdcbfca9fdb9fdb9fba8a583a573a573a583ecbbfcbaecbbdcbaddbbddbbedcb8cba0000000079a379a3fdcafca8fca9fcaaaa85f784f784aa85fdbafdbafdbafdc9fdcafecaddcbddcbfca9fc98f9a5f9a3edcbe754fedcedcc00009a859a850000fdcafecafdcafdb8fdcafecafdcbfdcbfb98fb98fbb9fbb9e5bcb5acfaccfacc0000a583a5830000fdb9fecafdb978cef6cdc7cdfbcbfbcbfdbafaa5fbb6ecb9d7994964fccbfccbb683f784f783b683fdcafecafdcae7cdf6cdf6cdedccddccedb93783a9840000b9a3e9a3aa75a8849a85aa95aa959a85edcafcbaedcac7cdf6cdc7cdfdcbfdcbe999ec34edb6eda64964d984a884a884b683b683b464b4647764fcba8ca8d8ce98ce99defdcafdcaaa75aa65aa75aa75a954aa74ca95b9859a859a85987498747974fcba6cbb6ba96cba4cbb"
+    },
+    "customData": [
+
+    ],
+    "embedAtlas": null,
+    "enumTags": [
+
+    ],
+    "identifier": "TilesetDesert",
+    "padding": 0,
+    "pxHei": 192,
+    "pxWid": 320,
+    "relPath": "Backgrounds/Tilesets/TilesetDesert.png",
+    "savedSelections": [
+
+    ],
+    "spacing": 0,
+    "tags": [
+
+    ],
+    "tagsSourceEnumUid": null,
+    "tileGridSize": 16,
+    "uid": 344
+  }
+}

@@ -1,0 +1,3616 @@
+fileFormatVersion: 2
+guid: 4fbb6e8db23898a448143bd6193f2f6f
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f3268c876daf4890b6af6cd462063137, type: 3}
+  _reimportOnDependencyChange: 1
+  _pixelsPerUnit: 16
+  _overrideTexture: {instanceID: 0}
+  _sprites:
+  - name: TilesetDesert_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 4992478a2c2124a43ba51d43e857f5dc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 176
+      width: 16
+      height: 16
+    spriteID: e3a22ef4cd8b8944599d0d0d54e60ea6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 4a04a156fe3325141a17002716280ea4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 9cefb6b98e81b084b8256547fd1478fd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 176
+      width: 16
+      height: 16
+    spriteID: f603862e2d14246439ad0d40119a8f60
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 79bf09be2ae0e9645bc0e1631d6e88c3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 5a21cd58e4d4a9c438da20485ff35c2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 176
+      width: 16
+      height: 16
+    spriteID: e1d28e3b431eded4f94cfb30ce076da7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 4d9614f3a3bfd844eaf4c7936c0ca3c9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 0112a2a0f3802aa42b512a6a1a1f013b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_10
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 1b8157b4daa49f840b7fd97a6417cb7f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_11
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 176
+      width: 16
+      height: 16
+    spriteID: db14f8990faca314081dd45eaaddeea0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_12
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 56980dac5439d194fa94b3e90a5caac9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_13
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 9807b39b88e2401458c67927654f1b31
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_14
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 176
+      width: 16
+      height: 16
+    spriteID: bb3e1545d301f4a44b8349f7d52110a8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_15
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 33f98cfa99c4dd4488d8485c4e59a48a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_16
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 166893f4976d0564cab8ebbb21959151
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_17
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 568a770ecf1e6a7448597a7be9de5e61
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_18
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 7c3fb6729e63a744186021e42702524a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_19
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c7dfe1c24bc652042ad3a2d6a88ac165
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_20
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 160
+      width: 16
+      height: 16
+    spriteID: f05fca03026a5bf49907bc53bf916048
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_21
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 1422404cd0c81d448a7284204d808db7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_22
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 160
+      width: 16
+      height: 16
+    spriteID: d3e251d4f71982045a4078a2917b16aa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_23
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 49da5a2394df52f46a4269b3d12f4f7b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_24
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 160
+      width: 16
+      height: 16
+    spriteID: a5c639eae459ae44db9c53be918e63f3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_25
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 60dfef1e41ec3174fb0e4b3605acd152
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_26
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4c64f0c2f5215ce43a973f8b813d3525
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_27
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 160
+      width: 16
+      height: 16
+    spriteID: f786195d148c2f14cb236f38bdef4668
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_28
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 2084e3d890ae88042979f2cf20106c28
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_29
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 98cd7afa922aac744b2eedd2714955f2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_30
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 1d284497c0efc6949bca3b44c0c6c79f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_31
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 299c48d162f4c524a8d99934c5031ddc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_32
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4e7244e5d1174934da37e64f99169f9d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_33
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 473bb243b0732b8408d653b7cb324188
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_34
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 15b9e1587e33d50458f44c6bb11b68b4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_35
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 160
+      width: 16
+      height: 16
+    spriteID: e76580bf5a4269e48944b6a1d32f907f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_36
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 3d1166adb804fc245aed5186976f4eda
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_37
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 160
+      width: 16
+      height: 16
+    spriteID: fa5969cf70f262742961a19d4f668dbe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_38
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 7e997a65b21a0ea4b96a1d35d0f287f8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_39
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 48df33b51dff6554595944c827704b82
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_40
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 1f51b1a72aa139e4e93bc8ebbba9972a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_41
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 144
+      width: 16
+      height: 16
+    spriteID: e10beec63d345ea4ab668bda6328549d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_42
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 144
+      width: 16
+      height: 16
+    spriteID: ecf2ec0864fd07a42b606f52f3603b2a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_43
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 6a420d8fe1dcfa447a1f73144b4b4533
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_44
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 55581b6948923914e91f5b7669fa46a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_45
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 1976654224fb1044f900e75310c5bc13
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_46
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 31607df3416c37f4abdeaa3156cd72f9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_47
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 144
+      width: 16
+      height: 16
+    spriteID: d2b4e0706d9fba544971c1c06b3df8ad
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_48
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 144
+      width: 16
+      height: 16
+    spriteID: d0267a4a0b6a7df4784a545093273321
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_49
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 339da712352aeaa42b5a042c090bfc8f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_50
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 8510fdd6060cf5c4a95191f6ade40008
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_51
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 1b29de99ec1338e4680ffcd880fa86c2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_52
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 646b6608694c9064984b3f1df79dc96d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_53
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 070218de1dd628d44a4414ec3c738be5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_54
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 4cc2da049f9ac644cbf8e9e3e1673e47
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_55
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 144
+      width: 16
+      height: 16
+    spriteID: ab6fd0c21f5ddf243a9cd538e4624999
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_56
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 144
+      width: 16
+      height: 16
+    spriteID: ab5ecc5c67bc0fa4b9e052f77889e728
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_57
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 9e374880712ae3545b9c999d53111ed7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_58
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 144
+      width: 16
+      height: 16
+    spriteID: b36af92d27d9b664f80ac14e529b7455
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_59
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 78569e0d06eb0b34b99bd33b79160f46
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_60
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 151a86f8b298bc342b2fd23c2828f346
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_61
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 128
+      width: 16
+      height: 16
+    spriteID: abcaea933d95d0242abe99e4cc7e3e89
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_62
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 128
+      width: 16
+      height: 16
+    spriteID: e2a8d79d00289ed4d923a77c1ac03698
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_63
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 020eb13e8f67ad4408df4abc3b257d73
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_64
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 128
+      width: 16
+      height: 16
+    spriteID: df2445ae39df55e489fbd4b181f1bd30
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_65
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c4d12529969c2444684e1e7586eadd7b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_66
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 15e14732eada4cf4eada0f03289c4b44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_67
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 128
+      width: 16
+      height: 16
+    spriteID: e3967fa1ce2a20647a925755ba4c9677
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_68
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 7fbdef122ee0e9a45995b07f4382f6db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_69
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 465a5ad6e3711674fa82c5da73d95459
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_70
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 128
+      width: 16
+      height: 16
+    spriteID: b62f4aa2afa7e6f43b002a23358bda7c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_71
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 128
+      width: 16
+      height: 16
+    spriteID: f06185cc57edde949a13cad40f077a43
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_72
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 128
+      width: 16
+      height: 16
+    spriteID: a2f8548957b44a547b962f8c52571e4e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_73
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 9c6e7044ec1a9e74882e1d2667c22a8c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_74
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 88adf6df14cbaaf4a8a343c096422bff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_75
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c3f2a214fd96f4f4681d4ad3ac279970
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_76
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 2391a05f662bfe44b8098635abcf156a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_77
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 4a6d6ea2d7940714294537cc4a105271
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_78
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 128
+      width: 16
+      height: 16
+    spriteID: ddadc3f929d12bd43805f08d79e54e71
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 128
+      width: 16
+      height: 16
+    spriteID: f8b9ead1d5508164bad1a6b42b049bf6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_80
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 8efac25674de4094f944c0b701b7d09f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_81
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 112
+      width: 16
+      height: 16
+    spriteID: a36ec167d82c7724fbe810fe9fce34be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_82
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 8e734d641242b76499b2cae5dce6ac55
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_83
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 112
+      width: 16
+      height: 16
+    spriteID: d18f05f56af4f034a97ac245b4ec0b9f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_84
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 112
+      width: 16
+      height: 16
+    spriteID: d4cf060cc16de98488207cabde087fd0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 112
+      width: 16
+      height: 16
+    spriteID: e54c6cff0b172134bafc28d74a5ad821
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_86
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 2a73a06aec364fd4e8438e29e45f6cb5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_87
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c6691bf5a1a06634faf1ac3eae1084b3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_88
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 26618cb6c3e8d654eb4d4e70a8ec191b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_89
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 655a23161e5b1d243a0e00a4a14054c7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_90
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c87274beba6b4104ca491d0d87cafa52
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_91
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 07ac0904da5286a4da9290b018c2c4b1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_92
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 262235e37f701f447aa612252b7f3ef1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_93
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 8033fe874b9c4cd4983a092093fdf6d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_94
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c33ae359435f8e64396f0a8f7b9a3420
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_95
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 112
+      width: 16
+      height: 16
+    spriteID: b746a8fcaa42515469d6fee002b75955
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_96
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 94131482874a824468a1c055993e2a78
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_97
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 7881f96a03074db49a36e449c1058b09
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_98
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 32ad82f8b41f4484d9f3cb0220f08f8b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_99
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 12d41e7a945656d448a115f0de9a0003
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_100
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 96
+      width: 16
+      height: 16
+    spriteID: a237e1848641d0441b0da085af5df0d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_101
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 45efd73590e80724eb18a0c19a14597b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_102
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 96
+      width: 16
+      height: 16
+    spriteID: f9850d2a5689cf44992e0116a878aafe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_103
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1c174f0a8d3aec84b93675bafa87fc47
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_104
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5ab46a65f7531c446b26af0c1920d441
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_105
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 96
+      width: 16
+      height: 16
+    spriteID: cb3acd9805732b94e8113d4d4eb0d84f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 96
+      width: 16
+      height: 16
+    spriteID: e9439cbb33cc70c47bc2a3fd7b36810e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_107
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 6e9a4c0e4b1afce4298aaf831df2bf12
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_108
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 0dfe1d324848db74c89949b1a6cdb4ee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_109
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 13c81b649d907324baa1f835a2232006
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_110
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 7a2cfc560a2dacc439c132882ae9de2e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_111
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 96
+      width: 16
+      height: 16
+    spriteID: b2da1750f5771544f8aa8fecfd2cddea
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_112
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 0a8fe5141528c2d43b0d74dbc7f99a89
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_113
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 395a4457c414a4045a47d0287a63cd8c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_114
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 296c483dba9e4de49af7c7d6c88c1072
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_115
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 868ca28b329a549469a25fcdff63b66b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_116
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5f4638f9fa3133441b19f44deeb3cb29
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 96
+      width: 16
+      height: 16
+    spriteID: ee356cbe23a0da74fbc67b084c13a081
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 96
+      width: 16
+      height: 16
+    spriteID: c364663ec6d0640449ce7aa7c5f4b738
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_119
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1adb9028a905acc4a980c78c50e41906
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_120
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 205be23b131b35e47980f465d252e72f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_121
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 80
+      width: 16
+      height: 16
+    spriteID: cd5f16f397aee044887991965d0cac17
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_122
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 4221358962a456b41bcb6d808dcab35a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_123
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 80
+      width: 16
+      height: 16
+    spriteID: dbb8dcee39fa4474a9c7abc7b0694b2c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_124
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 70b7d06d94bf85e4782db3763540fc14
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_125
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 162853f83e16ab14f872ef2c2afce443
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_126
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 80
+      width: 16
+      height: 16
+    spriteID: dfc22dc336d61e2459fbf7ec48286a5b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 80
+      width: 16
+      height: 16
+    spriteID: c4c3ac26c7ec26b4b861d3215dedc6b3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 80
+      width: 16
+      height: 16
+    spriteID: e59853a8782ad0a478615a63047e34ca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 80
+      width: 16
+      height: 16
+    spriteID: d9f1df64ed013a949b4b84ca4d785b3d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1c8f5a5efe11e134cb64d62a573d9ec8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 747790929d36fcb42a2185b83d0d0671
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 2145bb56b468a574b957db7fc67e4bdf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_133
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 97a6a61a727225e49afbce85c9430319
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_134
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 80
+      width: 16
+      height: 16
+    spriteID: a61d33628becd59429348fbd12dcafbc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_135
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 54646a35e4e56014abcb78a053c0c809
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_136
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 8045b0163835f6d47a26748146c15c7c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_137
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 2e41f069858dee242acf164a611b8246
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_138
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 1bd72278815ff324d98dc0cd6fddda5e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_139
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 80
+      width: 16
+      height: 16
+    spriteID: f75ab6768ad221a4fa9f20b4d1741f54
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_140
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 998089b1be8c4034a9c50e395b701785
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_141
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 13a8cd6b83d42a247a59a734785a1385
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_142
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 64
+      width: 16
+      height: 16
+    spriteID: ad14f0f36efb41c4ea4ffe169fc1c8bb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_143
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 6fcff901a2c53374e995013b81f7f52e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_144
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 64
+      width: 16
+      height: 16
+    spriteID: e22b2d41836fcc64fa18317053cac851
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_145
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 64
+      width: 16
+      height: 16
+    spriteID: c4801b1751f32d64a9420aa4fc09199b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_146
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b4633c01087c10245977bdbe94324870
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_147
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 83adeeba5e27f454b9d83a499253f34f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_148
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 5565e2e1ef3f2f243b15cdc83b34a7e7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_149
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 8bfed4ca77806cc43a65af637ce7903e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_150
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 5520eb522c7019243a0288dd7ef96035
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_151
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 1e976460810262741a92a9c7c41c0875
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_152
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 508771896922b4b45b50bae3a0cc371c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_153
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 64
+      width: 16
+      height: 16
+    spriteID: a58ac6a772eee0945acbd15b3d93d660
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_154
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 490f89ad353554c41b0d4ffceb692822
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_155
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 3575720393d1f1e4f9866a370b414f0b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_156
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 53fcb3dd68832064ba449d41e27780d8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_157
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 9db764bf0a10fb846937000cbda08a6c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_158
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 64
+      width: 16
+      height: 16
+    spriteID: d56ccd5474ca7ea42a78e22c7e965291
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_159
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 036823322d8bd244ca416cf783679370
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_160
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 48
+      width: 16
+      height: 16
+    spriteID: c8a5485f82e37864f90880f71dcf2de7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_161
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 6107b455d5032b944a7b744c444171a6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_162
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 40f56a03b255edd4ea7f691cb1be3443
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_163
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 590ed9e87c8793d4b8bf42dd5e513d3b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_164
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 05f5e2953df39cc4f93890625569ad3d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_165
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 1a6bfe9afb4efb84ca56c9bf57c8bcba
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_166
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 48
+      width: 16
+      height: 16
+    spriteID: fa472a4ab08a9c74990810eb221c8667
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_167
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 48
+      width: 16
+      height: 16
+    spriteID: bf709e4d269d51e4d84d0cee571b2ef5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_168
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 9ecd0ddd1b0d4e84abe4daf5b3c07de4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_169
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b3fef0b1caaa1d24795df7d38a391d5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_170
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 3b720583ca73d3f4d9d3b895f9678522
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_171
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 1ad7d64af1320b0439be4074df16b8a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_172
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 39a6965fb943f824db2a9dd0387aad87
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_173
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 4521cdaa10e2ea140a09b818af7b2e13
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_174
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 775c223f5e3992a4f8d85282acd163cd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_175
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 0c15a99e4b38717478c208b62d6719fb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_176
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 8933028b8fd41e54995a9e4a2ba85768
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_177
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 92dbc94eb10ccc14e80254ccafa7559a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_178
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 9de66c0906fdc9744ab5a93a4eb0dea6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_179
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 099b40091ac6d4144923c8f41d188911
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_180
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 32
+      width: 16
+      height: 16
+    spriteID: aa076b587d39ac6479dcca619e3bbb2a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_181
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 817ff06940c93d549a1e2d4fb7395494
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_182
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 051626cab01056c42b2b17d2f8e9344c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_183
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 7d92715d227de5847b92c0e0195cada8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_184
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 147715fb3e5a1dd41968fc7d87364e7e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_185
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 32
+      width: 16
+      height: 16
+    spriteID: cee1e56c513c7a243b3b1d03251bfcce
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_186
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 28415760c707f2242a499ba624cb0171
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_187
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 32
+      width: 16
+      height: 16
+    spriteID: a8a59e108af2d094aac560ac4f6a28c8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_188
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 9b9bb78f86757e34692d9db671b8d098
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_189
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 9904663abd4cc9443bd534d7042491d2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_190
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 65870ab178165fc41847599b382fffa9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_191
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 32
+      width: 16
+      height: 16
+    spriteID: c5edbeda618c6224d812c819ae2dc94c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_192
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 42a31af2784e0144ca631978044d790d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_193
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 32
+      width: 16
+      height: 16
+    spriteID: f7809486306779e468663f4a708b5ea7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_194
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 2468c430e4bcd79469d4d24bb90a9ecd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_195
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 315158991e5cac144be441e311eca90a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_196
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 32
+      width: 16
+      height: 16
+    spriteID: f847b47e082e61c4c932dad775a74281
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_197
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 0e0e8e108fbf3b443982a8662325a243
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_198
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 5d326be682178464387382d2346071f5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_199
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 8b186ea47c3a81e4eac8cd44874290dd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_200
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 16
+      width: 16
+      height: 16
+    spriteID: e8e33bf6190904b47b3dcc47cdd575a1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_201
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 862f635cdf2d35f4aa6bb48f96d89fcc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_202
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 16
+      width: 16
+      height: 16
+    spriteID: d127928edf7b1ec41b05d9d5b8ea156e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_203
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 16
+      width: 16
+      height: 16
+    spriteID: f82fe35216d0b60459f8d680bd21fad8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_204
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 16
+      height: 16
+    spriteID: ed705809ca2d63e46b37235726412a24
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_205
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 16
+      width: 16
+      height: 16
+    spriteID: f0e68e499c6106b428adff41b8890d44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_206
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 356b11354a7172a47b35c9416d1c27f6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_207
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 16
+      width: 16
+      height: 16
+    spriteID: e8e03aae31afcb2448977bab412cf5da
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_208
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 3dcd813bed9a3d84691c5c9999d9cf4d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_209
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 084bb8c64ddb8d44fa62905b628a1146
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_210
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 969df0218e0194843ad050a11af601e1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_211
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 5f7f852c8f0f3ab45a7247a6ba0ca6e4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_212
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6cf29bd91a445254f9b00a604d290dc4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_213
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 98d1e21440566044588f954719002128
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_214
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 16
+      width: 16
+      height: 16
+    spriteID: b1d47c1f32eceeb4bbf85a5698209f76
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_215
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 0989acc9fe46f1d4ab307fbbce9ffdfd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_216
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 16
+      width: 16
+      height: 16
+    spriteID: e5d4891dc55082649b6a8f0d4bccd9f5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_217
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 507c3409508c31c409a028cf14d6f64b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_218
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 2d4dcf511d600b0419b2da78c999bc4d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_219
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 816ed0c9c2e744644ba272748197ad14
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_220
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 480e5fce5cd62264f8820e6d70c635c3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_221
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 0
+      width: 16
+      height: 16
+    spriteID: ae35de74d084a304f8054f16183673e7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_222
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 3fbff82acf6e4644eac893eb3fd60103
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_223
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2ba52bb79778cf14c86b295b1f3e44bf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_224
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 0
+      width: 16
+      height: 16
+    spriteID: f0046defd73dcef4885e59b4ea24fd15
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_225
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 37c71724e0c26414daf49068d0e844da
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_226
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 0
+      width: 16
+      height: 16
+    spriteID: e8d8b723fb577b042a8d27829beaf369
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_227
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 7607cbe22b737834dbcc741d32fe738c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_228
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 0
+      width: 16
+      height: 16
+    spriteID: edece895d0b34a84293447cd3dcc636a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_229
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 64bf3069addf02b4fbdadebf4f6edabb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_230
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 4a56c3cd20935d545a29a32014b49151
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_231
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 8ad61e9ec34da0b4688af663e6c92956
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_232
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 0
+      width: 16
+      height: 16
+    spriteID: abf17b9957feeb047b9ca3634a6d1985
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_233
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 960e3c7125b04a44a9f5872af800117a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_234
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 6b9140272dc654b4e8fe4058436f7071
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_235
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 0
+      width: 16
+      height: 16
+    spriteID: bcab7d74fc2e6ac4a892611f2337b5f0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_236
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 050866400124eba46ad74f764f4b5f78
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_237
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 5b3786cb469cccf4aae39a5d9e24fae1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_238
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 0
+      width: 16
+      height: 16
+    spriteID: da28e98f0ce72c7479a5bab7ac332d6c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetDesert_239
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2b048ccd6b35baa4db30d573fef29bee
+    spriteOutline: []
+    tessellationDetail: 0
+  _secondaryTextures: []
+  _artifacts: {instanceID: 0}

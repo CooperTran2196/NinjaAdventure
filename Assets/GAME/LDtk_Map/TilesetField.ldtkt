@@ -1,0 +1,64 @@
+{
+  "Rects": [
+    {
+      "x": 0,
+      "y": 192,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 0,
+      "y": 144,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 0,
+      "y": 96,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 0,
+      "y": 48,
+      "w": 48,
+      "h": 48
+    }
+  ],
+  "Def": {
+    "__cHei": 15,
+    "__cWid": 5,
+    "cachedPixelData": {
+      "opaqueTiles": "000000100000000000000100000000000000100000000000000100000000000000100000000",
+      "averageColors": "ce95eea5ce95ffa5ffa5ee95ffa5ee95ffa5ffa5ce95de95ce9500000000c9a3eab3c9a3fab3fab3e9a3fab3e9a3fab3fab3c9a3d9a3c9a300000000c693e693c693f793f793e693f7a3e693f793f793c684d694c68400000000ceb9eebaceb9ffcaffcaeeb9ffcaeeb9ffcaffcacea9dfb9cea900000000ceeeeeeeceeeffffffffeeeeffffeeeeffffffffceeedeefceee00000000"
+    },
+    "customData": [
+
+    ],
+    "embedAtlas": null,
+    "enumTags": [
+
+    ],
+    "identifier": "TilesetField",
+    "padding": 0,
+    "pxHei": 240,
+    "pxWid": 80,
+    "relPath": "Backgrounds/Tilesets/TilesetField.png",
+    "savedSelections": [
+
+    ],
+    "spacing": 0,
+    "tags": [
+
+    ],
+    "tagsSourceEnumUid": null,
+    "tileGridSize": 16,
+    "uid": 94
+  }
+}

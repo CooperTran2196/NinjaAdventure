@@ -1,0 +1,52 @@
+{
+  "Rects": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 0,
+      "y": 192,
+      "w": 48,
+      "h": 48
+    },
+    {
+      "x": 176,
+      "y": 192,
+      "w": 48,
+      "h": 48
+    }
+  ],
+  "Def": {
+    "__cHei": 17,
+    "__cWid": 22,
+    "cachedPixelData": {
+      "opaqueTiles": "11111111110111111111101111111111011111111110111111111111111111111111111111111111111111110000111110010001111100100000000001111000000011111111110111111111101111111111011111111110111111111111111111111111111111111111111111110000111110010001111100100000000001111000000011111111110111111111101111111111011111111110111111111111111111111111111111111111111111110000111110000001111100",
+      "averageColors": "ffcaffcaffcaffcaffcaffcaffcaffcaffcaffca0000fdb8fdb8fdb8fdb8fda8fda8fda8fda8fca7fca70000ffcaffdbffcaffcaffcaffdbffdbffcaffcaffca0000fdb8fec9fdb8fda7fda8fdb8fdb8fda8fdb8fda70000ffcaffcaffcaffcaffcaffdaffdaffcaffcaffcaffcafdb8fdb8fdb8fdb8fda8fdb8fdb8fda8fdb8fca7fca7ffcaffcaffcaffcaffcaffcaffcaffcaffcaffcaffcafdb8fda7fdb8fdb8fda8fda8fda8fda8fca7fca7fca70000000000000000ffcaffcaffcaffcaffca00000000fec9000000000000fca7fdb8fdb8fca7fca700000000ffec0000000000000000000000000000000000000000fc96fedbfecafec90000000000000000000000000000ffb7ffb7ffb7ffa6ffa6ffb7ffb7ffa6ffa6ffb70000f787f787f787f787f786f787f787f786f786f7860000ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb70000f787f897f787f786f787f887f887f787f787f7860000ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7ffb7f787f787f787f787f787f887f887f787f787f787f787ffa6ffa7ffb6ffb6ffa7ffb7ffb7ffb7ffa7ffb7ffb7f787f786f787f787f786f787f787f787f786f787f7870000000000000000ffa7ffb7ffb7ffa7ffa700000000f897000000000000f786f787f787f786f78600000000ffdb0000000000000000000000000000000000000000f676fabbf9a8f8970000000000000000000000000000fdb7fdb7fda7fda7fda7fdb7fdb7fda7fdb7fdb70000f554f555f544f544f544f554f555f544f544f6550000fdb7fdb7fdb7fda7fdb7fdb7fdb7fdb7fdb7fdb70000f555f655f554f544f554f555f655f554f655f5550000fda7fdb7fda7fda7fdb7fdb7fdb7fdb7fdb7fdb7fdb7f544f555f544f544f555f655f655f554f655f555f555fda7fda7fda7fca7fda7fdb7fdb7fda7fdb7fdb7fdb7f544f544f544f544f544f554f544f544f544f555f5550000000000000000fdb7fdb7fdb7fdb7fdb7000000000000000000000000f544f655f555f554f55500000000"
+    },
+    "customData": [
+
+    ],
+    "embedAtlas": null,
+    "enumTags": [
+
+    ],
+    "identifier": "TilesetInteriorFloor",
+    "padding": 0,
+    "pxHei": 272,
+    "pxWid": 352,
+    "relPath": "Backgrounds/Tilesets/Interior/TilesetInteriorFloor.png",
+    "savedSelections": [
+
+    ],
+    "spacing": 0,
+    "tags": [
+
+    ],
+    "tagsSourceEnumUid": null,
+    "tileGridSize": 16,
+    "uid": 2012
+  }
+}

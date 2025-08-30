@@ -1,0 +1,143 @@
+{
+    "PixelsPerUnit": 16,
+    "CustomLevelPrefab": {
+        "instanceID": 0
+    },
+    "IntGridValueColorsVisible": false,
+    "UseCompositeCollider": true,
+    "GeometryType": 0,
+    "CreateBackgroundColor": true,
+    "CreateLevelBoundsTrigger": false,
+    "UseParallax": true,
+    "IntGridValues": [
+        {
+            "_key": "Collisions_1",
+            "_asset": {
+                "fileID": 11400000,
+                "guid": "8e7d089a37fa45a409077b1b89effb48",
+                "type": 2
+            }
+        },
+        {
+            "_key": "Fence_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Fence_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Field_5",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Field_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Field_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Field_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Field_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_5",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_6",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Water_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Water_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Water_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Water_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        }
+    ],
+    "Entities": []
+}

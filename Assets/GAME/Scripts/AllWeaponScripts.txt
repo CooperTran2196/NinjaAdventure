@@ -1,0 +1,435 @@
+ 
+// ----- File: W_Base.cs ----- 
+using UnityEngine;
+
+public abstract class W_Base : MonoBehaviour
+{
+    [Header("Data")]
+    public W_SO data;
+
+    [Header("Owner / Targeting")]
+    public Transform owner;         // set by W_Manager
+    public LayerMask targetMask;    // who this weapon damages
+
+    protected P_Movement pMove;
+    protected E_Movement eMove;
+    protected P_Stats    pStats;
+    protected E_Stats    eStats;
+    protected SpriteRenderer sprite;
+
+    protected virtual void Awake()
+    {
+        sprite ??= GetComponentInChildren<SpriteRenderer>();
+        if (owner == null) owner = transform.root;
+
+        if (owner)
+        {
+            pMove  = owner.GetComponent<P_Movement>();
+            eMove  = owner.GetComponent<E_Movement>();
+            pStats = owner.GetComponent<P_Stats>();
+            eStats = owner.GetComponent<E_Stats>();
+        }
+
+        if (data == null) Debug.LogWarning($"{name}: W_SO missing.");
+        if (sprite == null) Debug.LogWarning($"{name}: SpriteRenderer missing.");
+    }
+
+    public abstract void Attack();
+
+    protected Vector2 FacingDir
+    {
+        get
+        {
+            Vector2 d = pMove ? pMove.lastMove : (eMove ? eMove.lastMove : Vector2.down);
+            if (d.sqrMagnitude < 0.0001f) d = Vector2.down;
+            return d.normalized;
+        }
+    }
+
+    protected int AttackerBaseDamage => pStats ? pStats.attackDmg : (eStats ? eStats.attackDmg : 0);
+
+    protected int FinalDamage => AttackerBaseDamage + (data ? data.weaponDamage : 0);
+
+    protected float FacingAngleDeg()
+    {
+        return Vector2.SignedAngle(Vector2.down, FacingDir);
+    }
+
+    protected Vector3 WorldPosAtOffset(float extra = 0f)
+    {
+        float off = (data ? data.offsetDistance : 0f) + extra;
+        return (owner ? owner.position : transform.position) + (Vector3)(FacingDir * off);
+    }
+}
+ 
+// ----- File: W_Hitbox.cs ----- 
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class W_Hitbox : MonoBehaviour
+{
+    public Collider2D col;
+
+    int damage;
+    LayerMask targets;
+    GameObject owner;
+    float timeLeft;
+
+    void Awake()
+    {
+        col ??= GetComponent<Collider2D>();
+        if (col == null) Debug.LogError($"{name}: Collider2D missing.");
+        else col.isTrigger = true;
+
+        enabled = false;
+        if (col) col.enabled = false;
+    }
+
+    public void Arm(int dmg, LayerMask targetMask, GameObject ownerGO, float duration)
+    {
+        damage   = Mathf.Max(0, dmg);
+        targets  = targetMask;
+        owner    = ownerGO;
+        timeLeft = duration;
+
+        enabled = true;
+        if (col) col.enabled = true;
+    }
+
+    void Update()
+    {
+        timeLeft -= Time.deltaTime;
+        if (timeLeft <= 0f)
+        {
+            if (col) col.enabled = false;
+            enabled = false;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (owner && other.transform.IsChildOf(owner.transform)) return;
+        if (((1 << other.gameObject.layer) & targets) == 0) return;
+
+        // Player uses ChangeHealth; Enemy uses TakeDamage
+        var pc = other.GetComponent<P_Combat>();
+        if (pc != null) { pc.ChangeHealth(-damage); return; }   // 【turn16file11†P_Combat.cs†L58-L66】
+
+        var ec = other.GetComponent<E_Combat>();
+        if (ec != null) { ec.ChangeHealth(-damage); return; }      // 【turn16file7†AllEnemyScripts.txt†L68-L76】
+    }
+}
+ 
+// ----- File: W_Manager.cs ----- 
+using UnityEngine;
+using System;
+
+[DisallowMultipleComponent]
+public class W_Manager : MonoBehaviour
+{
+    public enum Slot { Melee, Ranged, Magic }
+
+    [Header("Owner / Root")]
+    public Transform weaponRoot; // where weapon prefabs spawn
+
+    [Header("Equipped Blueprints (drag SOs here)")]
+    public W_SO meleeSO;
+    public W_SO rangedSO;
+    public W_SO magicSO; // placeholder
+
+    [Header("Runtime Instances")]
+    public W_Melee  meleeInst;
+    public W_Base   rangedInst; // placeholder for later
+    public W_Base   magicInst;  // placeholder
+
+    [Header("Targets (set in Inspector)")]
+    public LayerMask playerWeaponTargets; // e.g. Enemy
+    public LayerMask enemyWeaponTargets;  // e.g. Player
+
+    public event Action<Slot, W_SO> OnEquipped;
+
+    // Requests that belong to the weapon system (no proxy)
+    public static event Action<W_SO, Slot> EquipRequested;
+    public static event Action<Slot>      AttackRequested;
+
+    public static void RequestEquip(W_SO so, Slot slot) => EquipRequested?.Invoke(so, slot);
+    public static void RequestAttack(Slot slot) => AttackRequested?.Invoke(slot);
+
+    void Awake()
+    {
+        if (weaponRoot == null) weaponRoot = transform;
+    }
+
+    void OnEnable()
+    {
+        EquipRequested  += HandleEquipRequested;
+        AttackRequested += HandleAttackRequested;
+    }
+
+    void OnDisable()
+    {
+        EquipRequested  -= HandleEquipRequested;
+        AttackRequested -= HandleAttackRequested;
+    }
+
+    void Start()
+    {
+        if (meleeSO) Equip(meleeSO, Slot.Melee); // equip at start
+    }
+
+    public void Equip(W_SO so, Slot slot)
+    {
+        if (so == null || so.prefab == null) return;
+
+        // Destroy old
+        switch (slot)
+        {
+            case Slot.Melee:  if (meleeInst)  Destroy(meleeInst.gameObject);  break;
+            case Slot.Ranged: if (rangedInst) Destroy(rangedInst.gameObject); break;
+            case Slot.Magic:  if (magicInst)  Destroy(magicInst.gameObject);  break;
+        }
+
+        // Spawn new
+        var go = Instantiate(so.prefab, weaponRoot);
+        var baseComp = go.GetComponent<W_Base>();
+        if (baseComp == null) { Debug.LogError($"Prefab {so.prefab.name} missing W_Base"); Destroy(go); return; }
+
+        baseComp.data  = so;
+        baseComp.owner = transform; // the character
+        bool isPlayer = GetComponent<P_Stats>() != null;
+        baseComp.targetMask = isPlayer ? playerWeaponTargets : enemyWeaponTargets; // ensure hits register  :contentReference[oaicite:4]{index=4}
+
+        switch (slot)
+        {
+            case Slot.Melee:  meleeInst  = baseComp as W_Melee;  break;
+            case Slot.Ranged: rangedInst = baseComp;             break;
+            case Slot.Magic:  magicInst  = baseComp;             break;
+        }
+
+        var sr = go.GetComponentInChildren<SpriteRenderer>();
+        if (sr) sr.enabled = false; // hidden until attack or preview
+
+        OnEquipped?.Invoke(slot, so);
+    }
+
+    void HandleEquipRequested(W_SO so, Slot slot) => Equip(so, slot);
+
+    void HandleAttackRequested(Slot slot)
+    {
+        // For now we only wire melee
+        if (slot == Slot.Melee) meleeInst?.Attack();
+    }
+}
+ 
+// ----- File: W_Melee.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+[DisallowMultipleComponent]
+public class W_Melee : W_Base
+{
+    [Header("Sprite & Timing")]
+    public SpriteRenderer weaponSprite;   // on THIS GO
+    public float showTime = 0.18f;
+    public float thrustDistance = 0.20f;
+    public bool previewPose = false;
+
+    [Header("Hitbox")]
+    public W_Hitbox hitbox;               // on THIS GO (same transform as sprite)
+
+    protected override void Awake()
+    {
+        base.Awake();
+        weaponSprite ??= GetComponent<SpriteRenderer>();
+        hitbox       ??= GetComponent<W_Hitbox>();
+        if (hitbox == null) Debug.LogError($"{name}: W_Hitbox missing.");
+        if (weaponSprite) weaponSprite.enabled = false;
+    }
+
+    void Update()
+    {
+        if (previewPose && weaponSprite)
+        {
+            weaponSprite.enabled = true;
+            transform.position = WorldPosAtOffset();                 // move THIS GO
+            transform.rotation = Quaternion.Euler(0, 0, FacingAngleDeg());
+        }
+    }
+
+    public override void Attack()
+    {
+        // Place & face (THIS GO holds both sprite + collider)
+        transform.position = WorldPosAtOffset();
+        transform.rotation = Quaternion.Euler(0, 0, FacingAngleDeg());
+
+        if (weaponSprite) weaponSprite.enabled = true;
+
+        // Arm the collider window
+        hitbox?.Arm(FinalDamage, targetMask, owner ? owner.gameObject : null, showTime);
+
+        // Thrust
+        StartCoroutine(ThrustThenHide());
+    }
+
+    IEnumerator ThrustThenHide()
+    {
+        float t = 0f;
+        Vector3 start = WorldPosAtOffset(-thrustDistance * 0.5f);
+        Vector3 end   = WorldPosAtOffset(+thrustDistance * 0.5f);
+
+        while (t < showTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / showTime);
+            transform.position = Vector3.Lerp(start, end, k);        // move THIS GO (sprite + collider together)
+            yield return null;
+        }
+
+        if (weaponSprite) weaponSprite.enabled = false;
+    }
+}
+ 
+// ----- File: W_Projectile.cs ----- 
+using UnityEngine;
+
+[DisallowMultipleComponent, RequireComponent(typeof(Collider2D))]
+public class W_Projectile : MonoBehaviour
+{
+    public Rigidbody2D rb;     // optional
+    public float speed = 8f;
+    public float life  = 2f;
+
+    int damage;
+    LayerMask targets;
+    GameObject owner;
+    Vector2 dir;
+    float timer;
+
+    void Awake()
+    {
+        rb ??= GetComponent<Rigidbody2D>();
+        var c = GetComponent<Collider2D>();
+        if (c) c.isTrigger = true;
+        timer = life;
+    }
+
+    public void Fire(Vector2 direction, int dmg, LayerMask targetMask, float speedOverride, float lifeOverride, GameObject ownerGO)
+    {
+        dir     = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.down;
+        damage  = Mathf.Max(0, dmg);
+        targets = targetMask;
+        owner   = ownerGO;
+        if (speedOverride > 0f) speed = speedOverride;
+        if (lifeOverride  > 0f) life  = lifeOverride;
+        timer = life;
+
+        if (rb) rb.linearVelocity = dir * speed;
+    }
+
+    void Update()
+    {
+        if (rb == null) transform.position += (Vector3)(dir * speed * Time.deltaTime);
+
+        timer -= Time.deltaTime;
+        if (timer <= 0f) Destroy(gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (owner && other.transform.IsChildOf(owner.transform)) return;
+        if (((1 << other.gameObject.layer) & targets) == 0) return;
+
+        var pc = other.GetComponent<P_Combat>();
+        if (pc != null) { pc.ChangeHealth(-damage); Destroy(gameObject); return; }  // 【turn16file11†P_Combat.cs†L58-L66】
+
+        var ec = other.GetComponent<E_Combat>();
+        if (ec != null) { ec.ChangeHealth(-damage); Destroy(gameObject); return; }     // 【turn16file7†AllEnemyScripts.txt†L68-L76】
+    }
+}
+ 
+// ----- File: W_Ranged.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+[DisallowMultipleComponent]
+public class W_Ranged : W_Base
+{
+    [Header("Sprite (visual only)")]
+    public SpriteRenderer weaponSprite;
+    public float showTime = 0.12f;
+    public bool previewPose = false;
+
+    [Header("Projectile")]
+    public W_Projectile projectilePrefab;
+    public float projectileSpeed = 8f;
+    public float projectileLife  = 2f;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        weaponSprite ??= GetComponentInChildren<SpriteRenderer>();
+        if (weaponSprite) weaponSprite.enabled = false;
+    }
+
+    void Update()
+    {
+        if (previewPose && weaponSprite)
+        {
+            weaponSprite.enabled = true;
+            weaponSprite.transform.position = WorldPosAtOffset();
+            weaponSprite.transform.rotation = Quaternion.Euler(0, 0, FacingAngleDeg());
+        }
+    }
+
+    public override void Attack()
+    {
+        // Show the bow/wand sprite briefly (no thrust, no damage by sprite)
+        if (weaponSprite)
+        {
+            weaponSprite.enabled = true;
+            weaponSprite.transform.position = WorldPosAtOffset();
+            weaponSprite.transform.rotation = Quaternion.Euler(0, 0, FacingAngleDeg());
+            StartCoroutine(HideAfter(showTime));
+        }
+
+        // Fire the projectile (this applies damage)
+        if (projectilePrefab)
+        {
+            var proj = Instantiate(
+                projectilePrefab,
+                WorldPosAtOffset(),
+                Quaternion.Euler(0, 0, FacingAngleDeg())
+            );
+            proj.Fire(FacingDir, FinalDamage, targetMask, projectileSpeed, projectileLife, owner ? owner.gameObject : null);
+        }
+    }
+
+    IEnumerator HideAfter(float t)
+    {
+        yield return new WaitForSeconds(t);
+        if (weaponSprite) weaponSprite.enabled = false;
+    }
+}
+ 
+// ----- File: W_SO.cs ----- 
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "W/W_SO")]
+public class W_SO : ScriptableObject
+{
+    public enum Style { Melee, Ranged, Magic }
+
+    [Header("Identity")]
+    public string id = "Weapon_ID";
+    public Style style = Style.Melee;
+
+    [Header("Runtime Prefab (W_Melee / W_Ranged)")]
+    public GameObject prefab;
+
+    [Header("Combat")]
+    public int weaponDamage = 1;
+
+    [Tooltip("Where to place/aim the weapon relative to owner: dir * offsetDistance.")]
+    public float offsetDistance = 0.5f;
+}
+ 

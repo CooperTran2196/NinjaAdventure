@@ -1,0 +1,33 @@
+{
+  "Rects": null,
+  "Def": {
+    "__cHei": 5,
+    "__cWid": 16,
+    "cachedPixelData": {
+      "opaqueTiles": "00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "averageColors": "9a536a634fda2fda5b7429432a533a5359539fc82ddd8c647c756cba5baa59755366000000000000000000000000000000000000000000000000000000000000478357834463478338936975478377930000000000000000000000000000000049aa5999467749aa3bbb699849997bbb000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "customData": [
+
+    ],
+    "embedAtlas": null,
+    "enumTags": [
+
+    ],
+    "identifier": "TilesetFloorDetail",
+    "padding": 0,
+    "pxHei": 80,
+    "pxWid": 256,
+    "relPath": "Backgrounds/Tilesets/TilesetFloorDetail.png",
+    "savedSelections": [
+
+    ],
+    "spacing": 0,
+    "tags": [
+
+    ],
+    "tagsSourceEnumUid": null,
+    "tileGridSize": 16,
+    "uid": 111
+  }
+}

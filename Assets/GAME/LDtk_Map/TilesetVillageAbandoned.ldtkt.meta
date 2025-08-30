@@ -1,0 +1,3616 @@
+fileFormatVersion: 2
+guid: 572817f7efc938b44aaae38834629c1d
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f3268c876daf4890b6af6cd462063137, type: 3}
+  _reimportOnDependencyChange: 1
+  _pixelsPerUnit: 16
+  _overrideTexture: {instanceID: 0}
+  _sprites:
+  - name: TilesetVillageAbandoned_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 2361d70948c2dfc4ba202ed77dda68eb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 176
+      width: 16
+      height: 16
+    spriteID: cd8346f0c1053734cb8243c600553423
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 84f733ed6496fdb4d89a3561d65a6448
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 7843329e59d883c419c277fd265e66e2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 6a01bdc96cf4b3347ae9515979025c24
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 74885d57bca2fa5428f7fd8cfda43f87
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 176
+      width: 16
+      height: 16
+    spriteID: d42c480a8cd501245ac32ea081ac832a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 176
+      width: 16
+      height: 16
+    spriteID: bf2b7be63d46c01499e92a2915b83556
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 176
+      width: 16
+      height: 16
+    spriteID: b8577e0e8b7939b4c906df6d46cadab0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c3781b024b647a44b83d12c7be37a008
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_10
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 176
+      width: 16
+      height: 16
+    spriteID: f5b2a40707e87934e9c66a0d6e253500
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_11
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 176
+      width: 16
+      height: 16
+    spriteID: d9b4b3a31828f1547a4342f76ebfcc44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_12
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 302a960d3e5961746a5989ace47d2c03
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_13
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 176
+      width: 16
+      height: 16
+    spriteID: b96b1b5ac1fcc5e448f69840f523bde6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_14
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 06477b6161c92224ca2436785a591559
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_15
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 176
+      width: 16
+      height: 16
+    spriteID: b771dfa5a305f964184e8150072bb39f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_16
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 56e6bdc8000fb3b44990abe4ed31f832
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_17
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 4fbbded0f021dfa4481c30db63eaabb2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_18
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 0e939b5341434164485f8339a19cc3c4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_19
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 0814b236f03c70640bdcc991d9795ebe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_20
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 160
+      width: 16
+      height: 16
+    spriteID: eac331d26a81a5448a01c742c0f615be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_21
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 6d039004379b83240869eaf15293b73a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_22
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 160
+      width: 16
+      height: 16
+    spriteID: a8e89f63deeda9444967d572849db4a0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_23
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 160
+      width: 16
+      height: 16
+    spriteID: bfdc7a44fa23d4348b9a2814b7009c67
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_24
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 160
+      width: 16
+      height: 16
+    spriteID: b277bc9ef0f941341a5bbe2eddfe3541
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_25
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 160
+      width: 16
+      height: 16
+    spriteID: ce29c4be968ab904bb48875b9daf9450
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_26
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 9bfa0572d906a2d438a809a15e4ac48c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_27
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 160
+      width: 16
+      height: 16
+    spriteID: d3ca2c4b32764b84086d1e78207e0e13
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_28
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4071c65557982a242b2d425a67a63b17
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_29
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 160
+      width: 16
+      height: 16
+    spriteID: c574fffa745bd8e4f902f92ac3d98102
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_30
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 160
+      width: 16
+      height: 16
+    spriteID: b121cd9ca8cc4f144b14292a305ae0f4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_31
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 67533dac7fe840f429999504b9c38112
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_32
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 160
+      width: 16
+      height: 16
+    spriteID: b9cb0db8f5e752a47aae937244d79882
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_33
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 0054982a2844e544e9f717b975997d51
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_34
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 160
+      width: 16
+      height: 16
+    spriteID: d005ed6aac4102748b2e7b86a3a06607
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_35
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 7b69a3f092e1e8f4396f3882a36d81f9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_36
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 3b60d3442c69dba4e8e4c97a2e913958
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_37
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 1342e1e9e58ba1549989008094355c32
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_38
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4822928b791b30b4b9c3a1671f740f97
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_39
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 160
+      width: 16
+      height: 16
+    spriteID: a252b78dc33f7ae4d96d6d10282b0320
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_40
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 63b2136621a93c74aa56a0aca7b44a2f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_41
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 3489a270c94fe9843a1f1964a89a4c17
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_42
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 5afe60030d5bead4a88d71077fd6ee2d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_43
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 43c4803f7407b144b960211bbf807c51
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_44
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 683b3cb18575b5e45ac5d88df6a838b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_45
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 4ed582ae08b9e0b4586b9a442ab15792
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_46
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 144
+      width: 16
+      height: 16
+    spriteID: e72802a46368cde4b94c7e53ab10c46a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_47
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 0947ccbe6b1816241911ab887c5fa61e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_48
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 3ed9ad313e6fcbc45a247ea5cfde57b2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_49
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 8215b6184ec02f94da79cbeaad146f69
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_50
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 144
+      width: 16
+      height: 16
+    spriteID: e9306061aa20d9c4882904659605b2b5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_51
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 96c74b3ecee48bf4c9197c89e5069ace
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_52
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 1dc96354ffc81fc42973706f3b97c195
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_53
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 9b9e1a79fcff71b479c34349dc8f28ec
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_54
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 09ac7ee9baf7561429359032107c37b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_55
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 6ee3ee109579df246868cc12a3f10075
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_56
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 144
+      width: 16
+      height: 16
+    spriteID: b3ea6c1d1f798fe45903a8b6a0b13d30
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_57
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 144
+      width: 16
+      height: 16
+    spriteID: ed337b229721df047b00b979dfe04da3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_58
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 144
+      width: 16
+      height: 16
+    spriteID: a8c1791a6ad04ab4d8b7f631ee4c1171
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_59
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 144
+      width: 16
+      height: 16
+    spriteID: fef0d600d6c0e5140b263affb01789ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_60
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 491dee4bc1de87c4c9b2cd15e3dcec31
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_61
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 128
+      width: 16
+      height: 16
+    spriteID: f4ac27e0f0bed364289db8efb9066340
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_62
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 128
+      width: 16
+      height: 16
+    spriteID: ef3c98994696b28428fe1e297314b893
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_63
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 777e33e284d8752479d38b351b120e20
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_64
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 128
+      width: 16
+      height: 16
+    spriteID: fdf3ffed6f35b86498262e9a7df0c781
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_65
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 5504d09c0cf4bcd449eec20e4a83b7bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_66
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 128
+      width: 16
+      height: 16
+    spriteID: d8b01b1443c538c40b9558fa4ee8d6bc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_67
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 573e17384baaa3f459cf2d2f69293c0d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_68
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 8254d36ddca6e5d4384cccfc27fc974a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_69
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 683b7596e532c8e44ac28257c6be3fd1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_70
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 36dfd67c3034c8641bc5ec5280364658
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_71
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 948b56980ec337440a5f9edee3118d78
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_72
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 4956ee77199c14c46b62e5dfabc8d9f2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_73
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 82afc8f16cee511418e481707a91c1a0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_74
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 3500f4e33501e9e4993e99e27513d4f3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_75
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 128
+      width: 16
+      height: 16
+    spriteID: dcff5b2057a941d4d83a64c39260bb44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_76
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c7b3ca636f66c2940a0991f12cbd91e8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_77
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 978be386a90962e4ca339c9c18526fce
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_78
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 128
+      width: 16
+      height: 16
+    spriteID: d1e57f483b037454dbf05875517a80bc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 128
+      width: 16
+      height: 16
+    spriteID: e8a75e15df8e27043887935493455c21
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_80
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 112
+      width: 16
+      height: 16
+    spriteID: bb42ec742adfbc44ebe34b091bcbfaab
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_81
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 39010024cc676da47910d8bab1757541
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_82
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 329218c4e1e57d142a7e79bee2599991
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_83
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 31f4e731152cbcd4281f05e65944cde5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_84
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 112
+      width: 16
+      height: 16
+    spriteID: bf07d03915cd51b47b2c80ed8fb93656
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 112
+      width: 16
+      height: 16
+    spriteID: ef39336de00c098459d21c43424b2531
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_86
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 112
+      width: 16
+      height: 16
+    spriteID: de7bd63ec1852414887ab1c9e16281ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_87
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 6e2cd4e046e63b04683c462303be3070
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_88
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 16da3ad239b68e54ca7b879d35b076ee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_89
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 112
+      width: 16
+      height: 16
+    spriteID: f2c2163cd6e3731499c73fa5641ae202
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_90
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 6df4f531ea19abd48bb45bab3ce8a9c2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_91
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 1fa42ab512289bd46a12ce87cc179b04
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_92
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 2d337e4ba63cc9d49addf01d401ad770
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_93
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 33b1abc735ed0e346951343eed66c6cf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_94
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 112
+      width: 16
+      height: 16
+    spriteID: dcff26ae639c16242ac8c9324e106707
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_95
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 112
+      width: 16
+      height: 16
+    spriteID: f4b68df6fb89b83478300f37954d336c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_96
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 112
+      width: 16
+      height: 16
+    spriteID: d8cbdd7937d834248b81f6adad8d1b71
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_97
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 77b1d3d70e01bc646ac18e4c7d000d79
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_98
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 347819a525ed39440bfb684ca5905cb0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_99
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 112
+      width: 16
+      height: 16
+    spriteID: baaa2cc95982f6247ba9630a23d33a53
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_100
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 69221d9ef48786c41afde9eefa7ff663
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_101
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 893e388937145f148b0e9e7e6c50cc4c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_102
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 654cadbd093d4b04c857d661322ebd5f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_103
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 3f98bd1c18d541a4f8d03edfeca11511
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_104
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 388162d47d93eee45abdb555f6d3b0d5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_105
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 4fbd07640df67e54aa067356d33d184e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 3e9ff39943f9591438662bdbfbcdcd53
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_107
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 96
+      width: 16
+      height: 16
+    spriteID: be06997e16e371a42b7f7f5eb75d0e82
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_108
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 26e8beedf2009824598fb9a90472dc59
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_109
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 9dc1ecbc01b07a9488f362703d2d03f9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_110
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 96
+      width: 16
+      height: 16
+    spriteID: fa7b4a4b027705f449995223f8d1dd39
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_111
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 50cd1b80c966a174fb7303c2a9f03c0a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_112
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 5198b195038e47f448cb621c4305c15d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_113
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 082646dcb2278844aa579d848957aa5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_114
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 09eaf6b34b29370499988a73e029912e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_115
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 96
+      width: 16
+      height: 16
+    spriteID: f0c8f3f1825087a49939c320a4114be4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_116
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 8243ae734413dc246ac20bf9d1d49f32
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 061d2e0f046c8df4f849c2fcfdce087b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 96
+      width: 16
+      height: 16
+    spriteID: e998351ddcb2bb54aa372f8697684368
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_119
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 4db2b499784d23c4abb10bb3ded52b5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_120
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 80
+      width: 16
+      height: 16
+    spriteID: c33baa57f623ee54da32d857daa2352e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_121
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 5880335e3d7f99641b7299c7e3b0efc9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_122
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 03b691beb7274974dab17bf12bb7c754
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_123
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 392243255af1cf6438bb3e59b1e9a9e1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_124
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 80
+      width: 16
+      height: 16
+    spriteID: dfd01837ce8d3624c9faef49dc41fd4f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_125
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 96901587fba3ab049bff83f7fffd53fc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_126
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 80
+      width: 16
+      height: 16
+    spriteID: bc81e5a1e43cd744c9e1095cccd101d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 146456c7aa4253f4e80c81b650b30076
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 80
+      width: 16
+      height: 16
+    spriteID: e6ffaf303e129db40a49c3f8a3c7d7d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 80
+      width: 16
+      height: 16
+    spriteID: bdfff208c2845784e9d2ed9a3d4e2c4d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 81380c7ebe176da488184fa030ea0121
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 5f879f1534d99ab4084f7cf102fd1dca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 80
+      width: 16
+      height: 16
+    spriteID: c5d524d7343a48f46aaa33a7ff8187e7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_133
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 97036177b617f1541894f6f1c99a69da
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_134
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 80
+      width: 16
+      height: 16
+    spriteID: cd629aae33ffa7a4491fb2dcfb14b57b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_135
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 7c4273534d984b4429c894d0480754d5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_136
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 08dea58d43cfd9947ad1aeef1ca17fe4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_137
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 80
+      width: 16
+      height: 16
+    spriteID: b87eacb41c6ba314ea8bc6ddd18f46f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_138
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 80
+      width: 16
+      height: 16
+    spriteID: bf4543a7b0f635249962f46f4940a610
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_139
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 80
+      width: 16
+      height: 16
+    spriteID: df8ed59dcf728854d97d6d1f1c4fca10
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_140
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 9a0d5c1d60e9b1a458ffdd15f02b30dd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_141
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 0f10730204be8d840acf30419806a20e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_142
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 64
+      width: 16
+      height: 16
+    spriteID: eb89dda800e50f94eb2483ac53e1891c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_143
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 0c57480af5a65994f9751004ddc96c23
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_144
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 91a9a344958fb4449b64e854761b579b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_145
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 64
+      width: 16
+      height: 16
+    spriteID: cd135db3541f4844ca33091a493c7def
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_146
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 540a2ca23b02195418e0104a35e50553
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_147
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 71018f713c309744aa1863870b48b706
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_148
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 011105e269c1b4c4bb1e0efda4a9927d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_149
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 43e43d78669e68b46a771b5f38737b47
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_150
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 64
+      width: 16
+      height: 16
+    spriteID: bbf23c21a5f2b5c4ca8d41618e2b04f2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_151
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 41da8775cf04a0d41ba6c94d0c64c74b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_152
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 64
+      width: 16
+      height: 16
+    spriteID: d315035984ba01641911ec3c70310de0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_153
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 35317ac8d97cb444da91fa928c95b1ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_154
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 09ae9933d10956443a0f4461e1587aab
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_155
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 02d0e67588fc3ce4a9163d18c9d7cf1c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_156
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 64
+      width: 16
+      height: 16
+    spriteID: a6ec78639244fa04b8ecf9f6d26f902d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_157
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 8bcef807520fb6e49bdef9514b1765aa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_158
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 64
+      width: 16
+      height: 16
+    spriteID: e54b11f6d52a29c488110283f29ada9e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_159
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 64
+      width: 16
+      height: 16
+    spriteID: fbd90354229c425468cda263ced29cc6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_160
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b0debd70cd814cd41bed526404175e90
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_161
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 3dfd0c4c80de7004782a4c80d46139b5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_162
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 48
+      width: 16
+      height: 16
+    spriteID: dca25a8e8eb43d84695e25017cf274e5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_163
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 48
+      width: 16
+      height: 16
+    spriteID: a73b8c29eb880714f9945a175de6651f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_164
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 48
+      width: 16
+      height: 16
+    spriteID: e6091dee96bedf040a3687f7c9d992b4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_165
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 48
+      width: 16
+      height: 16
+    spriteID: a07f139c04ca8a64080cdb0b537198a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_166
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 48
+      width: 16
+      height: 16
+    spriteID: a48a69570ffbed6479a2af6137493130
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_167
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 4d347da6834546548908688d301258fa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_168
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 48
+      width: 16
+      height: 16
+    spriteID: c97865004c326a14781006a25136a631
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_169
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 48
+      width: 16
+      height: 16
+    spriteID: d84967c12f45f1f43b44ffb8db46eab6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_170
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 48
+      width: 16
+      height: 16
+    spriteID: ba4fe4c4523ead346acec7ba4592be7d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_171
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 48
+      width: 16
+      height: 16
+    spriteID: c86942f0c4e816546b6bc788180f292c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_172
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 48
+      width: 16
+      height: 16
+    spriteID: e450b944218dbee45a3917b204ba60fa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_173
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 71a05b14185c9aa45bd0312b71f93814
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_174
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 48
+      width: 16
+      height: 16
+    spriteID: dc7c30d81850eba42a0dbb33f5bcded0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_175
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 960809b6b5fee354381f724f31ca9ada
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_176
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 2c540c8ef831abf429f17510e67e9aca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_177
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 10436ac5bb4d918479f39e90519ba584
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_178
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 81659bba63c5e484b9b7f3c21f542b7f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_179
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 9a7acb20ea063e44996ace92424508ed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_180
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 5aa0b8cbca969d44f95b2bb898d5f726
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_181
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 4762bb719a16cf4469ee93ae5680fd02
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_182
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 32
+      width: 16
+      height: 16
+    spriteID: f047383cd7fa07a4784c166938364989
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_183
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 878f3969a07c5a64cbe5d1ec6d70d7b4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_184
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 32
+      width: 16
+      height: 16
+    spriteID: f6d914e190c9953468ef01513192ade2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_185
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 32
+      width: 16
+      height: 16
+    spriteID: efa0917480cb97b43b1275ae90de98ec
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_186
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 32
+      width: 16
+      height: 16
+    spriteID: fd814dbc6cbaaca4ab1ed97e7237c54c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_187
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 49b4c7f8e50df794aa2ad2b5fcf40765
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_188
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 0e3839c3b23f916479b664154211bb17
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_189
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 847333548da90fe428ae9b650ac45f32
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_190
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 091cfd23029b2944aa33c6d0c650baa2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_191
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 32
+      width: 16
+      height: 16
+    spriteID: b3ba75bd27d48604da964210b219a1b0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_192
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 4bd7fef3926f8df41a82c63aa805d9aa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_193
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 3d0fb529c37c47d49b251359ab95823b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_194
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 17bab05519dc66644926d462feb13cbe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_195
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 999a796d0b2052a45b5d10a091304434
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_196
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 32
+      width: 16
+      height: 16
+    spriteID: c11231226d509494491be36a7e9f0031
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_197
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 88b5eebd7ed5e2e42a3b54d4b91621cc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_198
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 7f25f04b80c6a714c83d2f1fa77f3128
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_199
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 32
+      width: 16
+      height: 16
+    spriteID: e684f33faf118744f8ce720bccd00de5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_200
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 48801985226f13c49b0cd452be496285
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_201
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 5570efa7f9a13cc4b9ba67a97f2129a8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_202
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 35132670a6ee71e4f94d398f6d01161c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_203
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 2a41090b62bd4e64987bab0e6d4bbb91
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_204
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 16
+      height: 16
+    spriteID: c01d7850ded49f14184a017fdf563df4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_205
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9d9ebcbb0d4191d4da004bd2ebd03ca2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_206
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9c2f41501a121364eacde822cd5f97f4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_207
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 20a4047ae513d214c9b0a90e8e22c65e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_208
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 269a94fdd6628604996cf019aa8d8519
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_209
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 31c9024e29c935747981436f986eaaad
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_210
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 16
+      width: 16
+      height: 16
+    spriteID: d75e5e5f1e0fd044fb9551da9f5d6860
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_211
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 21502dc3f603bf247867cbe6ccf56a6b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_212
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 16
+      width: 16
+      height: 16
+    spriteID: c1fa77ba287022e469e82510db37a5d2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_213
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 316823ad7bbd293408f6f1bbf09ebc39
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_214
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 06762a997f49bba4a80ab8a23cc0e575
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_215
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 16
+      width: 16
+      height: 16
+    spriteID: bb82a402f30f2dd4eb6cc2a3dea3e0bd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_216
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 55f456f0cd74ea041bc8a7ba55d1d335
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_217
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 6dd590e81c744654e94710291d5fbc2b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_218
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 964943d2288b5c74ba3d435009d2207c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_219
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 93d446e214d77d748aee1b321b755927
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_220
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: 16
+    spriteID: b972e7cc2da48c34791af0f63cb559a5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_221
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 22fb60e43321c234da955166e9cd62d1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_222
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 59ab22abbc2cf6c46b437b59b5a6552c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_223
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 4c8fbf5437edc444a91aaf7e75af2e04
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_224
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 99284d32a840e0147834f015d995ef25
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_225
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 0
+      width: 16
+      height: 16
+    spriteID: caf443701ec2f294ca7725700db45ff6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_226
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 1116f7ed087e26448ac2733b3f52aac0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_227
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 0
+      width: 16
+      height: 16
+    spriteID: ab41c19b2d713514199f939ffc8bc3df
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_228
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 586b92b99ba5c4246b392ce14aa06f21
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_229
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 90d89d5a76f7b5d43a2b1da570ab8862
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_230
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 479317bae8a28814abb5305ae9366703
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_231
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 4e40ff26a7870e940bdf5ae2d13e79af
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_232
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 7ecad83d663900944bef53c78f9de4fa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_233
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 43a96a4ffc9bb654c993cb0cf8606fe5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_234
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 0
+      width: 16
+      height: 16
+    spriteID: ac41ec575b28f694ea1337b88c9caf78
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_235
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 003530094a112be42baba5db05c622df
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_236
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 0
+      width: 16
+      height: 16
+    spriteID: a687e308a13cd9c4da162237caeb067f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_237
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 272
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 94b319be5f4ff43478334edff09a53ed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_238
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 043492a50109b0a439f1a1de0c5de7c6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: TilesetVillageAbandoned_239
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 304
+      y: 0
+      width: 16
+      height: 16
+    spriteID: e55d921b70ea1ef4c824f71b9c3fd103
+    spriteOutline: []
+    tessellationDetail: 0
+  _secondaryTextures: []
+  _artifacts: {instanceID: 0}
