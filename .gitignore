@@ -1,5 +1,4 @@
-﻿# Unity
-[Ll]ibrary/
+﻿[Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild*/
@@ -7,16 +6,10 @@
 UserSettings/
 MemoryCaptures/
 SysInfo/
-# IDE
 .vs/
 .idea/
 *.csproj
 *.sln
 *.user
-*.unityproj
-*.pidb
-*.booproj
-*.svd
-# OS
 .DS_Store
 Thumbs.db
