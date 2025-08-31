@@ -1,18 +1,18 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class C_FX
 {
-    // Tint red briefly then restore (scaled time)
-    public static IEnumerator Flash(SpriteRenderer sprite, float duration)
+    public static IEnumerator Flash(SpriteRenderer sprite, float duration, Color baseColor)
     {
-        var original = sprite.color;
-        sprite.color = new Color(1f, 0.3f, 0.3f, original.a);
+        float a = sprite.color.a;                         // keep current alpha
+        sprite.color = new Color(1f, 0.3f, 0.3f, a);      // tint red
         yield return new WaitForSeconds(duration);
-        sprite.color = original;
+        sprite.color = new Color(baseColor.r, baseColor.g, baseColor.b, a); // restore
     }
 
-    // Fade alpha 1 -> 0 then destroy
+    // unchanged
     public static IEnumerator FadeAndDestroy(SpriteRenderer sprite, float deathFadeTime, GameObject go)
     {
         float t = 0f;

@@ -11,6 +11,7 @@ public class E_Stats : MonoBehaviour
     public int magicDmg = 0;
     public int armor = 0;
     public int magicResist = 0;
+    public float knockbackResistance = 10f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

@@ -9,11 +9,18 @@ public static class W_Knockback
     }
 
     // Convenience: find Rigidbody2D on target or parents and push.
-    public static void PushTarget(GameObject target, Vector2 direction, float impulse)
+    public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
+        // movement bucket
+        var pm = target.GetComponentInParent<P_Movement>();
+        if (pm != null) { pm.ReceiveKnockback(direction * knockbackForce); return; }
+
+        var em = target.GetComponentInParent<E_Movement>();
+        if (em != null) { em.ReceiveKnockback(direction * knockbackForce); return; }
+
+        // fallback: raw physics
         var rb = target.GetComponentInParent<Rigidbody2D>();
-        if (rb != null) rb.AddForce(direction * impulse, ForceMode2D.Impulse);
-        else Debug.LogWarning("W_Knockback: Rigidbody2D not found on target hierarchy.");
+        if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
     // Optional radial push helper for future AoE.

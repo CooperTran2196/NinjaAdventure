@@ -25,6 +25,7 @@ public class P_Movement : MonoBehaviour
     bool disabled;      // When true, movement/animation stops
     Vector2 moveAxis;   // Desired direction of travel
     Vector2 velocity;   // Final velocity applied to Rigidbody2D.linearVelocity
+    Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
 
@@ -38,7 +39,7 @@ public class P_Movement : MonoBehaviour
         animator ??= GetComponent<Animator>();
         stats ??= GetComponent<P_Stats>();
         combat ??= GetComponent<P_Combat>();
-        
+
         input ??= new P_InputActions();
 
         if (rb == null) Debug.LogError($"{name}: Rigidbody2D missing.");
@@ -76,7 +77,15 @@ public class P_Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = velocity;
+        Vector2 final = velocity + knockback;
+        rb.linearVelocity = final;
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
+    
     }
 
 
@@ -118,5 +127,11 @@ public class P_Movement : MonoBehaviour
             animator?.SetBool("isMoving", false);
         }
     }
+
+    public void ReceiveKnockback(Vector2 force)
+    {
+        knockback += force;
+    }
+
     
 }

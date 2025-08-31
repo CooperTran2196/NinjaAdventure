@@ -22,7 +22,8 @@ public class E_Movement : MonoBehaviour
     bool disabled;
     bool holdInRange;
     Vector2 moveAxis;
-    Vector2 velocity;              
+    Vector2 velocity;
+    Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
 
@@ -49,7 +50,14 @@ public class E_Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = velocity;
+        Vector2 final = velocity + knockback;
+        rb.linearVelocity = final; // replace linearVelocity
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
     }
 
     void Chase()
@@ -104,6 +112,9 @@ public class E_Movement : MonoBehaviour
             animator.SetBool("isIdle", false);
         }
     }
+
+    public void ReceiveKnockback(Vector2 force) { knockback += force; }
+
 
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;

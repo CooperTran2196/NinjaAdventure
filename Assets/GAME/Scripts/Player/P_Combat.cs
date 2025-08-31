@@ -47,7 +47,7 @@ public class P_Combat : MonoBehaviour
 
     bool isAttacking;
     float cooldownTimer;
-
+    Color baseColor;
     void Awake()
     {
         animator ??= GetComponent<Animator>();
@@ -63,7 +63,7 @@ public class P_Combat : MonoBehaviour
 
         animator?.SetFloat("atkX", 0f);
         animator?.SetFloat("atkY", -1f);
-
+        baseColor = sprite.color;
         debugTakeDamageAction = new InputAction(
             "DebugTakeDamage",
             InputActionType.Button,
@@ -154,7 +154,7 @@ public class P_Combat : MonoBehaviour
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
-            StartCoroutine(C_FX.Flash(sprite, flashDuration));
+            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
         else if (amount > 0)
         {
