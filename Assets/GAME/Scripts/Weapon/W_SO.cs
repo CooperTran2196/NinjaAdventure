@@ -1,20 +1,25 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "W/W_SO")]
+public enum WeaponType { Melee, Ranged, Magic }
+
+[CreateAssetMenu(menuName = "GAME/Weapon SO", fileName = "W_SO_NewWeapon")]
 public class W_SO : ScriptableObject
 {
-    public enum Style { Melee, Ranged, Magic }
+    [Header("Common")]
+    public string id = "weapon_id";
+    public WeaponType type = WeaponType.Melee;
+    public Sprite sprite;
+    public int baseDamage = 1;
 
-    [Header("Identity")]
-    public string id = "Weapon_ID";
-    public Style style = Style.Melee;
+    [Header("Melee")]
+    public float offsetDistance = 0.3f;
+    public float showTime = 0.18f;
+    public float thrustDistance = 0.2f;
 
-    [Header("Runtime Prefab (W_Melee / W_Ranged)")]
-    public GameObject prefab;
+    [Header("Ranged (placeholders)")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 8f;
 
-    [Header("Combat")]
-    public int weaponDamage = 1;
-
-    [Tooltip("Where to place/aim the weapon relative to owner: dir * offsetDistance.")]
-    public float offsetDistance = 0.5f;
+    [Header("Magic (placeholders)")]
+    public int manaCost = 0;
 }

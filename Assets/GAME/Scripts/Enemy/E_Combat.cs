@@ -151,7 +151,7 @@ public class E_Combat : MonoBehaviour
         // Placeholder
         activeWeapon?.Attack();
         yield return new WaitForSeconds(attackDuration - hitDelay);
-
+        
         // Decide stance for cooldown
         if (lockDuringAttack)
         {
@@ -196,7 +196,7 @@ public class E_Combat : MonoBehaviour
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
-            StartCoroutine(Flash());
+            StartCoroutine(C_FX.Flash(sprite, flashDuration));
         }
         else if (amount > 0)
         {
@@ -208,44 +208,10 @@ public class E_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(FadeAndDestroy());
+        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
         OnDied?.Invoke();
     }
 
-    /// Briefly tints the sprite red, then restores original color
-    public IEnumerator Flash()
-    {
-        // Save original color so we can restore it after the flash
-        Color original = sprite.color;
-
-        // Set sprite to pure red immediately
-        sprite.color = Color.red;
-
-        // Wait for 'flashDuration' seconds
-        yield return new WaitForSeconds(flashDuration);
-        sprite.color = original;
-    }
-
-    /// Lowers sprite alpha from 1 to 0 over 'deathFadeTime', then destroys the GameObject
-    public IEnumerator FadeAndDestroy()
-    {
-        Color baseColor = sprite.color;   // keep RGB, only change alpha
-        float elapsed = 0f;
-        float invDur = 1f / deathFadeTime; // avoids a divide each frame
-
-        while (elapsed < deathFadeTime)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed * invDur); // 0 → 1 over the duration
-            Color temp = baseColor;  // copy (Color is a struct)
-            temp.a = 1f - t;         // fade alpha from 1 to 0
-            sprite.color = temp;     // assign back to the SpriteRenderer
-
-            yield return null;    // wait one frame
-        }
-
-        Destroy(gameObject);
-    }
 
     void OnDrawGizmosSelected()
     {

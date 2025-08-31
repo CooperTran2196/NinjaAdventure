@@ -9,7 +9,7 @@ for %%f in ("D:\Google Drive\Code\Final project\Testing\Assets\GAME\Scripts\Audi
 )
 echo Done! Check %outputFile% in the Scripts folder.
 
-REM PlayerScripts Folder
+REM EnemyScripts Folder
 set outputFile=AllEnemyScripts.txt
 echo. > %outputFile%
 for %%f in ("D:\Google Drive\Code\Final project\Testing\Assets\GAME\Scripts\Enemy\*.cs") do (
@@ -28,6 +28,17 @@ for %%f in ("D:\Google Drive\Code\Final project\Testing\Assets\GAME\Scripts\Play
     echo. >> %outputFile%
 )
 echo Done! Check %outputFile% in the Scripts folder.
+
+REM CharacterScripts Folder
+set outputFile=AllCharacterScripts.txt
+echo. > %outputFile%
+for %%f in ("D:\Google Drive\Code\Final project\Testing\Assets\GAME\Scripts\Character\*.cs") do (
+    echo // ----- File: %%~nxf ----- >> %outputFile%
+    type "%%f" >> %outputFile%
+    echo. >> %outputFile%
+)
+echo Done! Check %outputFile% in the Scripts folder.
+
 
 REM SkillTree Folder
 set outputFile=AllSkillTreeScripts.txt

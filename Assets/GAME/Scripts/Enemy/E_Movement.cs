@@ -26,8 +26,6 @@ public class E_Movement : MonoBehaviour
 
     const float MIN_DISTANCE = 0.0001f;
 
-    // Placeholder
-    Vector2 knockback;
 
 
     void Awake()
@@ -46,7 +44,7 @@ public class E_Movement : MonoBehaviour
     void Update()
     {
         Chase();
-        ApplyAnimator();
+        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
     }
 
     void FixedUpdate()
@@ -75,7 +73,7 @@ public class E_Movement : MonoBehaviour
         else
         {
             Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-            bool hasDir = to.sqrMagnitude > MIN_DISTANCE;
+            bool hasDir = to.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE);
             if (hasDir) lastMove = to.normalized;
 
             // If holding then don't create intent, otherwise face & move toward target
@@ -91,33 +89,6 @@ public class E_Movement : MonoBehaviour
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
-    void ApplyAnimator()
-    {
-        // Early exit when isAtacking = true
-        if (animator.GetBool("isAttacking"))
-        {
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isIdle", false);
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-            return;
-        }
-
-        // Calculate moving to decide if enemy moves or not
-        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE && velocity.sqrMagnitude > MIN_DISTANCE;
-        animator.SetBool("isMoving", moving);
-        animator.SetBool("isIdle", !moving);
-
-        if (moving)
-        {
-            animator.SetFloat("moveX", moveAxis.x);
-            animator.SetFloat("moveY", moveAxis.y);
-        }
-
-        // Refresh the last facing for idle/attack
-        animator.SetFloat("idleX", lastMove.x);
-        animator.SetFloat("idleY", lastMove.y);
-    }
     
     // Freeze movement/anim immediately
     public void SetDisabled(bool isDisabled)
@@ -136,8 +107,6 @@ public class E_Movement : MonoBehaviour
 
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;
-
-    public void ApplyKnockback(Vector2 impulse) => knockback = impulse;
 
     void OnDrawGizmosSelected()
     {

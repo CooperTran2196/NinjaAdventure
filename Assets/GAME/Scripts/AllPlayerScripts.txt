@@ -35,6 +35,10 @@ public class P_Combat : MonoBehaviour
     public int debugHotkeyDamage = 1;
     InputAction debugTakeDamageAction;
 
+    P_InputActions input;
+    Vector2 aimDir = Vector2.down;
+    const float MIN_DISTANCE = 0.0001f;
+
     // Placeholder for Events
     public event Action<int> OnDamaged;
     public event Action<int> OnHealed;
@@ -45,6 +49,7 @@ public class P_Combat : MonoBehaviour
 
     bool isAttacking;
     float cooldownTimer;
+    public W_Melee mySword;
 
 
     void Awake()
@@ -53,25 +58,42 @@ public class P_Combat : MonoBehaviour
         sprite ??= GetComponent<SpriteRenderer>();
         stats ??= GetComponent<P_Stats>();
         movement ??= GetComponent<P_Movement>();
+        input ??= new P_InputActions();
 
         if (animator == null) Debug.LogError($"{name}: Animator missing.");
         if (sprite == null) Debug.LogWarning($"{name}: SpriteRenderer missing.");
         if (stats == null) Debug.LogError($"{name}: P_Stats missing.");
         if (movement == null) Debug.LogError($"{name}: P_Movement missing.");
 
+        animator?.SetFloat("atkX", 0f);
+        animator?.SetFloat("atkY", -1f);
 
         debugTakeDamageAction = new InputAction(
             "DebugTakeDamage",
             InputActionType.Button,
             $"<Keyboard>/{debugHotkey.ToString().ToLower()}"
         );
+
     }
 
-    void OnEnable() => debugTakeDamageAction?.Enable();
-    void OnDisable() => debugTakeDamageAction?.Disable();
+    void OnEnable()
+    {
+        input?.Enable();
+        debugTakeDamageAction?.Enable();
+    }
+
+    void OnDisable()
+    {
+        input?.Disable();
+        debugTakeDamageAction?.Disable();
+    }
 
     void Update()
     {
+        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
+        if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
+        if (input.Player.Attack.triggered) RequestAttack();
+
         if (autoKill) { autoKill = false; ChangeHealth(-stats.maxHP); }
         if (debugTakeDamageAction.triggered) ChangeHealth(-debugHotkeyDamage);
 
@@ -86,7 +108,7 @@ public class P_Combat : MonoBehaviour
         cooldownTimer = attackCooldown;
 
         // Face once at attack start
-        var dir = movement ? movement.lastMove : Vector2.down;
+        var dir = aimDir;
         animator.SetFloat("atkX", dir.x);
         animator.SetFloat("atkY", dir.y);
 
@@ -100,9 +122,7 @@ public class P_Combat : MonoBehaviour
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
-        W_Manager.RequestAttack(W_Manager.Slot.Melee);
-        if (activeWeapon != null) activeWeapon.Attack();
-        else animator.SetTrigger("Attack");
+        mySword?.Attack();
 
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
@@ -646,7 +666,7 @@ public class P_Movement : MonoBehaviour
     // Placeholder for events
     public event Action<Vector2> OnDirectionChanged;
     public event Action<Vector2> OnVelocityChanged;
-    
+
     void Awake()
     {
         rb ??= GetComponent<Rigidbody2D>();
@@ -659,6 +679,11 @@ public class P_Movement : MonoBehaviour
         if (animator == null) Debug.LogError($"{name}: Animator missing.");
         if (combat == null) Debug.LogError($"{name}: P_Combat missing.");
         if (stats == null) Debug.LogError($"{name}: P_Stats missing.");
+        
+        lastMove = Vector2.down;
+        animator?.SetFloat("moveX", 0f);
+        animator?.SetFloat("moveY", -1f);
+
     }
 
     void OnEnable()
@@ -681,8 +706,6 @@ public class P_Movement : MonoBehaviour
 
         SetMoveAxis(desired);
         ApplyAnimator(); // Keep Animator in sync with current move state
-        if (input.Player.Attack.triggered)
-            combat?.RequestAttack();
     }
 
 
@@ -711,10 +734,13 @@ public class P_Movement : MonoBehaviour
         moveAxis = v;
 
         // Velocity valve: stop only if attacking AND lockDuringAttack
+        // Read attack-state from Animator
         bool attacking = animator.GetBool("isAttacking");
+        // Valve is closed when disabled OR lockDuringAttack
         bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
-        Vector2 intended = moveAxis * stats.moveSpeed;
-        velocity = valveClosed ? Vector2.zero : intended;
+        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
+        // If valve is closed, stop; otherwise apply intended velocity
+        velocity = valveClosed ? Vector2.zero : intendedVelocity;
         OnVelocityChanged?.Invoke(velocity);
     }
 

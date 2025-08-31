@@ -47,8 +47,6 @@ public class P_Combat : MonoBehaviour
 
     bool isAttacking;
     float cooldownTimer;
-    public W_Melee mySword;
-
 
     void Awake()
     {
@@ -120,7 +118,7 @@ public class P_Combat : MonoBehaviour
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
-        mySword?.Attack();
+        activeWeapon?.Attack();
 
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
@@ -156,7 +154,7 @@ public class P_Combat : MonoBehaviour
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
-            StartCoroutine(Flash());
+            StartCoroutine(C_FX.Flash(sprite, flashDuration));
         }
         else if (amount > 0)
         {
@@ -170,7 +168,7 @@ public class P_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(FadeAndDestroy());
+        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
         OnDied?.Invoke();
     }
 

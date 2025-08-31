@@ -1,4 +1,4 @@
-using UnityEngine;
+/* using UnityEngine;
 using System.Collections;
 
 [DisallowMultipleComponent]
@@ -60,3 +60,4 @@ public class W_Ranged : W_Base
         if (weaponSprite) weaponSprite.enabled = false;
     }
 }
+ */
