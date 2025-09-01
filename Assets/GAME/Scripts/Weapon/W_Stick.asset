@@ -14,21 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: weapon_id
   type: 0
-  sprite: {fileID: 21300000, guid: dca399bdb02e89248b8185c55cd0ff20, type: 3}
+  sprite: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
   pointsUp: 1
   baseDamage: 2
+  knockbackForce: 5
+  stunTime: 0
   showTime: 0.3
   thrustDistance: 0.25
-  offsetDistance: 0.75
-  useDirectionalOffsets: 1
-  use8DirectionalOffsets: 1
   offsetDown: {x: -0.2, y: -0.75}
   offsetUp: {x: -0.2, y: 0.75}
   offsetLeft: {x: -0.7, y: -0.25}
   offsetRight: {x: 0.7, y: -0.25}
   offsetUpRight: {x: 0.5, y: 0.5}
   offsetUpLeft: {x: -0.5, y: 0.5}
-  offsetDownRight: {x: 0.2, y: -0.75}
+  offsetDownRight: {x: 0.5, y: -0.75}
   offsetDownLeft: {x: -0.5, y: -0.75}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 8
