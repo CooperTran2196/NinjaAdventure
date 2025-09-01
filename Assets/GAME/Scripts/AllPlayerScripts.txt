@@ -49,9 +49,7 @@ public class P_Combat : MonoBehaviour
 
     bool isAttacking;
     float cooldownTimer;
-    public W_Melee mySword;
-
-
+    Color baseColor;
     void Awake()
     {
         animator ??= GetComponent<Animator>();
@@ -67,7 +65,7 @@ public class P_Combat : MonoBehaviour
 
         animator?.SetFloat("atkX", 0f);
         animator?.SetFloat("atkY", -1f);
-
+        baseColor = sprite.color;
         debugTakeDamageAction = new InputAction(
             "DebugTakeDamage",
             InputActionType.Button,
@@ -122,7 +120,7 @@ public class P_Combat : MonoBehaviour
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
-        mySword?.Attack();
+        activeWeapon?.Attack();
 
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
@@ -158,7 +156,7 @@ public class P_Combat : MonoBehaviour
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
-            StartCoroutine(Flash());
+            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
         else if (amount > 0)
         {
@@ -172,7 +170,7 @@ public class P_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(FadeAndDestroy());
+        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
         OnDied?.Invoke();
     }
 
@@ -657,8 +655,6 @@ public class P_Movement : MonoBehaviour
     bool disabled;      // When true, movement/animation stops
     Vector2 moveAxis;   // Desired direction of travel
     Vector2 velocity;   // Final velocity applied to Rigidbody2D.linearVelocity
-
-    // Placeholder for future knockback
     Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
@@ -671,19 +667,19 @@ public class P_Movement : MonoBehaviour
     {
         rb ??= GetComponent<Rigidbody2D>();
         animator ??= GetComponent<Animator>();
-        combat ??= GetComponent<P_Combat>();
         stats ??= GetComponent<P_Stats>();
+        combat ??= GetComponent<P_Combat>();
+
         input ??= new P_InputActions();
 
         if (rb == null) Debug.LogError($"{name}: Rigidbody2D missing.");
         if (animator == null) Debug.LogError($"{name}: Animator missing.");
-        if (combat == null) Debug.LogError($"{name}: P_Combat missing.");
         if (stats == null) Debug.LogError($"{name}: P_Stats missing.");
-        
+        if (combat == null) Debug.LogError($"{name}: P_Combat missing.");
+
         lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
-
     }
 
     void OnEnable()
@@ -702,16 +698,24 @@ public class P_Movement : MonoBehaviour
 
         // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
         // If raw is near zero, normalized will be (0,0)
-        Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
+        Vector2 desired = raw.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE) ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
-        ApplyAnimator(); // Keep Animator in sync with current move state
+        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
     }
 
 
     void FixedUpdate()
     {
-        rb.linearVelocity = velocity;
+        Vector2 final = velocity + knockback;
+        rb.linearVelocity = final;
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
+    
     }
 
 
@@ -725,9 +729,8 @@ public class P_Movement : MonoBehaviour
         }
 
         // Only fire direction event if direction actually changed.
-        if (moveAxis != v && v.sqrMagnitude > MIN_DISTANCE)
+        if (moveAxis != v && v.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE))
         {
-            OnDirectionChanged?.Invoke(v);
             lastMove = v; // Idle facing uses latest non-zero direction
         }
 
@@ -741,42 +744,6 @@ public class P_Movement : MonoBehaviour
         Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
         // If valve is closed, stop; otherwise apply intended velocity
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
-        OnVelocityChanged?.Invoke(velocity);
-    }
-
-    void ApplyAnimator()
-    {
-        // Early exit when isAtacking = true
-        if (animator.GetBool("isAttacking"))
-        {
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isIdle", false);
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-            return;
-
-        }
-
-        // Calculate moving to decide if enemy moves or not
-        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE;
-        animator.SetBool("isMoving", moving);
-
-        if (moving)
-        {
-            // Set directional floats for your movement BlendTree.
-            animator.SetFloat("moveX", moveAxis.x);
-            animator.SetFloat("moveY", moveAxis.y);
-
-            // Update last idle facing and store it.
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-        }
-        else
-        {
-            // Keep last idle facing values to drive the idle pose.
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-        }
     }
 
     public void SetDisabled(bool isDisabled)
@@ -791,11 +758,11 @@ public class P_Movement : MonoBehaviour
         }
     }
 
-    public void ApplyKnockback(Vector2 impulse)
+    public void ReceiveKnockback(Vector2 force)
     {
-        knockback = impulse;
+        knockback += force;
     }
-    
+
     
 }
  
@@ -813,6 +780,7 @@ public class P_Stats : MonoBehaviour
     public int magicDmg = 0;
     public int armor = 0;
     public int magicResist = 0;
+    public float knockbackResistance = 10f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

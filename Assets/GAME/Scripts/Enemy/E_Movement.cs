@@ -26,9 +26,7 @@ public class E_Movement : MonoBehaviour
     Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
-
-
-
+    
     void Awake()
     {
         rb ??= GetComponent<Rigidbody2D>();

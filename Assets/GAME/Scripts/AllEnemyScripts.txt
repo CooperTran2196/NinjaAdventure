@@ -18,13 +18,13 @@ public class E_Combat : MonoBehaviour
 
     [Header("AI")]
     public LayerMask playerLayer;
-    public float attackRange = 1.2f;
-    public float thinkInterval = 0.2f;
+    public float attackRange = 0.9f;
+    public float thinkInterval = 0.5f;
 
     [Header("Attack")]
     public float attackDuration = 0.45f; // ALWAYS matched full clip length
     public float hitDelay = 0.15f; // ALWAYS set when the hit happens
-    public float attackCooldown = 1.5f; // cooldown between attacks
+    public float attackCooldown = 2f; // cooldown between attacks
     public bool lockDuringAttack = true; // read by E_Movement valve
 
     [Header("FX Timings")]
@@ -51,6 +51,7 @@ public class E_Combat : MonoBehaviour
     bool isAttacking;
     float contactTimer; // for collision damage
     float cooldownTimer; // for attacking cooldown
+    Color baseColor;
 
     void Awake()
     {
@@ -64,6 +65,7 @@ public class E_Combat : MonoBehaviour
         if (stats == null) Debug.LogError($"{name}: E_Stats missing.");
         if (movement == null) Debug.LogError($"{name}: E_Movement missing.");
 
+        baseColor = sprite.color;
 
         debugTakeDamageAction = new InputAction(
             "DebugTakeDamage",
@@ -153,7 +155,7 @@ public class E_Combat : MonoBehaviour
         // Placeholder
         activeWeapon?.Attack();
         yield return new WaitForSeconds(attackDuration - hitDelay);
-
+        
         // Decide stance for cooldown
         if (lockDuringAttack)
         {
@@ -170,6 +172,18 @@ public class E_Combat : MonoBehaviour
 
         cooldownTimer = attackCooldown;
     }
+    static Vector2 SnapToEightDirections(Vector2 direction)
+    {
+        if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
+
+        // Convert to degrees, find nearest 45°, rebuild unit vector
+        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        int octantIndex = Mathf.RoundToInt(degrees / 45f);
+        float radians = octantIndex * 45f * Mathf.Deg2Rad;
+
+        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
+    }
+
 
     public void ChangeHealth(int amount)
     {
@@ -179,7 +193,7 @@ public class E_Combat : MonoBehaviour
         // Death path
         if (newHP <= 0)
         {
-            if (amount < 0) OnDamaged?.Invoke(-amount); 
+            if (amount < 0) OnDamaged?.Invoke(-amount);
             stats.currentHP = 0;
             Die();
             return;
@@ -198,7 +212,7 @@ public class E_Combat : MonoBehaviour
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
-            StartCoroutine(Flash());
+            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
         else if (amount > 0)
         {
@@ -210,44 +224,10 @@ public class E_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(FadeAndDestroy());
+        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
         OnDied?.Invoke();
     }
 
-    /// Briefly tints the sprite red, then restores original color
-    public IEnumerator Flash()
-    {
-        // Save original color so we can restore it after the flash
-        Color original = sprite.color;
-
-        // Set sprite to pure red immediately
-        sprite.color = Color.red;
-
-        // Wait for 'flashDuration' seconds
-        yield return new WaitForSeconds(flashDuration);
-        sprite.color = original;
-    }
-
-    /// Lowers sprite alpha from 1 to 0 over 'deathFadeTime', then destroys the GameObject
-    public IEnumerator FadeAndDestroy()
-    {
-        Color baseColor = sprite.color;   // keep RGB, only change alpha
-        float elapsed = 0f;
-        float invDur = 1f / deathFadeTime; // avoids a divide each frame
-
-        while (elapsed < deathFadeTime)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed * invDur); // 0 → 1 over the duration
-            Color temp = baseColor;  // copy (Color is a struct)
-            temp.a = 1f - t;         // fade alpha from 1 to 0
-            sprite.color = temp;     // assign back to the SpriteRenderer
-
-            yield return null;    // wait one frame
-        }
-
-        Destroy(gameObject);
-    }
 
     void OnDrawGizmosSelected()
     {
@@ -288,12 +268,11 @@ public class E_Movement : MonoBehaviour
     bool disabled;
     bool holdInRange;
     Vector2 moveAxis;
-    Vector2 velocity;              
+    Vector2 velocity;
+    Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
 
-    // Placeholder
-    Vector2 knockback;
 
 
     void Awake()
@@ -312,12 +291,19 @@ public class E_Movement : MonoBehaviour
     void Update()
     {
         Chase();
-        ApplyAnimator();
+        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
     }
 
     void FixedUpdate()
     {
-        rb.linearVelocity = velocity;
+        Vector2 final = velocity + knockback;
+        rb.linearVelocity = final; // replace linearVelocity
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
     }
 
     void Chase()
@@ -341,7 +327,7 @@ public class E_Movement : MonoBehaviour
         else
         {
             Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-            bool hasDir = to.sqrMagnitude > MIN_DISTANCE;
+            bool hasDir = to.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE);
             if (hasDir) lastMove = to.normalized;
 
             // If holding then don't create intent, otherwise face & move toward target
@@ -357,33 +343,6 @@ public class E_Movement : MonoBehaviour
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
-    void ApplyAnimator()
-    {
-        // Early exit when isAtacking = true
-        if (animator.GetBool("isAttacking"))
-        {
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isIdle", false);
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-            return;
-        }
-
-        // Calculate moving to decide if enemy moves or not
-        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE && velocity.sqrMagnitude > MIN_DISTANCE;
-        animator.SetBool("isMoving", moving);
-        animator.SetBool("isIdle", !moving);
-
-        if (moving)
-        {
-            animator.SetFloat("moveX", moveAxis.x);
-            animator.SetFloat("moveY", moveAxis.y);
-        }
-
-        // Refresh the last facing for idle/attack
-        animator.SetFloat("idleX", lastMove.x);
-        animator.SetFloat("idleY", lastMove.y);
-    }
     
     // Freeze movement/anim immediately
     public void SetDisabled(bool isDisabled)
@@ -400,10 +359,11 @@ public class E_Movement : MonoBehaviour
         }
     }
 
+    public void ReceiveKnockback(Vector2 force) { knockback += force; }
+
+
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;
-
-    public void ApplyKnockback(Vector2 impulse) => knockback = impulse;
 
     void OnDrawGizmosSelected()
     {
@@ -426,6 +386,7 @@ public class E_Stats : MonoBehaviour
     public int magicDmg = 0;
     public int armor = 0;
     public int magicResist = 0;
+    public float knockbackResistance = 10f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

@@ -68,7 +68,7 @@ public class P_Movement : MonoBehaviour
 
         // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
         // If raw is near zero, normalized will be (0,0)
-        Vector2 desired = raw.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE) ? raw.normalized : Vector2.zero;
+        Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
         C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
@@ -99,7 +99,7 @@ public class P_Movement : MonoBehaviour
         }
 
         // Only fire direction event if direction actually changed.
-        if (moveAxis != v && v.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE))
+        if (moveAxis != v && v.sqrMagnitude > MIN_DISTANCE)
         {
             lastMove = v; // Idle facing uses latest non-zero direction
         }
@@ -111,9 +111,9 @@ public class P_Movement : MonoBehaviour
         bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
         bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
-        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
         // If valve is closed, stop; otherwise apply intended velocity
-        velocity = valveClosed ? Vector2.zero : intendedVelocity;
+        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
+        velocity = valveClosed ? Vector2.zero : (moveAxis * stats.moveSpeed);
     }
 
     public void SetDisabled(bool isDisabled)

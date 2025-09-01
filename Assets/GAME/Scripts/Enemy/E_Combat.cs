@@ -22,7 +22,6 @@ public class E_Combat : MonoBehaviour
     [Header("Attack")]
     public float attackDuration = 0.45f; // ALWAYS matched full clip length
     public float hitDelay = 0.15f; // ALWAYS set when the hit happens
-    public float attackCooldown = 2f; // cooldown between attacks
     public bool lockDuringAttack = true; // read by E_Movement valve
 
     [Header("FX Timings")]
@@ -168,20 +167,8 @@ public class E_Combat : MonoBehaviour
         isAttacking = false;
         animator.SetBool("isAttacking", false);
 
-        cooldownTimer = attackCooldown;
+        cooldownTimer = stats.attackCooldown;
     }
-    static Vector2 SnapToEightDirections(Vector2 direction)
-    {
-        if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
-
-        // Convert to degrees, find nearest 45°, rebuild unit vector
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        int octantIndex = Mathf.RoundToInt(degrees / 45f);
-        float radians = octantIndex * 45f * Mathf.Deg2Rad;
-
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-    }
-
 
     public void ChangeHealth(int amount)
     {
