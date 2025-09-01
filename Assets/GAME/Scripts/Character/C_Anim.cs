@@ -13,7 +13,7 @@ public static class C_Anim
             return;
         }
 
-        bool moving = moveAxis.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE);
+        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE;
         a.SetBool("isMoving", moving);
 
         if (moving)

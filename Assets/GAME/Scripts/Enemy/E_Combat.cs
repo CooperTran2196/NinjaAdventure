@@ -173,36 +173,19 @@ public class E_Combat : MonoBehaviour
     public void ChangeHealth(int amount)
     {
         if (!IsAlive) return;
-        int newHP = stats.currentHP + amount;
 
-        // Death path
-        if (newHP <= 0)
-        {
-            if (amount < 0) OnDamaged?.Invoke(-amount);
-            stats.currentHP = 0;
-            Die();
-            return;
-        }
-
-        // Overheal cap
-        if (newHP > stats.maxHP)
-        {
-            if (amount > 0) OnHealed?.Invoke(amount);
-            stats.currentHP = stats.maxHP;
-            return;
-        }
-
-        // Normal mid-range change
-        stats.currentHP = newHP;
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
             StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
-        else if (amount > 0)
-        {
-            OnHealed?.Invoke(amount);
-        }
+
+        else if (amount > 0) OnHealed?.Invoke(amount);
+
+        stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
+
+        if (stats.currentHP == 0)
+            Die(); // call the death sequence in ONE place
     }
 
     void Die()
@@ -220,10 +203,6 @@ public class E_Combat : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
     
-    // DEBUG
-    public void Kill()
-    {
-        if (!IsAlive) return;
-        ChangeHealth(-stats.maxHP);
-    }
+    /// DEBUG
+    public void Kill() => ChangeHealth(-stats.maxHP);
 }
