@@ -125,7 +125,12 @@ public class P_Combat : MonoBehaviour
     {
         if (!IsAlive) return;
 
-        if (amount < 0) OnDamaged?.Invoke(-amount);
+        if (amount < 0)
+        {
+            OnDamaged?.Invoke(-amount);
+            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
+        }
+
         else if (amount > 0) OnHealed?.Invoke(amount);
 
         stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
