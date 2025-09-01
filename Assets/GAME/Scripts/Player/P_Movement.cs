@@ -82,7 +82,7 @@ public class P_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     
@@ -112,8 +112,8 @@ public class P_Movement : MonoBehaviour
         // Valve is closed when disabled OR lockDuringAttack
         bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
-        velocity = valveClosed ? Vector2.zero : (moveAxis * stats.moveSpeed);
+        Vector2 intendedVelocity = moveAxis * stats.MS;
+        velocity = valveClosed ? Vector2.zero : (moveAxis * stats.MS);
     }
 
     public void SetDisabled(bool isDisabled)

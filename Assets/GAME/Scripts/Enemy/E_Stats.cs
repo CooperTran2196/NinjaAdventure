@@ -6,12 +6,12 @@ public class E_Stats : MonoBehaviour
     [Header("Health")]
     public int maxHP = 20;
     public int currentHP = 20;
-    public float moveSpeed = 5f;
-    public int attackDmg = 1;
-    public int magicDmg = 0;
-    public int armor = 0;
-    public int magicResist = 0;
-    public float knockbackResistance = 10f;
+    public float MS = 5f;
+    public int AD = 1;
+    public int AP = 0;
+    public int AR = 0;
+    public int MR = 0;
+    public float KR = 10f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

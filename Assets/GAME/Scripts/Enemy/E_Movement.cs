@@ -53,7 +53,7 @@ public class E_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -91,7 +91,7 @@ public class E_Movement : MonoBehaviour
         // Block velocity when disabled, holding, or attacking
         bool valveClosed = disabled || holdInRange || (attacking && combat.lockDuringAttack);
 
-        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
+        Vector2 intendedVelocity = moveAxis * stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
