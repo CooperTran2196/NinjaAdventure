@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.InputSystem;
 
 public class StatsUI : MonoBehaviour
 {
@@ -84,8 +83,6 @@ public class StatsUI : MonoBehaviour
         statsSlots[6].GetComponentInChildren<TMP_Text>().text =
             "Knockback Res: " + p_Stats.KR;
     }
-
-
 
     public void UpdateAllStats()
     {

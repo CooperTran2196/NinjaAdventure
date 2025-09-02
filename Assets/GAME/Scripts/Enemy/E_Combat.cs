@@ -130,9 +130,9 @@ public class E_Combat : MonoBehaviour
         }
 
         var player = c.collider.GetComponent<P_Combat>();
-        if (player == null || !player.IsAlive) return; // only damage a live player
+        if (player?.IsAlive == true) return; // Only damage a live player
+        player.ChangeHealth(-stats.collisionDamage); //Apply damage
 
-        player.ChangeHealth(-stats.collisionDamage);
         contactTimer = stats.collisionTick; // reset tick window
     }
 
