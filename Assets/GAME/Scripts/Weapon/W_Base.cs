@@ -53,7 +53,7 @@ public abstract class W_Base : MonoBehaviour
     public virtual void Equip(Transform newOwner)
     {
         owner = newOwner;
-        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;   // reassign, no ??=
+        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;
         pStats = owner ? owner.GetComponent<P_Stats>() : null;
         eStats = owner ? owner.GetComponent<E_Stats>() : null;
         if (data && sprite) sprite.sprite = data.sprite;

@@ -23,6 +23,7 @@ public class W_Melee : W_Base
         transform.position = spawn;
         transform.rotation = Quaternion.Euler(0, 0, angle);
         hitThisSwing.Clear();
+        
         // Show + enable hitbox
         sprite.enabled = true;
         hitbox.enabled = true;
@@ -46,7 +47,7 @@ public class W_Melee : W_Base
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Layer filter
+        // Layer filter -> only react to colliders on targetMask
         if ((targetMask.value & (1 << other.gameObject.layer)) == 0) return;
 
         // Ignore owner
@@ -55,10 +56,11 @@ public class W_Melee : W_Base
         // Ignore weapon–weapon contacts
         if (other.GetComponentInParent<W_Base>() != null) return;
 
-        // Damage
+        // Damage = (attacker AD) + (weapon baseDamage)
         int baseDmg = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
         int final = baseDmg + (data ? data.baseDamage : 0);
 
+        // Apply damage
         bool hit = false;
         var pc = other.GetComponentInParent<P_Combat>();
         if (pc != null) { pc.ChangeHealth(-final); hit = true; }
@@ -66,6 +68,7 @@ public class W_Melee : W_Base
         var ec = other.GetComponentInParent<E_Combat>();
         if (ec != null) { ec.ChangeHealth(-final); hit = true; }
 
+        // Per-swing de-dup
         GameObject root = pc ? pc.gameObject : (ec ? ec.gameObject : null);
         if (root == null) return;                    // no valid target
         if (!hitThisSwing.Add(root.GetInstanceID())) return; // already hit this swing
@@ -73,6 +76,7 @@ public class W_Melee : W_Base
         // Knockback
         if (hit && data != null && data.knockbackForce > 0f)
         {
+             // 8-way snapped aim direction
             Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
             W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
         }

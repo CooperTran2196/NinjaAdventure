@@ -2,28 +2,29 @@ using UnityEngine;
 
 public static class W_Knockback
 {
-    // Push a rigidbody by an impulse along 'direction' (assumed normalized).
+    // Push a rigidbody by an impulse along the direction
     public static void Push(Rigidbody2D rb, Vector2 direction, float impulse)
     {
         rb.AddForce(direction * impulse, ForceMode2D.Impulse);
     }
 
-    // Convenience: find Rigidbody2D on target or parents and push.
+    // Push target
     public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
-        // movement bucket
+        // Player
         var pm = target.GetComponentInParent<P_Movement>();
         if (pm != null) { pm.ReceiveKnockback(direction * knockbackForce); return; }
-
+        
+        // Enemy
         var em = target.GetComponentInParent<E_Movement>();
         if (em != null) { em.ReceiveKnockback(direction * knockbackForce); return; }
 
-        // fallback: raw physics
+        // Others
         var rb = target.GetComponentInParent<Rigidbody2D>();
         if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    // Optional radial push helper for future AoE.
+    // Radial AoE push
     public static int PushRadial(Vector2 center, float radius, float impulse, LayerMask mask)
     {
         int count = 0;
