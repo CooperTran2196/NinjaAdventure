@@ -6,7 +6,7 @@ public class E_Stats : MonoBehaviour
     [Header("Health")]
     public int maxHP = 20;
     public int currentHP = 20;
-    public float MS = 5f;
+    public float MS = 2f;
     public int AD = 1;
     public int AP = 0;
     public int AR = 0;

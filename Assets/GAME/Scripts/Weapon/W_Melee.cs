@@ -1,8 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class W_Melee : W_Base
-{
+{   
+    readonly HashSet<int> hitThisSwing = new HashSet<int>();
+
     public override void Attack()
     {
         StartCoroutine(Swing());
@@ -19,7 +22,7 @@ public class W_Melee : W_Base
 
         transform.position = spawn;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-
+        hitThisSwing.Clear();
         // Show + enable hitbox
         sprite.enabled = true;
         hitbox.enabled = true;
@@ -41,7 +44,6 @@ public class W_Melee : W_Base
         sprite.enabled = false;
     }
 
-    // W_Melee.cs
     void OnTriggerEnter2D(Collider2D other)
     {
         // Layer filter
@@ -49,6 +51,9 @@ public class W_Melee : W_Base
 
         // Ignore owner
         if (other.transform == owner || other.transform.IsChildOf(owner)) return;
+
+        // Ignore weapon–weapon contacts
+        if (other.GetComponentInParent<W_Base>() != null) return;
 
         // Damage
         int baseDmg = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
@@ -60,6 +65,10 @@ public class W_Melee : W_Base
 
         var ec = other.GetComponentInParent<E_Combat>();
         if (ec != null) { ec.ChangeHealth(-final); hit = true; }
+
+        GameObject root = pc ? pc.gameObject : (ec ? ec.gameObject : null);
+        if (root == null) return;                    // no valid target
+        if (!hitThisSwing.Add(root.GetInstanceID())) return; // already hit this swing
 
         // Knockback
         if (hit && data != null && data.knockbackForce > 0f)

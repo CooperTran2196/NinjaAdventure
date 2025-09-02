@@ -6,8 +6,8 @@ public class StatsUI : MonoBehaviour
 {
     [Header("References")]
     public P_Stats p_Stats;
-    public GameObject[] statsSlots;
     public CanvasGroup statsCanvas;
+    public GameObject[] statsSlots;
 
     private P_InputActions input;
     private bool statsOpen = false;

@@ -24,7 +24,6 @@ public class E_Combat : MonoBehaviour
     [Header("Attack")]
     public float attackDuration = 0.45f; // ALWAYS matched full clip length
     public float hitDelay = 0.15f; // ALWAYS set when the hit happens
-    public float attackCooldown = 2f; // cooldown between attacks
     public bool lockDuringAttack = true; // read by E_Movement valve
 
     [Header("FX Timings")]
@@ -170,54 +169,25 @@ public class E_Combat : MonoBehaviour
         isAttacking = false;
         animator.SetBool("isAttacking", false);
 
-        cooldownTimer = attackCooldown;
+        cooldownTimer = stats.attackCooldown;
     }
-    static Vector2 SnapToEightDirections(Vector2 direction)
-    {
-        if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
-
-        // Convert to degrees, find nearest 45°, rebuild unit vector
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        int octantIndex = Mathf.RoundToInt(degrees / 45f);
-        float radians = octantIndex * 45f * Mathf.Deg2Rad;
-
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-    }
-
 
     public void ChangeHealth(int amount)
     {
         if (!IsAlive) return;
-        int newHP = stats.currentHP + amount;
 
-        // Death path
-        if (newHP <= 0)
-        {
-            if (amount < 0) OnDamaged?.Invoke(-amount);
-            stats.currentHP = 0;
-            Die();
-            return;
-        }
-
-        // Overheal cap
-        if (newHP > stats.maxHP)
-        {
-            if (amount > 0) OnHealed?.Invoke(amount);
-            stats.currentHP = stats.maxHP;
-            return;
-        }
-
-        // Normal mid-range change
-        stats.currentHP = newHP;
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
             StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
-        else if (amount > 0)
-        {
-            OnHealed?.Invoke(amount);
-        }
+
+        else if (amount > 0) OnHealed?.Invoke(amount);
+
+        stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
+
+        if (stats.currentHP == 0)
+            Die(); // call the death sequence in ONE place
     }
 
     void Die()
@@ -235,12 +205,8 @@ public class E_Combat : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
     
-    // DEBUG
-    public void Kill()
-    {
-        if (!IsAlive) return;
-        ChangeHealth(-stats.maxHP);
-    }
+    /// DEBUG
+    public void Kill() => ChangeHealth(-stats.maxHP);
 }
  
 // ----- File: E_Movement.cs ----- 
@@ -272,9 +238,7 @@ public class E_Movement : MonoBehaviour
     Vector2 knockback;
 
     const float MIN_DISTANCE = 0.0001f;
-
-
-
+    
     void Awake()
     {
         rb ??= GetComponent<Rigidbody2D>();
@@ -301,7 +265,7 @@ public class E_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -339,7 +303,7 @@ public class E_Movement : MonoBehaviour
         // Block velocity when disabled, holding, or attacking
         bool valveClosed = disabled || holdInRange || (attacking && combat.lockDuringAttack);
 
-        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
+        Vector2 intendedVelocity = moveAxis * stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
@@ -381,12 +345,12 @@ public class E_Stats : MonoBehaviour
     [Header("Health")]
     public int maxHP = 20;
     public int currentHP = 20;
-    public float moveSpeed = 5f;
-    public int attackDmg = 1;
-    public int magicDmg = 0;
-    public int armor = 0;
-    public int magicResist = 0;
-    public float knockbackResistance = 10f;
+    public float MS = 2f;
+    public int AD = 1;
+    public int AP = 0;
+    public int AR = 0;
+    public int MR = 0;
+    public float KR = 10f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

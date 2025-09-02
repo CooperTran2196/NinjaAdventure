@@ -19,7 +19,6 @@ public class P_Combat : MonoBehaviour
     [Header("Attack")]
     public float attackDuration = 0.45f; // ALWAYS matched full clip length
     public float hitDelay = 0.15f; // ALWAYS set when the hit happens
-    public float attackCooldown = 1.5f; // cooldown between attacks
     public bool lockDuringAttack = true; // read by E_Movement valve
 
     [Header("FX Timings")]
@@ -100,71 +99,47 @@ public class P_Combat : MonoBehaviour
 
     public void RequestAttack()
     {
-        if (!IsAlive) return;
-        if (cooldownTimer > 0f) return;
+        if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = attackCooldown;
+        cooldownTimer = stats.attackCooldown;
 
         // Face once at attack start
-        var dir = aimDir;
-        animator.SetFloat("atkX", dir.x);
-        animator.SetFloat("atkY", dir.y);
-
+        animator.SetFloat("atkX", aimDir.x);
+        animator.SetFloat("atkY", aimDir.y);
         StartCoroutine(AttackRoutine());
     }
 
+
     IEnumerator AttackRoutine()
     {
-        isAttacking = true;
         animator.SetBool("isAttacking", true);
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
         activeWeapon?.Attack();
-
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
-        isAttacking = false;
         animator.SetBool("isAttacking", false);
-
     }
+
 
     public void ChangeHealth(int amount)
     {
         if (!IsAlive) return;
-        int newHP = stats.currentHP + amount;
 
-        // Death path
-        if (newHP <= 0)
-        {
-            if (amount < 0) OnDamaged?.Invoke(-amount); 
-            stats.currentHP = 0;
-            Die();
-            return;
-        }
-
-        // Overheal cap
-        if (newHP > stats.maxHP)
-        {
-            if (amount > 0) OnHealed?.Invoke(amount);
-            stats.currentHP = stats.maxHP;
-            return;
-        }
-
-        // Normal mid-range change
-        stats.currentHP = newHP;
         if (amount < 0)
         {
             OnDamaged?.Invoke(-amount);
             StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
         }
-        else if (amount > 0)
-        {
-            OnHealed?.Invoke(amount);
-        }
 
+        else if (amount > 0) OnHealed?.Invoke(amount);
+
+        stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
+
+        if (stats.currentHP == 0)
+            Die(); // call the death sequence in ONE place
     }
-
 
     void Die()
     {
@@ -174,49 +149,8 @@ public class P_Combat : MonoBehaviour
         OnDied?.Invoke();
     }
 
-
-    /// Briefly tints the sprite red, then restores original color
-    public IEnumerator Flash()
-    {
-        // Save original color so we can restore it after the flash
-        Color original = sprite.color;
-
-        // Set sprite to pure red immediately
-        sprite.color = Color.red;
-
-        // Wait for 'flashDuration' seconds
-        yield return new WaitForSeconds(flashDuration);
-        sprite.color = original;
-    }
-
-    /// Lowers sprite alpha from 1 to 0 over 'deathFadeTime', then destroys the GameObject
-    public IEnumerator FadeAndDestroy()
-    {
-        Color baseColor = sprite.color;   // keep RGB, only change alpha
-        float elapsed = 0f;
-        float invDur = 1f / deathFadeTime; // avoids a divide each frame
-
-        while (elapsed < deathFadeTime)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed * invDur); // 0 → 1 over the duration
-            Color temp = baseColor;  // copy (Color is a struct)
-            temp.a = 1f - t;         // fade alpha from 1 to 0
-            sprite.color = temp;     // assign back to the SpriteRenderer
-
-            yield return null;    // wait one frame
-        }
-
-        Destroy(gameObject);
-    }
-
-
     /// DEBUG
-    public void Kill()
-    {
-        if (!IsAlive) return;
-        ChangeHealth(-stats.maxHP);
-    }
+    public void Kill() => ChangeHealth(-stats.maxHP);
 }
  
 // ----- File: P_InputActions.cs ----- 
@@ -412,6 +346,34 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""3880069f-ae40-4215-b7f5-00748027e168"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""b26e1a91-c41c-4d3c-8481-7b6662c14015"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""297a4245-1580-4839-a3ad-75057190f2d3"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -420,11 +382,15 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_ToggleStats = m_UI.FindAction("ToggleStats", throwIfNotFound: true);
     }
 
     ~@P_InputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, P_InputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, P_InputActions.UI.Disable() has not been called.");
     }
 
     /// <summary>
@@ -603,6 +569,102 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_ToggleStats;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "UI".
+    /// </summary>
+    public struct UIActions
+    {
+        private @P_InputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public UIActions(@P_InputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ToggleStats".
+        /// </summary>
+        public InputAction @ToggleStats => m_Wrapper.m_UI_ToggleStats;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="UIActions" />
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @ToggleStats.started += instance.OnToggleStats;
+            @ToggleStats.performed += instance.OnToggleStats;
+            @ToggleStats.canceled += instance.OnToggleStats;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="UIActions" />
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @ToggleStats.started -= instance.OnToggleStats;
+            @ToggleStats.performed -= instance.OnToggleStats;
+            @ToggleStats.canceled -= instance.OnToggleStats;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
+        /// </summary>
+        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
+        /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
+        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="UIActions" /> instance referencing this action map.
+    /// </summary>
+    public UIActions @UI => new UIActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -624,6 +686,21 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
+    /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
+    public interface IUIActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "ToggleStats" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleStats(InputAction.CallbackContext context);
     }
 }
  
@@ -698,7 +775,7 @@ public class P_Movement : MonoBehaviour
 
         // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
         // If raw is near zero, normalized will be (0,0)
-        Vector2 desired = raw.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE) ? raw.normalized : Vector2.zero;
+        Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
         C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
@@ -712,7 +789,7 @@ public class P_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.knockbackResistance : 0f) * Time.fixedDeltaTime;
+            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     
@@ -729,7 +806,7 @@ public class P_Movement : MonoBehaviour
         }
 
         // Only fire direction event if direction actually changed.
-        if (moveAxis != v && v.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE))
+        if (moveAxis != v && v.sqrMagnitude > MIN_DISTANCE)
         {
             lastMove = v; // Idle facing uses latest non-zero direction
         }
@@ -741,9 +818,9 @@ public class P_Movement : MonoBehaviour
         bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
         bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
-        Vector2 intendedVelocity = moveAxis * stats.moveSpeed;
         // If valve is closed, stop; otherwise apply intended velocity
-        velocity = valveClosed ? Vector2.zero : intendedVelocity;
+        Vector2 intendedVelocity = moveAxis * stats.MS;
+        velocity = valveClosed ? Vector2.zero : (moveAxis * stats.MS);
     }
 
     public void SetDisabled(bool isDisabled)
@@ -773,14 +850,15 @@ using UnityEngine;
 public class P_Stats : MonoBehaviour
 {
     [Header("Stats")]
+    public int AD = 1; // Attack Damage
+    public int AP = 0; // Ability Power
+    public float MS = 5f; // Move Speed
+
     public int maxHP = 10;
     public int currentHP = 10;
-    public float moveSpeed = 5f;
-    public int attackDmg = 1;
-    public int magicDmg = 0;
-    public int armor = 0;
-    public int magicResist = 0;
-    public float knockbackResistance = 10f;
+    public int AR = 0; // Armor
+    public int MR = 0; // Magic Resist
+    public float KR = 10f; // knockback Resist
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

@@ -245,7 +245,7 @@ public class W_Melee : W_Base
         if (other.transform == owner || other.transform.IsChildOf(owner)) return;
 
         // Damage
-        int baseDmg = (pStats != null) ? pStats.attackDmg : (eStats != null ? eStats.attackDmg : 0);
+        int baseDmg = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
         int final = baseDmg + (data ? data.baseDamage : 0);
 
         bool hit = false;
