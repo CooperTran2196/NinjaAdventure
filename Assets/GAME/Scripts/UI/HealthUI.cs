@@ -19,13 +19,9 @@ public class HealthUI : MonoBehaviour
     System.Action<int> onDamaged, onHealed;
     System.Action onDied;
 
-    void Awake()
-    {
-        // all references assigned in Inspector
-    }
-
     void OnEnable()
     {
+        // Assign delegates
         onDamaged = _ => { chooseHealthSprite(); };
         onHealed  = _ => { chooseHealthSprite(); };
         onDied    = () => { chooseHealthSprite(); };
@@ -54,12 +50,12 @@ public class HealthUI : MonoBehaviour
         lastMaxHP = maxHP;
         int needed = Mathf.CeilToInt(maxHP / 3f);
 
-        // Clear old children and list
+        // Clear old children and list when increase maxHealth
         for (int i = root.childCount - 1; i >= 0; i--)
             Destroy(root.GetChild(i).gameObject);
         health.Clear();
 
-        // Spawn icons
+        // Spawn health sprites
         for (int i = 0; i < needed; i++)
         {
             var img = Instantiate(healthPointPrefab, root);

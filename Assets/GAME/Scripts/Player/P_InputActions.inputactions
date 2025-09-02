@@ -145,6 +145,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OnDamage",
+                    "type": "Button",
+                    "id": "ab623e52-d722-494d-94b1-4aafcd6d7e5e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OnHealed",
+                    "type": "Button",
+                    "id": "ec6d2d3d-b758-4006-af0b-1feb7e3770f2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,6 +174,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "GainExp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d20d81f6-6914-4ba5-99d4-fccd1d45bea3",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnDamage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ce79e09-ea96-4e21-93af-bd64734a5af9",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnHealed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

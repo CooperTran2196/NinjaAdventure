@@ -231,6 +231,24 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OnDamage"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab623e52-d722-494d-94b1-4aafcd6d7e5e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OnHealed"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec6d2d3d-b758-4006-af0b-1feb7e3770f2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -242,6 +260,28 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""GainExp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d20d81f6-6914-4ba5-99d4-fccd1d45bea3"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OnDamage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ce79e09-ea96-4e21-93af-bd64734a5af9"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OnHealed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -260,6 +300,8 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_GainExp = m_Debug.FindAction("GainExp", throwIfNotFound: true);
+        m_Debug_OnDamage = m_Debug.FindAction("OnDamage", throwIfNotFound: true);
+        m_Debug_OnHealed = m_Debug.FindAction("OnHealed", throwIfNotFound: true);
     }
 
     ~@P_InputActions()
@@ -546,6 +588,8 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Debug;
     private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
     private readonly InputAction m_Debug_GainExp;
+    private readonly InputAction m_Debug_OnDamage;
+    private readonly InputAction m_Debug_OnHealed;
     /// <summary>
     /// Provides access to input actions defined in input action map "Debug".
     /// </summary>
@@ -561,6 +605,14 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Debug/GainExp".
         /// </summary>
         public InputAction @GainExp => m_Wrapper.m_Debug_GainExp;
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/OnDamage".
+        /// </summary>
+        public InputAction @OnDamage => m_Wrapper.m_Debug_OnDamage;
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/OnHealed".
+        /// </summary>
+        public InputAction @OnHealed => m_Wrapper.m_Debug_OnHealed;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -590,6 +642,12 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @GainExp.started += instance.OnGainExp;
             @GainExp.performed += instance.OnGainExp;
             @GainExp.canceled += instance.OnGainExp;
+            @OnDamage.started += instance.OnOnDamage;
+            @OnDamage.performed += instance.OnOnDamage;
+            @OnDamage.canceled += instance.OnOnDamage;
+            @OnHealed.started += instance.OnOnHealed;
+            @OnHealed.performed += instance.OnOnHealed;
+            @OnHealed.canceled += instance.OnOnHealed;
         }
 
         /// <summary>
@@ -604,6 +662,12 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @GainExp.started -= instance.OnGainExp;
             @GainExp.performed -= instance.OnGainExp;
             @GainExp.canceled -= instance.OnGainExp;
+            @OnDamage.started -= instance.OnOnDamage;
+            @OnDamage.performed -= instance.OnOnDamage;
+            @OnDamage.canceled -= instance.OnOnDamage;
+            @OnHealed.started -= instance.OnOnHealed;
+            @OnHealed.performed -= instance.OnOnHealed;
+            @OnHealed.canceled -= instance.OnOnHealed;
         }
 
         /// <summary>
@@ -688,5 +752,19 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnGainExp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OnDamage" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOnDamage(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OnHealed" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOnHealed(InputAction.CallbackContext context);
     }
 }
