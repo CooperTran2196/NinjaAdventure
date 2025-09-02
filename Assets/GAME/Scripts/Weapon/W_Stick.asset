@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   sprite: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
   pointsUp: 1
-  baseDamage: 2
+  baseDamage: 1
   knockbackForce: 4
   stunTime: 0.5
   showTime: 0.3
