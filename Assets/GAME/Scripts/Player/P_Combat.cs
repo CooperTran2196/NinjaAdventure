@@ -56,7 +56,6 @@ public class P_Combat : MonoBehaviour
 
         animator?.SetFloat("atkX", 0f);
         animator?.SetFloat("atkY", -1f);
-        baseColor = sprite.color;
     }
 
     void OnEnable()
