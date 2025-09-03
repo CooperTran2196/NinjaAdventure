@@ -1,3 +1,4 @@
+// Assets/GAME/Scripts/UI/HealthUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -5,30 +6,28 @@ using System.Collections.Generic;
 public class HealthUI : MonoBehaviour
 {
     [Header("References")]
-    public P_Combat combat; // Reads currentHP/maxHP + raises events
+    public C_Health health;                 // drag the Player's C_Health here
     public RectTransform root;
     public Image healthPointPrefab;
 
     [Header("Sprites (index = HP in this slot)")]
     public Sprite[] healthPoint = new Sprite[4]; // 0 -> full
 
-    readonly List<Image> health = new List<Image>(); // Instantiated icons
+    readonly List<Image> hpIcons = new List<Image>(); // <— renamed
     int lastMaxHP = -1;
 
-    // Events
     System.Action<int> onDamaged, onHealed;
     System.Action onDied;
 
     void OnEnable()
     {
-        // Assign delegates
-        onDamaged = _ => { chooseHealthSprite(); };
-        onHealed  = _ => { chooseHealthSprite(); };
-        onDied    = () => { chooseHealthSprite(); };
+        onDamaged = _ => chooseHealthSprite();
+        onHealed  = _ => chooseHealthSprite();
+        onDied    = () => chooseHealthSprite();
 
-        combat.OnDamaged += onDamaged;
-        combat.OnHealed  += onHealed;
-        combat.OnDied    += onDied;
+        health.OnDamaged += onDamaged;   // <— subscribe to C_Health
+        health.OnHealed  += onHealed;
+        health.OnDied    += onDied;
 
         UpdateUI();
         chooseHealthSprite();
@@ -36,42 +35,37 @@ public class HealthUI : MonoBehaviour
 
     void OnDisable()
     {
-        combat.OnDamaged -= onDamaged;
-        combat.OnHealed  -= onHealed;
-        combat.OnDied    -= onDied;
+        health.OnDamaged -= onDamaged;
+        health.OnHealed  -= onHealed;
+        health.OnDied    -= onDied;
     }
 
-    // Build the correct number of icons from maxHP
     public void UpdateUI()
     {
-        int maxHP = combat.stats.maxHP;
+        int maxHP = health.pStats ? health.pStats.maxHP : health.eStats.maxHP;
         if (maxHP == lastMaxHP) return;
 
         lastMaxHP = maxHP;
         int needed = Mathf.CeilToInt(maxHP / 3f);
 
-        // Clear old children and list when increase maxHealth
-        for (int i = root.childCount - 1; i >= 0; i--)
-            Destroy(root.GetChild(i).gameObject);
-        health.Clear();
+        for (int i = root.childCount - 1; i >= 0; i--) Destroy(root.GetChild(i).gameObject);
+        hpIcons.Clear();
 
-        // Spawn health sprites
         for (int i = 0; i < needed; i++)
         {
             var img = Instantiate(healthPointPrefab, root);
             img.enabled = true;
-            health.Add(img);
+            hpIcons.Add(img);
         }
     }
 
-    // Pick which sprite to use based on remaining HP for that slot
     public void chooseHealthSprite()
     {
-        int hp = combat.stats.currentHP;
-        for (int i = 0; i < health.Count; i++)
+        int hp = health.pStats ? health.pStats.currentHP : health.eStats.currentHP;
+        for (int i = 0; i < hpIcons.Count; i++)
         {
-            int theHealthSpriteWanted = Mathf.Clamp(hp - i * 3, 0, 3);
-            health[i].sprite = healthPoint[theHealthSpriteWanted];
+            int idx = Mathf.Clamp(hp - i * 3, 0, 3);
+            hpIcons[i].sprite = healthPoint[idx];
         }
     }
 }
