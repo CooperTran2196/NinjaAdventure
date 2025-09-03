@@ -13,7 +13,7 @@ public class P_Combat : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
     public W_Base activeWeapon; // Placeholder
-    public C_ChangeHealth health;
+    public C_Health health;
 
 
     [Header("Attack")]
@@ -21,18 +21,12 @@ public class P_Combat : MonoBehaviour
     public float hitDelay = 0.15f; // ALWAYS set when the hit happens
     public bool lockDuringAttack = true; // read by E_Movement valve
 
-    [Header("FX Timings")]
-    public float flashDuration = 0.1f; // How long the red flash lasts
-    public float deathFadeTime = 1.5f; // How long to fade before destroy
 
     [Header("Keyword to Trigger Die Animation")]
     public string deathTrigger = "Die";
 
     [Header("Debug")]
     [SerializeField] private bool autoKill;
-    public Key debugHotkey = Key.F1;
-    public int debugHotkeyDamage = 1;
-    InputAction debugTakeDamageAction;
 
     P_InputActions input;
     Vector2 aimDir = Vector2.down;
@@ -46,9 +40,7 @@ public class P_Combat : MonoBehaviour
     // Quick state check
     public bool IsAlive => stats.currentHP > 0;
 
-    bool isAttacking;
     float cooldownTimer;
-    Color baseColor;
     void Awake()
     {
         animator ??= GetComponent<Animator>();
@@ -65,39 +57,19 @@ public class P_Combat : MonoBehaviour
         animator?.SetFloat("atkX", 0f);
         animator?.SetFloat("atkY", -1f);
         baseColor = sprite.color;
-        debugTakeDamageAction = new InputAction(
-            "DebugTakeDamage",
-            InputActionType.Button,
-            $"<Keyboard>/{debugHotkey.ToString().ToLower()}"
-        );
-
     }
 
     void OnEnable()
     {
         input?.Enable();
-        debugTakeDamageAction?.Enable();
-
-        if (health != null)
-        {
-            health.OnDamaged += a => OnDamaged?.Invoke(a);
-            health.OnHealed += a => OnHealed?.Invoke(a);
-            health.OnDied += () => { OnDied?.Invoke(); Die(); };
-        }
+        if (health != null) health.OnDied += Die;
     }
 
 
     void OnDisable()
     {
         input?.Disable();
-        debugTakeDamageAction?.Disable();
-
-        if (health != null)
-        {
-            health.OnDamaged -= a => OnDamaged?.Invoke(a);
-            health.OnHealed -= a => OnHealed?.Invoke(a);
-            health.OnDied -= () => { OnDied?.Invoke(); Die(); };
-        }
+        if (health != null) health.OnDied -= Die;
     }
 
 
@@ -109,7 +81,6 @@ public class P_Combat : MonoBehaviour
         if (input.Player.Attack.triggered) RequestAttack();
 
         if (autoKill) { autoKill = false; health?.ChangeHealth(-stats.maxHP); }
-        if (debugTakeDamageAction.triggered) health?.ChangeHealth(-debugHotkeyDamage);
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -143,8 +114,6 @@ public class P_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
-        OnDied?.Invoke();
     }
 
     /// DEBUG

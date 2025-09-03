@@ -13,7 +13,7 @@ public class E_Combat : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
     public W_Base activeWeapon;   // Placeholder
-    public C_ChangeHealth health;
+    public C_Health health;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -34,9 +34,6 @@ public class E_Combat : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] bool autoKill;
-    public Key debugHotkey = Key.F2;
-    public int debugHotkeyDamage = 1;
-    InputAction debugTakeDamageAction;
 
     // Placeholder for Events
     public event Action<int> OnDamaged;
@@ -49,7 +46,6 @@ public class E_Combat : MonoBehaviour
     bool isAttacking;
     float contactTimer; // for collision damage
     float cooldownTimer; // for attacking cooldown
-    Color baseColor;
 
     void Awake()
     {
@@ -64,47 +60,23 @@ public class E_Combat : MonoBehaviour
         if (movement == null) Debug.LogError($"{name}: E_Movement missing.");
 
         baseColor = sprite.color;
-
-        debugTakeDamageAction = new InputAction(
-            "DebugTakeDamage",
-            InputActionType.Button,
-            $"<Keyboard>/{debugHotkey.ToString().ToLower()}"
-        );
     }
 
     void OnEnable()
     {
-        debugTakeDamageAction.Enable();
         StartCoroutine(ThinkLoop());
-
-        if (health != null)
-        {
-            health.OnDamaged += a => OnDamaged?.Invoke(a);
-            health.OnHealed += a => OnHealed?.Invoke(a);
-            health.OnDied += () => { OnDied?.Invoke(); Die(); };
-        }
+        if (health != null) health.OnDied += Die;
     }
 
 
     void OnDisable()
     {
-        debugTakeDamageAction?.Disable();
-
-        if (health != null)
-        {
-            health.OnDamaged -= a => OnDamaged?.Invoke(a);
-            health.OnHealed -= a => OnHealed?.Invoke(a);
-            health.OnDied -= () => { OnDied?.Invoke(); Die(); };
-        }
+        if (health != null) health.OnDied -= Die;
     }
-
-
 
     void Update()
     {
         if (autoKill) { autoKill = false; health?.ChangeHealth(-stats.maxHP); }
-        if (debugTakeDamageAction.triggered) health?.ChangeHealth(-debugHotkeyDamage);
-
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
 
@@ -151,7 +123,7 @@ public class E_Combat : MonoBehaviour
             return;
         }
 
-        var playerHealth = c.collider.GetComponent<C_ChangeHealth>();
+        var playerHealth = c.collider.GetComponent<C_Health>();
         if (playerHealth == null || !playerHealth.IsAlive) return; // Only damage a live player
         playerHealth.ChangeHealth(-stats.collisionDamage); //Apply damage
 
@@ -196,8 +168,6 @@ public class E_Combat : MonoBehaviour
     {
         movement?.SetDisabled(true);
         animator?.SetTrigger(deathTrigger);
-        StartCoroutine(C_FX.FadeAndDestroy(sprite, deathFadeTime, gameObject));
-        OnDied?.Invoke();
     }
 
 
