@@ -1,30 +1,4 @@
  
-// ----- File: W_ApplyDamage.cs ----- 
-using UnityEngine;
-
-public static class W_ApplyDamage
-{
-    public static void ApplyPhysical(int attackerAD, int weaponBase, C_ChangeHealth target)
-    {
-        if (target == null || !target.IsAlive) return;
-        int requested = attackerAD + weaponBase;
-        float reduction = Mathf.Clamp01(target.AR / 100f);
-        int reduced = Mathf.RoundToInt(requested * (1f - reduction));
-        if (reduced <= 0) return;
-        target.ChangeHealth(-reduced);
-    }
-
-    public static void ApplyAbility(int attackerAP, int weaponBase, C_ChangeHealth target)
-    {
-        if (target == null || !target.IsAlive) return;
-        int requested = attackerAP + weaponBase;
-        float reduction = Mathf.Clamp01(target.MR / 100f);
-        int reduced = Mathf.RoundToInt(requested * (1f - reduction));
-        if (reduced <= 0) return;
-        target.ChangeHealth(-reduced);
-    }
-}
-     
 // ----- File: W_Base.cs ----- 
 using UnityEngine;
 
@@ -277,33 +251,28 @@ public class W_Melee : W_Base
         // Ignore weapon–weapon contacts
         if (other.GetComponentInParent<W_Base>() != null) return;
 
-        // Damage = (attacker AD) + (weapon baseDamage)
+        // Attacker stats
         int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int weaponBase = (data ? data.baseDamage : 0);
+        int attackerAP = (pStats != null) ? pStats.AP : (eStats != null ? eStats.AP : 0);
 
-        // Apply damage
-        bool hit = false;
-        var targetHealth = other.GetComponentInParent<C_ChangeHealth>();
-        if (targetHealth != null)
-        {
-            W_ApplyDamage.ApplyPhysical(attackerAD, weaponBase, targetHealth);
-            hit = true;
-        }
+        // Weapon bases (allow mix)
+        int weaponAD = data ? data.baseAD : 0;
+        int weaponAP = data ? data.baseAP : 0;
 
-
-        var ec = other.GetComponentInParent<E_Combat>();
-        if (ec != null) { ec.ChangeHealth(-final); hit = true; }
+        // Resolve target health once
+        var targetHealth = other.GetComponentInParent<C_Health>();
+        if (targetHealth == null || !targetHealth.IsAlive) return;
 
         // Per-swing de-dup
-        GameObject root = targetHealth ? targetHealth.gameObject : null;
-        if (root == null) return;
+        GameObject root = targetHealth.gameObject;
         if (!hitThisSwing.Add(root.GetInstanceID())) return;
 
+        // Apply damage (AR handled inside)
+        targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
-        // Knockback
-        if (hit && data != null && data.knockbackForce > 0f)
+        // Knockback (apply regardless of reduced damage)
+        if (data != null && data.knockbackForce > 0f)
         {
-             // 8-way snapped aim direction
             Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
             W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
         }
@@ -319,9 +288,9 @@ public class W_Melee : W_Base
                 if (em != null) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
             }
         }
-
-
     }
+
+
 }
  
 // ----- File: W_SO.cs ----- 
@@ -337,7 +306,11 @@ public class W_SO : ScriptableObject
     public WeaponType type = WeaponType.Melee;
     public Sprite sprite;
     public bool pointsUp = false; // false = points down
-    public int baseDamage = 1;
+
+    [Header("Damage (set either/both)")]
+    public int baseAD = 1;
+    public int baseAP = 0;
+
     public float knockbackForce = 5f;
     public float stunTime = .5f;
 
