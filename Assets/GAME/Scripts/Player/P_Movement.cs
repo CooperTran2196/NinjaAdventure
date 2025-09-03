@@ -15,8 +15,8 @@ public class P_Movement : MonoBehaviour
     public P_Combat combat;
 
     // Components
-    Rigidbody2D rb;
-    Animator animator;
+    private Rigidbody2D rb;
+    private Animator animator;
 
     // New Input System
     P_InputActions input;
@@ -113,7 +113,7 @@ public class P_Movement : MonoBehaviour
         bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
         Vector2 intendedVelocity = moveAxis * stats.MS;
-        velocity = valveClosed ? Vector2.zero : (moveAxis * stats.MS);
+        velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
     public void SetDisabled(bool isDisabled)
