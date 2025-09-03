@@ -6,9 +6,9 @@ public class E_Movement : MonoBehaviour
     [Header("References")]
     public E_Stats e_stats;
     public E_Combat e_combat;
-    public SpriteRenderer e_sprite;
-    public Animator animator;
-    public Rigidbody2D rb;
+    SpriteRenderer sprite;
+    Animator animator;
+    Rigidbody2D rb;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -29,14 +29,14 @@ public class E_Movement : MonoBehaviour
     
     void Awake()
     {
-        e_sprite    ??= GetComponent<SpriteRenderer>();
+        sprite      ??= GetComponent<SpriteRenderer>();
         rb          ??= GetComponent<Rigidbody2D>();
         animator    ??= GetComponent<Animator>();
         e_stats     ??= GetComponent<E_Stats>();
         e_combat    ??= GetComponent<E_Combat>();
         
 
-        if (e_sprite    == null) Debug.LogError($"{name}: SpriteRenderer missing.");
+        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer missing.");
         if (rb          == null) Debug.LogError($"{name}: Rigidbody2D missing.");
         if (animator    == null) Debug.LogError($"{name}: Animator missing.");
         if (e_stats     == null) Debug.LogError($"{name}: E_Stats missing.");
