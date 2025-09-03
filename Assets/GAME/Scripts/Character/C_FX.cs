@@ -1,24 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class C_FX : MonoBehaviour
 {
+    [Header("References")]
+    SpriteRenderer sprite;
+
     [Header("Flash")]
     public float flashDuration = 0.1f;
-    public Color healTint = new Color(0.3f, 1f, 0.3f, 1f);
+    public Color healTint   = new Color(0.3f, 1f, 0.3f, 1f);
     public Color damageTint = new Color(1f, 0.3f, 0.3f, 1f);
 
     [Header("Death")]
     public float deathFadeTime = 1.5f;
 
-    SpriteRenderer sprite;
     Color baseRGB;
 
     void Awake()
     {
-        sprite = GetComponent<SpriteRenderer>();
-        baseRGB = sprite.color; // includes current RGB + A
+        sprite ??= GetComponent<SpriteRenderer>();
+        if (sprite == null) Debug.LogError($"{name}: SpriteRenderer missing.", this);
+
+        baseRGB = sprite ? sprite.color : Color.white;
     }
 
     public void FlashOnDamaged() => StartCoroutine(Flash(damageTint));

@@ -1,25 +1,18 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
 
 public class P_Movement : MonoBehaviour
 {
+    [Header("References")]
+    Rigidbody2D rb;
+    Animator animator;
+    P_InputActions input;
+
+    public P_Stats p_stats;
+    public P_Combat p_combat;
+
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
-
-    [Header("References")]
-    public P_Stats stats;
-    public P_Combat combat;
-
-    // Components
-    private Rigidbody2D rb;
-    private Animator animator;
-
-    // New Input System
-    P_InputActions input;
 
     // Runtime state
     bool disabled;      // When true, movement/animation stops
@@ -29,23 +22,21 @@ public class P_Movement : MonoBehaviour
 
     const float MIN_DISTANCE = 0.0001f;
 
-    // Placeholder for events
-    public event Action<Vector2> OnDirectionChanged;
-    public event Action<Vector2> OnVelocityChanged;
-
     void Awake()
     {
         rb ??= GetComponent<Rigidbody2D>();
         animator ??= GetComponent<Animator>();
-        stats ??= GetComponent<P_Stats>();
-        combat ??= GetComponent<P_Combat>();
-
         input ??= new P_InputActions();
+
+        p_stats ??= GetComponent<P_Stats>();
+        p_combat ??= GetComponent<P_Combat>();
 
         if (rb == null) Debug.LogError($"{name}: Rigidbody2D missing.");
         if (animator == null) Debug.LogError($"{name}: Animator missing.");
-        if (stats == null) Debug.LogError($"{name}: P_Stats missing.");
-        if (combat == null) Debug.LogError($"{name}: P_Combat missing.");
+        if (input == null) Debug.LogError($"{name}: P_InputActions missing.");
+
+        if (p_stats == null) Debug.LogError($"{name}: P_Stats missing.");
+        if (p_combat == null) Debug.LogError($"{name}: P_Combat missing.");
 
         lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
@@ -82,10 +73,9 @@ public class P_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = (p_stats ? p_stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
-    
     }
 
 
@@ -110,9 +100,9 @@ public class P_Movement : MonoBehaviour
         // Read attack-state from Animator
         bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || (attacking && combat.lockDuringAttack);
+        bool valveClosed = disabled || (attacking && p_combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * stats.MS;
+        Vector2 intendedVelocity = moveAxis * p_stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 

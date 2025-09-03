@@ -1,77 +1,73 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
-[RequireComponent(typeof(Animator))]
 
 public class P_Combat : MonoBehaviour
 {
     [Header("References")]
-    public P_Stats stats;
-    public P_Movement movement;
-    public SpriteRenderer sprite;
-    public Animator animator;
-    public W_Base activeWeapon; // Placeholder
-    public C_Health health;
+    SpriteRenderer sprite;
+    Animator animator;
+    P_InputActions input;
 
-
+    public P_Stats p_stats;
+    public P_Movement p_movement;
+    public C_Health p_health;
+    public W_Base activeWeapon;
+    
     [Header("Attack")]
-    public float attackDuration = 0.45f; // ALWAYS matched full clip length
-    public float hitDelay = 0.15f; // ALWAYS set when the hit happens
-    public bool lockDuringAttack = true; // read by E_Movement valve
-
-
-    [Header("Keyword to Trigger Die Animation")]
-    public string deathTrigger = "Die";
+    [Header("ALWAYS matched full clip length (0.45)")]
+    public float attackDuration = 0.45f;
+    [Header("ALWAYS set when the hit happens (0.15)")]
+    public float hitDelay = 0.15f;
+    public bool lockDuringAttack = true;
 
     [Header("Debug")]
-    [SerializeField] private bool autoKill;
+    [SerializeField] bool autoKill;
 
-    P_InputActions input;
+    
     Vector2 aimDir = Vector2.down;
-    const float MIN_DISTANCE = 0.0001f;
 
-    // Placeholder for Events
-    public event Action<int> OnDamaged;
-    public event Action<int> OnHealed;
-    public event Action OnDied;
+    const float MIN_DISTANCE = 0.0001f;
+    float cooldownTimer;
 
     // Quick state check
-    public bool IsAlive => stats.currentHP > 0;
+    public bool IsAlive => p_stats.currentHP > 0;
 
-    float cooldownTimer;
     void Awake()
     {
-        animator ??= GetComponent<Animator>();
         sprite ??= GetComponent<SpriteRenderer>();
-        stats ??= GetComponent<P_Stats>();
-        movement ??= GetComponent<P_Movement>();
+        animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
+        
+        p_stats ??= GetComponent<P_Stats>();
+        p_movement ??= GetComponent<P_Movement>();
+        p_health ??= GetComponent<C_Health>();
+        activeWeapon ??= GetComponentInChildren<W_Melee>();
 
+        
         if (animator == null) Debug.LogError($"{name}: Animator missing.");
         if (sprite == null) Debug.LogWarning($"{name}: SpriteRenderer missing.");
-        if (stats == null) Debug.LogError($"{name}: P_Stats missing.");
-        if (movement == null) Debug.LogError($"{name}: P_Movement missing.");
 
-        animator?.SetFloat("atkX", 0f);
-        animator?.SetFloat("atkY", -1f);
+        if (p_stats == null) Debug.LogError($"{name}: P_Stats missing.");
+        if (p_movement == null) Debug.LogError($"{name}: P_Movement missing.");
+        if (p_health == null) Debug.LogError($"{name}: C_Health missing.");
+        if (activeWeapon == null) Debug.LogError($"{name}: C_Melee missing.");
+
+        animator.SetFloat("atkX", 0f);
+        animator.SetFloat("atkY", -1f);
     }
 
     void OnEnable()
     {
         input?.Enable();
-        if (health != null) health.OnDied += Die;
+        p_health.OnDied += Die;
     }
-
 
     void OnDisable()
     {
         input?.Disable();
-        if (health != null) health.OnDied -= Die;
+        p_health.OnDied -= Die;
     }
-
-
 
     void Update()
     {
@@ -79,7 +75,7 @@ public class P_Combat : MonoBehaviour
         if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
         if (input.Player.Attack.triggered) RequestAttack();
 
-        if (autoKill) { autoKill = false; health?.ChangeHealth(-stats.maxHP); }
+        if (autoKill) { autoKill = false; p_health.ChangeHealth(-p_stats.maxHP); }
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -88,7 +84,7 @@ public class P_Combat : MonoBehaviour
     {
         if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = stats.attackCooldown;
+        cooldownTimer = p_stats.attackCooldown;
 
         // Face once at attack start
         animator.SetFloat("atkX", aimDir.x);
@@ -111,10 +107,7 @@ public class P_Combat : MonoBehaviour
 
     void Die()
     {
-        movement?.SetDisabled(true);
-        animator?.SetTrigger(deathTrigger);
+        p_movement.SetDisabled(true);
+        animator.SetTrigger("Die");
     }
-
-    /// DEBUG
-    public void Kill() => health?.ChangeHealth(-stats.maxHP);
 }

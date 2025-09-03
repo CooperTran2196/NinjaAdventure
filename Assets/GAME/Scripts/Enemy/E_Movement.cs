@@ -4,11 +4,12 @@ using UnityEngine;
 public class E_Movement : MonoBehaviour
 {
     [Header("References")]
+    SpriteRenderer sprite;
+    Rigidbody2D rb;
+    Animator animator;
+    
     public E_Stats e_stats;
     public E_Combat e_combat;
-    SpriteRenderer sprite;
-    Animator animator;
-    Rigidbody2D rb;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -17,7 +18,7 @@ public class E_Movement : MonoBehaviour
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down;
 
-    // State
+    // Runtime state
     Transform target;
     bool disabled;
     bool holdInRange;
@@ -32,6 +33,7 @@ public class E_Movement : MonoBehaviour
         sprite      ??= GetComponent<SpriteRenderer>();
         rb          ??= GetComponent<Rigidbody2D>();
         animator    ??= GetComponent<Animator>();
+
         e_stats     ??= GetComponent<E_Stats>();
         e_combat    ??= GetComponent<E_Combat>();
         
@@ -39,7 +41,8 @@ public class E_Movement : MonoBehaviour
         if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer missing.");
         if (rb          == null) Debug.LogError($"{name}: Rigidbody2D missing.");
         if (animator    == null) Debug.LogError($"{name}: Animator missing.");
-        if (e_stats     == null) Debug.LogError($"{name}: E_Stats missing.");
+        
+        if (e_stats == null) Debug.LogError($"{name}: E_Stats missing.");
         if (e_combat    == null) Debug.LogError($"{name}: E_Combat missing.");
     }
 

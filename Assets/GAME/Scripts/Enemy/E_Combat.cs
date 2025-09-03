@@ -5,12 +5,13 @@ using UnityEngine;
 public class E_Combat : MonoBehaviour
 {
     [Header("References")]
+    SpriteRenderer sprite;
+    Animator animator;
+
     public E_Stats e_stats;
     public E_Movement e_movement;
-    public SpriteRenderer sprite;
-    public Animator animator;
-    public W_Base activeWeapon;
     public C_Health e_health;
+    public W_Base activeWeapon;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -31,22 +32,26 @@ public class E_Combat : MonoBehaviour
     public bool IsAlive => e_stats.currentHP > 0;
 
     bool isAttacking;
-    float contactTimer; // for collision damage
-    float cooldownTimer; // for attacking cooldown
+    float contactTimer;   // for collision damage
+    float cooldownTimer;  // for attacking cooldown
 
     void Awake()
     {
-        sprite      ??= GetComponent<SpriteRenderer>();
-        animator    ??= GetComponent<Animator>();
-        e_stats     ??= GetComponent<E_Stats>();
-        e_movement  ??= GetComponent<E_Movement>();
-        e_health    ??= GetComponent<C_Health>();
+        sprite          ??= GetComponent<SpriteRenderer>();
+        animator        ??= GetComponent<Animator>();
 
-        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (animator    == null) Debug.LogError($"{name}: Animator missing.");
-        if (e_stats     == null) Debug.LogError($"{name}: E_Stats missing.");
-        if (e_movement  == null) Debug.LogError($"{name}: E_Movement missing.");
-        if (e_health    == null) Debug.LogError($"{name}: C_Health missing.");
+        e_stats         ??= GetComponent<E_Stats>();
+        e_movement      ??= GetComponent<E_Movement>();
+        e_health        ??= GetComponent<C_Health>();
+        activeWeapon    ??= GetComponentInChildren<W_Melee>();
+
+        if (sprite == null) Debug.LogError($"{name}: SpriteRenderer missing.");
+        if (animator == null) Debug.LogError($"{name}: Animator missing.");
+
+        if (e_stats == null) Debug.LogError($"{name}: E_Stats missing.");
+        if (e_movement == null) Debug.LogError($"{name}: E_Movement missing.");
+        if (e_health == null) Debug.LogError($"{name}: C_Health missing.");
+        if (activeWeapon == null) Debug.LogError($"{name}: C_Melee missing.");
     }
 
     void OnEnable()
@@ -63,7 +68,7 @@ public class E_Combat : MonoBehaviour
 
     void Update()
     {
-        if (autoKill) { autoKill = false; e_health?.ChangeHealth(-e_stats.maxHP); }
+        if (autoKill) { autoKill = false; e_health.ChangeHealth(-e_stats.maxHP); }
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
 
@@ -151,8 +156,8 @@ public class E_Combat : MonoBehaviour
 
     void Die()
     {
-        e_movement?.SetDisabled(true);
-        animator?.SetTrigger("Die");
+        e_movement.SetDisabled(true);
+        animator.SetTrigger("Die");
     }
 
     void OnDrawGizmosSelected()

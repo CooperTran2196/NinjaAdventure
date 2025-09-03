@@ -206,13 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b00dc70f4431ee428add25ccf716bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  e_stats: {fileID: 0}
+  e_combat: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   detectionRadius: 3
   lastMove: {x: 0, y: -1}
-  stats: {fileID: 9192521606444175818}
-  combat: {fileID: 6788551118935735852}
 --- !u!114 &9192521606444175818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,8 +225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee622df9b6f90d7448e119a7d3fbce2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 10
-  currentHP: 10
+  maxHP: 100
+  currentHP: 0
   MS: 1.5
   AD: 1
   AP: 0
@@ -250,23 +250,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 274558421d90aa34fb8a4f7250c34e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 9192521606444175818}
-  movement: {fileID: 5561844253374118004}
-  sprite: {fileID: 558855158200817159}
-  animator: {fileID: 6618557476295583127}
-  activeWeapon: {fileID: 5702281453061795697}
-  health: {fileID: 8855155696878849692}
+  e_stats: {fileID: 0}
+  e_movement: {fileID: 0}
+  e_health: {fileID: 0}
+  activeWeapon: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  attackRange: 1.2
+  attackRange: 1.3
   thinkInterval: 0.5
   attackDuration: 0.45
   hitDelay: 0.15
   lockDuringAttack: 1
-  flashDuration: 0.1
-  deathFadeTime: 1.5
-  deathTrigger: Die
   autoKill: 0
 --- !u!114 &8855155696878849692
 MonoBehaviour:
@@ -367,14 +362,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6825720941697136436, guid: f12f7f8aa793746509e1fa850f71207e, type: 3}
   m_PrefabInstance: {fileID: 8742740740568073042}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5702281453061795697 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3924577721374387235, guid: f12f7f8aa793746509e1fa850f71207e, type: 3}
-  m_PrefabInstance: {fileID: 8742740740568073042}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13e3e871d6697774da9043adff344fed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::W_Melee

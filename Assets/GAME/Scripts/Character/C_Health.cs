@@ -4,16 +4,15 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
-    [Header("Assign exactly one")]
+    [Header("References (Only P or E _Stats)")]
+    P_InputActions input;
     public P_Stats pStats;
     public E_Stats eStats;
+    public C_FX fx;
 
-    [Header("Debug Keys (Debug action map)")]
-    public int takingDamageAmount = 1; // N
-    public int healingAmount = 1;      // B
-
-    [Header("FX (optional)")]
-    public C_FX fx; // drag & drop
+    [Header("Debug Keys (N/B)")]
+    public int takingDamageAmount = 1;
+    public int healingAmount = 1;
 
     // Events
     public event Action<int> OnDamaged;
@@ -28,15 +27,17 @@ public class C_Health : MonoBehaviour
     public int MR => pStats ? pStats.MR : eStats.MR;
     public bool IsAlive => CurrentHP > 0;
 
-    P_InputActions input;
-
     // cached delegates so we can unsubscribe
-    System.Action<int> fxDamagedHandler;
-    System.Action<int> fxHealedHandler;
-    System.Action      fxDiedHandler;
+    Action<int> fxDamagedHandler;
+    Action<int> fxHealedHandler;
+    Action      fxDiedHandler;
 
     void Awake()
     {
+        pStats  ??= GetComponent<P_Stats>();
+        eStats  ??= GetComponent<E_Stats>();
+        fx      ??= GetComponent<C_FX>();
+
         if (!pStats && !eStats) Debug.LogError($"{name}: C_Health needs P_Stats or E_Stats.", this);
         if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
@@ -74,6 +75,7 @@ public class C_Health : MonoBehaviour
     {
         if (input.Debug.OnDamaged.WasPressedThisFrame())
             ChangeHealth(-Mathf.Abs(takingDamageAmount));
+
         if (input.Debug.OnHealed.WasPressedThisFrame())
             ChangeHealth(Mathf.Abs(healingAmount));
     }
@@ -89,22 +91,22 @@ public class C_Health : MonoBehaviour
         float physRed = Mathf.Clamp01(AR / 100f);
         float abilRed = Mathf.Clamp01(MR / 100f);
 
-        int phys = Mathf.RoundToInt(reqPhysical * (1f - physRed));
-        int abil = Mathf.RoundToInt(reqAbility  * (1f - abilRed));
+        int phys  = Mathf.RoundToInt(reqPhysical * (1f - physRed));
+        int abil  = Mathf.RoundToInt(reqAbility  * (1f - abilRed));
         int total = phys + abil;
 
         if (total > 0) ChangeHealth(-total);
     }
-
+    
+    // Single entrypoint for damage/heal
     public void ChangeHealth(int amount)
     {
         if (!IsAlive) return;
 
-        int before = CurrentHP;
-        int after  = Mathf.Clamp(before + amount, 0, MaxHP);
-        int actual = after - before;
-
-        CurrentHP = after;
+        int before    = CurrentHP;
+        int after     = Mathf.Clamp(before + amount, 0, MaxHP);
+        int actual    = after - before;
+            CurrentHP = after;
 
         if (actual < 0) OnDamaged?.Invoke(-actual);
         else if (actual > 0) OnHealed?.Invoke(actual);
