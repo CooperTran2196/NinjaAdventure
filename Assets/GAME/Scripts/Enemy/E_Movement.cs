@@ -1,23 +1,23 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
 public class E_Movement : MonoBehaviour
 {
+    [Header("References")]
+    public E_Stats e_stats;
+    public E_Combat e_combat;
+    public SpriteRenderer e_sprite;
+    public Animator animator;
+    public Rigidbody2D rb;
+
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
-    public float detectionRadius = 3f;
+    [Min(3f)] public float detectionRadius = 3f;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down;
 
-    [Header("References")]
-    public E_Stats stats;
-    public E_Combat combat;
-
-    Rigidbody2D rb;
-    Animator animator;
+    // State
     Transform target;
     bool disabled;
     bool holdInRange;
@@ -29,15 +29,18 @@ public class E_Movement : MonoBehaviour
     
     void Awake()
     {
-        rb ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponent<Animator>();
-        stats ??= GetComponent<E_Stats>();
-        combat ??= GetComponent<E_Combat>();
+        e_sprite    ??= GetComponent<SpriteRenderer>();
+        rb          ??= GetComponent<Rigidbody2D>();
+        animator    ??= GetComponent<Animator>();
+        e_stats     ??= GetComponent<E_Stats>();
+        e_combat    ??= GetComponent<E_Combat>();
+        
 
-        if (rb == null) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (animator == null) Debug.LogError($"{name}: Animator missing.");
-        if (stats == null) Debug.LogError($"{name}: E_Stats missing.");
-        if (combat == null) Debug.LogError($"{name}: E_Combat missing.");
+        if (e_sprite    == null) Debug.LogError($"{name}: SpriteRenderer missing.");
+        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D missing.");
+        if (animator    == null) Debug.LogError($"{name}: Animator missing.");
+        if (e_stats     == null) Debug.LogError($"{name}: E_Stats missing.");
+        if (e_combat    == null) Debug.LogError($"{name}: E_Combat missing.");
     }
 
     void Update()
@@ -53,7 +56,7 @@ public class E_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (stats ? stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = (e_stats ? e_stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -62,8 +65,7 @@ public class E_Movement : MonoBehaviour
     {
         // Setup target if player comes close
         var hit = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
-        Transform newTarget = hit ? hit.transform : null;
-        target = newTarget;
+        target = hit ? hit.transform : null;
 
         if (disabled)
         {
@@ -89,13 +91,12 @@ public class E_Movement : MonoBehaviour
         // Velocity valve
         bool attacking = animator.GetBool("isAttacking");
         // Block velocity when disabled, holding, or attacking
-        bool valveClosed = disabled || holdInRange || (attacking && combat.lockDuringAttack);
+        bool valveClosed = disabled || holdInRange || (attacking && e_combat.lockDuringAttack);
 
-        Vector2 intendedVelocity = moveAxis * stats.MS;
+        Vector2 intendedVelocity = moveAxis * e_stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
-    
     // Freeze movement/anim immediately
     public void SetDisabled(bool isDisabled)
     {
@@ -112,7 +113,6 @@ public class E_Movement : MonoBehaviour
     }
 
     public void ReceiveKnockback(Vector2 force) { knockback += force; }
-
 
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;
