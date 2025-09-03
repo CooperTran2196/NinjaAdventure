@@ -1,4 +1,30 @@
  
+// ----- File: W_ApplyDamage.cs ----- 
+using UnityEngine;
+
+public static class W_ApplyDamage
+{
+    public static void ApplyPhysical(int attackerAD, int weaponBase, C_ChangeHealth target)
+    {
+        if (target == null || !target.IsAlive) return;
+        int requested = attackerAD + weaponBase;
+        float reduction = Mathf.Clamp01(target.AR / 100f);
+        int reduced = Mathf.RoundToInt(requested * (1f - reduction));
+        if (reduced <= 0) return;
+        target.ChangeHealth(-reduced);
+    }
+
+    public static void ApplyAbility(int attackerAP, int weaponBase, C_ChangeHealth target)
+    {
+        if (target == null || !target.IsAlive) return;
+        int requested = attackerAP + weaponBase;
+        float reduction = Mathf.Clamp01(target.MR / 100f);
+        int reduced = Mathf.RoundToInt(requested * (1f - reduction));
+        if (reduced <= 0) return;
+        target.ChangeHealth(-reduced);
+    }
+}
+     
 // ----- File: W_Base.cs ----- 
 using UnityEngine;
 
@@ -55,7 +81,7 @@ public abstract class W_Base : MonoBehaviour
     public virtual void Equip(Transform newOwner)
     {
         owner = newOwner;
-        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;   // reassign, no ??=
+        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;
         pStats = owner ? owner.GetComponent<P_Stats>() : null;
         eStats = owner ? owner.GetComponent<E_Stats>() : null;
         if (data && sprite) sprite.sprite = data.sprite;
@@ -153,28 +179,29 @@ using UnityEngine;
 
 public static class W_Knockback
 {
-    // Push a rigidbody by an impulse along 'direction' (assumed normalized).
+    // Push a rigidbody by an impulse along the direction
     public static void Push(Rigidbody2D rb, Vector2 direction, float impulse)
     {
         rb.AddForce(direction * impulse, ForceMode2D.Impulse);
     }
 
-    // Convenience: find Rigidbody2D on target or parents and push.
+    // Push target
     public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
-        // movement bucket
+        // Player
         var pm = target.GetComponentInParent<P_Movement>();
         if (pm != null) { pm.ReceiveKnockback(direction * knockbackForce); return; }
-
+        
+        // Enemy
         var em = target.GetComponentInParent<E_Movement>();
         if (em != null) { em.ReceiveKnockback(direction * knockbackForce); return; }
 
-        // fallback: raw physics
+        // Others
         var rb = target.GetComponentInParent<Rigidbody2D>();
         if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    // Optional radial push helper for future AoE.
+    // Radial AoE push
     public static int PushRadial(Vector2 center, float radius, float impulse, LayerMask mask)
     {
         int count = 0;
@@ -193,10 +220,13 @@ public static class W_Knockback
  
 // ----- File: W_Melee.cs ----- 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class W_Melee : W_Base
-{
+{   
+    readonly HashSet<int> hitThisSwing = new HashSet<int>();
+
     public override void Attack()
     {
         StartCoroutine(Swing());
@@ -213,7 +243,8 @@ public class W_Melee : W_Base
 
         transform.position = spawn;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-
+        hitThisSwing.Clear();
+        
         // Show + enable hitbox
         sprite.enabled = true;
         hitbox.enabled = true;
@@ -235,29 +266,44 @@ public class W_Melee : W_Base
         sprite.enabled = false;
     }
 
-    // W_Melee.cs
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Layer filter
+        // Layer filter -> only react to colliders on targetMask
         if ((targetMask.value & (1 << other.gameObject.layer)) == 0) return;
 
         // Ignore owner
         if (other.transform == owner || other.transform.IsChildOf(owner)) return;
 
-        // Damage
-        int baseDmg = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int final = baseDmg + (data ? data.baseDamage : 0);
+        // Ignore weapon–weapon contacts
+        if (other.GetComponentInParent<W_Base>() != null) return;
 
+        // Damage = (attacker AD) + (weapon baseDamage)
+        int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
+        int weaponBase = (data ? data.baseDamage : 0);
+
+        // Apply damage
         bool hit = false;
-        var pc = other.GetComponentInParent<P_Combat>();
-        if (pc != null) { pc.ChangeHealth(-final); hit = true; }
+        var targetHealth = other.GetComponentInParent<C_ChangeHealth>();
+        if (targetHealth != null)
+        {
+            W_ApplyDamage.ApplyPhysical(attackerAD, weaponBase, targetHealth);
+            hit = true;
+        }
+
 
         var ec = other.GetComponentInParent<E_Combat>();
         if (ec != null) { ec.ChangeHealth(-final); hit = true; }
 
+        // Per-swing de-dup
+        GameObject root = targetHealth ? targetHealth.gameObject : null;
+        if (root == null) return;
+        if (!hitThisSwing.Add(root.GetInstanceID())) return;
+
+
         // Knockback
         if (hit && data != null && data.knockbackForce > 0f)
         {
+             // 8-way snapped aim direction
             Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
             W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
         }

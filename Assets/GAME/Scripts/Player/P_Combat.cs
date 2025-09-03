@@ -13,6 +13,8 @@ public class P_Combat : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
     public W_Base activeWeapon; // Placeholder
+    public C_ChangeHealth health;
+
 
     [Header("Attack")]
     public float attackDuration = 0.45f; // ALWAYS matched full clip length
@@ -75,13 +77,30 @@ public class P_Combat : MonoBehaviour
     {
         input?.Enable();
         debugTakeDamageAction?.Enable();
+
+        if (health != null)
+        {
+            health.OnDamaged += a => OnDamaged?.Invoke(a);
+            health.OnHealed += a => OnHealed?.Invoke(a);
+            health.OnDied += () => { OnDied?.Invoke(); Die(); };
+        }
     }
+
 
     void OnDisable()
     {
         input?.Disable();
         debugTakeDamageAction?.Disable();
+
+        if (health != null)
+        {
+            health.OnDamaged -= a => OnDamaged?.Invoke(a);
+            health.OnHealed -= a => OnHealed?.Invoke(a);
+            health.OnDied -= () => { OnDied?.Invoke(); Die(); };
+        }
     }
+
+
 
     void Update()
     {
@@ -89,8 +108,8 @@ public class P_Combat : MonoBehaviour
         if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
         if (input.Player.Attack.triggered) RequestAttack();
 
-        if (autoKill) { autoKill = false; ChangeHealth(-stats.maxHP); }
-        if (debugTakeDamageAction.triggered) ChangeHealth(-debugHotkeyDamage);
+        if (autoKill) { autoKill = false; health?.ChangeHealth(-stats.maxHP); }
+        if (debugTakeDamageAction.triggered) health?.ChangeHealth(-debugHotkeyDamage);
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -120,25 +139,6 @@ public class P_Combat : MonoBehaviour
         animator.SetBool("isAttacking", false);
     }
 
-
-    public void ChangeHealth(int amount)
-    {
-        if (!IsAlive) return;
-
-        if (amount < 0)
-        {
-            OnDamaged?.Invoke(-amount);
-            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
-        }
-
-        else if (amount > 0) OnHealed?.Invoke(amount);
-
-        stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
-
-        if (stats.currentHP == 0)
-            Die(); // call the death sequence in ONE place
-    }
-
     void Die()
     {
         movement?.SetDisabled(true);
@@ -148,5 +148,5 @@ public class P_Combat : MonoBehaviour
     }
 
     /// DEBUG
-    public void Kill() => ChangeHealth(-stats.maxHP);
+    public void Kill() => health?.ChangeHealth(-stats.maxHP);
 }

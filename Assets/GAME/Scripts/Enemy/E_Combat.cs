@@ -13,6 +13,7 @@ public class E_Combat : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator animator;
     public W_Base activeWeapon;   // Placeholder
+    public C_ChangeHealth health;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -75,13 +76,34 @@ public class E_Combat : MonoBehaviour
     {
         debugTakeDamageAction.Enable();
         StartCoroutine(ThinkLoop());
+
+        if (health != null)
+        {
+            health.OnDamaged += a => OnDamaged?.Invoke(a);
+            health.OnHealed += a => OnHealed?.Invoke(a);
+            health.OnDied += () => { OnDied?.Invoke(); Die(); };
+        }
     }
-    void OnDisable() => debugTakeDamageAction?.Disable();
+
+
+    void OnDisable()
+    {
+        debugTakeDamageAction?.Disable();
+
+        if (health != null)
+        {
+            health.OnDamaged -= a => OnDamaged?.Invoke(a);
+            health.OnHealed -= a => OnHealed?.Invoke(a);
+            health.OnDied -= () => { OnDied?.Invoke(); Die(); };
+        }
+    }
+
+
 
     void Update()
     {
-        if (autoKill) { autoKill = false; ChangeHealth(-stats.maxHP); }
-        if (debugTakeDamageAction.triggered) ChangeHealth(-debugHotkeyDamage);
+        if (autoKill) { autoKill = false; health?.ChangeHealth(-stats.maxHP); }
+        if (debugTakeDamageAction.triggered) health?.ChangeHealth(-debugHotkeyDamage);
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -129,9 +151,9 @@ public class E_Combat : MonoBehaviour
             return;
         }
 
-        var player = c.collider.GetComponent<P_Combat>();
-        if (player?.IsAlive == true) return; // Only damage a live player
-        player.ChangeHealth(-stats.collisionDamage); //Apply damage
+        var playerHealth = c.collider.GetComponent<C_ChangeHealth>();
+        if (playerHealth == null || !playerHealth.IsAlive) return; // Only damage a live player
+        playerHealth.ChangeHealth(-stats.collisionDamage); //Apply damage
 
         contactTimer = stats.collisionTick; // reset tick window
     }
@@ -170,24 +192,6 @@ public class E_Combat : MonoBehaviour
         cooldownTimer = stats.attackCooldown;
     }
 
-    public void ChangeHealth(int amount)
-    {
-        if (!IsAlive) return;
-
-        if (amount < 0)
-        {
-            OnDamaged?.Invoke(-amount);
-            StartCoroutine(C_FX.Flash(sprite, flashDuration, baseColor));
-        }
-
-        else if (amount > 0) OnHealed?.Invoke(amount);
-
-        stats.currentHP = Mathf.Clamp(stats.currentHP + amount, 0, stats.maxHP);
-
-        if (stats.currentHP == 0)
-            Die(); // call the death sequence in ONE place
-    }
-
     void Die()
     {
         movement?.SetDisabled(true);
@@ -204,5 +208,6 @@ public class E_Combat : MonoBehaviour
     }
     
     /// DEBUG
-    public void Kill() => ChangeHealth(-stats.maxHP);
+    public void Kill() => health?.ChangeHealth(-stats.maxHP);
+
 }

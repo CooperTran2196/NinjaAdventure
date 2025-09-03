@@ -57,26 +57,23 @@ public class W_Melee : W_Base
         if (other.GetComponentInParent<W_Base>() != null) return;
 
         // Damage = (attacker AD) + (weapon baseDamage)
-        int baseDmg = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int final = baseDmg + (data ? data.baseDamage : 0);
+        int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
+        int weaponBase = (data != null) ? data.baseDamage : 0;
 
-        // Apply damage
-        bool hit = false;
-        var pc = other.GetComponentInParent<P_Combat>();
-        if (pc != null) { pc.ChangeHealth(-final); hit = true; }
-
-        var ec = other.GetComponentInParent<E_Combat>();
-        if (ec != null) { ec.ChangeHealth(-final); hit = true; }
+        // Resolve target health once
+        var targetHealth = other.GetComponentInParent<C_ChangeHealth>();
+        if (targetHealth == null || !targetHealth.IsAlive) return;
 
         // Per-swing de-dup
-        GameObject root = pc ? pc.gameObject : (ec ? ec.gameObject : null);
-        if (root == null) return;                    // no valid target
-        if (!hitThisSwing.Add(root.GetInstanceID())) return; // already hit this swing
+        GameObject root = targetHealth.gameObject;
+        if (!hitThisSwing.Add(root.GetInstanceID())) return;
 
-        // Knockback
-        if (hit && data != null && data.knockbackForce > 0f)
+        // Apply damage (AR handled inside)
+        W_ApplyDamage.ApplyPhysical(attackerAD, weaponBase, targetHealth);
+
+        // Knockback (apply regardless of reduced damage)
+        if (data != null && data.knockbackForce > 0f)
         {
-             // 8-way snapped aim direction
             Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
             W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
         }
@@ -92,7 +89,7 @@ public class W_Melee : W_Base
                 if (em != null) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
             }
         }
-
-
     }
+
+
 }
