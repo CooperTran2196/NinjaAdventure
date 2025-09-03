@@ -56,12 +56,16 @@ public class W_Melee : W_Base
         // Ignore weapon–weapon contacts
         if (other.GetComponentInParent<W_Base>() != null) return;
 
-        // Damage = (attacker AD) + (weapon baseDamage)
+        // Attacker stats
         int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int weaponBase = (data != null) ? data.baseDamage : 0;
+        int attackerAP = (pStats != null) ? pStats.AP : (eStats != null ? eStats.AP : 0);
+
+        // Weapon bases (allow mix)
+        int weaponAD = data ? data.baseAD : 0;
+        int weaponAP = data ? data.baseAP : 0;
 
         // Resolve target health once
-        var targetHealth = other.GetComponentInParent<C_ChangeHealth>();
+        var targetHealth = other.GetComponentInParent<C_Health>();
         if (targetHealth == null || !targetHealth.IsAlive) return;
 
         // Per-swing de-dup
@@ -69,7 +73,7 @@ public class W_Melee : W_Base
         if (!hitThisSwing.Add(root.GetInstanceID())) return;
 
         // Apply damage (AR handled inside)
-        W_ApplyDamage.ApplyPhysical(attackerAD, weaponBase, targetHealth);
+        targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
         // Knockback (apply regardless of reduced damage)
         if (data != null && data.knockbackForce > 0f)
