@@ -10,7 +10,11 @@ public class W_SO : ScriptableObject
     public WeaponType type = WeaponType.Melee;
     public Sprite sprite;
     public bool pointsUp = false; // false = points down
-    public int baseDamage = 1;
+
+    [Header("Damage (set either/both)")]
+    public int baseAD = 1;
+    public int baseAP = 0;
+
     public float knockbackForce = 5f;
     public float stunTime = .5f;
 
