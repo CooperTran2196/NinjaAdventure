@@ -45,10 +45,7 @@ public class ExpUI : MonoBehaviour
     public void GainExperience(int amount)
     {
         currentExp += amount;
-        if (currentExp >= expToLevel)
-        {
-            LevelUp();
-        }
+        if (currentExp >= expToLevel) LevelUp();
         UpdateUI();
     }
 
@@ -170,23 +167,20 @@ public class StatsUI : MonoBehaviour
 
     void Update()
     {
-        if (input.UI.ToggleStats.WasPressedThisFrame())
-        {
-            if (statsOpen) // To close
-            {
-                Time.timeScale = 1;
-                statsCanvas.alpha = 0;
-                statsOpen = false;
+        if (!input.UI.ToggleStats.WasPressedThisFrame()) return;
 
-            }
-            
-            else // to Open
-            {
-                UpdateAllStats();
-                Time.timeScale = 0;
-                statsCanvas.alpha = 1;
-                statsOpen = true;
-            }
+        if (statsOpen) // Close
+        {
+            Time.timeScale  = 1;
+            statsCanvas.alpha = 0;
+            statsOpen = false;
+        }
+        else // Open
+        {
+            UpdateAllStats();
+            Time.timeScale  = 0;
+            statsCanvas.alpha = 1;
+            statsOpen = true;
         }
     }
 
