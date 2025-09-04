@@ -24,9 +24,7 @@ public class P_Combat : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool autoKill;
 
-    
     Vector2 aimDir = Vector2.down;
-
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
 
@@ -45,13 +43,13 @@ public class P_Combat : MonoBehaviour
         activeWeapon ??= GetComponentInChildren<W_Melee>();
 
         
-        if (animator == null) Debug.LogError($"{name}: Animator missing.");
-        if (sprite == null) Debug.LogWarning($"{name}: SpriteRenderer missing.");
+        if (!animator) Debug.LogError($"{name}: Animator missing.");
+        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer missing.");
 
-        if (p_stats == null) Debug.LogError($"{name}: P_Stats missing.");
-        if (p_movement == null) Debug.LogError($"{name}: P_Movement missing.");
-        if (p_health == null) Debug.LogError($"{name}: C_Health missing.");
-        if (activeWeapon == null) Debug.LogError($"{name}: C_Melee missing.");
+        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
+        if (!p_movement) Debug.LogError($"{name}: P_Movement missing.");
+        if (!p_health) Debug.LogError($"{name}: C_Health missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
 
         animator.SetFloat("atkX", 0f);
         animator.SetFloat("atkY", -1f);

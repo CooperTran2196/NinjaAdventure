@@ -31,27 +31,19 @@ public class P_Movement : MonoBehaviour
         p_stats ??= GetComponent<P_Stats>();
         p_combat ??= GetComponent<P_Combat>();
 
-        if (rb == null) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (animator == null) Debug.LogError($"{name}: Animator missing.");
-        if (input == null) Debug.LogError($"{name}: P_InputActions missing.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing.");
+        if (!animator) Debug.LogError($"{name}: Animator missing.");
 
-        if (p_stats == null) Debug.LogError($"{name}: P_Stats missing.");
-        if (p_combat == null) Debug.LogError($"{name}: P_Combat missing.");
+        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
+        if (!p_combat) Debug.LogError($"{name}: P_Combat missing.");
 
         lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
     }
 
-    void OnEnable()
-    {
-        input.Enable();
-    }
-
-    void OnDisable()
-    {
-        input.Disable();
-    }
+    void OnEnable()  => input.Enable();
+    void OnDisable() => input.Disable();
 
     void Update()
     {
@@ -118,10 +110,5 @@ public class P_Movement : MonoBehaviour
         }
     }
 
-    public void ReceiveKnockback(Vector2 force)
-    {
-        knockback += force;
-    }
-
-    
+    public void ReceiveKnockback(Vector2 force) => knockback += force;
 }

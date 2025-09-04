@@ -15,6 +15,7 @@ public class W_SO : ScriptableObject
     public int baseAD = 1;
     public int baseAP = 0;
 
+    [Header("Impact")]
     public float knockbackForce = 5f;
     public float stunTime = .5f;
 

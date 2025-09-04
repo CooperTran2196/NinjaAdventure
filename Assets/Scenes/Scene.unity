@@ -13071,31 +13071,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9d4b0cf31e4be7468d6bb0028ad6087, type: 3}
---- !u!114 &574356372 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9192521606444175818, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
-  m_PrefabInstance: {fileID: 9135146632934085387}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee622df9b6f90d7448e119a7d3fbce2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &574356373 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5561844253374118004, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
-  m_PrefabInstance: {fileID: 9135146632934085387}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b00dc70f4431ee428add25ccf716bb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &574356377 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 558855158200817159, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+  m_PrefabInstance: {fileID: 9135146632934085387}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &574356384 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7243065284329812496, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
   m_PrefabInstance: {fileID: 9135146632934085387}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &601660849
@@ -13816,16 +13799,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 731f646acfdeae84aa38a07bc811f82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 714147514}
-  movement: {fileID: 714147518}
-  sprite: {fileID: 714147512}
-  animator: {fileID: 714147511}
-  activeWeapon: {fileID: 1590037548}
-  health: {fileID: 0}
+  p_stats: {fileID: 0}
+  p_movement: {fileID: 0}
+  p_health: {fileID: 0}
+  activeWeapon: {fileID: 0}
   attackDuration: 0.45
   hitDelay: 0.15
   lockDuringAttack: 1
-  deathTrigger: Die
   autoKill: 0
 --- !u!114 &714147516
 MonoBehaviour:
@@ -13869,9 +13849,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350ee43e4c433c94d8a194ac656b543d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  p_stats: {fileID: 0}
+  p_combat: {fileID: 0}
   lastMove: {x: 0, y: -1}
-  stats: {fileID: 714147514}
-  combat: {fileID: 714147515}
 --- !u!114 &714147519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13900,11 +13880,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  pStats: {fileID: 714147514}
+  pStats: {fileID: 0}
   eStats: {fileID: 0}
+  fx: {fileID: 0}
   takingDamageAmount: 1
   healingAmount: 1
-  fx: {fileID: 714147519}
 --- !u!1001 &724362552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23811,10 +23791,14 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5702281453061795697, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 574356384}
     - target: {fileID: 6788551118935735852, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: e_stats
       value: 
-      objectReference: {fileID: 574356372}
+      objectReference: {fileID: 0}
     - target: {fileID: 6788551118935735852, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: e_sprite
       value: 
@@ -23822,7 +23806,7 @@ PrefabInstance:
     - target: {fileID: 6788551118935735852, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: e_movement
       value: 
-      objectReference: {fileID: 574356373}
+      objectReference: {fileID: 0}
     - target: {fileID: 6788551118935735852, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: attackRange
       value: 1.3
@@ -23870,6 +23854,14 @@ PrefabInstance:
     - target: {fileID: 8316791912752418311, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: m_Name
       value: Samurai
+      objectReference: {fileID: 0}
+    - target: {fileID: 8855155696878849692, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: fx
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8855155696878849692, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: eStats
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9192521606444175818, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: maxHP

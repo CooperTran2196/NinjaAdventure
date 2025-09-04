@@ -76,21 +76,21 @@ public class W_Melee : W_Base
         targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
         // Knockback (apply regardless of reduced damage)
-        if (data != null && data.knockbackForce > 0f)
+        if (data && data.knockbackForce > 0f)
         {
             Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
             W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
         }
 
         // Stun time
-        if (data != null && data.stunTime > 0f)
+        if (data && data.stunTime > 0f)
         {
             var pm = other.GetComponentInParent<P_Movement>();
-            if (pm != null) { StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+            if (pm) { StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
             else
             {
                 var em = other.GetComponentInParent<E_Movement>();
-                if (em != null) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+                if (em) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
             }
         }
     }

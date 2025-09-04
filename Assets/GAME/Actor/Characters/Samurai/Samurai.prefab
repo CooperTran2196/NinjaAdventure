@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1435226404012631597}
   - component: {fileID: 8213458653139258557}
   - component: {fileID: 6618557476295583127}
-  - component: {fileID: 5561844253374118004}
   - component: {fileID: 9192521606444175818}
+  - component: {fileID: 5561844253374118004}
   - component: {fileID: 6788551118935735852}
   - component: {fileID: 8855155696878849692}
   - component: {fileID: 164768216848047140}
@@ -194,6 +194,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9192521606444175818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8316791912752418311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee622df9b6f90d7448e119a7d3fbce2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AD: 1
+  AP: 0
+  MS: 1.5
+  maxHP: 100
+  currentHP: 0
+  AR: 0
+  MR: 0
+  KR: 10
+  attackCooldown: 1.5
+  collisionDamage: 1
+  collisionTick: 1
+  knockbackForce: 5
+  stunTime: 0
 --- !u!114 &5561844253374118004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,31 +238,6 @@ MonoBehaviour:
     m_Bits: 64
   detectionRadius: 3
   lastMove: {x: 0, y: -1}
---- !u!114 &9192521606444175818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8316791912752418311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee622df9b6f90d7448e119a7d3fbce2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHP: 100
-  currentHP: 0
-  MS: 1.5
-  AD: 1
-  AP: 0
-  AR: 0
-  MR: 0
-  KR: 10
-  attackCooldown: 1.5
-  collisionDamage: 1
-  collisionTick: 1
-  knockbackForce: 5
-  stunTime: 0
 --- !u!114 &6788551118935735852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,9 +277,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
   pStats: {fileID: 0}
   eStats: {fileID: 9192521606444175818}
+  fx: {fileID: 164768216848047140}
   takingDamageAmount: 1
   healingAmount: 1
-  fx: {fileID: 164768216848047140}
 --- !u!114 &164768216848047140
 MonoBehaviour:
   m_ObjectHideFlags: 0

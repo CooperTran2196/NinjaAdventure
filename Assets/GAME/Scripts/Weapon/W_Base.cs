@@ -4,6 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class W_Base : MonoBehaviour
 {
+    [Header("References")]
+    protected SpriteRenderer sprite;
+    protected BoxCollider2D hitbox;
+    protected Animator ownerAnimator;
+    protected P_Stats pStats;
+    protected E_Stats eStats;
+
     [Header("Data")]
     public W_SO data;
 
@@ -19,12 +26,6 @@ public abstract class W_Base : MonoBehaviour
     [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange-red
 
     const float MIN_DISTANCE = 0.001f;
-    // Cached
-    protected SpriteRenderer sprite;
-    protected BoxCollider2D hitbox;
-    protected Animator ownerAnimator;
-    protected P_Stats pStats;
-    protected E_Stats eStats;
 
     protected virtual void Awake()
     {
@@ -47,7 +48,6 @@ public abstract class W_Base : MonoBehaviour
             hitbox.size = sprite.sprite.bounds.size;
             hitbox.offset = Vector2.zero;
         }
-    
     }
 
     public virtual void Equip(Transform newOwner)

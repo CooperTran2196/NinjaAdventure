@@ -45,13 +45,13 @@ public class E_Combat : MonoBehaviour
         e_health        ??= GetComponent<C_Health>();
         activeWeapon    ??= GetComponentInChildren<W_Melee>();
 
-        if (sprite == null) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (animator == null) Debug.LogError($"{name}: Animator missing.");
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing.");
+        if (!animator) Debug.LogError($"{name}: Animator missing.");
 
-        if (e_stats == null) Debug.LogError($"{name}: E_Stats missing.");
-        if (e_movement == null) Debug.LogError($"{name}: E_Movement missing.");
-        if (e_health == null) Debug.LogError($"{name}: C_Health missing.");
-        if (activeWeapon == null) Debug.LogError($"{name}: C_Melee missing.");
+        if (!e_stats) Debug.LogError($"{name}: E_Stats missing.");
+        if (!e_movement) Debug.LogError($"{name}: E_Movement missing.");
+        if (!e_health) Debug.LogError($"{name}: C_Health missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
     }
 
     void OnEnable()
