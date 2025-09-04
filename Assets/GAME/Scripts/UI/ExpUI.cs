@@ -43,10 +43,7 @@ public class ExpUI : MonoBehaviour
     public void GainExperience(int amount)
     {
         currentExp += amount;
-        if (currentExp >= expToLevel)
-        {
-            LevelUp();
-        }
+        if (currentExp >= expToLevel) LevelUp();
         UpdateUI();
     }
 
