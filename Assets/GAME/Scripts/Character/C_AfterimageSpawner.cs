@@ -15,30 +15,32 @@ public class C_AfterimageSpawner : MonoBehaviour
     void Awake()
     {
         srcSR ??= GetComponent<SpriteRenderer>();
-        if (srcSR == null) Debug.LogWarning("C_AfterimageSpawner: missing SpriteRenderer on the same GameObject.");
+        if (!srcSR) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
     }
 
-    // Spawns a quick burst of ghosts for 'duration' seconds using the given sprite
-    public void StartBurst(float duration, Sprite sprite)
+    // Burst where every ghost uses the SAME locked sprite & flips (captured at dodge start)
+    public void StartBurst(float duration, Sprite lockedSprite, bool lockedFlipX, bool lockedFlipY)
     {
-        StartCoroutine(BurstRoutine(duration, sprite));
+        StartCoroutine(BurstRoutine(duration, lockedSprite, lockedFlipX, lockedFlipY));
     }
 
-    IEnumerator BurstRoutine(float duration, Sprite sprite)
+    IEnumerator BurstRoutine(float duration, Sprite lockedSprite, bool lockedFlipX, bool lockedFlipY)
     {
+        // Spawn one immediately so the trail starts right away
+        SpawnGhost(lockedSprite, lockedFlipX, lockedFlipY);
+
         float t = 0f;
         while (t < duration)
         {
-            SpawnGhost(sprite);
             yield return new WaitForSeconds(spawnInterval);
             t += spawnInterval;
+            SpawnGhost(lockedSprite, lockedFlipX, lockedFlipY);
         }
     }
 
-    void SpawnGhost(Sprite sprite)
+    void SpawnGhost(Sprite sprite, bool flipX, bool flipY)
     {
-        if (srcSR == null || sprite == null) return;
-
+        // Assumes srcSR exists & sprite provided (per your style: Inspector preconditions are correct)
         var g = new GameObject("Afterimage");
         g.transform.position = transform.position;
         g.transform.rotation = transform.rotation;
@@ -46,8 +48,8 @@ public class C_AfterimageSpawner : MonoBehaviour
 
         var gsr = g.AddComponent<SpriteRenderer>();
         gsr.sprite = sprite;
-        gsr.flipX = srcSR.flipX;
-        gsr.flipY = srcSR.flipY;
+        gsr.flipX = flipX;
+        gsr.flipY = flipY;
         gsr.sortingLayerID = srcSR.sortingLayerID;
         gsr.sortingOrder = srcSR.sortingOrder + sortingOrderOffset;
         gsr.color = ghostTint;
@@ -58,7 +60,7 @@ public class C_AfterimageSpawner : MonoBehaviour
     IEnumerator FadeAndDestroy(SpriteRenderer gsr)
     {
         float t = 0f;
-        var start = gsr.color;
+        Color start = gsr.color;
         while (t < ghostLifetime)
         {
             float a = Mathf.Lerp(start.a, 0f, t / ghostLifetime);
