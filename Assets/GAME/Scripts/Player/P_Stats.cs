@@ -17,6 +17,11 @@ public class P_Stats : MonoBehaviour
     [Header("Combat")]
     public float attackCooldown = 1.2f;
 
+    [Header("Dodge")]
+    public float dodgeSpeed = 11f;      // units/second
+    public float dodgeDistance = 2.0f;  // units (≈ tiles)
+    public float dodgeCooldown = 0.45f; // seconds
+
     [Header("Placeholders")]
     public float knockbackForce = 0f;
     public float stunTime = 0f;

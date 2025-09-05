@@ -8,8 +8,10 @@ public class P_Movement : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_stats;
-    public P_Combat p_combat;
+    public P_Stats p_Stats;
+    public P_Combat p_Combat;
+    public C_Dodge c_Dodge;
+    public C_State c_State;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
@@ -28,44 +30,51 @@ public class P_Movement : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
 
-        p_stats ??= GetComponent<P_Stats>();
-        p_combat ??= GetComponent<P_Combat>();
+        p_Stats ??= GetComponent<P_Stats>();
+        p_Combat ??= GetComponent<P_Combat>();
+        c_Dodge ??= GetComponent<C_Dodge>();
+        c_State ??= GetComponent<C_State>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-
-        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
-        if (!p_combat) Debug.LogError($"{name}: P_Combat missing.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
+        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Movement missing.");
+        if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
+        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
+        if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
 
         lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
     }
 
-    void OnEnable()  => input.Enable();
+    void OnEnable() => input.Enable();
     void OnDisable() => input.Disable();
 
     void Update()
     {
-        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
-
         // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
         // If raw is near zero, normalized will be (0,0)
+        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
         Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
-        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
+        
+        bool busy = c_State != null && c_State.IsBusy;
+        C_Anim.UpdateAnimDirections(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
     }
 
 
     void FixedUpdate()
     {
-        Vector2 final = velocity + knockback;
+        Vector2 forced = (c_Dodge != null) ? c_Dodge.ForcedVelocity : Vector2.zero;
+        Vector2 baseVel = (forced != Vector2.zero) ? forced : velocity;
+        Vector2 final   = baseVel + knockback;
         rb.linearVelocity = final;
+
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (p_stats ? p_stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = (p_Stats ? p_Stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -92,9 +101,9 @@ public class P_Movement : MonoBehaviour
         // Read attack-state from Animator
         bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || (attacking && p_combat.lockDuringAttack);
+        bool valveClosed = disabled || (attacking && p_Combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * p_stats.MS;
+        Vector2 intendedVelocity = moveAxis * p_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
@@ -106,9 +115,9 @@ public class P_Movement : MonoBehaviour
             moveAxis = Vector2.zero;
             velocity = Vector2.zero;
             rb.linearVelocity = Vector2.zero; // immediate stop
-            animator?.SetBool("isMoving", false);
         }
     }
 
     public void ReceiveKnockback(Vector2 force) => knockback += force;
+
 }

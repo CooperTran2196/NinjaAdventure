@@ -9,10 +9,10 @@ public class P_Combat : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_stats;
-    public P_Movement p_movement;
-    public C_Health p_health;
-    public W_Base activeWeapon;
+    public P_Stats     p_Stats;
+    public P_Movement  p_Movement;
+    public C_Health    p_Health;
+    public W_Base      activeWeapon;
     
     [Header("Attack")]
     [Header("ALWAYS matched full clip length (0.45)")]
@@ -27,9 +27,10 @@ public class P_Combat : MonoBehaviour
     Vector2 aimDir = Vector2.down;
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
+    public bool IsAttacking { get; private set; }
 
     // Quick state check
-    public bool IsAlive => p_stats.currentHP > 0;
+    public bool IsAlive => p_Stats.currentHP > 0;
 
     void Awake()
     {
@@ -37,19 +38,19 @@ public class P_Combat : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
         
-        p_stats ??= GetComponent<P_Stats>();
-        p_movement ??= GetComponent<P_Movement>();
-        p_health ??= GetComponent<C_Health>();
+        p_Stats ??= GetComponent<P_Stats>();
+        p_Movement ??= GetComponent<P_Movement>();
+        p_Health ??= GetComponent<C_Health>();
         activeWeapon ??= GetComponentInChildren<W_Melee>();
 
         
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer missing.");
+        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer in P_Combat missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in P_Combat missing.");
 
-        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
-        if (!p_movement) Debug.LogError($"{name}: P_Movement missing.");
-        if (!p_health) Debug.LogError($"{name}: C_Health missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
+        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
+        if (!p_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in P_Combat missing.");
 
         animator.SetFloat("atkX", 0f);
         animator.SetFloat("atkY", -1f);
@@ -58,13 +59,13 @@ public class P_Combat : MonoBehaviour
     void OnEnable()
     {
         input?.Enable();
-        p_health.OnDied += Die;
+        p_Health.OnDied += Die;
     }
 
     void OnDisable()
     {
         input?.Disable();
-        p_health.OnDied -= Die;
+        p_Health.OnDied -= Die;
     }
 
     void Update()
@@ -73,7 +74,7 @@ public class P_Combat : MonoBehaviour
         if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
         if (input.Player.Attack.triggered) RequestAttack();
 
-        if (autoKill) { autoKill = false; p_health.ChangeHealth(-p_stats.maxHP); }
+        if (autoKill) { autoKill = false; p_Health.ChangeHealth(-p_Stats.maxHP); }
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -82,7 +83,7 @@ public class P_Combat : MonoBehaviour
     {
         if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = p_stats.attackCooldown;
+        cooldownTimer = p_Stats.attackCooldown;
 
         // Face once at attack start
         animator.SetFloat("atkX", aimDir.x);
@@ -90,22 +91,23 @@ public class P_Combat : MonoBehaviour
         StartCoroutine(AttackRoutine());
     }
 
-
     IEnumerator AttackRoutine()
     {
-        animator.SetBool("isAttacking", true);
+        // STATE: Attack START
+        IsAttacking = true;
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
         activeWeapon?.Attack();
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
-        animator.SetBool("isAttacking", false);
+        // STATE: Attack END
+        IsAttacking = false;
     }
 
     void Die()
     {
-        p_movement.SetDisabled(true);
+        p_Movement.SetDisabled(true);
         animator.SetTrigger("Die");
     }
 }

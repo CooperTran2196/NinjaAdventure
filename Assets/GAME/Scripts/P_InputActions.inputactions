@@ -23,6 +23,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dodge",
+                    "type": "Button",
+                    "id": "79e27c44-7e73-4d7f-a00b-241a66d7438d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -83,8 +92,8 @@
                 },
                 {
                     "name": "",
-                    "id": "dc02d794-dcfe-46e7-8d1a-b186bea67744",
-                    "path": "<Keyboard>/space",
+                    "id": "d52488fb-3952-40ec-8847-57d64be1fb32",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -94,12 +103,12 @@
                 },
                 {
                     "name": "",
-                    "id": "d52488fb-3952-40ec-8847-57d64be1fb32",
-                    "path": "<Mouse>/leftButton",
+                    "id": "dc02d794-dcfe-46e7-8d1a-b186bea67744",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Dodge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
