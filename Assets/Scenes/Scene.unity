@@ -13597,6 +13597,7 @@ GameObject:
   - component: {fileID: 714147515}
   - component: {fileID: 714147520}
   - component: {fileID: 714147519}
+  - component: {fileID: 714147521}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -13785,6 +13786,9 @@ MonoBehaviour:
   MR: 0
   KR: 10
   attackCooldown: 1.2
+  dodgeSpeed: 11
+  dodgeDistance: 2
+  dodgeCooldown: 0.45
   knockbackForce: 0
   stunTime: 0
 --- !u!114 &714147515
@@ -13852,6 +13856,8 @@ MonoBehaviour:
   p_stats: {fileID: 0}
   p_combat: {fileID: 0}
   lastMove: {x: 0, y: -1}
+  dodgeTrigger: Dodge
+  dodgeSprite: {fileID: 21300000, guid: 243868682f0044c43b47a751ccab3a09, type: 3}
 --- !u!114 &714147519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13885,6 +13891,22 @@ MonoBehaviour:
   fx: {fileID: 0}
   takingDamageAmount: 1
   healingAmount: 1
+--- !u!114 &714147521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714147508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f53f5b765a6544abaa98fda7e48972f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_AfterimageSpawner
+  spawnInterval: 0.035
+  ghostLifetime: 0.2
+  ghostTint: {r: 0.7, g: 0.7, b: 0.7, a: 0.7}
+  sortingOrderOffset: -1
 --- !u!1001 &724362552
 PrefabInstance:
   m_ObjectHideFlags: 0
