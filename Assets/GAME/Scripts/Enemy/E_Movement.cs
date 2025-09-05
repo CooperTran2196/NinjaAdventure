@@ -49,7 +49,7 @@ public class E_Movement : MonoBehaviour
     void Update()
     {
         Chase();
-        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
+        C_Anim.UpdateAnimDirections(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
     }
 
     void FixedUpdate()

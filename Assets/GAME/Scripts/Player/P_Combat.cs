@@ -50,7 +50,7 @@ public class P_Combat : MonoBehaviour
         if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
         if (!p_movement) Debug.LogError($"{name}: P_Movement missing.");
         if (!p_health) Debug.LogError($"{name}: C_Health missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: W_Melee missing.");
 
         animator.SetFloat("atkX", 0f);
         animator.SetFloat("atkY", -1f);

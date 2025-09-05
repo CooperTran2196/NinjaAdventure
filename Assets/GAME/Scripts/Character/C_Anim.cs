@@ -2,31 +2,22 @@ using UnityEngine;
 
 public static class C_Anim
 {
-    // Shared for Player + Enemy
-    public static void ApplyMoveIdle(
+    // Writes only the directional floats on the Animator
+    public static void UpdateAnimDirections(
         Animator animator,
-        bool isAttacking,
+        bool busy,
         Vector2 moveAxis,
         Vector2 lastMove,
         float MIN_DISTANCE)
     {
-        if (isAttacking)
-        {
-            animator.SetBool("isMoving", false);
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-            return;
-        }
-
-        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE;
-        animator.SetBool("isMoving", moving);
-
-        if (moving)
+        // Only write move floats when not locked by another state
+        if (!busy && moveAxis.sqrMagnitude > MIN_DISTANCE)
         {
             animator.SetFloat("moveX", moveAxis.x);
             animator.SetFloat("moveY", moveAxis.y);
         }
 
+        // Always refresh idle facing so the character remembers direction
         animator.SetFloat("idleX", lastMove.x);
         animator.SetFloat("idleY", lastMove.y);
     }
