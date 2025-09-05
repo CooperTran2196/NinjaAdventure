@@ -19,9 +19,17 @@ public class W_SO : ScriptableObject
     public float knockbackForce = 5f;
     public float stunTime = .5f;
 
-    [Header("Melee timings & radial offset")]
+    [Header("Melee timings & Thrust Distance")]
     public float showTime = 0.3f;
     public float thrustDistance = 0.25f;
+
+    [Header("Ranged + Magic")]
+    public GameObject projectilePrefab;
+    public int manaCost = 0;
+    public float projectileSpeed = 8f;
+    public float projectileLifetime = 3f;
+    public float stickOnHitSeconds = 0f;
+    public int   pierceCount = 0; 
 
     [Header("Optional directional offsets")]
     [Header("Cardinals")]
@@ -30,15 +38,10 @@ public class W_SO : ScriptableObject
     public Vector2 offsetLeft = new Vector2(-0.7f, -0.25f);
     public Vector2 offsetRight = new Vector2(0.7f, -0.25f);
     [Header("Diagonals")]
-    public Vector2 offsetUpRight    = new Vector2(0.5f, 0.5f);
-    public Vector2 offsetUpLeft     = new Vector2(-0.5f, 0.5f);
-    public Vector2 offsetDownRight  = new Vector2(0.5f, -0.75f);
-    public Vector2 offsetDownLeft   = new Vector2(-0.5f, 0.75f);
+    public Vector2 offsetUpRight = new Vector2(0.5f, 0.5f);
+    public Vector2 offsetUpLeft = new Vector2(-0.5f, 0.5f);
+    public Vector2 offsetDownRight = new Vector2(0.5f, -0.75f);
+    public Vector2 offsetDownLeft = new Vector2(-0.5f, 0.75f);
 
-    [Header("Ranged (placeholders)")]
-    public GameObject projectilePrefab;
-    public float projectileSpeed = 8f;
 
-    [Header("Magic (placeholders)")]
-    public int manaCost = 0;
 }

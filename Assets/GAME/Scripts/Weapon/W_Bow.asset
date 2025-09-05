@@ -13,14 +13,21 @@ MonoBehaviour:
   m_Name: W_Bow
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: weapon_id
-  type: 0
+  type: 1
   sprite: {fileID: 21300000, guid: 2b21fa211dcce5c4db12daf9bcd3f4f9, type: 3}
   pointsUp: 1
-  baseDamage: 2
+  baseAD: 1
+  baseAP: 0
   knockbackForce: 5
   stunTime: 0.5
   showTime: 0.3
   thrustDistance: 0.25
+  projectilePrefab: {fileID: 21886594188181845, guid: ef9fa45681caa4e7992c49d5990cfa7d, type: 3}
+  manaCost: 0
+  projectileSpeed: 8
+  projectileLifetime: 3
+  stickOnHitSeconds: 2
+  pierceCount: 1
   offsetDown: {x: -0.2, y: -0.75}
   offsetUp: {x: -0.2, y: 0.75}
   offsetLeft: {x: -0.7, y: -0.25}
@@ -29,6 +36,3 @@ MonoBehaviour:
   offsetUpLeft: {x: -0.5, y: 0.5}
   offsetDownRight: {x: 0.2, y: -0.75}
   offsetDownLeft: {x: -0.5, y: -0.75}
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 8
-  manaCost: 0

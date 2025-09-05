@@ -77,7 +77,7 @@ public abstract class W_Base : MonoBehaviour
     }
 
 
-    // Choose one of the 8 offsets from SO
+    // Choose 8 offsets from SO
     protected Vector2 GetSpawnOffset(Vector2 snappedDir)
     {
         if (!data) return Vector2.zero;
@@ -98,7 +98,7 @@ public abstract class W_Base : MonoBehaviour
     }
 
 
-    // Shared math utility (same as enemy)
+    // Shared math utility for all characters
     protected static Vector2 SnapToEightDirections(Vector2 direction)
     {
         if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
@@ -107,7 +107,6 @@ public abstract class W_Base : MonoBehaviour
         float radians = octantIndex * 45f * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
     }
-
 
     public abstract void Attack();
 
@@ -120,7 +119,7 @@ public abstract class W_Base : MonoBehaviour
         var bc = hitbox ? hitbox : GetComponent<BoxCollider2D>();
         if (!bc) return;
 
-        // Only draw while the weapon is "live": sprite visible OR collider enabled
+        // Only draw while the weapon is live: sprite visible OR collider enabled
         if ((sr && sr.enabled) || bc.enabled)
         {
             var prevMatrix = Gizmos.matrix;
