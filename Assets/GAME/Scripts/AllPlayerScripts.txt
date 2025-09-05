@@ -11,10 +11,10 @@ public class P_Combat : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_stats;
-    public P_Movement p_movement;
-    public C_Health p_health;
-    public W_Base activeWeapon;
+    public P_Stats     p_Stats;
+    public P_Movement  p_Movement;
+    public C_Health    p_Health;
+    public W_Base      activeWeapon;
     
     [Header("Attack")]
     [Header("ALWAYS matched full clip length (0.45)")]
@@ -29,9 +29,10 @@ public class P_Combat : MonoBehaviour
     Vector2 aimDir = Vector2.down;
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
+    public bool IsAttacking { get; private set; }
 
     // Quick state check
-    public bool IsAlive => p_stats.currentHP > 0;
+    public bool IsAlive => p_Stats.currentHP > 0;
 
     void Awake()
     {
@@ -39,19 +40,19 @@ public class P_Combat : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
         
-        p_stats ??= GetComponent<P_Stats>();
-        p_movement ??= GetComponent<P_Movement>();
-        p_health ??= GetComponent<C_Health>();
+        p_Stats ??= GetComponent<P_Stats>();
+        p_Movement ??= GetComponent<P_Movement>();
+        p_Health ??= GetComponent<C_Health>();
         activeWeapon ??= GetComponentInChildren<W_Melee>();
 
         
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer missing.");
+        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer in P_Combat missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in P_Combat missing.");
 
-        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
-        if (!p_movement) Debug.LogError($"{name}: P_Movement missing.");
-        if (!p_health) Debug.LogError($"{name}: C_Health missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
+        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
+        if (!p_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in P_Combat missing.");
 
         animator.SetFloat("atkX", 0f);
         animator.SetFloat("atkY", -1f);
@@ -60,13 +61,13 @@ public class P_Combat : MonoBehaviour
     void OnEnable()
     {
         input?.Enable();
-        p_health.OnDied += Die;
+        p_Health.OnDied += Die;
     }
 
     void OnDisable()
     {
         input?.Disable();
-        p_health.OnDied -= Die;
+        p_Health.OnDied -= Die;
     }
 
     void Update()
@@ -75,7 +76,7 @@ public class P_Combat : MonoBehaviour
         if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
         if (input.Player.Attack.triggered) RequestAttack();
 
-        if (autoKill) { autoKill = false; p_health.ChangeHealth(-p_stats.maxHP); }
+        if (autoKill) { autoKill = false; p_Health.ChangeHealth(-p_Stats.maxHP); }
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -84,7 +85,7 @@ public class P_Combat : MonoBehaviour
     {
         if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = p_stats.attackCooldown;
+        cooldownTimer = p_Stats.attackCooldown;
 
         // Face once at attack start
         animator.SetFloat("atkX", aimDir.x);
@@ -92,22 +93,23 @@ public class P_Combat : MonoBehaviour
         StartCoroutine(AttackRoutine());
     }
 
-
     IEnumerator AttackRoutine()
     {
-        animator.SetBool("isAttacking", true);
+        // STATE: Attack START
+        IsAttacking = true;
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
         activeWeapon?.Attack();
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
-        animator.SetBool("isAttacking", false);
+        // STATE: Attack END
+        IsAttacking = false;
     }
 
     void Die()
     {
-        p_movement.SetDisabled(true);
+        p_Movement.SetDisabled(true);
         animator.SetTrigger("Die");
     }
 }
@@ -123,8 +125,10 @@ public class P_Movement : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_stats;
-    public P_Combat p_combat;
+    public P_Stats p_Stats;
+    public P_Combat p_Combat;
+    public C_Dodge c_Dodge;
+    public C_State c_State;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
@@ -143,44 +147,51 @@ public class P_Movement : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
 
-        p_stats ??= GetComponent<P_Stats>();
-        p_combat ??= GetComponent<P_Combat>();
+        p_Stats ??= GetComponent<P_Stats>();
+        p_Combat ??= GetComponent<P_Combat>();
+        c_Dodge ??= GetComponent<C_Dodge>();
+        c_State ??= GetComponent<C_State>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-
-        if (!p_stats) Debug.LogError($"{name}: P_Stats missing.");
-        if (!p_combat) Debug.LogError($"{name}: P_Combat missing.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
+        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Movement missing.");
+        if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
+        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
+        if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
 
         lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
     }
 
-    void OnEnable()  => input.Enable();
+    void OnEnable() => input.Enable();
     void OnDisable() => input.Disable();
 
     void Update()
     {
-        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
-
         // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
         // If raw is near zero, normalized will be (0,0)
+        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
         Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
-        C_Anim.ApplyMoveIdle(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
+        
+        bool busy = c_State != null && c_State.IsBusy;
+        C_Anim.UpdateAnimDirections(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
     }
 
 
     void FixedUpdate()
     {
-        Vector2 final = velocity + knockback;
+        Vector2 forced = (c_Dodge != null) ? c_Dodge.ForcedVelocity : Vector2.zero;
+        Vector2 baseVel = (forced != Vector2.zero) ? forced : velocity;
+        Vector2 final   = baseVel + knockback;
         rb.linearVelocity = final;
+
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (p_stats ? p_stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = (p_Stats ? p_Stats.KR : 0f) * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -207,9 +218,9 @@ public class P_Movement : MonoBehaviour
         // Read attack-state from Animator
         bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || (attacking && p_combat.lockDuringAttack);
+        bool valveClosed = disabled || (attacking && p_Combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * p_stats.MS;
+        Vector2 intendedVelocity = moveAxis * p_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
@@ -221,11 +232,11 @@ public class P_Movement : MonoBehaviour
             moveAxis = Vector2.zero;
             velocity = Vector2.zero;
             rb.linearVelocity = Vector2.zero; // immediate stop
-            animator?.SetBool("isMoving", false);
         }
     }
 
     public void ReceiveKnockback(Vector2 force) => knockback += force;
+
 }
  
 // ----- File: P_Stats.cs ----- 
@@ -247,6 +258,11 @@ public class P_Stats : MonoBehaviour
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;
+
+    [Header("Dodge")]
+    public float dodgeSpeed = 11f;      // units/second
+    public float dodgeDistance = 2.0f;  // units (≈ tiles)
+    public float dodgeCooldown = 0.45f; // seconds
 
     [Header("Placeholders")]
     public float knockbackForce = 0f;

@@ -1,36 +1,198 @@
  
+// ----- File: C_AfterimageSpawner.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+public class C_AfterimageSpawner : MonoBehaviour
+{
+    [Header("Trail")]
+    public float spawnInterval = 0.035f;
+    public float ghostLifetime = 0.20f;
+    public Color ghostTint = new Color(0.7f, 0.7f, 0.7f, 0.7f);
+    public int sortingOrderOffset = -1; // draw behind player
+
+    // Cached
+    SpriteRenderer srcSR;
+
+    void Awake()
+    {
+        srcSR ??= GetComponent<SpriteRenderer>();
+        if (!srcSR) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
+    }
+
+    // Burst where every ghost uses the SAME locked sprite & flips (captured at dodge start)
+    public void StartBurst(float duration, Sprite lockedSprite, bool lockedFlipX, bool lockedFlipY)
+    {
+        StartCoroutine(BurstRoutine(duration, lockedSprite, lockedFlipX, lockedFlipY));
+    }
+
+    IEnumerator BurstRoutine(float duration, Sprite lockedSprite, bool lockedFlipX, bool lockedFlipY)
+    {
+        // Spawn one immediately so the trail starts right away
+        SpawnGhost(lockedSprite, lockedFlipX, lockedFlipY);
+
+        float t = 0f;
+        while (t < duration)
+        {
+            yield return new WaitForSeconds(spawnInterval);
+            t += spawnInterval;
+            SpawnGhost(lockedSprite, lockedFlipX, lockedFlipY);
+        }
+    }
+
+    void SpawnGhost(Sprite sprite, bool flipX, bool flipY)
+    {
+        // Assumes srcSR exists & sprite provided (per your style: Inspector preconditions are correct)
+        var g = new GameObject("Afterimage");
+        g.transform.position = transform.position;
+        g.transform.rotation = transform.rotation;
+        g.transform.localScale = transform.localScale;
+
+        var gsr = g.AddComponent<SpriteRenderer>();
+        gsr.sprite = sprite;
+        gsr.flipX = flipX;
+        gsr.flipY = flipY;
+        gsr.sortingLayerID = srcSR.sortingLayerID;
+        gsr.sortingOrder = srcSR.sortingOrder + sortingOrderOffset;
+        gsr.color = ghostTint;
+
+        StartCoroutine(FadeAndDestroy(gsr));
+    }
+
+    IEnumerator FadeAndDestroy(SpriteRenderer gsr)
+    {
+        float t = 0f;
+        Color start = gsr.color;
+        while (t < ghostLifetime)
+        {
+            float a = Mathf.Lerp(start.a, 0f, t / ghostLifetime);
+            gsr.color = new Color(start.r, start.g, start.b, a);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gsr.gameObject);
+    }
+}
+ 
 // ----- File: C_Anim.cs ----- 
 using UnityEngine;
 
 public static class C_Anim
 {
-    // Shared for Player + Enemy
-    public static void ApplyMoveIdle(
+    // Writes only the directional floats on the Animator
+    public static void UpdateAnimDirections(
         Animator animator,
-        bool isAttacking,
+        bool busy,
         Vector2 moveAxis,
         Vector2 lastMove,
         float MIN_DISTANCE)
     {
-        if (isAttacking)
-        {
-            animator.SetBool("isMoving", false);
-            animator.SetFloat("idleX", lastMove.x);
-            animator.SetFloat("idleY", lastMove.y);
-            return;
-        }
-
-        bool moving = moveAxis.sqrMagnitude > MIN_DISTANCE;
-        animator.SetBool("isMoving", moving);
-
-        if (moving)
+        // Only write move floats when not locked by another state
+        if (!busy && moveAxis.sqrMagnitude > MIN_DISTANCE)
         {
             animator.SetFloat("moveX", moveAxis.x);
             animator.SetFloat("moveY", moveAxis.y);
         }
 
+        // Always refresh idle facing so the character remembers direction
         animator.SetFloat("idleX", lastMove.x);
         animator.SetFloat("idleY", lastMove.y);
+    }
+}
+ 
+// ----- File: C_Dodge.cs ----- 
+using UnityEngine;
+using System.Collections;
+
+public class C_Dodge : MonoBehaviour
+{
+    [Header("References")]
+    Animator animator;
+    P_InputActions input;
+    P_Stats stats;
+    C_AfterimageSpawner afterimage;
+    P_Movement movement; // read lastMove for direction
+
+    [Header("Config")]
+    public bool useInput = true; // Player = true; Enemy can set false and call RequestDodge(dir) manually
+
+    [Header("State (read-only)")]
+    public bool IsDodging { get; private set; }
+    public Vector2 ForcedVelocity => IsDodging ? forcedVelocity : Vector2.zero;
+
+    float cooldownTimer;
+    Vector2 forcedVelocity;
+
+    void Awake()
+    {
+        animator   ??= GetComponent<Animator>();
+        stats      ??= GetComponent<P_Stats>();
+        movement   ??= GetComponent<P_Movement>();
+        afterimage ??= GetComponent<C_AfterimageSpawner>();
+        input      ??= new P_InputActions();
+
+        if (!animator) Debug.LogError($"{name}: Animator missing.");
+        if (!stats)    Debug.LogError($"{name}: P_Stats missing.");
+    }
+
+    void OnEnable()
+    {
+        if (useInput) input.Player.Dodge.Enable();
+    }
+
+    void OnDisable()
+    {
+        if (useInput) input.Player.Dodge.Disable();
+    }
+
+    void Update()
+    {
+        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        if (!useInput) return;
+
+        if (input.Player.Dodge.WasPressedThisFrame())
+        {
+            // Read facing from movement; fallback down if zero
+            Vector2 dir = (movement && movement.lastMove != Vector2.zero) ? movement.lastMove.normalized : Vector2.down;
+            RequestDodge(dir);
+        }
+    }
+
+    // --- External API for AI/other scripts ---
+    public void RequestDodge(Vector2 dir)
+    {
+        if (IsDodging) return;
+        if (cooldownTimer > 0f) return;
+
+        // Lock the CURRENT sprite BEFORE we switch to the Dodge state
+        var sr = GetComponent<SpriteRenderer>();
+        var lockedSprite = sr ? sr.sprite : null;
+        bool lockedFlipX = sr ? sr.flipX : false;
+        bool lockedFlipY = sr ? sr.flipY : false;
+
+        // Animation-cancel on purpose
+
+        // Duration is derived from distance & speed
+        float duration = (stats.dodgeSpeed > 0f) ? (stats.dodgeDistance / stats.dodgeSpeed) : 0f;
+
+        // Enter dodge
+        IsDodging = true;
+
+        forcedVelocity = dir.normalized * stats.dodgeSpeed;
+
+        // Spawn trail using the locked sprite for the whole dodge
+        afterimage?.StartBurst(duration, lockedSprite, lockedFlipX, lockedFlipY);
+
+        StartCoroutine(DodgeRoutine(duration));
+    }
+
+    public IEnumerator DodgeRoutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        forcedVelocity = Vector2.zero;
+        IsDodging = false;
+        cooldownTimer = stats.dodgeCooldown;
     }
 }
  
@@ -95,8 +257,8 @@ public class C_Health : MonoBehaviour
 {
     [Header("References (Only P or E _Stats)")]
     P_InputActions input;
-    public P_Stats pStats;
-    public E_Stats eStats;
+    public P_Stats p_Stats;
+    public E_Stats e_Stats;
     public C_FX fx;
 
     [Header("Debug Keys (N/B)")]
@@ -109,11 +271,11 @@ public class C_Health : MonoBehaviour
     public event Action OnDied;
 
     // Accessors
-    int MaxHP => pStats ? pStats.maxHP : eStats.maxHP;
-    int CurrentHP { get => pStats ? pStats.currentHP : eStats.currentHP;
-                    set { if (pStats) pStats.currentHP = value; else eStats.currentHP = value; } }
-    public int AR => pStats ? pStats.AR : eStats.AR;
-    public int MR => pStats ? pStats.MR : eStats.MR;
+    int MaxHP => p_Stats ? p_Stats.maxHP : e_Stats.maxHP;
+    int CurrentHP { get => p_Stats ? p_Stats.currentHP : e_Stats.currentHP;
+                    set { if (p_Stats) p_Stats.currentHP = value; else e_Stats.currentHP = value; } }
+    public int AR => p_Stats ? p_Stats.AR : e_Stats.AR;
+    public int MR => p_Stats ? p_Stats.MR : e_Stats.MR;
     public bool IsAlive => CurrentHP > 0;
 
     // cached delegates so we can unsubscribe
@@ -123,11 +285,11 @@ public class C_Health : MonoBehaviour
 
     void Awake()
     {
-        pStats  ??= GetComponent<P_Stats>();
-        eStats  ??= GetComponent<E_Stats>();
+        p_Stats  ??= GetComponent<P_Stats>();
+        e_Stats  ??= GetComponent<E_Stats>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!pStats && !eStats) Debug.LogError($"{name}: C_Health needs P_Stats or E_Stats.", this);
+        if (!p_Stats && !e_Stats) Debug.LogError($"{name}: C_Health needs P_Stats or E_Stats.", this);
         if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
@@ -204,5 +366,68 @@ public class C_Health : MonoBehaviour
     }
 
     public void Kill() => ChangeHealth(-MaxHP);
+}
+ 
+// ----- File: C_State.cs ----- 
+using UnityEngine;
+
+public class C_State : MonoBehaviour
+{
+    public enum ActorState { Idle, Move, Attack, Dodge }
+
+    // References
+    Animator animator;
+    Rigidbody2D rb;
+    public P_Movement p_Movement;
+    public P_Combat   p_combat;
+    public C_Dodge    c_dodge;
+
+    // State
+    public ActorState Current { get; private set; } = ActorState.Idle;
+    public bool IsBusy => Current == ActorState.Dodge || (Current == ActorState.Attack && (p_combat?.lockDuringAttack ?? false));
+
+    const float MIN_DISTANCE = 0.0001f; // same epsilon as elsewhere
+
+    void Awake()
+    {
+        animator   ??= GetComponent<Animator>();
+        rb         ??= GetComponent<Rigidbody2D>();
+        p_Movement ??= GetComponent<P_Movement>();
+        p_combat   ??= GetComponent<P_Combat>();
+        c_dodge    ??= GetComponent<C_Dodge>();
+
+        if (!animator) Debug.LogError($"{name}: Animator missing.");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D missing.");
+    }
+
+    void Update()
+    {
+        var next = PickState();
+        if (next != Current)
+        {
+            Current = next;
+            // (Optional) fire an event later if you need VFX/audio
+        }
+        ApplyAnimator(Current);
+    }
+
+    ActorState PickState()
+    {
+        if (c_dodge?.IsDodging == true) return ActorState.Dodge;
+        if (p_combat?.IsAttacking == true) return ActorState.Attack;
+
+        // Use current body velocity to infer movement (works with ForcedVelocity + knockback)
+        if (rb.linearVelocity.sqrMagnitude > MIN_DISTANCE) return ActorState.Move;
+
+        return ActorState.Idle;
+    }
+
+    void ApplyAnimator(ActorState s)
+    {
+        // Single source of truth for these 3 bools
+        animator?.SetBool("isDodging",   s == ActorState.Dodge);
+        animator?.SetBool("isAttacking", s == ActorState.Attack);
+        animator?.SetBool("isMoving",    s == ActorState.Move);
+    }
 }
  
