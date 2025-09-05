@@ -14012,6 +14012,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 652215505}
+  - {fileID: 1590037545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &714147515
@@ -14029,7 +14030,9 @@ MonoBehaviour:
   c_Stats: {fileID: 714147524}
   p_Movement: {fileID: 714147518}
   p_Health: {fileID: 714147520}
-  activeWeapon: {fileID: 652215506}
+  meleeWeapon: {fileID: 1590037548}
+  rangedWeapon: {fileID: 652215506}
+  magicWeapon: {fileID: 0}
   attackDuration: 0.45
   hitDelay: 0.15
   lockDuringAttack: 1
@@ -20848,11 +20851,11 @@ Transform:
   m_GameObject: {fileID: 1590037544}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 714147513}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1590037546
 BoxCollider2D:
@@ -24230,4 +24233,3 @@ SceneRoots:
   - {fileID: 1671039988}
   - {fileID: 9135146632934085387}
   - {fileID: 714147513}
-  - {fileID: 1590037545}

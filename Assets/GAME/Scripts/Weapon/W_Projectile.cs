@@ -48,61 +48,36 @@ public class W_Projectile : MonoBehaviour
             Destroy(gameObject, data.projectileLifetime);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+void OnTriggerEnter2D(Collider2D other)
+{
+    // FILTER via W_Base static
+    if (!W_Base.TryGetTarget(owner, targetMask, other, out var targetHealth, out var root)) return;
+
+    // per-projectile de-dup
+    if (!hitOnce.Add(root.GetInstanceID())) return;
+
+    // EFFECTS via W_Base static
+    W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
+
+    // <-- Add this block: consume pierce budget or stop now
+    if (remainingPierces > 0)
     {
-        // Layer filter
-        if ((targetMask.value & (1 << other.gameObject.layer)) == 0) return;
-
-        // Ignore owner + children
-        if (other.transform == owner || other.transform.IsChildOf(owner)) return;
-
-        // Ignore weapon–weapon contacts
-        if (other.GetComponentInParent<W_Base>() != null) return;
-
-        // Resolve target health
-        var targetHealth = other.GetComponentInParent<C_Health>();
-        if (targetHealth == null || !targetHealth.IsAlive) return;
-
-        // One hit per unique target
-        var root = targetHealth.gameObject;
-        if (!hitOnce.Add(root.GetInstanceID())) return;
-
-        // Damage mix (same as melee flow)
-        int attackerAD = attackerStats.AD;
-        int attackerAP = attackerStats.AP;
-        int weaponAD   = data.baseAD;
-        int weaponAP   = data.baseAP;
-        targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
-
-        // Knockback
-        if (data.knockbackForce > 0f)
-            W_Knockback.PushTarget(other.gameObject, moveDir, data.knockbackForce);
-
-        // Stun
-        if (data.stunTime > 0f)
-        {
-            var pm = other.GetComponentInParent<P_Movement>();
-            if (pm) { StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
-            else
-            {
-                var em = other.GetComponentInParent<E_Movement>();
-                if (em) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
-            }
-        }
-
-        // Pierce: pass through while charges remain
-        if (remainingPierces > 0) { remainingPierces--; return; }
-
-        // No more pierce → stick to the *collider we hit* and fade
-        if (data.stickOnHitSeconds > 0f)
-        {
-            StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        remainingPierces--;      // pass through this target
+        return;                  // keep flying
     }
+
+    // No more pierce: stick (if enabled) or destroy
+    if (data.stickOnHitSeconds > 0f)
+    {
+        StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
+    }
+    else
+    {
+        Destroy(gameObject);
+    }
+}
+
+
 
     IEnumerator StickAndDie(Collider2D hitCol, float seconds)
     {

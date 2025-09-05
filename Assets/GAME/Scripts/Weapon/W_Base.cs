@@ -97,7 +97,6 @@ public abstract class W_Base : MonoBehaviour
         return (snappedDir.y >= 0f) ? data.offsetUp : data.offsetDown;
     }
 
-
     // Shared math utility for all characters
     protected static Vector2 SnapToEightDirections(Vector2 direction)
     {
@@ -107,6 +106,87 @@ public abstract class W_Base : MonoBehaviour
         float radians = octantIndex * 45f * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
     }
+    // Consistent sprite rotation based on pointsUp convention
+    protected float GetVisualAngle(Vector2 dir)
+    {
+        Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
+        return Vector2.SignedAngle(baseline, dir);
+    }
+
+    // Position/rotate + show sprite; optionally enable hitbox
+    protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
+    {
+        transform.position = pos;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+        if (sprite) sprite.enabled = true;
+        if (hitbox) hitbox.enabled = enableHitbox;
+    }
+
+    // Move forward/back along dir over showTime; call onProgress(k) if provided
+    protected System.Collections.IEnumerator ThrustOverTime(
+        Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
+    {
+        float t = 0f;
+        Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end   = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+
+        while (t < showTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / showTime);
+            transform.position = Vector3.Lerp(start, end, k);
+            onProgress?.Invoke(k);
+            yield return null;
+        }
+        // Caller will hide sprite/hitbox.
+    }
+// --- STATIC versions (usable from W_Projectile) ---
+public static bool TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other,
+                                out C_Health target, out GameObject root)
+{
+    if ((targetMask.value & (1 << other.gameObject.layer)) == 0) { target = null; root = null; return false; }
+    if (other.transform == owner || other.transform.IsChildOf(owner)) { target = null; root = null; return false; }
+    if (other.GetComponentInParent<W_Base>() != null) { target = null; root = null; return false; }
+
+    target = other.GetComponentInParent<C_Health>();
+    if (target == null || !target.IsAlive) { root = null; return false; }
+
+    root = target.gameObject;
+    return true;
+}
+
+public static void ApplyHitEffects(C_Stats attacker, W_SO data,
+                                   C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour host)
+{
+    int attackerAD = attacker.AD, attackerAP = attacker.AP;
+    int weaponAD   = data.baseAD, weaponAP   = data.baseAP;
+
+    target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+
+    if (data.knockbackForce > 0f)
+        W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
+
+    if (data.stunTime > 0f)
+    {
+        var pm = hitCol.GetComponentInParent<P_Movement>();
+        if (pm) { host.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+        else
+        {
+            var em = hitCol.GetComponentInParent<E_Movement>();
+            if (em) { host.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+        }
+    }
+}
+
+// --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged) ---
+protected bool TryGetTarget(Collider2D other, out C_Health target, out GameObject root)
+    => TryGetTarget(owner, targetMask, other, out target, out root);
+
+protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
+    => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
+
+
+
 
     public abstract void Attack();
 
