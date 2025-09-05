@@ -59,7 +59,7 @@ public class P_Movement : MonoBehaviour
 
         SetMoveAxis(desired);
         
-        bool busy = c_State != null && c_State.IsBusy;
+        bool busy = c_State != null && c_State.CheckIsBusy();
         C_Anim.UpdateAnimDirections(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
     }
 
