@@ -7,11 +7,15 @@ public class C_Health : MonoBehaviour
     [Header("References (Only P or E _Stats)")]
     P_InputActions input;
     public C_Stats c_Stats;
+    public C_Dodge c_Dodge;
     public C_FX fx;
 
     [Header("Debug Keys (N/B)")]
     public int takingDamageAmount = 1;
     public int healingAmount = 1;
+
+    [Header("Allow Dodge?")]
+    public bool useDodgeIFrames = true;
 
     // Events
     public event Action<int> OnDamaged;
@@ -33,9 +37,11 @@ public class C_Health : MonoBehaviour
     void Awake()
     {
         c_Stats ??= GetComponent<C_Stats>();
+        c_Dodge ??= GetComponent<C_Dodge>();
         fx      ??= GetComponent<C_FX>();
 
         if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
+        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
         if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
@@ -82,15 +88,8 @@ public class C_Health : MonoBehaviour
     {
         if (!IsAlive) return;
 
-        int reqPhysical = Mathf.Max(0, attackerAD + weaponAD);
-        int reqAbility  = Mathf.Max(0, attackerAP + weaponAP);
-
-        float physRed = Mathf.Clamp01(AR / 100f);
-        float abilRed = Mathf.Clamp01(MR / 100f);
-
-        int phys  = Mathf.RoundToInt(reqPhysical * (1f - physRed));
-        int abil  = Mathf.RoundToInt(reqAbility  * (1f - abilRed));
-        int total = phys + abil;
+        int total = Mathf.RoundToInt((attackerAD + weaponAD) * (1f - Mathf.Clamp01(AR / 100f))) +
+                    Mathf.RoundToInt((attackerAP + weaponAP) * (1f - Mathf.Clamp01(MR / 100f)));
 
         if (total > 0) ChangeHealth(-total);
     }
@@ -98,7 +97,7 @@ public class C_Health : MonoBehaviour
     // Single entrypoint for damage/heal
     public void ChangeHealth(int amount)
     {
-        if (!IsAlive) return;
+        if (!IsAlive || (amount < 0 && useDodgeIFrames && c_Dodge.IsDodging)) return;
 
         int before    = CurrentHP;
         int after     = Mathf.Clamp(before + amount, 0, MaxHP);
