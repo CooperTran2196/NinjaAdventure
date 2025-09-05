@@ -10,12 +10,12 @@ public class C_Health : MonoBehaviour
     public C_Dodge c_Dodge;
     public C_FX fx;
 
+    [Header("Allow Dodge/IFrames?")]
+    public bool useDodgeIFrames = true;
+
     [Header("Debug Keys (N/B)")]
     public int takingDamageAmount = 1;
     public int healingAmount = 1;
-
-    [Header("Allow Dodge?")]
-    public bool useDodgeIFrames = true;
 
     // Events
     public event Action<int> OnDamaged;
