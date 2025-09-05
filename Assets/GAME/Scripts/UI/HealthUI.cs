@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class HealthUI : MonoBehaviour
 {
     [Header("References")]
-    public P_Stats  p_Stats;
+    public C_Stats  p_Stats;
     public C_Health p_Health;            // Player's C_Health
     public RectTransform root;
     public Image healthPointPrefab;

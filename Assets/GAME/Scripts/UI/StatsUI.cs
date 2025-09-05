@@ -4,7 +4,7 @@ using TMPro;
 public class StatsUI : MonoBehaviour
 {
     [Header("References")]
-    public P_Stats p_Stats;
+    public C_Stats p_Stats;
     public CanvasGroup statsCanvas;
     public GameObject[] statsSlots;
 
