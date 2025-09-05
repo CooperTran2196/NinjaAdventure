@@ -9,7 +9,7 @@ public class P_Combat : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats     p_Stats;
+    public C_Stats     c_Stats;
     public P_Movement  p_Movement;
     public C_Health    p_Health;
     public W_Base      activeWeapon;
@@ -30,7 +30,7 @@ public class P_Combat : MonoBehaviour
     public bool IsAttacking { get; private set; }
 
     // Quick state check
-    public bool IsAlive => p_Stats.currentHP > 0;
+    public bool IsAlive => c_Stats.currentHP > 0;
 
     void Awake()
     {
@@ -38,7 +38,7 @@ public class P_Combat : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
         
-        p_Stats ??= GetComponent<P_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
         p_Movement ??= GetComponent<P_Movement>();
         p_Health ??= GetComponent<C_Health>();
         activeWeapon ??= GetComponentInChildren<W_Melee>();
@@ -47,7 +47,7 @@ public class P_Combat : MonoBehaviour
         if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer in P_Combat missing.");
         if (!animator) Debug.LogError($"{name}: Animator in P_Combat missing.");
 
-        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        if (!c_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
         if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
         if (!p_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
         if (!activeWeapon) Debug.LogError($"{name}: W_Melee in P_Combat missing.");
@@ -74,7 +74,7 @@ public class P_Combat : MonoBehaviour
         if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
         if (input.Player.Attack.triggered) RequestAttack();
 
-        if (autoKill) { autoKill = false; p_Health.ChangeHealth(-p_Stats.maxHP); }
+        if (autoKill) { autoKill = false; p_Health.ChangeHealth(-c_Stats.maxHP); }
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
@@ -83,7 +83,7 @@ public class P_Combat : MonoBehaviour
     {
         if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = p_Stats.attackCooldown;
+        cooldownTimer = c_Stats.attackCooldown;
 
         // Face once at attack start
         animator.SetFloat("atkX", aimDir.x);

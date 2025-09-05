@@ -19,9 +19,9 @@ public class C_FX : MonoBehaviour
     void Awake()
     {
         sprite ??= GetComponent<SpriteRenderer>();
-        if (sprite == null) Debug.LogError($"{name}: SpriteRenderer missing.", this);
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
 
-        baseRGB = sprite ? sprite.color : Color.white;
+        baseRGB = sprite.color;
     }
 
     public void FlashOnDamaged() => StartCoroutine(Flash(damageTint));

@@ -17,7 +17,7 @@ public class W_Melee : W_Base
         Vector3 spawn = owner.position + (Vector3)GetSpawnOffset(dir);
 
         // rotate from baseline depending on art (up vs down)
-        Vector2 baseline = (data != null && data.pointsUp) ? Vector2.up : Vector2.down;
+        Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
         float angle = Vector2.SignedAngle(baseline, dir);
 
         transform.position = spawn;
@@ -57,12 +57,12 @@ public class W_Melee : W_Base
         if (other.GetComponentInParent<W_Base>() != null) return;
 
         // Attacker stats
-        int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int attackerAP = (pStats != null) ? pStats.AP : (eStats != null ? eStats.AP : 0);
+        int attackerAD = c_Stats.AD;
+        int attackerAP = c_Stats.AP;
 
         // Weapon bases (allow mix)
-        int weaponAD = data ? data.baseAD : 0;
-        int weaponAP = data ? data.baseAP : 0;
+        int weaponAD = data.baseAD;
+        int weaponAP = data.baseAP;
 
         // Resolve target health once
         var targetHealth = other.GetComponentInParent<C_Health>();

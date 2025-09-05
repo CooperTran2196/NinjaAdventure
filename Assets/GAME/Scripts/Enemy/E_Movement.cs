@@ -8,8 +8,8 @@ public class E_Movement : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     
-    public E_Stats e_stats;
-    public E_Combat e_combat;
+    public C_Stats c_Stats;   
+    public E_Combat e_Combat;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -34,16 +34,16 @@ public class E_Movement : MonoBehaviour
         rb          ??= GetComponent<Rigidbody2D>();
         animator    ??= GetComponent<Animator>();
 
-        e_stats     ??= GetComponent<E_Stats>();
-        e_combat    ??= GetComponent<E_Combat>();
+        c_Stats     ??= GetComponent<C_Stats>();
+        e_Combat    ??= GetComponent<E_Combat>();
         
 
-        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (animator    == null) Debug.LogError($"{name}: Animator missing.");
+        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer in E_Movement missing.");
+        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D in E_Movement missing.");
+        if (animator    == null) Debug.LogError($"{name}: Animator in E_Movement missing.");
         
-        if (e_stats == null) Debug.LogError($"{name}: E_Stats missing.");
-        if (e_combat    == null) Debug.LogError($"{name}: E_Combat missing.");
+        if (c_Stats     == null) Debug.LogError($"{name}: E_Stats in E_Movement missing.");
+        if (e_Combat    == null) Debug.LogError($"{name}: E_Combat in E_Movement missing.");
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class E_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (e_stats ? e_stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = c_Stats.KR * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -84,7 +84,7 @@ public class E_Movement : MonoBehaviour
         else
         {
             Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-            bool hasDir = to.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE);
+            bool hasDir = to.sqrMagnitude > MIN_DISTANCE;
             if (hasDir) lastMove = to.normalized;
 
             // If holding then don't create intent, otherwise face & move toward target
@@ -94,9 +94,9 @@ public class E_Movement : MonoBehaviour
         // Velocity valve
         bool attacking = animator.GetBool("isAttacking");
         // Block velocity when disabled, holding, or attacking
-        bool valveClosed = disabled || holdInRange || (attacking && e_combat.lockDuringAttack);
+        bool valveClosed = disabled || holdInRange || (attacking && e_Combat.lockDuringAttack);
 
-        Vector2 intendedVelocity = moveAxis * e_stats.MS;
+        Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 

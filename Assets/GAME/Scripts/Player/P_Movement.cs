@@ -8,7 +8,7 @@ public class P_Movement : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_Stats;
+    public C_Stats c_Stats;
     public P_Combat p_Combat;
     public C_Dodge c_Dodge;
     public C_State c_State;
@@ -30,14 +30,14 @@ public class P_Movement : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
 
-        p_Stats ??= GetComponent<P_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
         p_Combat ??= GetComponent<P_Combat>();
         c_Dodge ??= GetComponent<C_Dodge>();
         c_State ??= GetComponent<C_State>();
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
         if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
-        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Movement missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats in P_Movement missing.");
         if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
         if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
         if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
@@ -66,7 +66,7 @@ public class P_Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 forced = (c_Dodge != null) ? c_Dodge.ForcedVelocity : Vector2.zero;
+        Vector2 forced  = c_Dodge.ForcedVelocity;
         Vector2 baseVel = (forced != Vector2.zero) ? forced : velocity;
         Vector2 final   = baseVel + knockback;
         rb.linearVelocity = final;
@@ -74,7 +74,7 @@ public class P_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (p_Stats ? p_Stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = c_Stats.KR * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -103,7 +103,7 @@ public class P_Movement : MonoBehaviour
         // Valve is closed when disabled OR lockDuringAttack
         bool valveClosed = disabled || (attacking && p_Combat.lockDuringAttack);
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * p_Stats.MS;
+        Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 

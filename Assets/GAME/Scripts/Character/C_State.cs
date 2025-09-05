@@ -25,8 +25,8 @@ public class C_State : MonoBehaviour
         p_Combat   ??= GetComponent<P_Combat>();
         c_Dodge    ??= GetComponent<C_Dodge>();
 
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-        if (!rb)       Debug.LogError($"{name}: Rigidbody2D missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in C_State missing.");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
     }
 
     void Update()

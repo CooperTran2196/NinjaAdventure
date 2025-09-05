@@ -6,7 +6,7 @@ public class C_Dodge : MonoBehaviour
     [Header("References")]
     Animator animator;
     P_InputActions input;
-    P_Stats stats;
+    C_Stats c_Stats;
     C_AfterimageSpawner afterimage;
     P_Movement movement; // read lastMove for direction
 
@@ -22,14 +22,17 @@ public class C_Dodge : MonoBehaviour
 
     void Awake()
     {
-        animator   ??= GetComponent<Animator>();
-        stats      ??= GetComponent<P_Stats>();
-        movement   ??= GetComponent<P_Movement>();
+        animator ??= GetComponent<Animator>();
+        c_Stats ??= GetComponent<C_Stats>();
+        movement ??= GetComponent<P_Movement>();
         afterimage ??= GetComponent<C_AfterimageSpawner>();
-        input      ??= new P_InputActions();
 
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
-        if (!stats)    Debug.LogError($"{name}: P_Stats missing.");
+        input ??= new P_InputActions();
+
+        if (!animator) Debug.LogError($"{name}: Animator in C_Dodge missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Dodge missing.");
+        if (!movement) Debug.LogError($"{name}: P_Movement in C_Dodge missing.");
+        if (!afterimage)  Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge missing.");
     }
 
     void OnEnable()
@@ -70,12 +73,12 @@ public class C_Dodge : MonoBehaviour
         // Animation-cancel on purpose
 
         // Duration is derived from distance & speed
-        float duration = (stats.dodgeSpeed > 0f) ? (stats.dodgeDistance / stats.dodgeSpeed) : 0f;
+        float duration = (c_Stats.dodgeSpeed > 0f) ? (c_Stats.dodgeDistance / c_Stats.dodgeSpeed) : 0f;
 
         // Enter dodge
         IsDodging = true;
 
-        forcedVelocity = dir.normalized * stats.dodgeSpeed;
+        forcedVelocity = dir.normalized * c_Stats.dodgeSpeed;
 
         // Spawn trail using the locked sprite for the whole dodge
         afterimage?.StartBurst(duration, lockedSprite, lockedFlipX, lockedFlipY);
@@ -89,6 +92,6 @@ public class C_Dodge : MonoBehaviour
 
         forcedVelocity = Vector2.zero;
         IsDodging = false;
-        cooldownTimer = stats.dodgeCooldown;
+        cooldownTimer = c_Stats.dodgeCooldown;
     }
 }

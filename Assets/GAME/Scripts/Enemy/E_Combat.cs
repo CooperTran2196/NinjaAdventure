@@ -8,9 +8,9 @@ public class E_Combat : MonoBehaviour
     SpriteRenderer sprite;
     Animator animator;
 
-    public E_Stats e_stats;
-    public E_Movement e_movement;
-    public C_Health e_health;
+    public C_Stats c_Stats;
+    public E_Movement e_Movement;
+    public C_Health e_Health;
     public W_Base activeWeapon;
 
     [Header("AI")]
@@ -29,7 +29,7 @@ public class E_Combat : MonoBehaviour
     [SerializeField] bool autoKill;
 
     // Quick state check
-    public bool IsAlive => e_stats.currentHP > 0;
+    public bool IsAlive => c_Stats.currentHP > 0;
 
     bool isAttacking;
     float contactTimer;   // for collision damage
@@ -40,35 +40,35 @@ public class E_Combat : MonoBehaviour
         sprite          ??= GetComponent<SpriteRenderer>();
         animator        ??= GetComponent<Animator>();
 
-        e_stats         ??= GetComponent<E_Stats>();
-        e_movement      ??= GetComponent<E_Movement>();
-        e_health        ??= GetComponent<C_Health>();
+        c_Stats         ??= GetComponent<C_Stats>();
+        e_Movement      ??= GetComponent<E_Movement>();
+        e_Health        ??= GetComponent<C_Health>();
         activeWeapon    ??= GetComponentInChildren<W_Melee>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in E_Combat missing.");
 
-        if (!e_stats) Debug.LogError($"{name}: E_Stats missing.");
-        if (!e_movement) Debug.LogError($"{name}: E_Movement missing.");
-        if (!e_health) Debug.LogError($"{name}: C_Health missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats in E_Combat missing.");
+        if (!e_Movement) Debug.LogError($"{name}: E_Movement in E_Combat missing.");
+        if (!e_Health) Debug.LogError($"{name}: C_Health in E_Combat missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: C_Melee in E_Combat missing.");
     }
 
     void OnEnable()
     {
         StartCoroutine(ThinkLoop());
-        e_health.OnDied += Die;
+        e_Health.OnDied += Die;
     }
 
 
     void OnDisable()
     {
-        e_health.OnDied -= Die;
+        e_Health.OnDied -= Die;
     }
 
     void Update()
     {
-        if (autoKill) { autoKill = false; e_health.ChangeHealth(-e_stats.maxHP); }
+        if (autoKill) { autoKill = false; e_Health.ChangeHealth(-c_Stats.maxHP); }
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
 
@@ -88,12 +88,12 @@ public class E_Combat : MonoBehaviour
                 {
                     // Normal mode: Idle in place if player is still in range
                     bool shouldHold = inAttackRange && cooldownTimer > 0f;
-                    e_movement.SetHoldInRange(shouldHold);
+                    e_Movement.SetHoldInRange(shouldHold);
                 }
                 else
                 {
                     // Hard mode: Enemies never hold between attack
-                    e_movement.SetHoldInRange(false);
+                    e_Movement.SetHoldInRange(false);
                 }
                 // If close enough and off cooldown, begin an attack
                 if (inAttackRange && cooldownTimer <= 0f)
@@ -116,8 +116,8 @@ public class E_Combat : MonoBehaviour
         }
         var playerHealth = collision.collider.GetComponent<C_Health>();
         if (playerHealth == null || !playerHealth.IsAlive) return; // Only damage a live player
-        playerHealth.ChangeHealth(-e_stats.collisionDamage); //Apply damage
-        contactTimer = e_stats.collisionTick; // reset tick window
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage); //Apply damage
+        contactTimer = c_Stats.collisionTick; // reset tick window
     }
 
 
@@ -127,7 +127,7 @@ public class E_Combat : MonoBehaviour
         animator.SetBool("isAttacking", true);
 
         // Aim the directional attack
-        var dir = e_movement.lastMove;
+        var dir = e_Movement.lastMove;
         animator.SetFloat("atkX", dir.x);
         animator.SetFloat("atkY", dir.y);
 
@@ -141,22 +141,22 @@ public class E_Combat : MonoBehaviour
         if (lockDuringAttack)
         {
             bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-            e_movement.SetHoldInRange(stillInRange);
+            e_Movement.SetHoldInRange(stillInRange);
         }
         else
         {
-            e_movement.SetHoldInRange(false);
+            e_Movement.SetHoldInRange(false);
         }
 
         isAttacking = false;
         animator.SetBool("isAttacking", false);
 
-        cooldownTimer = e_stats.attackCooldown;
+        cooldownTimer = c_Stats.attackCooldown;
     }
 
     void Die()
     {
-        e_movement.SetDisabled(true);
+        e_Movement.SetDisabled(true);
         animator.SetTrigger("Die");
     }
 

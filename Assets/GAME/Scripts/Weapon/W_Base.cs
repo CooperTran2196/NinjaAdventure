@@ -8,8 +8,7 @@ public abstract class W_Base : MonoBehaviour
     protected SpriteRenderer sprite;
     protected BoxCollider2D hitbox;
     protected Animator ownerAnimator;
-    protected P_Stats pStats;
-    protected E_Stats eStats;
+    protected C_Stats c_Stats;
 
     [Header("Data")]
     public W_SO data;
@@ -39,8 +38,7 @@ public abstract class W_Base : MonoBehaviour
 
         owner ??= transform.root;
         ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
-        pStats ??= owner ? owner.GetComponent<P_Stats>() : null;
-        eStats ??= owner ? owner.GetComponent<E_Stats>() : null;
+        c_Stats ??= owner ? owner.GetComponent<C_Stats>() : null;
 
         if (data && sprite) sprite.sprite = data.sprite;
         if (autoSizeFromSprite && sprite && sprite.sprite && hitbox)
@@ -54,8 +52,7 @@ public abstract class W_Base : MonoBehaviour
     {
         owner = newOwner;
         ownerAnimator = owner ? owner.GetComponent<Animator>() : null;
-        pStats = owner ? owner.GetComponent<P_Stats>() : null;
-        eStats = owner ? owner.GetComponent<E_Stats>() : null;
+        c_Stats = owner ? owner.GetComponent<C_Stats>() : null;
         if (data && sprite) sprite.sprite = data.sprite;
     }
 
