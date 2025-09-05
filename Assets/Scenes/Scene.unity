@@ -12745,7 +12745,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3f2a861e62e4814bb2322770e87b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
-  health: {fileID: 0}
+  p_Stats: {fileID: 0}
+  p_Health: {fileID: 0}
   root: {fileID: 553297928}
   healthPointPrefab: {fileID: 0}
   healthPoint:
@@ -13599,6 +13600,7 @@ GameObject:
   - component: {fileID: 714147520}
   - component: {fileID: 714147519}
   - component: {fileID: 714147521}
+  - component: {fileID: 714147523}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -13804,9 +13806,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 731f646acfdeae84aa38a07bc811f82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p_stats: {fileID: 714147514}
-  p_movement: {fileID: 714147518}
-  p_health: {fileID: 714147520}
+  p_Stats: {fileID: 0}
+  p_Movement: {fileID: 0}
+  p_Health: {fileID: 0}
   activeWeapon: {fileID: 1590037548}
   attackDuration: 0.45
   hitDelay: 0.15
@@ -13854,9 +13856,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350ee43e4c433c94d8a194ac656b543d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p_stats: {fileID: 714147514}
-  p_combat: {fileID: 714147515}
-  c_dodge: {fileID: 714147522}
+  p_Stats: {fileID: 0}
+  p_Combat: {fileID: 0}
+  c_Dodge: {fileID: 0}
+  c_State: {fileID: 0}
   lastMove: {x: 0, y: -1}
 --- !u!114 &714147519
 MonoBehaviour:
@@ -13886,8 +13889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  pStats: {fileID: 714147514}
-  eStats: {fileID: 0}
+  p_Stats: {fileID: 0}
+  e_Stats: {fileID: 0}
   fx: {fileID: 714147519}
   takingDamageAmount: 1
   healingAmount: 1
@@ -13920,6 +13923,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Dodge
   useInput: 1
+--- !u!114 &714147523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714147508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a248c84468cc14fb5b00475330115b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_State
+  p_Movement: {fileID: 714147518}
+  p_combat: {fileID: 714147515}
+  c_dodge: {fileID: 714147522}
 --- !u!1001 &724362552
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,8 +6,8 @@ public class C_Health : MonoBehaviour
 {
     [Header("References (Only P or E _Stats)")]
     P_InputActions input;
-    public P_Stats pStats;
-    public E_Stats eStats;
+    public P_Stats p_Stats;
+    public E_Stats e_Stats;
     public C_FX fx;
 
     [Header("Debug Keys (N/B)")]
@@ -20,11 +20,11 @@ public class C_Health : MonoBehaviour
     public event Action OnDied;
 
     // Accessors
-    int MaxHP => pStats ? pStats.maxHP : eStats.maxHP;
-    int CurrentHP { get => pStats ? pStats.currentHP : eStats.currentHP;
-                    set { if (pStats) pStats.currentHP = value; else eStats.currentHP = value; } }
-    public int AR => pStats ? pStats.AR : eStats.AR;
-    public int MR => pStats ? pStats.MR : eStats.MR;
+    int MaxHP => p_Stats ? p_Stats.maxHP : e_Stats.maxHP;
+    int CurrentHP { get => p_Stats ? p_Stats.currentHP : e_Stats.currentHP;
+                    set { if (p_Stats) p_Stats.currentHP = value; else e_Stats.currentHP = value; } }
+    public int AR => p_Stats ? p_Stats.AR : e_Stats.AR;
+    public int MR => p_Stats ? p_Stats.MR : e_Stats.MR;
     public bool IsAlive => CurrentHP > 0;
 
     // cached delegates so we can unsubscribe
@@ -34,11 +34,11 @@ public class C_Health : MonoBehaviour
 
     void Awake()
     {
-        pStats  ??= GetComponent<P_Stats>();
-        eStats  ??= GetComponent<E_Stats>();
+        p_Stats  ??= GetComponent<P_Stats>();
+        e_Stats  ??= GetComponent<E_Stats>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!pStats && !eStats) Debug.LogError($"{name}: C_Health needs P_Stats or E_Stats.", this);
+        if (!p_Stats && !e_Stats) Debug.LogError($"{name}: C_Health needs P_Stats or E_Stats.", this);
         if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
