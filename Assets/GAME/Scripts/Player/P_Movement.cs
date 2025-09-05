@@ -11,6 +11,7 @@ public class P_Movement : MonoBehaviour
     public P_Stats p_stats;
     public P_Combat p_combat;
     public C_Dodge c_dodge;
+    public C_State c_state;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
@@ -27,6 +28,9 @@ public class P_Movement : MonoBehaviour
     {
         c_dodge ??= GetComponent<C_Dodge>();
         if (!c_dodge) Debug.LogError($"{name}: C_Dodge missing.");
+
+        c_state ??= GetComponent<C_State>();
+        if (!c_state) Debug.LogError($"{name}: C_State missing.");
 
         rb ??= GetComponent<Rigidbody2D>();
         animator ??= GetComponent<Animator>();
@@ -59,7 +63,7 @@ public class P_Movement : MonoBehaviour
         Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
-        bool busy = animator.GetBool("isAttacking") || (c_dodge != null && c_dodge.IsDodging);
+        bool busy = c_state != null && c_state.IsBusy;
         C_Anim.ApplyMoveIdle(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
     }
 
@@ -115,7 +119,6 @@ public class P_Movement : MonoBehaviour
             moveAxis = Vector2.zero;
             velocity = Vector2.zero;
             rb.linearVelocity = Vector2.zero; // immediate stop
-            animator?.SetBool("isMoving", false);
         }
     }
 

@@ -27,6 +27,7 @@ public class P_Combat : MonoBehaviour
     Vector2 aimDir = Vector2.down;
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
+    public bool IsAttacking { get; private set; }
 
     // Quick state check
     public bool IsAlive => p_stats.currentHP > 0;
@@ -93,14 +94,12 @@ public class P_Combat : MonoBehaviour
 
     IEnumerator AttackRoutine()
     {
-        animator.SetBool("isAttacking", true);
-
+        IsAttacking = true;
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
         activeWeapon?.Attack();
         yield return new WaitForSeconds(attackDuration - hitDelay);
-
-        animator.SetBool("isAttacking", false);
+        IsAttacking = false;
     }
 
     void Die()

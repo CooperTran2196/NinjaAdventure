@@ -68,15 +68,12 @@ public class C_Dodge : MonoBehaviour
         bool lockedFlipY = sr ? sr.flipY : false;
 
         // Animation-cancel on purpose
-        animator?.SetBool("isAttacking", false);
-        animator?.SetBool("isMoving", false);
 
         // Duration is derived from distance & speed
         float duration = (stats.dodgeSpeed > 0f) ? (stats.dodgeDistance / stats.dodgeSpeed) : 0f;
 
         // Enter dodge
         IsDodging = true;
-        animator?.SetBool("isDodging", true);
 
         forcedVelocity = dir.normalized * stats.dodgeSpeed;
 
@@ -92,7 +89,6 @@ public class C_Dodge : MonoBehaviour
 
         forcedVelocity = Vector2.zero;
         IsDodging = false;
-        animator?.SetBool("isDodging", false);
         cooldownTimer = stats.dodgeCooldown;
     }
 }
