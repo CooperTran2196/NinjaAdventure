@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem; // new Input System
+
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -100,7 +102,7 @@ public abstract class W_Base : MonoBehaviour
     {
         float t = 0f;
         Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
-        Vector3 end   = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
 
         while (t < showTime)
         {
@@ -209,6 +211,61 @@ public abstract class W_Base : MonoBehaviour
             Gizmos.color = prevColor;
         }
     }
+    
+    // 8-way snap just for ANIMATION facing (not for physics)
+protected static Vector2 Snap8(Vector2 v)
+{
+    if (v.sqrMagnitude < 1e-6f) return Vector2.right; // fallback
+    float deg = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+    int oct = Mathf.RoundToInt(deg / 45f);
+    int idx = ((oct % 8) + 8) % 8;
+    float snapDeg = idx * 45f;
+    float rad = snapDeg * Mathf.Deg2Rad;
+    return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+}
+
+    // Raw, continuous aim direction:
+    // - Player: owner -> mouse world
+    // - Enemy:  owner -> Player (by tag)
+    // Falls back to Right if degenerate.
+    protected Vector2 GetRawAimDir()
+    {
+        Vector2 dir = Vector2.right;
+
+        if (owner != null && owner.CompareTag("Player"))
+        {
+            if (Camera.main && Mouse.current != null)
+            {
+                Vector2 m = Mouse.current.position.ReadValue();
+                float z = Mathf.Abs(Camera.main.transform.position.z - owner.position.z);
+                Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
+                dir = ((Vector2)(mw - transform.position));
+            }
+        }
+        else
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player) dir = ((Vector2)(player.transform.position - transform.position));
+        }
+
+        if (dir.sqrMagnitude < 1e-6f) dir = Vector2.right;
+        else dir.Normalize();
+        return dir;
+    }
+
+
+    // Lock the Animator's attack facing (atkX/atkY) for this attack,
+    // using SNAPPED direction derived from the raw aim.
+    // (Movement can keep updating moveX/moveY — that’s okay.)
+    protected void LockAttackFacing(Vector2 rawDir)
+    {
+        if (!ownerAnimator) return;
+        Vector2 animDir = Snap8(rawDir);
+        ownerAnimator.SetFloat("atkX", animDir.x);
+        ownerAnimator.SetFloat("atkY", animDir.y);
+    }
+
+
 }
 
 

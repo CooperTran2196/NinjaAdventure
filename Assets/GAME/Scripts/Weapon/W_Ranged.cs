@@ -11,38 +11,27 @@ public class W_Ranged : W_Base
 
     IEnumerator Shoot()
     {
-        var a = AimDirection(); // snapped for visuals
+        var a = AimDirection(); // you keep using this for sprite angle & offset (pointsUp honored)
+
+        // Raw direction for PHYSICS (mouse for player, player transform for enemies)
+        Vector2 rawDir = GetRawAimDir();
+
+        // 🔒 Lock Animator facing from aim for the whole attack window
+        LockAttackFacing(rawDir);
 
         Vector3 pos = owner.position + (Vector3)a.offset;
         BeginVisual(pos, a.angleDeg, enableHitbox: false);
 
-        // --- compute raw projectile direction ---
-        Vector2 rawDir = a.dir; // fallback
-
-        if (owner.CompareTag("Player")) // player shooting
-        {
-            Vector2 mouseScreen = Mouse.current.position.ReadValue();
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(
-                new Vector3(mouseScreen.x, mouseScreen.y, Mathf.Abs(Camera.main.transform.position.z - owner.position.z))
-            );
-            rawDir = ((Vector2)(mouseWorld - transform.position)).normalized;
-            if (rawDir.sqrMagnitude < 1e-6f) rawDir = a.dir;
-        }
-        else // enemy shooting
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player)
-                rawDir = ((Vector2)(player.transform.position - transform.position)).normalized;
-        }
-
         bool fired = false;
         yield return ThrustOverTime(a.dir, data.showTime, data.thrustDistance, (k) =>
         {
-            if (!fired && k >= 0.5f) { FireProjectile(rawDir); fired = true; }
+            if (!fired && k >= 0.5f) { FireProjectile(rawDir); fired = true; } // physics stays precise
         });
 
         if (sprite) sprite.enabled = false;
     }
+
+
 
     void FireProjectile(Vector2 dir)
     {

@@ -13,9 +13,15 @@ public class W_Melee : W_Base
 
     IEnumerator Swing()
     {
-        // Reset enemy id per attack -> avoid machine-gun hits
         hitThisSwing.Clear();
-        var a = AimDirection(); // a.dir, a.angleDeg, a.offset
+
+        // Raw direction to target (mouse for player, player transform for enemies)
+        Vector2 rawDir = GetRawAimDir();
+
+        // 🔒 Lock Animator facing from aim for this swing window
+        LockAttackFacing(rawDir);
+
+        var a = AimDirection(); // keep using your existing visuals (pointsUp honored)
 
         Vector3 pos = owner.position + (Vector3)a.offset;
         BeginVisual(pos, a.angleDeg, enableHitbox: true);
@@ -25,6 +31,8 @@ public class W_Melee : W_Base
         if (hitbox) hitbox.enabled = false;
         if (sprite) sprite.enabled = false;
     }
+
+
 
     void OnTriggerStay2D(Collider2D other)
     {
