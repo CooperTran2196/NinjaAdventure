@@ -48,34 +48,35 @@ public class W_Projectile : MonoBehaviour
             Destroy(gameObject, data.projectileLifetime);
     }
 
-void OnTriggerEnter2D(Collider2D other)
-{
-    // FILTER via W_Base static
-    if (!W_Base.TryGetTarget(owner, targetMask, other, out var targetHealth, out var root)) return;
-
-    // per-projectile de-dup
-    if (!hitOnce.Add(root.GetInstanceID())) return;
-
-    // EFFECTS via W_Base static
-    W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
-
-    // <-- Add this block: consume pierce budget or stop now
-    if (remainingPierces > 0)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        remainingPierces--;      // pass through this target
-        return;                  // keep flying
-    }
+        // FILTER via W_Base static
+        if (!W_Base.TryGetTarget(owner, targetMask, other, out var targetHealth, out var root)) return;
 
-    // No more pierce: stick (if enabled) or destroy
-    if (data.stickOnHitSeconds > 0f)
-    {
-        StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
+        // per-projectile de-dup
+        if (!hitOnce.Add(root.GetInstanceID())) return;
+
+        // EFFECTS via W_Base static
+        W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
+
+        // <-- Add this block: consume pierce budget or stop now
+        if (remainingPierces > 0)
+        {
+            remainingPierces--;      // pass through this target
+            return;                  // keep flying
+        }
+
+        // No more pierce: stick (if enabled) or destroy
+        if (data.stickOnHitSeconds > 0f)
+        {
+            StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
     }
-    else
-    {
-        Destroy(gameObject);
-    }
-}
 
 
 
