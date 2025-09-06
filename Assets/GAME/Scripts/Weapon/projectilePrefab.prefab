@@ -152,7 +152,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 1
+  m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0.11438349, y: 0.0067281723}
   m_SpriteTilingProperty:

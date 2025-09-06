@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -52,41 +53,25 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    public virtual void Equip(Transform newOwner)
-    {
-        owner = newOwner;
-        ownerAnimator = owner.GetComponent<Animator>();
-        c_Stats = owner.GetComponent<C_Stats>();
-    }
-
-    public void SetData(W_SO d, bool applySprite = true)
-    {
-        data = d;
-        if (applySprite && data && sprite) sprite.sprite = data.sprite;
-    }
-
     // One-stop aim: returns snapped dir, sprite angle, and spawn offset.
     protected (Vector2 dir, float angleDeg, Vector2 offset) AimDirection()
     {
-        // 1/ Read input vector from owner animator
-        float ax = ownerAnimator.GetFloat("atkX");
-        float ay = ownerAnimator.GetFloat("atkY");
-
-        // 2/ Convert to angle and snap to nearest 45° octant
+        // 1/ Read input vector from owner animator and 
+        // Convert to angle and snap to nearest 45° octant
         float deg = Mathf.Atan2(ownerAnimator.GetFloat("atkY"),
                                 ownerAnimator.GetFloat("atkX")) * Mathf.Rad2Deg;
         int oct = Mathf.RoundToInt(deg / 45f); // 45° steps          
         int idx = ((oct % 8) + 8) % 8;  // normalize to 0 -> 7                   
 
-        // 3/ Build the snapped unit direction from the octant
+        // 2/ Build the snapped unit direction from the octant
         float rad = idx * 45f * Mathf.Deg2Rad;
         Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
-        // 4/ Check if the weapon point up or down
+        // 3/ Check if the weapon point up or down
         Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
         float angle = Vector2.SignedAngle(baseline, dir);
 
-        // 5) Pick offset directly from SO via octant index
+        // 4/ Pick offset directly from SO via octant index
         Vector2 off =
             idx == 0 ? data.offsetRight :
             idx == 1 ? data.offsetUpRight :
@@ -110,7 +95,7 @@ public abstract class W_Base : MonoBehaviour
     }
 
     // Move forward/back along dir over showTime, call onProgress(k) if ranged
-    protected System.Collections.IEnumerator ThrustOverTime(
+    protected IEnumerator ThrustOverTime(
         Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
     {
         float t = 0f;
@@ -126,6 +111,10 @@ public abstract class W_Base : MonoBehaviour
             yield return null;
         }
     }
+
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
+        => TryGetTarget(owner, targetMask, other);
 
     // STATIC versions for W_Projectile)
     public static (C_Health target, GameObject root)
@@ -143,7 +132,7 @@ public abstract class W_Base : MonoBehaviour
         if (other.GetComponentInParent<W_Base>() != null)
             return (null, null);
 
-        // Find target health on root
+        // Find target health on other's root
         var target = other.GetComponentInParent<C_Health>();
         if (target == null || !target.IsAlive)
             return (null, null);
@@ -152,11 +141,15 @@ public abstract class W_Base : MonoBehaviour
         return (target, target.gameObject);
     }
 
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
+        => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
+
     public static void ApplyHitEffects(C_Stats attacker, W_SO data,
-                                       C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour host)
+                                       C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour weapon)
     {
         int attackerAD = attacker.AD, attackerAP = attacker.AP;
-        int weaponAD = data.baseAD, weaponAP = data.baseAP;
+        int weaponAD = data.AD, weaponAP = data.AP;
 
         target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
@@ -166,26 +159,29 @@ public abstract class W_Base : MonoBehaviour
         if (data.stunTime > 0f)
         {
             var pm = hitCol.GetComponentInParent<P_Movement>();
-            if (pm) { host.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
             else
             {
                 var em = hitCol.GetComponentInParent<E_Movement>();
-                if (em) { host.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
             }
         }
     }
 
-
-    // --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged)
-    protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
-        => TryGetTarget(owner, targetMask, other);
-
-    protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
-        => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
-
-
     public abstract void Attack();
 
+    public virtual void Equip(Transform newOwner)
+    {
+        owner = newOwner;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
+    }
+
+    public void SetData(W_SO d, bool applySprite = true)
+    {
+        data = d;
+        if (applySprite && data && sprite) sprite.sprite = data.sprite;
+    }
     void OnDrawGizmos()
     {
         if (!debugDrawHitbox) return;

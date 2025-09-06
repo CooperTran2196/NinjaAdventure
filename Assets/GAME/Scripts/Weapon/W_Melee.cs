@@ -31,6 +31,6 @@ public class W_Melee : W_Base
         var (targetHealth, root) = TryGetTarget(other);
         if (targetHealth == null) return;
         if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
-        ApplyHitEffects(c_Stats, data, targetHealth, AimDirection().dir, other, this);
+        ApplyHitEffects(c_Stats, data, targetHealth, AimDirection().dir, other);
     }
 }

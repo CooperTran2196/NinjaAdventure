@@ -12,8 +12,8 @@ public class W_SO : ScriptableObject
     public bool pointsUp = false; // false = points down
 
     [Header("Damage (set either/both)")]
-    public int baseAD = 1;
-    public int baseAP = 0;
+    public int AD = 1;
+    public int AP = 0;
 
     [Header("Impact")]
     public float knockbackForce = 5f;

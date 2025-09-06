@@ -56,15 +56,11 @@ public class W_Projectile : MonoBehaviour
 
         // per-projectile de-dup
         if (!hitOnce.Add(root.GetInstanceID())) return;
-        // per-projectile de-dup
-        if (!hitOnce.Add(root.GetInstanceID())) return;
 
         // EFFECTS via W_Base static
         W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
-        // EFFECTS via W_Base static
-        W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
 
-        // <-- Add this block: consume pierce budget or stop now
+        // Consume pierce or stop now
         if (remainingPierces > 0)
         {
             remainingPierces--;      // pass through this target
