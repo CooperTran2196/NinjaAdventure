@@ -65,51 +65,42 @@ public abstract class W_Base : MonoBehaviour
         if (applySprite && data && sprite) sprite.sprite = data.sprite;
     }
 
-    // Read atkX/atkY; normalize if above threshold; else default to down.
-    // Always returns a clean 8-way vector from atkX/atkY, or Down if unset
-    protected Vector2 GetAimDir()
+    // One-stop aim: returns snapped dir, sprite angle, and spawn offset.
+    protected (Vector2 dir, float angleDeg, Vector2 offset) AimDirection()
     {
-        Vector2 v = new Vector2(ownerAnimator.GetFloat("atkX"),
-                                ownerAnimator.GetFloat("atkY"));
-        return SnapToEightDirections(v);
-    }
+        // 1/ Read input vector from owner animator
+        float ax = ownerAnimator.GetFloat("atkX");
+        float ay = ownerAnimator.GetFloat("atkY");
 
-    // Choose 1 from 8 offsets from SO
-    protected Vector2 GetSpawnOffset(Vector2 snappedDir)
-    {
-        float t = MIN_DISTANCE;
-        bool hasX = Mathf.Abs(snappedDir.x) > t;
-        bool hasY = Mathf.Abs(snappedDir.y) > t;
+        // 2/ Convert to angle and snap to nearest 45° octant
+        float deg = Mathf.Atan2(ownerAnimator.GetFloat("atkY"),
+                                ownerAnimator.GetFloat("atkX")) * Mathf.Rad2Deg;
+        int oct = Mathf.RoundToInt(deg / 45f); // 45° steps          
+        int idx = ((oct % 8) + 8) % 8;  // normalize to 0 -> 7                   
 
-        if (hasX && hasY)
-        {
-            if (snappedDir.x >= 0f && snappedDir.y >= 0f) return data.offsetUpRight;
-            if (snappedDir.x < 0f && snappedDir.y >= 0f) return data.offsetUpLeft;
-            if (snappedDir.x >= 0f && snappedDir.y < 0f) return data.offsetDownRight;
-            return data.offsetDownLeft;
-        }
-        if (hasX) return (snappedDir.x >= 0f) ? data.offsetRight : data.offsetLeft;
-        return (snappedDir.y >= 0f) ? data.offsetUp : data.offsetDown;
-    }
+        // 3/ Build the snapped unit direction from the octant
+        float rad = idx * 45f * Mathf.Deg2Rad;
+        Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
-    // Shared math utility for all characters
-    protected static Vector2 SnapToEightDirections(Vector2 direction)
-    {
-        if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // Pick the nearest 45 degree
-        int octantIndex = Mathf.RoundToInt(degrees / 45f);
-        float radians = octantIndex * 45f * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-    }
-    // Consistent sprite rotation based on pointsUp convention
-    protected float GetVisualAngle(Vector2 dir)
-    {
+        // 4/ Check if the weapon point up or down
         Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
-        return Vector2.SignedAngle(baseline, dir);
+        float angle = Vector2.SignedAngle(baseline, dir);
+
+        // 5) Pick offset directly from SO via octant index
+        Vector2 off =
+            idx == 0 ? data.offsetRight :
+            idx == 1 ? data.offsetUpRight :
+            idx == 2 ? data.offsetUp :
+            idx == 3 ? data.offsetUpLeft :
+            idx == 4 ? data.offsetLeft :
+            idx == 5 ? data.offsetDownLeft :
+            idx == 6 ? data.offsetDown :
+                       data.offsetDownRight; // idx == 7
+
+        return (dir, angle, off);
     }
 
-    // Position/rotate + show sprite; optionally enable hitbox
+    // Position/rotate + show sprite, optionally enable hitbox
     protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
     {
         transform.position = pos;
@@ -118,7 +109,7 @@ public abstract class W_Base : MonoBehaviour
         if (hitbox) hitbox.enabled = enableHitbox;
     }
 
-    // Move forward/back along dir over showTime; call onProgress(k) if provided
+    // Move forward/back along dir over showTime, call onProgress(k) if ranged
     protected System.Collections.IEnumerator ThrustOverTime(
         Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
     {
@@ -134,8 +125,8 @@ public abstract class W_Base : MonoBehaviour
             onProgress?.Invoke(k);
             yield return null;
         }
-        // Caller will hide sprite/hitbox.
     }
+
     // --- STATIC versions (usable from W_Projectile) ---
     public static bool TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other,
                                     out C_Health target, out GameObject root)
@@ -153,7 +144,6 @@ public abstract class W_Base : MonoBehaviour
         root = target.gameObject;
         return true;
     }
-
 
     public static void ApplyHitEffects(C_Stats attacker, W_SO data,
                                        C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour host)
@@ -179,7 +169,7 @@ public abstract class W_Base : MonoBehaviour
     }
 
 
-    // --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged) ---
+    // --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged)
     protected bool TryGetTarget(Collider2D other, out C_Health target, out GameObject root)
         => TryGetTarget(owner, targetMask, other, out target, out root);
 

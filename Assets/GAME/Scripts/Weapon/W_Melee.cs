@@ -13,28 +13,24 @@ public class W_Melee : W_Base
 
     IEnumerator Swing()
     {
-        Vector2 dir = GetAimDir();
-        Vector3 pos = owner.position + (Vector3)GetSpawnOffset(dir);
-        float angle = GetVisualAngle(dir);
-
+        // Reset enemy id per attack -> avoid machine-gun hits
         hitThisSwing.Clear();
-        BeginVisual(pos, angle, enableHitbox: true);    // show + enable hitbox
+        var a = AimDirection(); // a.dir, a.angleDeg, a.offset
 
-        yield return ThrustOverTime(dir, data.showTime, data.thrustDistance);
+        Vector3 pos = owner.position + (Vector3)a.offset;
+        BeginVisual(pos, a.angleDeg, enableHitbox: true);
 
-        // Hide
+        yield return ThrustOverTime(a.dir, data.showTime, data.thrustDistance);
+
         if (hitbox) hitbox.enabled = false;
         if (sprite) sprite.enabled = false;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         if (!TryGetTarget(other, out var targetHealth, out var root)) return;
-        if (!hitThisSwing.Add(root.GetInstanceID())) return;   // de-dup this swing
 
-        // Use current aim for knockback direction
-        ApplyHitEffects(c_Stats, data, targetHealth, GetAimDir(), other, this);
+        if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
+        ApplyHitEffects(c_Stats, data, targetHealth, AimDirection().dir, other, this);
     }
-
-
 }

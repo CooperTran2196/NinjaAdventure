@@ -10,16 +10,15 @@ public class W_Ranged : W_Base
 
     IEnumerator Shoot()
     {
-        Vector2 dir = GetAimDir();
-        Vector3 pos = owner.position + (Vector3)GetSpawnOffset(dir);
-        float angle = GetVisualAngle(dir);
+        var a = AimDirection();
+
+        Vector3 pos = owner.position + (Vector3)a.offset;
+        BeginVisual(pos, a.angleDeg, enableHitbox: false);
 
         bool fired = false;
-        BeginVisual(pos, angle, enableHitbox: false);   // bow never does damage
-
-        yield return ThrustOverTime(dir, data.showTime, data.thrustDistance, (k) =>
+        yield return ThrustOverTime(a.dir, data.showTime, data.thrustDistance, (k) =>
         {
-            if (!fired && k >= 0.5f) { FireProjectile(dir); fired = true; }
+            if (!fired && k >= 0.5f) { FireProjectile(a.dir); fired = true; }
         });
 
         if (sprite) sprite.enabled = false;
