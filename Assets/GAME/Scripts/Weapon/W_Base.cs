@@ -10,7 +10,7 @@ public abstract class W_Base : MonoBehaviour
     protected Animator ownerAnimator;
     protected C_Stats c_Stats;
 
-    [Header("Data")]
+    [Header("Weapon Data")]
     public W_SO data;
 
     [Header("Owner + Targets")]
@@ -33,15 +33,19 @@ public abstract class W_Base : MonoBehaviour
         hitbox.isTrigger = true;
 
         // Hide by default and shown only during Attack
-        if (sprite) sprite.enabled = false;
-        if (hitbox) hitbox.enabled = false;
+        sprite.enabled = false;
+        hitbox.enabled = false;
 
-        owner ??= transform.root;
-        ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
-        c_Stats ??= owner ? owner.GetComponent<C_Stats>() : null;
+        // Owner is always the root
+        owner = transform.root;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
 
-        if (data && sprite) sprite.sprite = data.sprite;
-        if (autoSizeFromSprite && sprite && sprite.sprite && hitbox)
+        // Always apply the data sprite
+        sprite.sprite = data.sprite;
+
+        // Auto size the weapon hitbox
+        if (autoSizeFromSprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
             hitbox.offset = Vector2.zero;
@@ -51,9 +55,8 @@ public abstract class W_Base : MonoBehaviour
     public virtual void Equip(Transform newOwner)
     {
         owner = newOwner;
-        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;
-        c_Stats = owner ? owner.GetComponent<C_Stats>() : null;
-        if (data && sprite) sprite.sprite = data.sprite;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
     }
 
     public void SetData(W_SO d, bool applySprite = true)
@@ -66,22 +69,14 @@ public abstract class W_Base : MonoBehaviour
     // Always returns a clean 8-way vector from atkX/atkY, or Down if unset
     protected Vector2 GetAimDir()
     {
-        if (!ownerAnimator) return Vector2.down;
-
-        float ax = ownerAnimator.GetFloat("atkX");
-        float ay = ownerAnimator.GetFloat("atkY");
-        Vector2 v = new Vector2(ax, ay);
-
-        if (v.sqrMagnitude <= (MIN_DISTANCE * MIN_DISTANCE)) return Vector2.down;
+        Vector2 v = new Vector2(ownerAnimator.GetFloat("atkX"),
+                                ownerAnimator.GetFloat("atkY"));
         return SnapToEightDirections(v);
     }
 
-
-    // Choose 8 offsets from SO
+    // Choose 1 from 8 offsets from SO
     protected Vector2 GetSpawnOffset(Vector2 snappedDir)
     {
-        if (!data) return Vector2.zero;
-
         float t = MIN_DISTANCE;
         bool hasX = Mathf.Abs(snappedDir.x) > t;
         bool hasY = Mathf.Abs(snappedDir.y) > t;
@@ -102,6 +97,7 @@ public abstract class W_Base : MonoBehaviour
     {
         if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // Pick the nearest 45 degree
         int octantIndex = Mathf.RoundToInt(degrees / 45f);
         float radians = octantIndex * 45f * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
@@ -140,52 +136,55 @@ public abstract class W_Base : MonoBehaviour
         }
         // Caller will hide sprite/hitbox.
     }
-// --- STATIC versions (usable from W_Projectile) ---
-public static bool TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other,
-                                out C_Health target, out GameObject root)
-{
-    if ((targetMask.value & (1 << other.gameObject.layer)) == 0) { target = null; root = null; return false; }
-    if (other.transform == owner || other.transform.IsChildOf(owner)) { target = null; root = null; return false; }
-    if (other.GetComponentInParent<W_Base>() != null) { target = null; root = null; return false; }
-
-    target = other.GetComponentInParent<C_Health>();
-    if (target == null || !target.IsAlive) { root = null; return false; }
-
-    root = target.gameObject;
-    return true;
-}
-
-public static void ApplyHitEffects(C_Stats attacker, W_SO data,
-                                   C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour host)
-{
-    int attackerAD = attacker.AD, attackerAP = attacker.AP;
-    int weaponAD   = data.baseAD, weaponAP   = data.baseAP;
-
-    target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
-
-    if (data.knockbackForce > 0f)
-        W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
-
-    if (data.stunTime > 0f)
+    // --- STATIC versions (usable from W_Projectile) ---
+    public static bool TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other,
+                                    out C_Health target, out GameObject root)
     {
-        var pm = hitCol.GetComponentInParent<P_Movement>();
-        if (pm) { host.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
-        else
+        // Avoid friendly fire
+        if ((targetMask.value & (1 << other.gameObject.layer)) == 0) { target = null; root = null; return false; }
+        // Ignore owner
+        if (other.transform == owner || other.transform.IsChildOf(owner)) { target = null; root = null; return false; }
+        // Ignore other weapons
+        if (other.GetComponentInParent<W_Base>() != null) { target = null; root = null; return false; }
+        // Find a health component on the target’s root
+        target = other.GetComponentInParent<C_Health>();
+        if (target == null || !target.IsAlive) { root = null; return false; }
+        // Avoid multi-hit spam on the same enemy in one attack
+        root = target.gameObject;
+        return true;
+    }
+
+
+    public static void ApplyHitEffects(C_Stats attacker, W_SO data,
+                                       C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour host)
+    {
+        int attackerAD = attacker.AD, attackerAP = attacker.AP;
+        int weaponAD = data.baseAD, weaponAP = data.baseAP;
+
+        target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+
+        if (data.knockbackForce > 0f)
+            W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
+
+        if (data.stunTime > 0f)
         {
-            var em = hitCol.GetComponentInParent<E_Movement>();
-            if (em) { host.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+            var pm = hitCol.GetComponentInParent<P_Movement>();
+            if (pm) { host.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+            else
+            {
+                var em = hitCol.GetComponentInParent<E_Movement>();
+                if (em) { host.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+            }
         }
     }
-}
-
-// --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged) ---
-protected bool TryGetTarget(Collider2D other, out C_Health target, out GameObject root)
-    => TryGetTarget(owner, targetMask, other, out target, out root);
-
-protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
-    => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
 
 
+    // --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged) ---
+    protected bool TryGetTarget(Collider2D other, out C_Health target, out GameObject root)
+        => TryGetTarget(owner, targetMask, other, out target, out root);
+
+    protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
+        => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
 
 
     public abstract void Attack();
