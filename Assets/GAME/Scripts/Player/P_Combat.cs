@@ -58,8 +58,7 @@ public class P_Combat : MonoBehaviour
         if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
         if (!p_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
 
-        animator.SetFloat("atkX", 0f);
-        animator.SetFloat("atkY", -1f);
+        C_Anim.SetAttackDirection(animator, aimDir);
     }
 
     void OnEnable()
@@ -83,7 +82,6 @@ public class P_Combat : MonoBehaviour
         // Inputs:
         // - Left Mouse  -> Melee
         // - Right Mouse -> Ranged
-        // (Keep old action for backward-compat: Attack -> Melee)
         if (input.Player.MeleeAttack.triggered)  RequestAttack(meleeWeapon);
         if (input.Player.RangedAttack.triggered) RequestAttack(rangedWeapon);
 
@@ -99,10 +97,8 @@ public class P_Combat : MonoBehaviour
         cooldownTimer = c_Stats.attackCooldown;
 
         // Face once at attack start
-        animator.SetFloat("atkX", aimDir.x);
-        animator.SetFloat("atkY", aimDir.y);
-        // Update Facing direction
-        p_Movement.lastMove = aimDir;
+        C_Anim.SetAttackDirection(animator, aimDir);
+        
         StartCoroutine(AttackRoutine(weapon));
     }
 

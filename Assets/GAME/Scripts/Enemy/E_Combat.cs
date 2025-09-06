@@ -51,7 +51,7 @@ public class E_Combat : MonoBehaviour
         if (!c_Stats) Debug.LogError($"{name}: C_Stats in E_Combat missing.");
         if (!e_Movement) Debug.LogError($"{name}: E_Movement in E_Combat missing.");
         if (!e_Health) Debug.LogError($"{name}: C_Health in E_Combat missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee in E_Combat missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in E_Combat missing.");
     }
 
     void OnEnable()
@@ -128,11 +128,9 @@ public class E_Combat : MonoBehaviour
 
         // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
         Vector2 dir = ReadAimToPlayer();
-        animator.SetFloat("atkX", dir.x);
-        animator.SetFloat("atkY", dir.y);
         
         // Set facing direction
-        e_Movement.lastMove = dir;
+        C_Anim.SetAttackDirection(animator, dir);
 
         // Delay -> Attack -> recover
         yield return new WaitForSeconds(hitDelay);

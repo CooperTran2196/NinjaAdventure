@@ -19,14 +19,19 @@ public class C_State : MonoBehaviour
 
     void Awake()
     {
-        animator   ??= GetComponent<Animator>();
-        rb         ??= GetComponent<Rigidbody2D>();
-        p_Movement ??= GetComponent<P_Movement>();
-        p_Combat   ??= GetComponent<P_Combat>();
-        c_Dodge    ??= GetComponent<C_Dodge>();
+        rb ??= GetComponent<Rigidbody2D>();
+        animator ??= GetComponent<Animator>();
 
+        p_Movement ??= GetComponent<P_Movement>();
+        p_Combat ??= GetComponent<P_Combat>();
+        c_Dodge ??= GetComponent<C_Dodge>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
         if (!animator) Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
+        
+        if (!p_Movement) Debug.LogError($"{name}: P_Movement in C_State missing.");
+        if (!p_Combat) Debug.LogError($"{name}: P_Combat in C_State missing.");
+        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in C_State missing.");
     }
 
     void Update()

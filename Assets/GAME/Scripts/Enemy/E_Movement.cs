@@ -49,6 +49,10 @@ public class E_Movement : MonoBehaviour
     void Update()
     {
         Chase();
+        if (animator.GetBool("isAttacking"))
+        {
+            lastMove = C_Anim.GetAttackDirection(animator);
+        }
         C_Anim.UpdateAnimDirections(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
     }
 

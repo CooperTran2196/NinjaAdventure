@@ -21,4 +21,23 @@ public static class C_Anim
         animator.SetFloat("idleX", lastMove.x);
         animator.SetFloat("idleY", lastMove.y);
     }
+
+    // Single place to write attack-facing
+    public static void SetAttackDirection(Animator animator, Vector2 dir)
+    {
+        animator.SetFloat("atkX", dir.x);
+        animator.SetFloat("atkY", dir.y);
+    }
+
+    // Read back the attack facing used by Movement while attacking
+    public static Vector2 GetAttackDirection(Animator animator)
+    {
+        return new Vector2(animator.GetFloat("atkX"), animator.GetFloat("atkY"));
+    }
+
+    // Read idle facing
+    public static Vector2 GetIdleDirection(Animator animator)
+    {
+        return new Vector2(animator.GetFloat("idleX"), animator.GetFloat("idleY"));
+    }
 }
