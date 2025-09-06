@@ -11,27 +11,22 @@ public class W_Ranged : W_Base
 
     IEnumerator Shoot()
     {
-        var a = AimDirection(); // you keep using this for sprite angle & offset (pointsUp honored)
-
-        // Raw direction for PHYSICS (mouse for player, player transform for enemies)
+        // Continuous aim for both visuals and physics
         Vector2 rawDir = GetRawAimDir();
 
-        // 🔒 Lock Animator facing from aim for the whole attack window
-        LockAttackFacing(rawDir);
-
-        Vector3 pos = owner.position + (Vector3)a.offset;
-        BeginVisual(pos, a.angleDeg, enableHitbox: false);
+        // Visuals (bow orbit + rotation)
+        Vector3 pos = PolarPosition(rawDir);
+        float angle = PolarAngle(rawDir);
+        BeginVisual(pos, angle, enableHitbox: false);
 
         bool fired = false;
-        yield return ThrustOverTime(a.dir, data.showTime, data.thrustDistance, (k) =>
+        yield return ThrustOverTime(rawDir, data.showTime, data.thrustDistance, (k) =>
         {
-            if (!fired && k >= 0.5f) { FireProjectile(rawDir); fired = true; } // physics stays precise
+            if (!fired && k >= 0.5f) { FireProjectile(rawDir); fired = true; }
         });
 
-        if (sprite) sprite.enabled = false;
+        sprite.enabled = false;
     }
-
-
 
     void FireProjectile(Vector2 dir)
     {

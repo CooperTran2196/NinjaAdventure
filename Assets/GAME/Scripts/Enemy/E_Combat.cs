@@ -30,7 +30,7 @@ public class E_Combat : MonoBehaviour
 
     // Quick state check
     public bool IsAlive => c_Stats.currentHP > 0;
-
+    const float MIN_DISTANCE = 0.0001f;
     bool isAttacking;
     float contactTimer;   // for collision damage
     float cooldownTimer;  // for attacking cooldown
@@ -126,10 +126,13 @@ public class E_Combat : MonoBehaviour
         isAttacking = true;
         animator.SetBool("isAttacking", true);
 
-        // Aim the directional attack
-        var dir = e_Movement.lastMove;
+        // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
+        Vector2 dir = ReadAimToPlayer();
         animator.SetFloat("atkX", dir.x);
         animator.SetFloat("atkY", dir.y);
+        
+        // Set facing direction
+        e_Movement.lastMove = dir;
 
         // Delay -> Attack -> recover
         yield return new WaitForSeconds(hitDelay);
@@ -152,6 +155,14 @@ public class E_Combat : MonoBehaviour
         animator.SetBool("isAttacking", false);
 
         cooldownTimer = c_Stats.attackCooldown;
+    }
+
+    Vector2 ReadAimToPlayer()
+    {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (!player) return Vector2.down;
+        Vector2 d = (Vector2)(player.transform.position - transform.position);
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : Vector2.down;
     }
 
     void Die()

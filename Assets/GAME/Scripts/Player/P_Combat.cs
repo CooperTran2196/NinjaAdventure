@@ -76,8 +76,10 @@ public class P_Combat : MonoBehaviour
 
     void Update()
     {
-        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
-        if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
+        // Read aim from MOUSE (continuous). Keep style: cache into aimDir here.
+        Vector2 mouseAim = ReadMouseAim();
+        if (mouseAim.sqrMagnitude > MIN_DISTANCE) aimDir = mouseAim;
+
         // Inputs:
         // - Left Mouse  -> Melee
         // - Right Mouse -> Ranged
@@ -99,6 +101,8 @@ public class P_Combat : MonoBehaviour
         // Face once at attack start
         animator.SetFloat("atkX", aimDir.x);
         animator.SetFloat("atkY", aimDir.y);
+        // Update Facing direction
+        p_Movement.lastMove = aimDir;
         StartCoroutine(AttackRoutine(weapon));
     }
 
@@ -114,6 +118,16 @@ public class P_Combat : MonoBehaviour
 
         // STATE: Attack END
         IsAttacking = false;
+    }
+
+    Vector2 ReadMouseAim()
+    {
+        if (!Camera.main || Mouse.current == null) return aimDir;
+        Vector2 m = Mouse.current.position.ReadValue();
+        float z = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
+        Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
+        Vector2 d = (Vector2)(mw - transform.position);
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : aimDir;
     }
 
     void Die()

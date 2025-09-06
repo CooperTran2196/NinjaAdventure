@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem; // new Input System
 
-
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class W_Base : MonoBehaviour
@@ -54,37 +53,39 @@ public abstract class W_Base : MonoBehaviour
             hitbox.offset = Vector2.zero;
         }
     }
-
-    // One-stop aim: returns snapped dir, sprite angle, and spawn offset.
-    protected (Vector2 dir, float angleDeg, Vector2 offset) AimDirection()
+    // Continuous aim: mouse for Player, target Player for Enemy
+    protected Vector2 GetRawAimDir()
     {
-        // 1/ Read input vector from owner animator and 
-        // Convert to angle and snap to nearest 45° octant
-        float deg = Mathf.Atan2(ownerAnimator.GetFloat("atkY"),
-                                ownerAnimator.GetFloat("atkX")) * Mathf.Rad2Deg;
-        int oct = Mathf.RoundToInt(deg / 45f); // 45° steps          
-        int idx = ((oct % 8) + 8) % 8;  // normalize to 0 -> 7                   
+        Vector2 dir = Vector2.right;
 
-        // 2/ Build the snapped unit direction from the octant
-        float rad = idx * 45f * Mathf.Deg2Rad;
-        Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+        if (owner != null && owner.CompareTag("Player"))
+        {
+            if (Camera.main && Mouse.current != null)
+            {
+                Vector2 m = Mouse.current.position.ReadValue();
+                float z = Mathf.Abs(Camera.main.transform.position.z - owner.position.z);
+                Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
+                dir = ((Vector2)(mw - owner.position));
+            }
+        }
+        else
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player) dir = ((Vector2)(player.transform.position - owner.position));
+        }
 
-        // 3/ Check if the weapon point up or down
+        if (dir.sqrMagnitude < MIN_DISTANCE) dir = Vector2.right;
+        else dir.Normalize();
+        return dir;
+    }
+
+    protected Vector3 PolarPosition(Vector2 rawAim) =>
+        owner.position + (Vector3)(rawAim * data.offsetRadius);
+
+    protected float PolarAngle(Vector2 rawAim)
+    {
         Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
-        float angle = Vector2.SignedAngle(baseline, dir);
-
-        // 4/ Pick offset directly from SO via octant index
-        Vector2 off =
-            idx == 0 ? data.offsetRight :
-            idx == 1 ? data.offsetUpRight :
-            idx == 2 ? data.offsetUp :
-            idx == 3 ? data.offsetUpLeft :
-            idx == 4 ? data.offsetLeft :
-            idx == 5 ? data.offsetDownLeft :
-            idx == 6 ? data.offsetDown :
-                       data.offsetDownRight; // idx == 7
-
-        return (dir, angle, off);
+        return Vector2.SignedAngle(baseline, rawAim) + data.angleBiasDeg;
     }
 
     // Position/rotate + show sprite, optionally enable hitbox
@@ -92,8 +93,8 @@ public abstract class W_Base : MonoBehaviour
     {
         transform.position = pos;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        if (sprite) sprite.enabled = true;
-        if (hitbox) hitbox.enabled = enableHitbox;
+        sprite.enabled = true;
+        hitbox.enabled = enableHitbox;
     }
 
     // Move forward/back along dir over showTime, call onProgress(k) if ranged
@@ -118,7 +119,7 @@ public abstract class W_Base : MonoBehaviour
     protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
         => TryGetTarget(owner, targetMask, other);
 
-    // STATIC versions for W_Projectile)
+    // STATIC versions for W_Projectile
     public static (C_Health target, GameObject root)
                 TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other)
     {
@@ -211,61 +212,6 @@ public abstract class W_Base : MonoBehaviour
             Gizmos.color = prevColor;
         }
     }
-    
-    // 8-way snap just for ANIMATION facing (not for physics)
-protected static Vector2 Snap8(Vector2 v)
-{
-    if (v.sqrMagnitude < 1e-6f) return Vector2.right; // fallback
-    float deg = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-    int oct = Mathf.RoundToInt(deg / 45f);
-    int idx = ((oct % 8) + 8) % 8;
-    float snapDeg = idx * 45f;
-    float rad = snapDeg * Mathf.Deg2Rad;
-    return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-}
-
-    // Raw, continuous aim direction:
-    // - Player: owner -> mouse world
-    // - Enemy:  owner -> Player (by tag)
-    // Falls back to Right if degenerate.
-    protected Vector2 GetRawAimDir()
-    {
-        Vector2 dir = Vector2.right;
-
-        if (owner != null && owner.CompareTag("Player"))
-        {
-            if (Camera.main && Mouse.current != null)
-            {
-                Vector2 m = Mouse.current.position.ReadValue();
-                float z = Mathf.Abs(Camera.main.transform.position.z - owner.position.z);
-                Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
-                dir = ((Vector2)(mw - transform.position));
-            }
-        }
-        else
-        {
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player) dir = ((Vector2)(player.transform.position - transform.position));
-        }
-
-        if (dir.sqrMagnitude < 1e-6f) dir = Vector2.right;
-        else dir.Normalize();
-        return dir;
-    }
-
-
-    // Lock the Animator's attack facing (atkX/atkY) for this attack,
-    // using SNAPPED direction derived from the raw aim.
-    // (Movement can keep updating moveX/moveY — that’s okay.)
-    protected void LockAttackFacing(Vector2 rawDir)
-    {
-        if (!ownerAnimator) return;
-        Vector2 animDir = Snap8(rawDir);
-        ownerAnimator.SetFloat("atkX", animDir.x);
-        ownerAnimator.SetFloat("atkY", animDir.y);
-    }
-
-
 }
 
 

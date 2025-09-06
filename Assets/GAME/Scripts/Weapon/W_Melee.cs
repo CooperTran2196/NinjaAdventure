@@ -15,30 +15,27 @@ public class W_Melee : W_Base
     {
         hitThisSwing.Clear();
 
-        // Raw direction to target (mouse for player, player transform for enemies)
+        // Continuous aim (mouse for Player / player transform for Enemy)
         Vector2 rawDir = GetRawAimDir();
 
-        // 🔒 Lock Animator facing from aim for this swing window
-        LockAttackFacing(rawDir);
+        // Visuals
+        Vector3 pos = PolarPosition(rawDir);
+        float angle = PolarAngle(rawDir);
+        BeginVisual(pos, angle, enableHitbox: true);
 
-        var a = AimDirection(); // keep using your existing visuals (pointsUp honored)
+        // Thrust
+        yield return ThrustOverTime(rawDir, data.showTime, data.thrustDistance);
 
-        Vector3 pos = owner.position + (Vector3)a.offset;
-        BeginVisual(pos, a.angleDeg, enableHitbox: true);
-
-        yield return ThrustOverTime(a.dir, data.showTime, data.thrustDistance);
-
-        if (hitbox) hitbox.enabled = false;
-        if (sprite) sprite.enabled = false;
+        hitbox.enabled = false;
+        sprite.enabled = false;
     }
-
-
 
     void OnTriggerStay2D(Collider2D other)
     {
         var (targetHealth, root) = TryGetTarget(other);
         if (targetHealth == null) return;
         if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
-        ApplyHitEffects(c_Stats, data, targetHealth, AimDirection().dir, other);
+        var rawDir = GetRawAimDir();
+        ApplyHitEffects(c_Stats, data, targetHealth, rawDir, other);
     }
 }
