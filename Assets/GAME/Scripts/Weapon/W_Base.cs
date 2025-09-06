@@ -127,22 +127,29 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    // --- STATIC versions (usable from W_Projectile) ---
-    public static bool TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other,
-                                    out C_Health target, out GameObject root)
+    // STATIC versions for W_Projectile)
+    public static (C_Health target, GameObject root)
+                TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other)
     {
-        // Avoid friendly fire
-        if ((targetMask.value & (1 << other.gameObject.layer)) == 0) { target = null; root = null; return false; }
+        // Layer filter
+        if ((targetMask.value & (1 << other.gameObject.layer)) == 0)
+            return (null, null);
+
         // Ignore owner
-        if (other.transform == owner || other.transform.IsChildOf(owner)) { target = null; root = null; return false; }
-        // Ignore other weapons
-        if (other.GetComponentInParent<W_Base>() != null) { target = null; root = null; return false; }
-        // Find a health component on the target’s root
-        target = other.GetComponentInParent<C_Health>();
-        if (target == null || !target.IsAlive) { root = null; return false; }
-        // Avoid multi-hit spam on the same enemy in one attack
-        root = target.gameObject;
-        return true;
+        if (other.transform == owner || other.transform.IsChildOf(owner))
+            return (null, null);
+
+        // Ignore weapon–weapon contacts
+        if (other.GetComponentInParent<W_Base>() != null)
+            return (null, null);
+
+        // Find target health on root
+        var target = other.GetComponentInParent<C_Health>();
+        if (target == null || !target.IsAlive)
+            return (null, null);
+
+        // Success -> return C_Health and GameObject
+        return (target, target.gameObject);
     }
 
     public static void ApplyHitEffects(C_Stats attacker, W_SO data,
@@ -170,8 +177,8 @@ public abstract class W_Base : MonoBehaviour
 
 
     // --- INSTANCE convenience wrappers (usable from W_Melee / W_Ranged)
-    protected bool TryGetTarget(Collider2D other, out C_Health target, out GameObject root)
-        => TryGetTarget(owner, targetMask, other, out target, out root);
+    protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
+        => TryGetTarget(owner, targetMask, other);
 
     protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
         => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
