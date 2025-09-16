@@ -157,10 +157,7 @@ public class P_Exp : MonoBehaviour
     public int skillPointsPerLevel = 2;
 
     [Header("Debug")]
-    public bool debugStartAtLevel = false;
-    public int  debugStartLevel   = 1;
-    public bool debugGrantXPOnStart = false;
-    public int  debugXPOnStart      = 0;
+    public int debugXPAmount = 20;
 
     public event Action<int> OnLevelUp;
     public event Action<int,int> OnXPChanged;
@@ -168,21 +165,12 @@ public class P_Exp : MonoBehaviour
 
     void Start()
     {
-        if (debugStartAtLevel && debugStartLevel > level)
-        {
-            int target = debugStartLevel;
-            for (int i = level; i < target; i++)
-            {
-                level++;
-                skillPoints += skillPointsPerLevel;
-                OnLevelUp?.Invoke(level);
-            }
-            OnSkillPointsChanged?.Invoke(skillPoints);
-            OnXPChanged?.Invoke(currentXP, GetXPRequiredForNext());
-        }
+        OnXPChanged?.Invoke(currentXP, GetXPRequiredForNext());
+    }
 
-        if (debugGrantXPOnStart && debugXPOnStart > 0)
-            AddXP(debugXPOnStart);
+    public void AddDebugXP()
+    {
+        AddXP(debugXPAmount);
     }
 
     public void AddXP(int amount)
@@ -354,10 +342,9 @@ public class P_Movement : MonoBehaviour
 using UnityEngine;
 using System;
 
-[DisallowMultipleComponent]
 public class P_StatsChanged : MonoBehaviour
 {
-    [Header("Refs")]
+    [Header("References")]
     public C_Stats  c_Stats;
     public C_Health c_Health;
 
@@ -418,8 +405,6 @@ public class P_StatsChanged : MonoBehaviour
 
     void Recalculate()
     {
-        if (!c_Stats) return;
-
         // Recalculate all stats based on base values + upgrades
         c_Stats.AD = baseAD + upAD;
         c_Stats.AP = baseAP + upAP;

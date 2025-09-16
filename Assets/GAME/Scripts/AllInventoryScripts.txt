@@ -32,93 +32,67 @@ public class INV_ItemSO : ScriptableObject
 using System;
 using UnityEngine;
 
-[ExecuteAlways] // lets OnEnable/Update run in edit mode too
+[ExecuteAlways] // lets OnEnable run in Edit Mode so the icon updates in Inspector
 public class INV_Loot : MonoBehaviour
 {
     public static event Action<INV_ItemSO, int> OnItemLooted;
 
+    [Header("References")]
+    public INV_ItemSO itemSO;
+
+    SpriteRenderer sr;
+    Animator anim;
+
     [Header("Data")]
-    public INV_ItemSO item;
     public int quantity = 1;
-
-    [Header("Refs")]
-    public SpriteRenderer sr;
-    public Animator animator;
-
-    [Header("Pickup Gate")]
-    public bool canBePickedUp = true;
+    public bool canBePickedUp = true; // false when we drop it from inventory
 
     CircleCollider2D trigger;
 
-    // --- NEW: queued refresh so we don't touch sprite in OnValidate ---
-    bool _needsVisualRefresh;
-
     void Awake()
     {
-        sr       ??= GetComponentInChildren<SpriteRenderer>();
-        animator ??= GetComponent<Animator>();
-        trigger  ??= GetComponent<CircleCollider2D>();
+        sr      ??= GetComponentInChildren<SpriteRenderer>();
+        anim    ??= GetComponent<Animator>();
+        trigger ??= GetComponent<CircleCollider2D>();
 
-        if (!sr) Debug.LogError($"{name}: SpriteRenderer missing.", this);
-        if (!animator) Debug.LogError($"{name}: Animator missing.", this);
+        if (!sr)      Debug.LogError($"{name}: SpriteRenderer missing.", this);
+        if (!anim)    Debug.LogError($"{name}: Animator missing.", this);
         if (!trigger) Debug.LogError($"{name}: CircleCollider2D missing.", this);
     }
 
-    // Only flag here; don't set sr.sprite inside OnValidate
-    void OnValidate()
-    {
-        sr ??= GetComponentInChildren<SpriteRenderer>();
-        _needsVisualRefresh = true;
-    }
+    void OnEnable() => RefreshAppearance();
 
-    void OnEnable()
-    {
-        // Also refresh on enable (covers play + edit)
-        _needsVisualRefresh = true;
-    }
-
-    void Update()
-    {
-        if (_needsVisualRefresh)
-        {
-            SafeRefreshAppearance();
-            _needsVisualRefresh = false;
-        }
-    }
-
-    // Used by Initialize() and by our deferred refresh
-    void SafeRefreshAppearance()
-    {
-        if (!sr) sr = GetComponentInChildren<SpriteRenderer>();
-        if (item != null)
-        {
-            sr.sprite = item.icon;         // safe here (not inside OnValidate/Awake)
-            gameObject.name = item.itemName;
-        }
-    }
-
+    // Called by INV_Manager when spawning overflow/right-click drops
     public void Initialize(INV_ItemSO so, int qty)
     {
-        item = so;
+        itemSO = so;
         quantity = qty;
-        canBePickedUp = false;
-        _needsVisualRefresh = true; // defer sprite/name
+        canBePickedUp = false; // avoid instant repick
+        RefreshAppearance();
+    }
+
+    void RefreshAppearance()
+    {
+        if (!sr || !itemSO) return;
+
+        sr.sprite = itemSO.icon;
+        gameObject.name = itemSO.itemName;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player") && !canBePickedUp) return;
+        if (!other.CompareTag("Player") || !canBePickedUp) return;
 
         trigger.enabled = false;
-        OnItemLooted?.Invoke(item, quantity);
-        animator?.SetTrigger("Pickup");
-        Destroy(gameObject, 0.5f);
+        OnItemLooted?.Invoke(itemSO, quantity);
+        anim?.SetTrigger("Pickup");
+        Destroy(gameObject, 0.5f); // Match animation length
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        
+
         canBePickedUp = true;
     }
 }
@@ -206,21 +180,16 @@ public class INV_Manager : MonoBehaviour
 
     public void UseItem(INV_Slots slot)
     {
-        if (slot == null || slot.item == null || slot.quantity <= 0) return;
-
-        bool used = useItem.ApplyItemEffects(slot.item);
-        if (!used) return; // Tried to heal at full HP
+        if (!useItem.ApplyItemEffects(slot.item)) return; // Heal at full HP
 
         slot.quantity -= 1;
         if (slot.quantity <= 0) slot.item = null;
         slot.UpdateUI();
     }
 
-    // RIGHT-CLICK drop exactly one
+
     public void DropItemFromSlot(INV_Slots slot)
     {
-        if (slot == null || slot.item == null || slot.quantity <= 0) return;
-
         DropLoot(slot.item, 1);
         slot.quantity -= 1;
         if (slot.quantity <= 0) slot.item = null;
@@ -250,52 +219,69 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     public int quantity;
 
     [Header("UI")]
-    public Image icon;
-    public TMP_Text qtyText;
+    public Image itemImage;
+    public TMP_Text amountText;
 
     INV_Manager inv;
+    static SHOP_Manager activeShop;
 
     void Awake()
     {
-        icon    ??= transform.Find("Icon")?.GetComponent<Image>();
-        qtyText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
-        inv     ??= GetComponentInParent<INV_Manager>();
 
-        if (!icon) Debug.LogError($"{name}: Icon missing.", this);
-        if (!qtyText) Debug.LogError($"{name}: QuantityText missing.", this);
-        if (!inv) Debug.LogError($"{name}: InventoryManager missing in parent.", this);
+        itemImage  ??= transform.Find("Icon")?.GetComponent<Image>();
+        amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
+        inv        ??= GetComponentInParent<INV_Manager>();
+
+        if (!itemImage)  Debug.LogError($"{name}: Item Image missing.", this);
+        if (!amountText) Debug.LogError($"{name}: Amount Text missing.", this);
+        if (!inv)        Debug.LogError($"{name}: INV_Manager missing in parent.", this);
+    }
+
+    void OnEnable()  => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
+    void OnDisable() => SHOP_Manager.OnShopStateChanged -= HandleShopStateChanged;
+
+    void HandleShopStateChanged(SHOP_Manager shop, bool isOpen)
+    {
+        activeShop = isOpen ? shop : null;
     }
 
     public void UpdateUI()
     {
         if (item != null)
         {
-            if (icon)
-            {
-                icon.enabled = true;
-                icon.sprite = item.icon;
-            }
-            if (qtyText) qtyText.text = quantity.ToString();
+            itemImage.enabled = true;
+            itemImage.sprite = item.icon;
+            amountText.text = quantity.ToString();
         }
         else
         {
-            if (icon) icon.enabled = false;
-            if (qtyText) qtyText.text = "";
+            itemImage.enabled = false;
+            amountText.text = "";
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData e)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (item == null || quantity <= 0) return;
+
+        // Shop open: LEFT = sell 1; disable use/drop while open
+        if (activeShop != null)
         {
-            if (item == null || quantity <= 0) return;
+            if (e.button == PointerEventData.InputButton.Left)
+            {
+                activeShop.SellItem(item);
+                quantity -= 1;
+                if (quantity <= 0) item = null;
+                UpdateUI();
+            }
+            return;
+        }
+
+        // Shop closed: normal behavior
+        if (e.button == PointerEventData.InputButton.Left)
             inv.UseItem(this);
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            if (item == null || quantity <= 0) return;
-            inv.DropItemFromSlot(this); // NEW
-        }
+        else if (e.button == PointerEventData.InputButton.Right)
+            inv.DropItemFromSlot(this);
     }
 }
 
@@ -306,80 +292,215 @@ using UnityEngine;
 public class INV_UseItem : MonoBehaviour
 {
     [Header("Targets")]
-    public C_Health       playerHealth;   // drag Player’s C_Health
-    public P_StatsChanged playerStats;    // drag Player’s P_StatsChanged
+    public C_Health c_Health;
+    public P_StatsChanged p_Stats;
 
     void Awake()
     {
-        playerHealth ??= FindFirstObjectByType<C_Health>();
-        playerStats  ??= FindFirstObjectByType<P_StatsChanged>();
+        c_Health ??= FindFirstObjectByType<C_Health>();
+        p_Stats  ??= FindFirstObjectByType<P_StatsChanged>();
 
-        if (!playerHealth) Debug.LogError($"{name}: playerHealth missing.", this);
-        if (!playerStats)  Debug.LogError($"{name}: playerStats missing.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health in INV_UseItemmissing.", this);
+        if (!p_Stats)  Debug.LogError($"{name}: P_StatsChanged in INV_UseItemmissing missing.", this);
     }
 
-    // Returns true if an effect actually applied (so the item should be consumed)
-    public bool ApplyItemEffects(INV_ItemSO item)
+    // Returns true if any effect actually applied
+    public bool ApplyItemEffects(INV_ItemSO itemSO)
     {
-        if (!item || !playerStats) return false;
-        var stats = playerStats.c_Stats; // HP lives here
         bool applied = false;
+        var s = p_Stats.c_Stats; // holds currentHP / maxHP
 
-        // 1) Heal (skip consumption if already full)
-        if (item.currentHealth > 0 && playerHealth && stats != null)
+        // Heal only if not already full (avoid consuming pointlessly)
+        if (itemSO.currentHealth > 0 && s.currentHP < s.maxHP)
         {
-            if (stats.currentHP < stats.maxHP) // avoid overheal consumption
-            {
-                int before = stats.currentHP;
-                playerHealth.ChangeHealth(item.currentHealth); // heals since positive
-                int after  = stats.currentHP;
-                applied |= (after > before);
-            }
-        }
-
-        // 2) Max HP (perm or temp)
-        if (item.maxHealth != 0)
-        {
-            if (item.durationSec > 0f)
-                StartCoroutine(TempStat(ST_SkillSO.Stat.MaxHP, item.maxHealth, item.durationSec, clampHPOnExpire: true));
-            else
-                playerStats.ApplyStat(ST_SkillSO.Stat.MaxHP, item.maxHealth);
+            c_Health.ChangeHealth(itemSO.currentHealth); // positive = heal
             applied = true;
         }
 
-        // 3) Move Speed (perm or temp)
-        if (item.speed != 0)
-        {
-            if (item.durationSec > 0f)
-                StartCoroutine(TempStat(ST_SkillSO.Stat.MS, item.speed, item.durationSec));
-            else
-                playerStats.ApplyStat(ST_SkillSO.Stat.MS, item.speed);
-            applied = true;
-        }
+        // Apply stat bumps immediately
+        if (itemSO.maxHealth != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.MaxHP, itemSO.maxHealth); applied = true; }
+        if (itemSO.speed     != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.MS,     itemSO.speed);     applied = true; }
+        if (itemSO.damage    != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.AD,     itemSO.damage);    applied = true; }
 
-        // 4) Damage (map your “damage” to AD here)
-        if (item.damage != 0)
-        {
-            if (item.durationSec > 0f)
-                StartCoroutine(TempStat(ST_SkillSO.Stat.AD, item.damage, item.durationSec));
-            else
-                playerStats.ApplyStat(ST_SkillSO.Stat.AD, item.damage);
-            applied = true;
-        }
+        // Single timer for all temporary effects
+        if (applied && itemSO.durationSec > 0f)
+            StartCoroutine(EffectTimer(itemSO));
 
         return applied;
     }
 
-    IEnumerator TempStat(ST_SkillSO.Stat stat, int delta, float duration, bool clampHPOnExpire = false)
+    IEnumerator EffectTimer(INV_ItemSO itemSO)
     {
-        var stats = playerStats.c_Stats;
-        playerStats.ApplyStat(stat, delta);
-        yield return new WaitForSeconds(duration);
-        playerStats.ApplyStat(stat, -delta);
+        var s = p_Stats.c_Stats;
+        yield return new WaitForSeconds(itemSO.durationSec);
 
-        // If we reduced MaxHP, make sure currentHP isn’t above new cap (don’t fire damage events)
-        if (clampHPOnExpire && stats != null && stat == ST_SkillSO.Stat.MaxHP)
-            stats.currentHP = Mathf.Min(stats.currentHP, stats.maxHP);
+        if (itemSO.maxHealth != 0)
+        {
+            p_Stats.ApplyStat(ST_SkillSO.Stat.MaxHP, -itemSO.maxHealth);
+            s.currentHP = Mathf.Min(s.currentHP, s.maxHP); // clamp after MaxHP shrink
+        }
+        if (itemSO.speed  != 0) p_Stats.ApplyStat(ST_SkillSO.Stat.MS, -itemSO.speed);
+        if (itemSO.damage != 0) p_Stats.ApplyStat(ST_SkillSO.Stat.AD, -itemSO.damage);
+    }
+}
+
+// ----- File: SHOP_Manager.cs -----
+// Assets/GAME/Scripts/INV/SHOP_Manager.cs
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SHOP_Manager : MonoBehaviour
+{
+    public static event Action<SHOP_Manager, bool> OnShopStateChanged;
+
+    [Header("Shopping List")]
+    [SerializeField] List<ShopItem> shopItems = new();   // per-shopkeeper list
+
+    [Header("Slots")]
+    [SerializeField] SHOP_Slot[] shopSlots;              // set in Inspector
+
+    [Header("Inventory Link (for buy/sell step)")]
+    public INV_Manager inv;                              // drag your Inventory Canvas
+
+    void Awake()
+    {
+        // Auto-wire inventory if not assigned (optional)
+        inv ??= FindFirstObjectByType<INV_Manager>();
+
+        if (!inv)
+            Debug.LogError($"{name}: INV_Manager reference missing on SHOP_Manager.", this);
+        if (shopSlots == null || shopSlots.Length == 0)
+            Debug.LogWarning($"{name}: No shopSlots assigned.", this);
+    }
+
+    void Start()
+    {
+        PopulateShopItems();
+        OnShopStateChanged?.Invoke(this, true); // open by default for now
+    }
+
+    void OnDisable() => OnShopStateChanged?.Invoke(this, false);
+
+    public void PopulateShopItems()
+    {
+        // fill used slots
+        int count = Mathf.Min(shopItems.Count, shopSlots.Length);
+        for (int i = 0; i < count; i++)
+        {
+            var data = shopItems[i];
+            var slot = shopSlots[i];
+            slot.gameObject.SetActive(true);
+            slot.Initialize(data.itemSO, data.price);
+        }
+
+        // turn off the rest
+        for (int i = count; i < shopSlots.Length; i++)
+            shopSlots[i].gameObject.SetActive(false);
+    }
+
+    // ---- next-video hooks (already here so you don’t refactor later) ----
+    public void TryBuyItem(INV_ItemSO itemSO, int price)
+    {
+        if (itemSO == null) return;
+        if (!inv) return;
+        if (inv.gold < price) return;
+        if (!HasSpace(itemSO)) return;
+
+        inv.gold -= price;
+        inv.goldText.text = inv.gold.ToString();
+        inv.AddItem(itemSO, 1);
+    }
+
+    public void SellItem(INV_ItemSO itemSO)
+    {
+        if (itemSO == null) return;
+        if (!inv) return;
+        int price = GetPrice(itemSO);
+        if (price <= 0) return;
+
+        inv.gold += price;
+        inv.goldText.text = inv.gold.ToString();
+        // INV_Slots handles decreasing quantity & UpdateUI on click
+    }
+
+    bool HasSpace(INV_ItemSO itemSO)
+    {
+        // same item with room
+        foreach (var slot in inv.inv_Slots)
+            if (slot.item == itemSO && slot.quantity < itemSO.stackSize) return true;
+
+        // empty slot
+        foreach (var slot in inv.inv_Slots)
+            if (slot.item == null) return true;
+
+        return false;
+    }
+
+    int GetPrice(INV_ItemSO itemSO)
+    {
+        for (int i = 0; i < shopItems.Count; i++)
+            if (shopItems[i].itemSO == itemSO) return shopItems[i].price;
+        return 0;
+    }
+
+    [Serializable]
+    public class ShopItem
+    {
+        public INV_ItemSO itemSO;
+        public int price = 1;
+    }
+}
+
+// ----- File: SHOP_Slot.cs -----
+// Assets/GAME/Scripts/INV/SHOP_Slot.cs
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class SHOP_Slot : MonoBehaviour
+{
+    [Header("Runtime Data")]
+    public INV_ItemSO itemSO { get; private set; }
+    public int price { get; private set; }
+
+    [Header("UI")]
+    public Image icon;         // child "Icon"
+    public TMP_Text nameText;  // child "NameText"
+    public TMP_Text priceText; // child "PriceText"
+
+    [Header("Refs")]
+    public SHOP_Manager shop;  // parent manager
+
+    void Awake()
+    {
+        shop      ??= GetComponentInParent<SHOP_Manager>();
+        icon      ??= transform.Find("Icon")?.GetComponent<Image>();
+        nameText  ??= transform.Find("NameText")?.GetComponent<TMP_Text>();
+        priceText ??= transform.Find("PriceText")?.GetComponent<TMP_Text>();
+
+        if (!shop)      Debug.LogError($"{name}: SHOP_Manager missing in parent.", this);
+        if (!icon)      Debug.LogError($"{name}: Icon Image missing.", this);
+        if (!nameText)  Debug.LogError($"{name}: NameText TMP missing.", this);
+        if (!priceText) Debug.LogError($"{name}: PriceText TMP missing.", this);
+    }
+
+    // called by SHOP_Manager at startup
+    public void Initialize(INV_ItemSO newItemSO, int newPrice)
+    {
+        itemSO = newItemSO;
+        price  = newPrice;
+
+        icon.enabled = true;
+        icon.sprite  = itemSO.icon;
+        nameText.text  = itemSO.itemName;
+        priceText.text = price.ToString();
+    }
+
+    // keep this so the next video (buy) just works
+    public void OnBuyButtonClicked()
+    {
+        shop.TryBuyItem(itemSO, price);
     }
 }
 

@@ -105,10 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b17f3a1e6c24b4f88e6f927b684c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::INV_Loot
-  item: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+  itemSO: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
   quantity: 1
-  sr: {fileID: 2755574459470191987}
-  animator: {fileID: 1359678954221791126}
   canBePickedUp: 1
 --- !u!1 &5582016673195023097
 GameObject:

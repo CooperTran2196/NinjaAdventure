@@ -31,6 +31,10 @@ public abstract class W_Base : MonoBehaviour
     {
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
+
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
+        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+
         hitbox.isTrigger = true;
 
         // Hide by default and shown only during Attack
@@ -41,6 +45,11 @@ public abstract class W_Base : MonoBehaviour
         owner = transform.root;
         ownerAnimator = owner.GetComponent<Animator>();
         c_Stats = owner.GetComponent<C_Stats>();
+
+        if (!owner) Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
+        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner.name}", this);
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing on owner {owner.name}", this);
+        if (!data) Debug.LogError($"{name}: W_SO data is not assigned on {gameObject.name}", this);
 
         // Always apply the data sprite
         sprite.sprite = data.sprite;
@@ -129,11 +138,12 @@ public abstract class W_Base : MonoBehaviour
         int weaponAD = data.AD, weaponAP = data.AP;
         int dealt = target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
-        target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
         var pStatsChanged = attacker.GetComponent<P_StatsChanged>();
-            if (pStatsChanged != null && dealt > 0)
-                pStatsChanged.OnDealtDamage(dealt);
-                
+        if (pStatsChanged != null && dealt > 0)
+        {
+            pStatsChanged.OnDealtDamage(dealt);
+        }
+
         if (data.knockbackForce > 0f)
             W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
 

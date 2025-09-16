@@ -13,10 +13,7 @@ public class P_Exp : MonoBehaviour
     public int skillPointsPerLevel = 2;
 
     [Header("Debug")]
-    public bool debugStartAtLevel = false;
-    public int  debugStartLevel   = 1;
-    public bool debugGrantXPOnStart = false;
-    public int  debugXPOnStart      = 0;
+    public int debugXPAmount = 20;
 
     public event Action<int> OnLevelUp;
     public event Action<int,int> OnXPChanged;
@@ -24,21 +21,12 @@ public class P_Exp : MonoBehaviour
 
     void Start()
     {
-        if (debugStartAtLevel && debugStartLevel > level)
-        {
-            int target = debugStartLevel;
-            for (int i = level; i < target; i++)
-            {
-                level++;
-                skillPoints += skillPointsPerLevel;
-                OnLevelUp?.Invoke(level);
-            }
-            OnSkillPointsChanged?.Invoke(skillPoints);
-            OnXPChanged?.Invoke(currentXP, GetXPRequiredForNext());
-        }
+        OnXPChanged?.Invoke(currentXP, GetXPRequiredForNext());
+    }
 
-        if (debugGrantXPOnStart && debugXPOnStart > 0)
-            AddXP(debugXPOnStart);
+    public void AddDebugXP()
+    {
+        AddXP(debugXPAmount);
     }
 
     public void AddXP(int amount)

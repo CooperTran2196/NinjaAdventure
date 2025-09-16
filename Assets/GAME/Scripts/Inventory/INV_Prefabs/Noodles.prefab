@@ -195,8 +195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b17f3a1e6c24b4f88e6f927b684c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::INV_Loot
-  item: {fileID: 11400000, guid: 79266f5bfc918ca4481ad77a13899096, type: 2}
-  quantity: 5
-  sr: {fileID: 2893255175069595932}
-  animator: {fileID: 4100451787851998045}
+  itemSO: {fileID: 11400000, guid: 79266f5bfc918ca4481ad77a13899096, type: 2}
+  quantity: 1
   canBePickedUp: 1

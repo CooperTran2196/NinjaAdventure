@@ -4,60 +4,62 @@ using TMPro;
 
 public class ExpUI : MonoBehaviour
 {
-    [Header("XP")]
-    public int level;
-    public int currentExp;
-    public int expToLevel = 10;
-    public float expGrowMultiplier = 1.2f;
+    [Header("References")]
+    public P_Exp p_Exp;
 
     [Header("UI")]
     public Slider expSlider;
     public TMP_Text currentLevelText;
 
-    private P_InputActions input;
+    P_InputActions input;
+
+    void Awake()
+    {
+        input = new P_InputActions();
+        p_Exp ??= FindFirstObjectByType<P_Exp>();
+
+        if (!p_Exp) Debug.LogError($"{name}: P_Exp in ExpUI missing.", this);
+        if (!expSlider) Debug.LogError($"{name}: expSlider in ExpUI missing.", this);
+        if (!currentLevelText) Debug.LogError($"{name}: currentLevelText in ExpUI missing.", this);
+    }
 
     void OnEnable()
     {
-        input ??= new P_InputActions();
         input.Debug.Enable();
+        if (p_Exp != null)
+        {
+            p_Exp.OnLevelUp += HandleLevelUp;
+            p_Exp.OnXPChanged += HandleXPChanged;
+        }
+        UpdateUI();
     }
 
     void OnDisable()
     {
         input.Debug.Disable();
-    }
-
-    void Start()
-    {
-        UpdateUI();
+        if (p_Exp != null)
+        {
+            p_Exp.OnLevelUp -= HandleLevelUp;
+            p_Exp.OnXPChanged -= HandleXPChanged;
+        }
     }
 
     void Update()
     {
         if (input.Debug.GainExp.WasPressedThisFrame())
-        {
-            GainExperience(2);
-        }
+            p_Exp?.AddDebugXP();
     }
 
-    public void GainExperience(int amount)
-    {
-        currentExp += amount;
-        if (currentExp >= expToLevel) LevelUp();
-        UpdateUI();
-    }
+    void HandleLevelUp(int newLevel) => UpdateUI();
+    void HandleXPChanged(int cur, int req) => UpdateUI();
 
-    private void LevelUp()
+    void UpdateUI()
     {
-        level++;
-        currentExp -= expToLevel;
-        expToLevel = Mathf.RoundToInt(expToLevel * expGrowMultiplier);
-    }
-
-    public void UpdateUI()
-    {
-        expSlider.maxValue = expToLevel;
-        expSlider.value = currentExp;
-        currentLevelText.text = "Level: " + level;
+        if (p_Exp == null) return;
+        int cur = p_Exp.currentXP;
+        int req = p_Exp.GetXPRequiredForNext();
+        expSlider.maxValue = req;
+        expSlider.value = cur;
+        currentLevelText.text = "Level: " + p_Exp.level;
     }
 }
