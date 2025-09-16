@@ -19774,7 +19774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -103}
+  m_AnchoredPosition: {x: 500, y: -110}
   m_SizeDelta: {x: 1000, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1416406542
@@ -23749,10 +23749,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Category
       objectReference: {fileID: 0}
-    - target: {fileID: 5289265894010467996, guid: e653250bf65a6ca4e9e5986b0f2591b7, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 8483b21890d7add46a6663f1278db7b6, type: 3}
     - target: {fileID: 6385169149980716777, guid: e653250bf65a6ca4e9e5986b0f2591b7, type: 3}
       propertyPath: m_Name
       value: ShopCategoryButton
