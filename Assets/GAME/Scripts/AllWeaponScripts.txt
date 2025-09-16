@@ -1,6 +1,6 @@
- 
-// ----- File: W_Base.cs ----- 
+// ----- File: W_Base.cs -----
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -10,10 +10,9 @@ public abstract class W_Base : MonoBehaviour
     protected SpriteRenderer sprite;
     protected BoxCollider2D hitbox;
     protected Animator ownerAnimator;
-    protected P_Stats pStats;
-    protected E_Stats eStats;
+    protected C_Stats c_Stats;
 
-    [Header("Data")]
+    [Header("Weapon Data")]
     public W_SO data;
 
     [Header("Owner + Targets")]
@@ -25,7 +24,7 @@ public abstract class W_Base : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] bool debugDrawHitbox = false;
-    [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange-red
+    [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
 
     const float MIN_DISTANCE = 0.001f;
 
@@ -36,29 +35,128 @@ public abstract class W_Base : MonoBehaviour
         hitbox.isTrigger = true;
 
         // Hide by default and shown only during Attack
-        if (sprite) sprite.enabled = false;
-        if (hitbox) hitbox.enabled = false;
+        sprite.enabled = false;
+        hitbox.enabled = false;
 
-        owner ??= transform.root;
-        ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
-        pStats ??= owner ? owner.GetComponent<P_Stats>() : null;
-        eStats ??= owner ? owner.GetComponent<E_Stats>() : null;
+        // Owner is always the root
+        owner = transform.root;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
 
-        if (data && sprite) sprite.sprite = data.sprite;
-        if (autoSizeFromSprite && sprite && sprite.sprite && hitbox)
+        // Always apply the data sprite
+        sprite.sprite = data.sprite;
+
+        // Auto size the weapon hitbox
+        if (autoSizeFromSprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
             hitbox.offset = Vector2.zero;
         }
     }
 
+    protected Vector3 PolarPosition(Vector2 rawAim) =>
+        owner.position + (Vector3)(rawAim * data.offsetRadius);
+
+    protected float PolarAngle(Vector2 rawAim)
+    {
+        Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
+        return Vector2.SignedAngle(baseline, rawAim) + data.angleBiasDeg;
+    }
+
+    // Position/rotate + show sprite, optionally enable hitbox
+    protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
+    {
+        transform.position = pos;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+        sprite.enabled = true;
+        hitbox.enabled = enableHitbox;
+    }
+
+    // Move forward/back along dir over showTime, call onProgress if ranged
+    protected IEnumerator ThrustOverTime(
+        Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
+    {
+        float t = 0f;
+        Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+
+        while (t < showTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / showTime);
+            transform.position = Vector3.Lerp(start, end, k);
+            onProgress?.Invoke(k);
+            yield return null;
+        }
+    }
+
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
+        => TryGetTarget(owner, targetMask, other);
+
+    // STATIC versions for W_Projectile
+    public static (C_Health target, GameObject root)
+                TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other)
+    {
+        // Layer filter
+        if ((targetMask.value & (1 << other.gameObject.layer)) == 0)
+            return (null, null);
+
+        // Ignore owner
+        if (other.transform == owner || other.transform.IsChildOf(owner))
+            return (null, null);
+
+        // Ignore weapon–weapon contacts
+        if (other.GetComponentInParent<W_Base>() != null)
+            return (null, null);
+
+        // Find target health on other's root
+        var target = other.GetComponentInParent<C_Health>();
+        if (target == null || !target.IsAlive)
+            return (null, null);
+
+        // Success -> return C_Health and GameObject
+        return (target, target.gameObject);
+    }
+
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
+        => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
+
+    public static void ApplyHitEffects(C_Stats attacker, W_SO data,
+                                       C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour weapon)
+    {
+        int attackerAD = attacker.AD, attackerAP = attacker.AP;
+        int weaponAD = data.AD, weaponAP = data.AP;
+        int dealt = target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+
+        target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+        var pStatsChanged = attacker.GetComponent<P_StatsChanged>();
+            if (pStatsChanged != null && dealt > 0)
+                pStatsChanged.OnDealtDamage(dealt);
+                
+        if (data.knockbackForce > 0f)
+            W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
+
+        if (data.stunTime > 0f)
+        {
+            var pm = hitCol.GetComponentInParent<P_Movement>();
+            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+            else
+            {
+                var em = hitCol.GetComponentInParent<E_Movement>();
+                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+            }
+        }
+    }
+
+    public abstract void Attack(Vector2 dir);
+
     public virtual void Equip(Transform newOwner)
     {
         owner = newOwner;
-        ownerAnimator = owner ? owner.GetComponent<Animator>() : null;
-        pStats = owner ? owner.GetComponent<P_Stats>() : null;
-        eStats = owner ? owner.GetComponent<E_Stats>() : null;
-        if (data && sprite) sprite.sprite = data.sprite;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
     }
 
     public void SetData(W_SO d, bool applySprite = true)
@@ -66,56 +164,6 @@ public abstract class W_Base : MonoBehaviour
         data = d;
         if (applySprite && data && sprite) sprite.sprite = data.sprite;
     }
-
-    // Read atkX/atkY; normalize if above threshold; else default to down.
-    // Always returns a clean 8-way vector from atkX/atkY, or Down if unset
-    protected Vector2 GetAimDir()
-    {
-        if (!ownerAnimator) return Vector2.down;
-
-        float ax = ownerAnimator.GetFloat("atkX");
-        float ay = ownerAnimator.GetFloat("atkY");
-        Vector2 v = new Vector2(ax, ay);
-
-        if (v.sqrMagnitude <= (MIN_DISTANCE * MIN_DISTANCE)) return Vector2.down;
-        return SnapToEightDirections(v);
-    }
-
-
-    // Choose one of the 8 offsets from SO
-    protected Vector2 GetSpawnOffset(Vector2 snappedDir)
-    {
-        if (!data) return Vector2.zero;
-
-        float t = MIN_DISTANCE;
-        bool hasX = Mathf.Abs(snappedDir.x) > t;
-        bool hasY = Mathf.Abs(snappedDir.y) > t;
-
-        if (hasX && hasY)
-        {
-            if (snappedDir.x >= 0f && snappedDir.y >= 0f) return data.offsetUpRight;
-            if (snappedDir.x < 0f && snappedDir.y >= 0f) return data.offsetUpLeft;
-            if (snappedDir.x >= 0f && snappedDir.y < 0f) return data.offsetDownRight;
-            return data.offsetDownLeft;
-        }
-        if (hasX) return (snappedDir.x >= 0f) ? data.offsetRight : data.offsetLeft;
-        return (snappedDir.y >= 0f) ? data.offsetUp : data.offsetDown;
-    }
-
-
-    // Shared math utility (same as enemy)
-    protected static Vector2 SnapToEightDirections(Vector2 direction)
-    {
-        if (direction.sqrMagnitude < 1e-9f) return Vector2.down;
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        int octantIndex = Mathf.RoundToInt(degrees / 45f);
-        float radians = octantIndex * 45f * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-    }
-
-
-    public abstract void Attack();
-
     void OnDrawGizmos()
     {
         if (!debugDrawHitbox) return;
@@ -125,7 +173,7 @@ public abstract class W_Base : MonoBehaviour
         var bc = hitbox ? hitbox : GetComponent<BoxCollider2D>();
         if (!bc) return;
 
-        // Only draw while the weapon is "live": sprite visible OR collider enabled
+        // Only draw while the weapon is live: sprite visible OR collider enabled
         if ((sr && sr.enabled) || bc.enabled)
         {
             var prevMatrix = Gizmos.matrix;
@@ -147,8 +195,8 @@ public abstract class W_Base : MonoBehaviour
 
 
 
- 
-// ----- File: W_Knockback.cs ----- 
+
+// ----- File: W_Knockback.cs -----
 using UnityEngine;
 
 public static class W_Knockback
@@ -191,155 +239,248 @@ public static class W_Knockback
         return count;
     }
 }
- 
-// ----- File: W_Melee.cs ----- 
+
+// ----- File: W_Melee.cs -----
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class W_Melee : W_Base
-{   
+{
+    Vector2 swingDir;
+
     readonly HashSet<int> hitThisSwing = new HashSet<int>();
 
-    public override void Attack()
+    public override void Attack(Vector2 dir)
     {
+        swingDir = (dir.sqrMagnitude > 0f) ? dir.normalized : Vector2.right;
         StartCoroutine(Swing());
     }
 
     IEnumerator Swing()
     {
-        Vector2 dir = GetAimDir();                      // snapped to 8-way
-        Vector3 spawn = owner.position + (Vector3)GetSpawnOffset(dir);
-
-        // rotate from baseline depending on art (up vs down)
-        Vector2 baseline = (data != null && data.pointsUp) ? Vector2.up : Vector2.down;
-        float angle = Vector2.SignedAngle(baseline, dir);
-
-        transform.position = spawn;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
         hitThisSwing.Clear();
-        
-        // Show + enable hitbox
-        sprite.enabled = true;
-        hitbox.enabled = true;
 
-        // Thrust over showTime
-        float t = 0f;
-        Vector3 start = transform.position - (Vector3)(dir * (data.thrustDistance * 0.5f));
-        Vector3 end   = transform.position + (Vector3)(dir * (data.thrustDistance * 0.5f));
-        while (t < data.showTime)
-        {
-            t += Time.deltaTime;
-            float k = Mathf.Clamp01(t / data.showTime);
-            transform.position = Vector3.Lerp(start, end, k);
-            yield return null;
-        }
+        // Continuous aim (mouse for Player / player transform for Enemy)
+        Vector2 rawDir = swingDir;
 
-        // Hide
+        // Visuals
+        Vector3 pos = PolarPosition(rawDir);
+        float angle = PolarAngle(rawDir);
+        BeginVisual(pos, angle, enableHitbox: true);
+
+        // Thrust
+        yield return ThrustOverTime(rawDir, data.showTime, data.thrustDistance);
+
         hitbox.enabled = false;
         sprite.enabled = false;
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        var (targetHealth, root) = TryGetTarget(other);
+        if (targetHealth == null) return;
+        if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
+        ApplyHitEffects(c_Stats, data, targetHealth, swingDir, other);
+    }
+}
+
+// ----- File: W_Projectile.cs -----
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
+public class W_Projectile : MonoBehaviour
+{
+    // Cache
+    SpriteRenderer sprite;
+    BoxCollider2D col;
+    Rigidbody2D rb;
+
+    // Runtime
+    Transform owner;
+    C_Stats attackerStats;
+    W_SO data;
+    LayerMask targetMask;
+    Vector2 moveDir;
+    int remainingPierces;
+    readonly HashSet<int> hitOnce = new HashSet<int>();
+
+    void Awake()
+    {
+        sprite ??= GetComponent<SpriteRenderer>();
+        col    ??= GetComponent<BoxCollider2D>();
+        rb     ??= GetComponent<Rigidbody2D>();
+
+        col.isTrigger = true;
+        rb.gravityScale = 0f;
+        rb.freezeRotation = true;
+    }
+
+    public void Init(Transform owner, C_Stats attackerStats, W_SO data, Vector2 dir, LayerMask mask)
+    {
+        this.owner = owner;
+        this.attackerStats = attackerStats;
+        this.data = data;
+        this.moveDir = dir.normalized;
+        this.targetMask = mask;
+        this.remainingPierces = Mathf.Max(0, data.pierceCount);
+
+        // Keep prefab’s arrow sprite (don’t overwrite with data.sprite which is bow art)
+        rb.linearVelocity = moveDir * data.projectileSpeed;
+
+        if (data.projectileLifetime > 0f)
+            Destroy(gameObject, data.projectileLifetime);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Layer filter -> only react to colliders on targetMask
-        if ((targetMask.value & (1 << other.gameObject.layer)) == 0) return;
+        // FILTER via W_Base static
+        var (targetHealth, root) = W_Base.TryGetTarget(owner, targetMask, other);
+        if (targetHealth == null) return;
 
-        // Ignore owner
-        if (other.transform == owner || other.transform.IsChildOf(owner)) return;
+        // per-projectile de-dup
+        if (!hitOnce.Add(root.GetInstanceID())) return;
 
-        // Ignore weapon–weapon contacts
-        if (other.GetComponentInParent<W_Base>() != null) return;
+        // EFFECTS via W_Base static
+        W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
 
-        // Attacker stats
-        int attackerAD = (pStats != null) ? pStats.AD : (eStats != null ? eStats.AD : 0);
-        int attackerAP = (pStats != null) ? pStats.AP : (eStats != null ? eStats.AP : 0);
-
-        // Weapon bases (allow mix)
-        int weaponAD = data ? data.baseAD : 0;
-        int weaponAP = data ? data.baseAP : 0;
-
-        // Resolve target health once
-        var targetHealth = other.GetComponentInParent<C_Health>();
-        if (targetHealth == null || !targetHealth.IsAlive) return;
-
-        // Per-swing de-dup
-        GameObject root = targetHealth.gameObject;
-        if (!hitThisSwing.Add(root.GetInstanceID())) return;
-
-        // Apply damage (AR handled inside)
-        targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
-
-        // Knockback (apply regardless of reduced damage)
-        if (data && data.knockbackForce > 0f)
+        // Consume pierce or stop now
+        if (remainingPierces > 0)
         {
-            Vector2 dir = GetAimDir(); // snapped 8-way from W_Base
-            W_Knockback.PushTarget(other.gameObject, dir, data.knockbackForce);
+            remainingPierces--;      // pass through this target
+            return;                  // keep flying
         }
 
-        // Stun time
-        if (data && data.stunTime > 0f)
+        // No more pierce: stick (if enabled) or destroy
+        if (data.stickOnHitSeconds > 0f)
         {
-            var pm = other.GetComponentInParent<P_Movement>();
-            if (pm) { StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
-            else
-            {
-                var em = other.GetComponentInParent<E_Movement>();
-                if (em) { StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
-            }
+            StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
+    IEnumerator StickAndDie(Collider2D hitCol, float seconds)
+    {
+        // Compute a precise surface point on the hit collider
+        var dist = col.Distance(hitCol);          // distance info between our collider and hit collider
+        Vector2 snap = dist.pointB;               // point on the *hit* collider
+        transform.position = snap + (moveDir * 0.02f); // tiny embed so it visually "bites" in
 
+        // Pin it: stop physics & collisions, then parent to the *collider* (so it rides the sprite/bone)
+        rb.linearVelocity = Vector2.zero;
+        rb.isKinematic = true;
+        col.enabled = false;
+        transform.SetParent(hitCol.transform, true);
+
+        // Optional: ensure it renders above the target while stuck
+        if (sprite) sprite.sortingOrder += 1;
+
+        // Fade over 'seconds'
+        if (sprite)
+        {
+            Color c = sprite.color;
+            float t = 0f;
+            while (t < seconds)
+            {
+                t += Time.deltaTime;
+                float a = 1f - Mathf.Clamp01(t / seconds);
+                sprite.color = new Color(c.r, c.g, c.b, a);
+                yield return null;
+            }
+        }
+
+        Destroy(gameObject);
+    }
 }
- 
-// ----- File: W_SO.cs ----- 
+
+// ----- File: W_Ranged.cs -----
+using System.Collections;
+using UnityEngine;
+
+public class W_Ranged : W_Base
+{
+    public override void Attack(Vector2 dir)
+    {
+        StartCoroutine(Shoot(dir));
+    }
+
+    IEnumerator Shoot(Vector2 dir)
+    {
+        // Visuals (bow orbit + rotation)
+        Vector3 pos = PolarPosition(dir);
+        float angle = PolarAngle(dir);
+        BeginVisual(pos, angle, enableHitbox: false);
+
+        bool fired = false;
+        yield return ThrustOverTime(dir, data.showTime, data.thrustDistance, (k) =>
+        {
+            if (!fired && k >= 0.5f) { FireProjectile(dir); fired = true; }
+        });
+
+        sprite.enabled = false;
+    }
+
+    void FireProjectile(Vector2 dir)
+    {
+        if (!data || !data.projectilePrefab) return;
+
+        // Spawn from current bow position (mid-thrust)
+        Vector3 p = transform.position;
+
+        // Projectile default art faces RIGHT
+        float projAngle = Vector2.SignedAngle(Vector2.right, dir);
+
+        var go = Instantiate(data.projectilePrefab, p, Quaternion.Euler(0, 0, projAngle));
+        var proj = go.GetComponent<W_Projectile>();
+        if (proj != null) proj.Init(owner, c_Stats, data, dir, targetMask);
+    }
+}
+
+// ----- File: W_SO.cs -----
 using UnityEngine;
 
 public enum WeaponType { Melee, Ranged, Magic }
 
-[CreateAssetMenu(menuName = "GAME/Weapon SO", fileName = "W_SO_NewWeapon")]
+[CreateAssetMenu(menuName = "Weapon SO", fileName = "W_SO_NewWeapon")]
 public class W_SO : ScriptableObject
 {
     [Header("Common")]
-    public string id = "weapon_id";
+    public string id = "weaponId";
     public WeaponType type = WeaponType.Melee;
     public Sprite sprite;
     public bool pointsUp = false; // false = points down
+    public float offsetRadius = 0.7f; // polar placement radius
+    public float angleBiasDeg = 0f; // optional art twist
 
     [Header("Damage (set either/both)")]
-    public int baseAD = 1;
-    public int baseAP = 0;
+    public int AD = 1;
+    public int AP = 0;
 
     [Header("Impact")]
     public float knockbackForce = 5f;
     public float stunTime = .5f;
 
-    [Header("Melee timings & radial offset")]
+    [Header("Melee timings + Thrust Distance")]
     public float showTime = 0.3f;
     public float thrustDistance = 0.25f;
 
-    [Header("Optional directional offsets")]
-    [Header("Cardinals")]
-    public Vector2 offsetDown = new Vector2(-0.2f, -0.75f);
-    public Vector2 offsetUp = new Vector2(-0.2f, 0.75f);
-    public Vector2 offsetLeft = new Vector2(-0.7f, -0.25f);
-    public Vector2 offsetRight = new Vector2(0.7f, -0.25f);
-    [Header("Diagonals")]
-    public Vector2 offsetUpRight    = new Vector2(0.5f, 0.5f);
-    public Vector2 offsetUpLeft     = new Vector2(-0.5f, 0.5f);
-    public Vector2 offsetDownRight  = new Vector2(0.5f, -0.75f);
-    public Vector2 offsetDownLeft   = new Vector2(-0.5f, 0.75f);
-
-    [Header("Ranged (placeholders)")]
+    [Header("Ranged + Magic")]
     public GameObject projectilePrefab;
-    public float projectileSpeed = 8f;
-
-    [Header("Magic (placeholders)")]
     public int manaCost = 0;
+    public float projectileSpeed = 0f;
+    public float projectileLifetime = 0f;
+    public float stickOnHitSeconds = 0f;
+    public int   pierceCount = 0;
 }
- 
-// ----- File: W_Stun.cs ----- 
+
+// ----- File: W_Stun.cs -----
 using System.Collections;
 using UnityEngine;
 
@@ -361,4 +502,4 @@ public static class W_Stun
         m.SetDisabled(false);
     }
 }
- 
+

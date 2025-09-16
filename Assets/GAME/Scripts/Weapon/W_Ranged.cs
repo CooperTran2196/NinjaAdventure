@@ -1,28 +1,24 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class W_Ranged : W_Base
 {
-    public override void Attack()
+    public override void Attack(Vector2 dir)
     {
-        StartCoroutine(Shoot());
+        StartCoroutine(Shoot(dir));
     }
 
-    IEnumerator Shoot()
+    IEnumerator Shoot(Vector2 dir)
     {
-        // Continuous aim for both visuals and physics
-        Vector2 rawDir = GetRawAimDir();
-
         // Visuals (bow orbit + rotation)
-        Vector3 pos = PolarPosition(rawDir);
-        float angle = PolarAngle(rawDir);
+        Vector3 pos = PolarPosition(dir);
+        float angle = PolarAngle(dir);
         BeginVisual(pos, angle, enableHitbox: false);
 
         bool fired = false;
-        yield return ThrustOverTime(rawDir, data.showTime, data.thrustDistance, (k) =>
+        yield return ThrustOverTime(dir, data.showTime, data.thrustDistance, (k) =>
         {
-            if (!fired && k >= 0.5f) { FireProjectile(rawDir); fired = true; }
+            if (!fired && k >= 0.5f) { FireProjectile(dir); fired = true; }
         });
 
         sprite.enabled = false;

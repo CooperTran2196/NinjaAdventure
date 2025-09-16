@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.InputSystem; // new Input System
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -24,7 +23,7 @@ public abstract class W_Base : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] bool debugDrawHitbox = false;
-    [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange-red
+    [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
 
     const float MIN_DISTANCE = 0.001f;
 
@@ -53,31 +52,6 @@ public abstract class W_Base : MonoBehaviour
             hitbox.offset = Vector2.zero;
         }
     }
-    // Continuous aim: mouse for Player, target Player for Enemy
-    protected Vector2 GetRawAimDir()
-    {
-        Vector2 dir = Vector2.right;
-
-        if (owner != null && owner.CompareTag("Player"))
-        {
-            if (Camera.main && Mouse.current != null)
-            {
-                Vector2 m = Mouse.current.position.ReadValue();
-                float z = Mathf.Abs(Camera.main.transform.position.z - owner.position.z);
-                Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
-                dir = ((Vector2)(mw - owner.position));
-            }
-        }
-        else
-        {
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player) dir = ((Vector2)(player.transform.position - owner.position));
-        }
-
-        if (dir.sqrMagnitude < MIN_DISTANCE) dir = Vector2.right;
-        else dir.Normalize();
-        return dir;
-    }
 
     protected Vector3 PolarPosition(Vector2 rawAim) =>
         owner.position + (Vector3)(rawAim * data.offsetRadius);
@@ -97,7 +71,7 @@ public abstract class W_Base : MonoBehaviour
         hitbox.enabled = enableHitbox;
     }
 
-    // Move forward/back along dir over showTime, call onProgress(k) if ranged
+    // Move forward/back along dir over showTime, call onProgress if ranged
     protected IEnumerator ThrustOverTime(
         Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
     {
@@ -153,9 +127,13 @@ public abstract class W_Base : MonoBehaviour
     {
         int attackerAD = attacker.AD, attackerAP = attacker.AP;
         int weaponAD = data.AD, weaponAP = data.AP;
+        int dealt = target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
         target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
-
+        var pStatsChanged = attacker.GetComponent<P_StatsChanged>();
+            if (pStatsChanged != null && dealt > 0)
+                pStatsChanged.OnDealtDamage(dealt);
+                
         if (data.knockbackForce > 0f)
             W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
 
@@ -171,7 +149,7 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    public abstract void Attack();
+    public abstract void Attack(Vector2 dir);
 
     public virtual void Equip(Transform newOwner)
     {

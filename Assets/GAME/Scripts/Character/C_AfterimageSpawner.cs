@@ -42,8 +42,7 @@ public class C_AfterimageSpawner : MonoBehaviour
     {
         // Assumes srcSR exists & sprite provided (per your style: Inspector preconditions are correct)
         var g = new GameObject("Afterimage");
-        g.transform.position = transform.position;
-        g.transform.rotation = transform.rotation;
+        g.transform.SetPositionAndRotation(transform.position, transform.rotation);
         g.transform.localScale = transform.localScale;
 
         var gsr = g.AddComponent<SpriteRenderer>();

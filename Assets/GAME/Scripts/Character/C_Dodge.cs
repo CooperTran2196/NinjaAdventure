@@ -6,9 +6,12 @@ public class C_Dodge : MonoBehaviour
     [Header("References")]
     Animator animator;
     P_InputActions input;
-    C_Stats c_Stats;
+
+    public C_Stats c_Stats;
+    public C_State c_State;
+    public P_Movement p_Movement; // read lastMove for direction
+    public E_Movement e_Movement;
     C_AfterimageSpawner afterimage;
-    P_Movement movement; // read lastMove for direction
 
     [Header("Config")]
     public bool useInput = true; // Player = true; Enemy can set false and call RequestDodge(dir) manually
@@ -24,14 +27,15 @@ public class C_Dodge : MonoBehaviour
     {
         animator ??= GetComponent<Animator>();
         c_Stats ??= GetComponent<C_Stats>();
-        movement ??= GetComponent<P_Movement>();
+        c_State ??= GetComponent<C_State>();
+        p_Movement ??= GetComponent<P_Movement>();
         afterimage ??= GetComponent<C_AfterimageSpawner>();
 
         input ??= new P_InputActions();
 
         if (!animator) Debug.LogError($"{name}: Animator in C_Dodge missing.");
         if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Dodge missing.");
-        if (!movement) Debug.LogError($"{name}: P_Movement in C_Dodge missing.");
+        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_Dodge missing.");
         if (!afterimage)  Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge missing.");
     }
 
@@ -53,14 +57,15 @@ public class C_Dodge : MonoBehaviour
         if (input.Player.Dodge.WasPressedThisFrame())
         {
             // Read facing from movement; fallback down if zero
-            Vector2 dir = (movement && movement.lastMove != Vector2.zero) ? movement.lastMove.normalized : Vector2.down;
+            Vector2 dir = (p_Movement && p_Movement.lastMove != Vector2.zero) ? p_Movement.lastMove.normalized : Vector2.down;
             RequestDodge(dir);
         }
     }
 
-    // --- External API for AI/other scripts ---
+    // External API for AI/other scripts
     public void RequestDodge(Vector2 dir)
     {
+        if (c_State && c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
         if (IsDodging) return;
         if (cooldownTimer > 0f) return;
 

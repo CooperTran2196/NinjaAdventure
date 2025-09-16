@@ -17,7 +17,7 @@ TagManager:
   - Player
   - Enemy
   - Weapon
-  - 
+  - Loot
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 10905695
+    locked: 0
+  - name: Loot
+    uniqueID: 2498439127
     locked: 0
   m_RenderingLayers:
   - Default

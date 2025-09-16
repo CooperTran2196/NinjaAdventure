@@ -8,10 +8,10 @@ public class P_Movement : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public C_Stats c_Stats;
-    public P_Combat p_Combat;
-    public C_Dodge c_Dodge;
-    public C_State c_State;
+    C_Stats c_Stats;
+    C_State c_State;
+    P_Combat p_Combat;
+    C_Dodge c_Dodge;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
@@ -37,12 +37,12 @@ public class P_Movement : MonoBehaviour
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
         if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
+
         if (!c_Stats) Debug.LogError($"{name}: C_Stats in P_Movement missing.");
         if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
         if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
         if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
 
-        lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
     }
@@ -52,19 +52,16 @@ public class P_Movement : MonoBehaviour
 
     void Update()
     {
-        // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
-        // If raw is near zero, normalized will be (0,0)
+        // Normalize to avoid diagonal speed advantage
+        // If raw is near zero, x,y = 0
         Vector2 raw = input.Player.Move.ReadValue<Vector2>();
         Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
         
-        bool busy = c_State != null && c_State.CheckIsBusy();
-        if (animator.GetBool("isAttacking"))
-        {
-            lastMove = C_Anim.GetAttackDirection(animator);
-        }
-        C_Anim.UpdateAnimDirections(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
+        // Do not override lastMove when attacking
+        // Attack facing is stored separately in animator atkX/atkY so movement (WASD) still controls idle facing
+        c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
 
@@ -101,11 +98,8 @@ public class P_Movement : MonoBehaviour
 
         moveAxis = v;
 
-        // Velocity valve: stop only if attacking AND lockDuringAttack
-        // Read attack-state from Animator
-        bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || (attacking && p_Combat.lockDuringAttack);
+        bool valveClosed = disabled || c_State.CheckIsBusy();
         // If valve is closed, stop; otherwise apply intended velocity
         Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;

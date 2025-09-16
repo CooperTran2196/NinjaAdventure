@@ -5,6 +5,7 @@ public class StatsUI : MonoBehaviour
 {
     [Header("References")]
     public C_Stats p_Stats;
+    public P_StatsChanged p_StatsChanged;
     public CanvasGroup statsCanvas;
     public GameObject[] statsSlots;
 
@@ -16,8 +17,23 @@ public class StatsUI : MonoBehaviour
         input = new P_InputActions();
         input.UI.ToggleStats.Enable();
 
+        p_Stats ??= FindFirstObjectByType<C_Stats>();
+        p_StatsChanged ??= FindFirstObjectByType<P_StatsChanged>();
+
         // start closed
         statsCanvas.alpha = 0;
+    }
+    
+    void OnEnable()
+    {
+        if (p_StatsChanged != null)
+            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;  // <-- add
+    }
+
+    void OnDisable()
+    {
+        if (p_StatsChanged != null)
+            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;  // <-- add
     }
 
     void Start()
@@ -47,38 +63,38 @@ public class StatsUI : MonoBehaviour
     public void UpdateAD()
     {
         statsSlots[0].GetComponentInChildren<TMP_Text>().text =
-            "Damage: " + p_Stats.AD;
+            "AD: " + p_Stats.AD;
     }
     public void UpdateAP()
     {
         statsSlots[1].GetComponentInChildren<TMP_Text>().text =
-            "Ability Power: " + p_Stats.AP;
+            "AP: " + p_Stats.AP;
     }
     public void UpdateMS()
     {
         statsSlots[2].GetComponentInChildren<TMP_Text>().text =
-            "Move Speed: " + p_Stats.MS;
+            "MS: " + p_Stats.MS;
     }
 
     public void UpdateMaxHealth()
     {
         statsSlots[3].GetComponentInChildren<TMP_Text>().text =
-            "Max Health: " + p_Stats.maxHP;
+            "HP: " + p_Stats.maxHP;
     }
     public void UpdateAR()
     {
         statsSlots[4].GetComponentInChildren<TMP_Text>().text =
-            "Armor: " + p_Stats.AR;
+            "AR: " + p_Stats.AR;
     }
     public void UpdateMR()
     {
         statsSlots[5].GetComponentInChildren<TMP_Text>().text =
-            "Magic Res: " + p_Stats.MR;
+            "MR: " + p_Stats.MR;
     }
         public void UpdateKR()
     {
         statsSlots[6].GetComponentInChildren<TMP_Text>().text =
-            "Knockback Res: " + p_Stats.KR;
+            "KR: " + p_Stats.KR;
     }
 
     public void UpdateAllStats()

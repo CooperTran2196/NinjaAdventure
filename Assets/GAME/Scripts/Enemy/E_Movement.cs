@@ -9,6 +9,7 @@ public class E_Movement : MonoBehaviour
     Animator animator;
     
     public C_Stats c_Stats;   
+    public C_State c_State;
     public E_Combat e_Combat;
 
     [Header("Detection (OverlapCircle)")]
@@ -26,7 +27,7 @@ public class E_Movement : MonoBehaviour
     Vector2 velocity;
     Vector2 knockback;
 
-    const float MIN_DISTANCE = 0.0001f;
+    const float MIN_DISTANCE = 0.000001f;
     
     void Awake()
     {
@@ -35,6 +36,7 @@ public class E_Movement : MonoBehaviour
         animator    ??= GetComponent<Animator>();
 
         c_Stats     ??= GetComponent<C_Stats>();
+        c_State ??= GetComponent<C_State>();
         e_Combat    ??= GetComponent<E_Combat>();
         
 
@@ -49,11 +51,11 @@ public class E_Movement : MonoBehaviour
     void Update()
     {
         Chase();
-        if (animator.GetBool("isAttacking"))
-        {
-            lastMove = C_Anim.GetAttackDirection(animator);
-        }
-        C_Anim.UpdateAnimDirections(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
+            if (c_State.Is(C_State.ActorState.Attack))
+            {
+                lastMove = c_State.GetAttackDirection();
+            }
+            c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
     void FixedUpdate()
@@ -96,10 +98,7 @@ public class E_Movement : MonoBehaviour
         }
 
         // Velocity valve
-        bool attacking = animator.GetBool("isAttacking");
-        // Block velocity when disabled, holding, or attacking
-        bool valveClosed = disabled || holdInRange || (attacking && e_Combat.lockDuringAttack);
-
+        bool valveClosed = disabled || holdInRange || (c_State != null && c_State.CheckIsBusy());
         Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
@@ -114,8 +113,6 @@ public class E_Movement : MonoBehaviour
             moveAxis = Vector2.zero;
             velocity = Vector2.zero;
             rb.linearVelocity = Vector2.zero; // immediate stop
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isIdle", false);
         }
     }
 

@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class W_Melee : W_Base
 {
+    Vector2 swingDir;
+
     readonly HashSet<int> hitThisSwing = new HashSet<int>();
 
-    public override void Attack()
+    public override void Attack(Vector2 dir)
     {
+        swingDir = (dir.sqrMagnitude > 0f) ? dir.normalized : Vector2.right;
         StartCoroutine(Swing());
     }
 
@@ -16,7 +19,7 @@ public class W_Melee : W_Base
         hitThisSwing.Clear();
 
         // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector2 rawDir = GetRawAimDir();
+        Vector2 rawDir = swingDir;
 
         // Visuals
         Vector3 pos = PolarPosition(rawDir);
@@ -35,7 +38,6 @@ public class W_Melee : W_Base
         var (targetHealth, root) = TryGetTarget(other);
         if (targetHealth == null) return;
         if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
-        var rawDir = GetRawAimDir();
-        ApplyHitEffects(c_Stats, data, targetHealth, rawDir, other);
+        ApplyHitEffects(c_Stats, data, targetHealth, swingDir, other);
     }
 }

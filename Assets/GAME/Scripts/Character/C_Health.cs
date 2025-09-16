@@ -5,11 +5,11 @@ using UnityEngine;
 public class C_Health : MonoBehaviour
 {
     [Header("References (Only P or E _Stats)")]
-    P_InputActions input;
     public C_Stats c_Stats;
     public C_Dodge c_Dodge;
     public C_FX fx;
 
+    P_InputActions input;
     [Header("Allow Dodge/IFrames?")]
     public bool useDodgeIFrames = true;
 
@@ -84,16 +84,21 @@ public class C_Health : MonoBehaviour
     }
 
     // AD+AP combined calculation (armor/mres as % 0–100)
-    public void ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP)
+    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP)
     {
-        if (!IsAlive) return;
+        if (!IsAlive) return 0;
+        if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
 
-        int total = Mathf.RoundToInt((attackerAD + weaponAD) * (1f - Mathf.Clamp01(AR / 100f))) +
-                    Mathf.RoundToInt((attackerAP + weaponAP) * (1f - Mathf.Clamp01(MR / 100f)));
+        int total =
+            Mathf.RoundToInt((attackerAD + weaponAD) * (1f - Mathf.Clamp01(AR / 100f))) +
+            Mathf.RoundToInt((attackerAP + weaponAP) * (1f - Mathf.Clamp01(MR / 100f)));
 
-        if (total > 0) ChangeHealth(-total);
+        int before = CurrentHP;
+        int dealt = Mathf.Clamp(total, 0, before);
+        if (dealt > 0) ChangeHealth(-dealt);
+        return dealt;
     }
-    
+
     // Single entrypoint for damage/heal
     public void ChangeHealth(int amount)
     {

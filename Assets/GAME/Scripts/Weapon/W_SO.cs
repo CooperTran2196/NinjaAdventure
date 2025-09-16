@@ -10,8 +10,8 @@ public class W_SO : ScriptableObject
     public WeaponType type = WeaponType.Melee;
     public Sprite sprite;
     public bool pointsUp = false; // false = points down
-    public float offsetRadius = 0.6f;  // polar placement radius
-    public float angleBiasDeg = 0f;    // optional art twist
+    public float offsetRadius = 0.7f; // polar placement radius
+    public float angleBiasDeg = 0f; // optional art twist
 
     [Header("Damage (set either/both)")]
     public int AD = 1;

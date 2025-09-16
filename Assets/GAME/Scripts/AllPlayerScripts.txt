@@ -1,8 +1,8 @@
- 
-// ----- File: P_Combat.cs ----- 
+// ----- File: P_Combat.cs -----
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class P_Combat : MonoBehaviour
 {
@@ -11,28 +11,32 @@ public class P_Combat : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats     p_Stats;
-    public P_Movement  p_Movement;
-    public C_Health    p_Health;
-    public W_Base      activeWeapon;
+    C_Stats     c_Stats;
+    C_State     c_State;
+    P_Movement  p_Movement;
+    C_Health    c_Health;
+    
+    [Header("Weapons (Player can hold 3)")]
+    public W_Melee  meleeWeapon;
+    public W_Ranged rangedWeapon;
+    public W_Base   magicWeapon;
     
     [Header("Attack")]
     [Header("ALWAYS matched full clip length (0.45)")]
     public float attackDuration = 0.45f;
     [Header("ALWAYS set when the hit happens (0.15)")]
     public float hitDelay = 0.15f;
-    public bool lockDuringAttack = true;
 
     [Header("Debug")]
     [SerializeField] bool autoKill;
 
-    Vector2 aimDir = Vector2.down;
+    Vector2 aimDir = Vector2.down; // default when starting the game
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
-    public bool IsAttacking { get; private set; }
+    public bool isAttacking { get; private set; }
 
     // Quick state check
-    public bool IsAlive => p_Stats.currentHP > 0;
+    public bool IsAlive => c_Stats.currentHP > 0;
 
     void Awake()
     {
@@ -40,81 +44,188 @@ public class P_Combat : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
         
-        p_Stats ??= GetComponent<P_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
+        c_State ??= GetComponent<C_State>();
         p_Movement ??= GetComponent<P_Movement>();
-        p_Health ??= GetComponent<C_Health>();
-        activeWeapon ??= GetComponentInChildren<W_Melee>();
+        c_Health ??= GetComponent<C_Health>();
+
+        meleeWeapon  ??= GetComponentInChildren<W_Melee>();
+        rangedWeapon ??= GetComponentInChildren<W_Ranged>();
+        magicWeapon  ??= null; // placeholder only
 
         
         if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer in P_Combat missing.");
         if (!animator) Debug.LogError($"{name}: Animator in P_Combat missing.");
 
-        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        if (!c_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        
         if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
-        if (!p_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in P_Combat missing.");
-
-        animator.SetFloat("atkX", 0f);
-        animator.SetFloat("atkY", -1f);
+        if (!c_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
     }
 
     void OnEnable()
     {
         input?.Enable();
-        p_Health.OnDied += Die;
     }
 
     void OnDisable()
     {
         input?.Disable();
-        p_Health.OnDied -= Die;
     }
 
     void Update()
     {
-        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
-        if (raw.sqrMagnitude > MIN_DISTANCE) aimDir = raw.normalized;
-        if (input.Player.Attack.triggered) RequestAttack();
+        // Read aim from MOUSE
+        Vector2 mouseAim = ReadMouseAim();
+        if (mouseAim.sqrMagnitude > MIN_DISTANCE) aimDir = mouseAim;
 
-        if (autoKill) { autoKill = false; p_Health.ChangeHealth(-p_Stats.maxHP); }
+        // Inputs: Left Mouse  -> Melee, Right Mouse -> Ranged
+        if (input.Player.MeleeAttack.triggered)  RequestAttack(meleeWeapon);
+        if (input.Player.RangedAttack.triggered) RequestAttack(rangedWeapon);
+
+        if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
 
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
 
-    public void RequestAttack()
+    public void RequestAttack(W_Base weapon)
     {
         if (!IsAlive || cooldownTimer > 0f) return;
 
-        cooldownTimer = p_Stats.attackCooldown;
+        cooldownTimer = c_Stats.attackCooldown;
 
         // Face once at attack start
-        animator.SetFloat("atkX", aimDir.x);
-        animator.SetFloat("atkY", aimDir.y);
-        StartCoroutine(AttackRoutine());
+        c_State.SetAttackDirection(aimDir);
+
+        
+        StartCoroutine(AttackRoutine(weapon));
     }
 
-    IEnumerator AttackRoutine()
+    IEnumerator AttackRoutine(W_Base weapon)
     {
         // STATE: Attack START
-        IsAttacking = true;
+        isAttacking = true;
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
-        activeWeapon?.Attack();
+        weapon.Attack(aimDir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
         // STATE: Attack END
-        IsAttacking = false;
+        isAttacking = false;
     }
 
-    void Die()
+    Vector2 ReadMouseAim()
     {
-        p_Movement.SetDisabled(true);
-        animator.SetTrigger("Die");
+        // return previous aim if no camera/mouse
+        if (!Camera.main || Mouse.current == null)
+        {
+            Debug.LogError("P_Combat: No main camera or mouse found for aiming.");
+            return aimDir;
+        }
+
+        // screen-space mouse position
+            Vector2 m = Mouse.current.position.ReadValue();
+
+        // z distance from camera to actor for ScreenToWorldPoint
+        float z = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
+
+        // mouse position in world space at actor depth
+        Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
+
+        // vector from actor to mouse
+        Vector2 d = (Vector2)(mw - transform.position);
+
+        // return normalized direction if significant, else preserve aim
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : aimDir;
     }
 }
- 
-// ----- File: P_Movement.cs ----- 
+
+// ----- File: P_Exp.cs -----
+using UnityEngine;
+using System;
+
+[DisallowMultipleComponent]
+public class P_Exp : MonoBehaviour
+{
+    [Header("Linear XP (tweak in Inspector)")]
+    public int level = 1;
+    public int currentXP = 0;
+    public int skillPoints = 0;
+    public int xpBase = 60;      // L1→L2
+    public int xpStep = 30;      // linear add per level
+    public int skillPointsPerLevel = 2;
+
+    [Header("Debug")]
+    public bool debugStartAtLevel = false;
+    public int  debugStartLevel   = 1;
+    public bool debugGrantXPOnStart = false;
+    public int  debugXPOnStart      = 0;
+
+    public event Action<int> OnLevelUp;
+    public event Action<int,int> OnXPChanged;
+    public event Action<int> OnSkillPointsChanged;
+
+    void Start()
+    {
+        if (debugStartAtLevel && debugStartLevel > level)
+        {
+            int target = debugStartLevel;
+            for (int i = level; i < target; i++)
+            {
+                level++;
+                skillPoints += skillPointsPerLevel;
+                OnLevelUp?.Invoke(level);
+            }
+            OnSkillPointsChanged?.Invoke(skillPoints);
+            OnXPChanged?.Invoke(currentXP, GetXPRequiredForNext());
+        }
+
+        if (debugGrantXPOnStart && debugXPOnStart > 0)
+            AddXP(debugXPOnStart);
+    }
+
+    public void AddXP(int amount)
+    {
+        if (amount <= 0) return;
+
+        currentXP += amount;
+        int req = GetXPRequiredForNext();
+
+        while (currentXP >= req)
+        {
+            currentXP -= req;
+            level++;
+            skillPoints += skillPointsPerLevel;
+
+            OnLevelUp?.Invoke(level);
+            OnSkillPointsChanged?.Invoke(skillPoints);
+
+            req = GetXPRequiredForNext();
+        }
+
+        OnXPChanged?.Invoke(currentXP, req);
+    }
+
+    public bool TrySpendSkillPoints(int amount)
+    {
+        // return false if not enough points
+        if (amount <= 0) return false;
+        if (skillPoints < amount) return false;
+
+        skillPoints -= amount;
+        OnSkillPointsChanged?.Invoke(skillPoints);
+        return true;
+    }
+
+    public int GetXPRequiredForNext()
+    {
+        int n = Mathf.Max(1, level);
+        return xpBase + xpStep * (n - 1);
+    }
+}
+
+// ----- File: P_Movement.cs -----
 using System;
 using UnityEngine;
 
@@ -125,10 +236,10 @@ public class P_Movement : MonoBehaviour
     Animator animator;
     P_InputActions input;
 
-    public P_Stats p_Stats;
-    public P_Combat p_Combat;
-    public C_Dodge c_Dodge;
-    public C_State c_State;
+    C_Stats c_Stats;
+    C_State c_State;
+    P_Combat p_Combat;
+    C_Dodge c_Dodge;
 
     [Header("Facing / Animator")]
     public Vector2 lastMove = Vector2.down; // Default facing down
@@ -147,19 +258,19 @@ public class P_Movement : MonoBehaviour
         animator ??= GetComponent<Animator>();
         input ??= new P_InputActions();
 
-        p_Stats ??= GetComponent<P_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
         p_Combat ??= GetComponent<P_Combat>();
         c_Dodge ??= GetComponent<C_Dodge>();
         c_State ??= GetComponent<C_State>();
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
         if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
-        if (!p_Stats) Debug.LogError($"{name}: P_Stats in P_Movement missing.");
+
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats in P_Movement missing.");
         if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
         if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
         if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
 
-        lastMove = Vector2.down;
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);
     }
@@ -169,21 +280,22 @@ public class P_Movement : MonoBehaviour
 
     void Update()
     {
-        // Normalize to avoid diagonal speed advantage; also gives clean 4/8-way
-        // If raw is near zero, normalized will be (0,0)
+        // Normalize to avoid diagonal speed advantage
+        // If raw is near zero, x,y = 0
         Vector2 raw = input.Player.Move.ReadValue<Vector2>();
         Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
 
         SetMoveAxis(desired);
         
-        bool busy = c_State != null && c_State.IsBusy;
-        C_Anim.UpdateAnimDirections(animator, busy, moveAxis, lastMove, MIN_DISTANCE);
+        // Do not override lastMove when attacking
+        // Attack facing is stored separately in animator atkX/atkY so movement (WASD) still controls idle facing
+        c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
 
     void FixedUpdate()
     {
-        Vector2 forced = (c_Dodge != null) ? c_Dodge.ForcedVelocity : Vector2.zero;
+        Vector2 forced  = c_Dodge.ForcedVelocity;
         Vector2 baseVel = (forced != Vector2.zero) ? forced : velocity;
         Vector2 final   = baseVel + knockback;
         rb.linearVelocity = final;
@@ -191,7 +303,7 @@ public class P_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (p_Stats ? p_Stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = c_Stats.KR * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -214,13 +326,10 @@ public class P_Movement : MonoBehaviour
 
         moveAxis = v;
 
-        // Velocity valve: stop only if attacking AND lockDuringAttack
-        // Read attack-state from Animator
-        bool attacking = animator.GetBool("isAttacking");
         // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || (attacking && p_Combat.lockDuringAttack);
+        bool valveClosed = disabled || c_State.CheckIsBusy();
         // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * p_Stats.MS;
+        Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
@@ -238,34 +347,98 @@ public class P_Movement : MonoBehaviour
     public void ReceiveKnockback(Vector2 force) => knockback += force;
 
 }
- 
-// ----- File: P_Stats.cs ----- 
+
+// ----- File: P_SkillBonuses.cs -----
+
+// ----- File: P_StatsChanged.cs -----
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
-public class P_Stats : MonoBehaviour
+public class P_StatsChanged : MonoBehaviour
 {
-    [Header("Stats")]
-    public int AD = 1; // Attack Damage
-    public int AP = 0; // Ability Power
-    public float MS = 5f; // Move Speed
+    [Header("Refs")]
+    public C_Stats  c_Stats;
+    public C_Health c_Health;
 
-    public int maxHP = 10;
-    public int currentHP = 10;
-    public int AR = 0; // Armor
-    public int MR = 0; // Magic Resist
-    public float KR = 10f; // knockback Resist
+    // Baseline snapshot
+    int baseAD, baseAP, baseMaxHP, baseAR, baseMR;
+    float baseMS, baseKR;
 
-    [Header("Combat")]
-    public float attackCooldown = 1.2f;
+    // Upgrades
+    int upAD, upAP, upHP, upAR, upMR;
+    float upMS, upKR;
 
-    [Header("Dodge")]
-    public float dodgeSpeed = 11f;      // units/second
-    public float dodgeDistance = 2.0f;  // units (≈ tiles)
-    public float dodgeCooldown = 0.45f; // seconds
+    // Lifesteal
+    public bool  lifestealUnlocked = false;
+    [Range(0f, 1f)] public float lifestealPercent = 0f;
 
-    [Header("Placeholders")]
-    public float knockbackForce = 0f;
-    public float stunTime = 0f;
+    public event Action OnStatsRecalculated;
+
+    void Awake()
+    {
+        c_Stats  ??= GetComponent<C_Stats>();
+        c_Health ??= GetComponent<C_Health>();
+
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing in P_Skills.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health missing in P_Skills.", this);
+
+        baseAD    = c_Stats.AD;
+        baseAP    = c_Stats.AP;
+        baseMaxHP = c_Stats.maxHP;
+        baseAR    = c_Stats.AR;
+        baseMR    = c_Stats.MR;
+        baseMS    = c_Stats.MS;
+        baseKR    = c_Stats.KR;
+  
+        Recalculate();
+    }
+
+    // Called by SkillManager when a node upgrades
+    public void ApplyStat(ST_SkillSO.Stat stat, int delta)
+    {
+        switch (stat)
+        {
+            case ST_SkillSO.Stat.AD:     upAD += delta; break;
+            case ST_SkillSO.Stat.AP:     upAP += delta; break;
+            case ST_SkillSO.Stat.MaxHP:  upHP += delta; break;
+            case ST_SkillSO.Stat.AR:     upAR += delta; break;
+            case ST_SkillSO.Stat.MR:     upMR += delta; break;
+            case ST_SkillSO.Stat.MS:     upMS += delta; break;
+            case ST_SkillSO.Stat.KR:     upKR += delta; break;
+        }
+        Recalculate();
+    }
+
+    public void SetLifestealPercent(float percent)
+    {
+        lifestealUnlocked = percent > 0f;
+        lifestealPercent  = percent;
+    }
+
+    void Recalculate()
+    {
+        if (!c_Stats) return;
+
+        // Recalculate all stats based on base values + upgrades
+        c_Stats.AD = baseAD + upAD;
+        c_Stats.AP = baseAP + upAP;
+        c_Stats.maxHP = baseMaxHP + upHP;
+        c_Stats.AR = baseAR + upAR;
+        c_Stats.MR = baseMR + upMR;
+        c_Stats.MS = baseMS + upMS;
+        c_Stats.KR = baseKR + upKR;
+
+        // Announce that stats have been updated
+        OnStatsRecalculated?.Invoke();
+    }
+
+    // Heal when the PLAYER deals final damage (wire from weapon/hit pipeline)
+    public void OnDealtDamage(int finalDamage)
+    {
+        if (!lifestealUnlocked || finalDamage <= 0) return;
+        int heal = Mathf.RoundToInt(finalDamage * lifestealPercent);
+        if (heal > 0) c_Health.ChangeHealth(heal);
+    }
 }
- 
+

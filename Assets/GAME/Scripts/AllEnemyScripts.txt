@@ -1,5 +1,4 @@
- 
-// ----- File: E_Combat.cs ----- 
+// ----- File: E_Combat.cs -----
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,9 +9,10 @@ public class E_Combat : MonoBehaviour
     SpriteRenderer sprite;
     Animator animator;
 
-    public E_Stats e_stats;
-    public E_Movement e_movement;
-    public C_Health e_health;
+    public C_Stats c_Stats;
+    public C_State c_State;
+    public E_Movement e_Movement;
+    public C_Health e_Health;
     public W_Base activeWeapon;
 
     [Header("AI")]
@@ -25,15 +25,14 @@ public class E_Combat : MonoBehaviour
     public float attackDuration = 0.45f;
     [Header("ALWAYS set when the hit happens (0.15)")]
     public float hitDelay = 0.15f;
-    public bool lockDuringAttack = true;
 
     [Header("Debug")]
     [SerializeField] bool autoKill;
 
     // Quick state check
-    public bool IsAlive => e_stats.currentHP > 0;
-
-    bool isAttacking;
+    public bool isAttacking { get;  private set; }
+    public bool IsAlive => c_Stats.currentHP > 0;
+    const float MIN_DISTANCE = 0.0001f;
     float contactTimer;   // for collision damage
     float cooldownTimer;  // for attacking cooldown
 
@@ -42,35 +41,29 @@ public class E_Combat : MonoBehaviour
         sprite          ??= GetComponent<SpriteRenderer>();
         animator        ??= GetComponent<Animator>();
 
-        e_stats         ??= GetComponent<E_Stats>();
-        e_movement      ??= GetComponent<E_Movement>();
-        e_health        ??= GetComponent<C_Health>();
+        c_Stats         ??= GetComponent<C_Stats>();
+        c_State         ??= GetComponent<C_State>();
+        e_Movement      ??= GetComponent<E_Movement>();
+        e_Health        ??= GetComponent<C_Health>();
         activeWeapon    ??= GetComponentInChildren<W_Melee>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (!animator) Debug.LogError($"{name}: Animator missing.");
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in E_Combat missing.");
 
-        if (!e_stats) Debug.LogError($"{name}: E_Stats missing.");
-        if (!e_movement) Debug.LogError($"{name}: E_Movement missing.");
-        if (!e_health) Debug.LogError($"{name}: C_Health missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: C_Melee missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats in E_Combat missing.");
+        if (!e_Movement) Debug.LogError($"{name}: E_Movement in E_Combat missing.");
+        if (!e_Health) Debug.LogError($"{name}: C_Health in E_Combat missing.");
+        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in E_Combat missing.");
     }
 
     void OnEnable()
     {
         StartCoroutine(ThinkLoop());
-        e_health.OnDied += Die;
-    }
-
-
-    void OnDisable()
-    {
-        e_health.OnDied -= Die;
     }
 
     void Update()
     {
-        if (autoKill) { autoKill = false; e_health.ChangeHealth(-e_stats.maxHP); }
+        if (autoKill) { autoKill = false; e_Health.ChangeHealth(-c_Stats.maxHP); }
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
     }
 
@@ -86,17 +79,10 @@ public class E_Combat : MonoBehaviour
             {
                 bool inAttackRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
 
-                if (lockDuringAttack)
-                {
-                    // Normal mode: Idle in place if player is still in range
-                    bool shouldHold = inAttackRange && cooldownTimer > 0f;
-                    e_movement.SetHoldInRange(shouldHold);
-                }
-                else
-                {
-                    // Hard mode: Enemies never hold between attack
-                    e_movement.SetHoldInRange(false);
-                }
+                bool lockMoveFlag = (c_State && c_State.lockMove);
+                bool shouldHold = inAttackRange && cooldownTimer > 0f && lockMoveFlag;
+                e_Movement.SetHoldInRange(shouldHold);
+
                 // If close enough and off cooldown, begin an attack
                 if (inAttackRange && cooldownTimer <= 0f)
                     StartCoroutine(AttackRoutine());
@@ -109,7 +95,10 @@ public class E_Combat : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision)
     {
         if (!IsAlive) return;
-
+        
+        // Filter to only player layer
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
+            return;
         // Count down using physics timestep
         if (contactTimer > 0f)
         {
@@ -118,48 +107,44 @@ public class E_Combat : MonoBehaviour
         }
         var playerHealth = collision.collider.GetComponent<C_Health>();
         if (playerHealth == null || !playerHealth.IsAlive) return; // Only damage a live player
-        playerHealth.ChangeHealth(-e_stats.collisionDamage); //Apply damage
-        contactTimer = e_stats.collisionTick; // reset tick window
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage); //Apply damage
+        contactTimer = c_Stats.collisionTick; // reset tick window
     }
 
 
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        animator.SetBool("isAttacking", true);
 
-        // Aim the directional attack
-        var dir = e_movement.lastMove;
-        animator.SetFloat("atkX", dir.x);
-        animator.SetFloat("atkY", dir.y);
+        // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
+        Vector2 dir = ReadAimToPlayer();
+        
+        // Set facing direction
+        c_State.SetAttackDirection(dir);
 
         // Delay -> Attack -> recover
         yield return new WaitForSeconds(hitDelay);
         // Placeholder
-        activeWeapon?.Attack();
+        activeWeapon?.Attack(dir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
         
         // Decide keep chasing/idle based on lockDuringAttack (MODE)
-        if (lockDuringAttack)
-        {
-            bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-            e_movement.SetHoldInRange(stillInRange);
-        }
-        else
-        {
-            e_movement.SetHoldInRange(false);
-        }
+        bool lockMoveFlag = (c_State && c_State.lockMove);
+        bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        e_Movement.SetHoldInRange(lockMoveFlag && stillInRange);
+
 
         isAttacking = false;
-        animator.SetBool("isAttacking", false);
 
-        cooldownTimer = e_stats.attackCooldown;
+        cooldownTimer = c_Stats.attackCooldown;
     }
 
-    void Die()
+    Vector2 ReadAimToPlayer()
     {
-        e_movement.SetDisabled(true);
-        animator.SetTrigger("Die");
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (!player) return Vector2.down;
+        Vector2 d = (Vector2)(player.transform.position - transform.position);
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : Vector2.down;
     }
 
     void OnDrawGizmosSelected()
@@ -168,8 +153,98 @@ public class E_Combat : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
- 
-// ----- File: E_Movement.cs ----- 
+
+// ----- File: E_HealthBarSlider.cs -----
+// File: E_HealthBarSlider.cs  (enemy-only, green-only)
+using UnityEngine;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(CanvasGroup))]
+public class E_HealthBarSlider : MonoBehaviour
+{
+    [Header("References")]
+    public C_Health e_Health; // owner
+    public Slider   slider;   // green current HP
+
+    [Header("World Positioning")]
+    public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
+
+    [Header("Visibility")]
+    public float visibleTime = 2f;   // auto-hide delay
+    public bool  startHidden = true; // start invisible until first event
+
+    // cached
+    CanvasGroup cg;
+    float hideTimer;
+
+    void Awake()
+    {
+        cg       ??= GetComponent<CanvasGroup>();
+        e_Health ??= GetComponentInParent<C_Health>();
+
+        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider missing.", this);
+        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider missing.", this);
+    }
+
+    void OnEnable()
+    {
+        var s = e_Health.c_Stats;      // current/max HP live here
+        slider.maxValue = s.maxHP;     // make slider track the true max
+        slider.value    = s.currentHP; // initialize to current
+
+        if (startHidden) cg.alpha = 0f;
+
+        e_Health.OnDamaged += OnDamaged;
+        e_Health.OnHealed  += OnHealed;
+        e_Health.OnDied    += OnDied;
+    }
+
+    void OnDisable()
+    {
+        e_Health.OnDamaged -= OnDamaged;
+        e_Health.OnHealed  -= OnHealed;
+        e_Health.OnDied    -= OnDied;
+    }
+
+    void LateUpdate()
+    {
+        // follow owner
+        transform.position = e_Health.transform.position + worldOffset;
+
+        // handle fade-out timer
+        if (hideTimer > 0f)
+        {
+            hideTimer -= Time.deltaTime;
+            if (hideTimer <= 0f) cg.alpha = 0f;
+        }
+    }
+
+    // ——— health event handlers ———
+    void OnDamaged(int amount)
+    {
+        slider.value = e_Health.c_Stats.currentHP;
+        Show();
+    }
+
+    void OnHealed(int amount)
+    {
+        slider.value = e_Health.c_Stats.currentHP;
+        Show();
+    }
+
+    void OnDied()
+    {
+        cg.alpha = 0f; // death visuals handled elsewhere
+    }
+
+    void Show()
+    {
+        cg.alpha = 1f;
+        hideTimer = visibleTime;
+    }
+}
+
+// ----- File: E_Movement.cs -----
 using System;
 using UnityEngine;
 
@@ -180,8 +255,9 @@ public class E_Movement : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     
-    public E_Stats e_stats;
-    public E_Combat e_combat;
+    public C_Stats c_Stats;   
+    public C_State c_State;
+    public E_Combat e_Combat;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -198,7 +274,7 @@ public class E_Movement : MonoBehaviour
     Vector2 velocity;
     Vector2 knockback;
 
-    const float MIN_DISTANCE = 0.0001f;
+    const float MIN_DISTANCE = 0.000001f;
     
     void Awake()
     {
@@ -206,22 +282,27 @@ public class E_Movement : MonoBehaviour
         rb          ??= GetComponent<Rigidbody2D>();
         animator    ??= GetComponent<Animator>();
 
-        e_stats     ??= GetComponent<E_Stats>();
-        e_combat    ??= GetComponent<E_Combat>();
+        c_Stats     ??= GetComponent<C_Stats>();
+        c_State ??= GetComponent<C_State>();
+        e_Combat    ??= GetComponent<E_Combat>();
         
 
-        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer missing.");
-        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (animator    == null) Debug.LogError($"{name}: Animator missing.");
+        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer in E_Movement missing.");
+        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D in E_Movement missing.");
+        if (animator    == null) Debug.LogError($"{name}: Animator in E_Movement missing.");
         
-        if (e_stats == null) Debug.LogError($"{name}: E_Stats missing.");
-        if (e_combat    == null) Debug.LogError($"{name}: E_Combat missing.");
+        if (c_Stats     == null) Debug.LogError($"{name}: E_Stats in E_Movement missing.");
+        if (e_Combat    == null) Debug.LogError($"{name}: E_Combat in E_Movement missing.");
     }
 
     void Update()
     {
         Chase();
-        C_Anim.UpdateAnimDirections(animator, animator.GetBool("isAttacking"), moveAxis, lastMove, MIN_DISTANCE);
+            if (c_State.Is(C_State.ActorState.Attack))
+            {
+                lastMove = c_State.GetAttackDirection();
+            }
+            c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
     void FixedUpdate()
@@ -231,7 +312,7 @@ public class E_Movement : MonoBehaviour
 
         if (knockback.sqrMagnitude > 0f)
         {
-            float step = (e_stats ? e_stats.KR : 0f) * Time.fixedDeltaTime;
+            float step = c_Stats.KR * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
         }
     }
@@ -256,7 +337,7 @@ public class E_Movement : MonoBehaviour
         else
         {
             Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-            bool hasDir = to.sqrMagnitude > (MIN_DISTANCE * MIN_DISTANCE);
+            bool hasDir = to.sqrMagnitude > MIN_DISTANCE;
             if (hasDir) lastMove = to.normalized;
 
             // If holding then don't create intent, otherwise face & move toward target
@@ -264,11 +345,8 @@ public class E_Movement : MonoBehaviour
         }
 
         // Velocity valve
-        bool attacking = animator.GetBool("isAttacking");
-        // Block velocity when disabled, holding, or attacking
-        bool valveClosed = disabled || holdInRange || (attacking && e_combat.lockDuringAttack);
-
-        Vector2 intendedVelocity = moveAxis * e_stats.MS;
+        bool valveClosed = disabled || holdInRange || (c_State != null && c_State.CheckIsBusy());
+        Vector2 intendedVelocity = moveAxis * c_Stats.MS;
         velocity = valveClosed ? Vector2.zero : intendedVelocity;
     }
 
@@ -282,8 +360,6 @@ public class E_Movement : MonoBehaviour
             moveAxis = Vector2.zero;
             velocity = Vector2.zero;
             rb.linearVelocity = Vector2.zero; // immediate stop
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isIdle", false);
         }
     }
 
@@ -298,31 +374,41 @@ public class E_Movement : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }
- 
-// ----- File: E_Stats.cs ----- 
+
+// ----- File: E_Reward.cs -----
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class E_Stats : MonoBehaviour
+public class E_Reward : MonoBehaviour
 {
-    [Header("Stats")]
-    public int AD = 1; // Attack Damage
-    public int AP = 0; // Ability Power
-    public float MS = 5f; // Move Speed
+    [Header("Rewards")]
+    public int expReward = 10; // tweak per enemy prefab
 
-    public int maxHP = 10;
-    public int currentHP = 10;
-    public int AR = 0; // Armor
-    public int MR = 0; // Magic Resist
-    public float KR = 10f; // knockback Resist
+    C_Health c_Health;
+    static P_Exp p_Exp;
 
-    [Header("Combat")]
-    public float attackCooldown = 1.2f;
-    public int   collisionDamage = 1;   // per-enemy
-    public float collisionTick   = 0.5f; // seconds between ticks while touching
+    void Awake()
+    {
+        c_Health ??= GetComponentInParent<C_Health>();
+        if (p_Exp == null) p_Exp = FindObjectOfType<P_Exp>();
 
-    [Header("Placeholders")]
-    public float knockbackForce = 0f;
-    public float stunTime = 0f;
+        if (!c_Health) Debug.LogError($"{name}: C_Health in E_Reward missing.", this);
+        if (!p_Exp) Debug.LogError($"{name}: P_Exp not found in scene.", this);
+    }
+
+    void OnEnable()
+    {
+        c_Health.OnDied += HandleDied;
+    }
+
+    void OnDisable()
+    {
+        c_Health.OnDied -= HandleDied;
+    }
+
+    void HandleDied()
+    {
+        p_Exp?.AddXP(expReward);
+    }
 }
- 
+

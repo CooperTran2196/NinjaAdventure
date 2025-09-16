@@ -1,91 +1,67 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using TMPro;
 
 public class HealthUI : MonoBehaviour
 {
     [Header("References")]
-    public C_Stats  p_Stats;
-    public C_Health p_Health;            // Player's C_Health
-    public RectTransform root;
-    public Image healthPointPrefab;
+    public C_Stats p_Stats;
+    public C_Health p_Health;
+    public P_StatsChanged p_StatsChanged; // Add reference to listen for stat changes
+    public Slider healthSlider;
+    public TMP_Text healthText;
 
-    [Header("Sprites (index = Empty -> Full)")]
-    public Sprite[] healthPoint = new Sprite[4];
-
-    readonly List<Image> hpIcons = new List<Image>();
-    int lastMaxHP = -1;
-
-    System.Action<int> onDamaged, onHealed;
-    System.Action onDied;
-    
     void Awake()
     {
-        if (!p_Stats) Debug.LogError($"{name}: P_Stats in HealthUI missing.");
-        if (!p_Health) Debug.LogError($"{name}: P_Health in HealthUI missing.");
+        // Find references if not assigned
+        p_Stats ??= FindFirstObjectByType<C_Stats>();
+        p_Health ??= FindFirstObjectByType<C_Health>();
+        p_StatsChanged ??= FindFirstObjectByType<P_StatsChanged>();
 
+        if (!p_Stats) Debug.LogError($"{name}: C_Stats in HealthUI missing.", this);
+        if (!p_Health) Debug.LogError($"{name}: C_Health in HealthUI missing.", this);
+        if (!p_StatsChanged) Debug.LogError($"{name}: P_StatsChanged in HealthUI missing.", this);
+        if (!healthSlider) Debug.LogError($"{name}: healthSlider in HealthUI missing.", this);
+
+        // Initialize slider
+        healthSlider.maxValue = p_Stats.maxHP;
+        healthSlider.value = p_Stats.currentHP;
     }
 
     void OnEnable()
     {
-        onDamaged = _ => UpdateSprites();
-        onHealed  = _ => UpdateSprites();
-        onDied    = () => UpdateSprites();
+        // Subscribe to health and stat change events
+        p_Health.OnDamaged += HandleHealthChanged;
+        p_Health.OnHealed += HandleHealthChanged;
+        p_Health.OnDied += UpdateUI;
 
-        p_Health.OnDamaged += onDamaged;
-        p_Health.OnHealed  += onHealed;
-        p_Health.OnDied    += onDied;
+        p_StatsChanged.OnStatsRecalculated += UpdateUI;
 
         UpdateUI();
-        UpdateSprites();
     }
 
     void OnDisable()
     {
-        p_Health.OnDamaged -= onDamaged;
-        p_Health.OnHealed  -= onHealed;
-        p_Health.OnDied    -= onDied;
+        p_Health.OnDamaged -= HandleHealthChanged;
+        p_Health.OnHealed -= HandleHealthChanged;
+        p_Health.OnDied -= UpdateUI;
+
+        p_StatsChanged.OnStatsRecalculated -= UpdateUI;
+
+    }
+
+    // A helper method to match the signature of OnDamaged and OnHealed events
+    void HandleHealthChanged(int amount)
+    {
+        UpdateUI();
     }
 
     public void UpdateUI()
     {
-        // Player-only
-        int maxHP = p_Stats.maxHP;
+        // Update the slider's max value and current value
+        healthSlider.maxValue = p_Stats.maxHP;
+        healthSlider.value = p_Stats.currentHP;
 
-        int HealthPointPerIcon = Mathf.Max(1, healthPoint.Length - 1);
-
-        if (maxHP == lastMaxHP)
-            return;
-
-        lastMaxHP = maxHP;
-
-        // Number of heart images needed
-        int needed = Mathf.CeilToInt(maxHP / (float)HealthPointPerIcon);
-
-        // Rebuild
-        for (int i = root.childCount - 1; i >= 0; i--)
-            Destroy(root.GetChild(i).gameObject);
-
-        hpIcons.Clear();
-
-        for (int i = 0; i < needed; i++)
-        {
-            var img = Instantiate(healthPointPrefab, root);
-            img.enabled = true;
-            hpIcons.Add(img);
-        }
-    }
-
-    public void UpdateSprites()
-    {
-        int hp  = p_Stats.currentHP;
-        int pph = Mathf.Max(1, healthPoint.Length - 1); // fills per heart (excluding empty)
-
-        for (int i = 0; i < hpIcons.Count; i++)
-        {
-            // Remaining HP that this heart can show
-            int fill = Mathf.Clamp(hp - i * pph, 0, pph);
-            hpIcons[i].sprite = healthPoint[fill];
-        }
+        healthText.text = $"{p_Stats.currentHP} / {p_Stats.maxHP}";
     }
 }

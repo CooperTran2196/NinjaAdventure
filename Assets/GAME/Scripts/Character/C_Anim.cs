@@ -17,7 +17,7 @@ public static class C_Anim
             animator.SetFloat("moveY", moveAxis.y);
         }
 
-        // Always refresh idle facing so the character remembers direction
+        // Always refresh idle facing sso the character remembers direction
         animator.SetFloat("idleX", lastMove.x);
         animator.SetFloat("idleY", lastMove.y);
     }

@@ -9,6 +9,7 @@ public class E_Combat : MonoBehaviour
     Animator animator;
 
     public C_Stats c_Stats;
+    public C_State c_State;
     public E_Movement e_Movement;
     public C_Health e_Health;
     public W_Base activeWeapon;
@@ -23,15 +24,14 @@ public class E_Combat : MonoBehaviour
     public float attackDuration = 0.45f;
     [Header("ALWAYS set when the hit happens (0.15)")]
     public float hitDelay = 0.15f;
-    public bool lockDuringAttack = true;
 
     [Header("Debug")]
     [SerializeField] bool autoKill;
 
     // Quick state check
+    public bool isAttacking { get;  private set; }
     public bool IsAlive => c_Stats.currentHP > 0;
     const float MIN_DISTANCE = 0.0001f;
-    bool isAttacking;
     float contactTimer;   // for collision damage
     float cooldownTimer;  // for attacking cooldown
 
@@ -41,6 +41,7 @@ public class E_Combat : MonoBehaviour
         animator        ??= GetComponent<Animator>();
 
         c_Stats         ??= GetComponent<C_Stats>();
+        c_State         ??= GetComponent<C_State>();
         e_Movement      ??= GetComponent<E_Movement>();
         e_Health        ??= GetComponent<C_Health>();
         activeWeapon    ??= GetComponentInChildren<W_Melee>();
@@ -57,13 +58,6 @@ public class E_Combat : MonoBehaviour
     void OnEnable()
     {
         StartCoroutine(ThinkLoop());
-        e_Health.OnDied += Die;
-    }
-
-
-    void OnDisable()
-    {
-        e_Health.OnDied -= Die;
     }
 
     void Update()
@@ -84,17 +78,10 @@ public class E_Combat : MonoBehaviour
             {
                 bool inAttackRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
 
-                if (lockDuringAttack)
-                {
-                    // Normal mode: Idle in place if player is still in range
-                    bool shouldHold = inAttackRange && cooldownTimer > 0f;
-                    e_Movement.SetHoldInRange(shouldHold);
-                }
-                else
-                {
-                    // Hard mode: Enemies never hold between attack
-                    e_Movement.SetHoldInRange(false);
-                }
+                bool lockMoveFlag = (c_State && c_State.lockMove);
+                bool shouldHold = inAttackRange && cooldownTimer > 0f && lockMoveFlag;
+                e_Movement.SetHoldInRange(shouldHold);
+
                 // If close enough and off cooldown, begin an attack
                 if (inAttackRange && cooldownTimer <= 0f)
                     StartCoroutine(AttackRoutine());
@@ -107,7 +94,10 @@ public class E_Combat : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision)
     {
         if (!IsAlive) return;
-
+        
+        // Filter to only player layer
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
+            return;
         // Count down using physics timestep
         if (contactTimer > 0f)
         {
@@ -124,33 +114,26 @@ public class E_Combat : MonoBehaviour
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        animator.SetBool("isAttacking", true);
 
         // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
         Vector2 dir = ReadAimToPlayer();
         
         // Set facing direction
-        C_Anim.SetAttackDirection(animator, dir);
+        c_State.SetAttackDirection(dir);
 
         // Delay -> Attack -> recover
         yield return new WaitForSeconds(hitDelay);
         // Placeholder
-        activeWeapon?.Attack();
+        activeWeapon?.Attack(dir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
         
         // Decide keep chasing/idle based on lockDuringAttack (MODE)
-        if (lockDuringAttack)
-        {
-            bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-            e_Movement.SetHoldInRange(stillInRange);
-        }
-        else
-        {
-            e_Movement.SetHoldInRange(false);
-        }
+        bool lockMoveFlag = (c_State && c_State.lockMove);
+        bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        e_Movement.SetHoldInRange(lockMoveFlag && stillInRange);
+
 
         isAttacking = false;
-        animator.SetBool("isAttacking", false);
 
         cooldownTimer = c_Stats.attackCooldown;
     }
@@ -161,12 +144,6 @@ public class E_Combat : MonoBehaviour
         if (!player) return Vector2.down;
         Vector2 d = (Vector2)(player.transform.position - transform.position);
         return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : Vector2.down;
-    }
-
-    void Die()
-    {
-        e_Movement.SetDisabled(true);
-        animator.SetTrigger("Die");
     }
 
     void OnDrawGizmosSelected()
