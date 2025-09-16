@@ -10,17 +10,25 @@ public class W_Ranged : W_Base
 
     IEnumerator Shoot(Vector2 dir)
     {
+        // Normalize aim for consistency
+        dir = (dir.sqrMagnitude > 0f) ? dir.normalized : Vector2.right;
+
         // Visuals (bow orbit + rotation)
         Vector3 pos = PolarPosition(dir);
         float angle = PolarAngle(dir);
         BeginVisual(pos, angle, enableHitbox: false);
 
-        bool fired = false;
-        yield return ThrustOverTime(dir, data.showTime, data.thrustDistance, (k) =>
-        {
-            if (!fired && k >= 0.5f) { FireProjectile(dir); fired = true; }
-        });
+        // Run the thrust motion in parallel
+        StartCoroutine(ThrustOverTime(dir, data.showTime, data.thrustDistance));
 
+        // Fire exactly at 50% of the show time
+        yield return new WaitForSeconds(data.showTime * 0.5f);
+        FireProjectile(dir);
+
+        // Finish the remaining half of the show time
+        yield return new WaitForSeconds(data.showTime * 0.5f);
+
+        // Hide
         sprite.enabled = false;
     }
 

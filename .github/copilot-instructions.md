@@ -1,12 +1,12 @@
 ## Copilot Instructions — NinjaAdventure (concise)
 
 Quick overview
-- Unity 2D action RPG. Code lives in `Assets/GAME/Scripts/` and is organized by feature (Player, Enemy, Character, Weapon, UI).
+- Unity 2D action RPG. Code lives in `Assets/GAME/Scripts/` and is organized by feature (Player, Enemy, Character, Weapon, UI, SkillTree).
 
 Big-picture architecture
 - Component-driven: small MonoBehaviours own single responsibilities (examples: `C_Stats`, `C_Health`, `P_Movement`, `E_Combat`).
-- Weapons are data-driven: `W_SO` ScriptableObjects hold weapon stats; `W_Base` + `W_Melee`/`W_Ranged` implement behaviour.
-- Input is routed through the generated `P_InputActions` class (Player / UI / Debug action maps). Don't edit the generated file — edit the `.inputactions` asset.
+- Weapons are data-driven: `W_SO` ScriptableObjects hold weapon stats; `W_Base` + `W_Melee`/`W_Ranged` implement behaviour; `W_Projectile` handles ranged.
+- Input is routed via generated `P_InputActions` (Player / UI / Debug maps). Don’t edit `P_InputActions.cs` — edit `Assets/Settings/P_InputActions.inputactions`.
 
 Developer workflows (essentials)
 - Build: run the VS Code `build` task (msbuild). Play and debug in the Unity Editor.

@@ -18,44 +18,40 @@ public abstract class W_Base : MonoBehaviour
     public Transform owner;
     public LayerMask targetMask;
 
-    [Header("Hitbox Auto")]
+    [Header("Auto Sized Hitbox")]
     public bool autoSizeFromSprite = true;
 
     [Header("Debug")]
     [SerializeField] bool debugDrawHitbox = false;
     [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
 
-    const float MIN_DISTANCE = 0.001f;
-
-    protected virtual void Awake()
+    void Awake()
     {
+        // 1/ Cache weapon components
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
 
         if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
         if (!hitbox) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
 
-        hitbox.isTrigger = true;
-
-        // Hide by default and shown only during Attack
-        sprite.enabled = false;
+        // 2/ Collider mode + default visibility
+        hitbox.isTrigger = true;     // trigger-based hit detection
+        sprite.enabled = false;      // show only during attack window
         hitbox.enabled = false;
 
-        // Owner is always the root
+        // 3/ Owner + deps
         owner = transform.root;
-        ownerAnimator = owner.GetComponent<Animator>();
-        c_Stats = owner.GetComponent<C_Stats>();
+        ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
+        c_Stats ??= owner ? owner.GetComponent<C_Stats>() : null;
+        
+        if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
+        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
+        if (!data)          Debug.LogError($"{name}: W_SO data is not assigned on {gameObject.name}", this);
 
-        if (!owner) Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
-        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner.name}", this);
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing on owner {owner.name}", this);
-        if (!data) Debug.LogError($"{name}: W_SO data is not assigned on {gameObject.name}", this);
-
-        // Always apply the data sprite
-        sprite.sprite = data.sprite;
-
-        // Auto size the weapon hitbox
-        if (autoSizeFromSprite)
+        // 4/ Visual + hitbox sizing
+        if (data && sprite) sprite.sprite = data.sprite;
+        if (autoSizeFromSprite && sprite && sprite.sprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
             hitbox.offset = Vector2.zero;
@@ -80,9 +76,8 @@ public abstract class W_Base : MonoBehaviour
         hitbox.enabled = enableHitbox;
     }
 
-    // Move forward/back along dir over showTime, call onProgress if ranged
-    protected IEnumerator ThrustOverTime(
-        Vector2 dir, float showTime, float thrustDist, System.Action<float> onProgress = null)
+    // Move forward/back along dir over showTime (no callback)
+    protected IEnumerator ThrustOverTime(Vector2 dir, float showTime, float thrustDist)
     {
         float t = 0f;
         Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
@@ -93,11 +88,10 @@ public abstract class W_Base : MonoBehaviour
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / showTime);
             transform.position = Vector3.Lerp(start, end, k);
-            onProgress?.Invoke(k);
             yield return null;
         }
     }
-
+    
     // INSTANCE convenience wrappers for from W_Melee / W_Ranged
     protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
         => TryGetTarget(owner, targetMask, other);
@@ -138,10 +132,11 @@ public abstract class W_Base : MonoBehaviour
         int weaponAD = data.AD, weaponAP = data.AP;
         int dealt = target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
-        var pStatsChanged = attacker.GetComponent<P_StatsChanged>();
-        if (pStatsChanged != null && dealt > 0)
+        // Notify attacker of damage dealt (Player only)
+        var p_StatsChanged = attacker.GetComponent<P_StatsChanged>();
+        if (p_StatsChanged != null && dealt > 0)
         {
-            pStatsChanged.OnDealtDamage(dealt);
+            p_StatsChanged.OnDealtDamage(dealt);
         }
 
         if (data.knockbackForce > 0f)
@@ -173,6 +168,9 @@ public abstract class W_Base : MonoBehaviour
         data = d;
         if (applySprite && data && sprite) sprite.sprite = data.sprite;
     }
+
+
+    // Debug: draw hitbox when active
     void OnDrawGizmos()
     {
         if (!debugDrawHitbox) return;
