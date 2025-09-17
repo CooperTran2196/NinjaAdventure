@@ -14,9 +14,9 @@ public class W_Ranged : W_Base
         attackDir = attackDir.normalized;
 
         // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector3 pos = GetPolarPosition(attackDir);
+        Vector3 posision = GetPolarPosition(attackDir);
         float angle = GetPolarAngle(attackDir);
-        BeginVisual(pos, angle, enableHitbox: false);
+        BeginVisual(posision, angle, enableHitbox: false);
 
         // Run the thrust motion in parallel
         StartCoroutine(ThrustOverTime(attackDir, weaponData.showTime, weaponData.thrustDistance));

@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 
+[DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
 {
     [Header("References")]

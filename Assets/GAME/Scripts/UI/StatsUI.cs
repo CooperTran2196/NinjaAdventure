@@ -43,21 +43,15 @@ public class StatsUI : MonoBehaviour
 
     void Update()
     {
-        if (!input.UI.ToggleStats.WasPressedThisFrame()) return;
+        if (input.UI.ToggleStats.WasPressedThisFrame())
+            SetOpen(!statsOpen);
+    }
 
-        if (statsOpen) // Close
-        {
-            Time.timeScale  = 1;
-            statsCanvas.alpha = 0;
-            statsOpen = false;
-        }
-        else // Open
-        {
-            UpdateAllStats();
-            Time.timeScale  = 0;
-            statsCanvas.alpha = 1;
-            statsOpen = true;
-        }
+    void SetOpen(bool open)
+    {
+        Time.timeScale = open ? 0f : 1f;
+        statsCanvas.alpha = open ? 1f : 0f;
+        statsOpen = open;
     }
 
     public void UpdateAD()

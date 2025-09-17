@@ -4,6 +4,7 @@ using System;
 [DisallowMultipleComponent]
 public class P_Exp : MonoBehaviour
 {
+    [Header("Independent component to manage Player's XP, Level, and Skill Points")]
     [Header("Linear XP (tweak in Inspector)")]
     public int level = 1;
     public int currentXP = 0;
@@ -15,9 +16,9 @@ public class P_Exp : MonoBehaviour
     [Header("Debug")]
     public int debugXPAmount = 20;
 
-    public event Action<int> OnLevelUp;
-    public event Action<int,int> OnXPChanged;
-    public event Action<int> OnSkillPointsChanged;
+    public event Action<int>        OnLevelUp;
+    public event Action<int,int>    OnXPChanged;
+    public event Action<int>        OnSPChanged;
 
     void Start()
     {
@@ -43,7 +44,7 @@ public class P_Exp : MonoBehaviour
             skillPoints += skillPointsPerLevel;
 
             OnLevelUp?.Invoke(level);
-            OnSkillPointsChanged?.Invoke(skillPoints);
+            OnSPChanged?.Invoke(skillPoints);
 
             req = GetXPRequiredForNext();
         }
@@ -57,8 +58,9 @@ public class P_Exp : MonoBehaviour
         if (amount <= 0) return false;
         if (skillPoints < amount) return false;
 
+        // spend points and return true
         skillPoints -= amount;
-        OnSkillPointsChanged?.Invoke(skillPoints);
+        OnSPChanged?.Invoke(skillPoints);
         return true;
     }
 

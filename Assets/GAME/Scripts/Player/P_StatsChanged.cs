@@ -3,8 +3,9 @@ using System;
 
 public class P_StatsChanged : MonoBehaviour
 {
+    [Header("Independent component to manage Player's stats changed by Skill Tree")]
     [Header("References")]
-    public C_Stats  c_Stats;
+    public C_Stats c_Stats;
     public C_Health c_Health;
 
     // Baseline snapshot
@@ -16,27 +17,27 @@ public class P_StatsChanged : MonoBehaviour
     float upMS, upKR;
 
     // Lifesteal
-    public bool  lifestealUnlocked = false;
+    public bool lifestealUnlocked = false;
     [Range(0f, 1f)] public float lifestealPercent = 0f;
 
     public event Action OnStatsRecalculated;
 
     void Awake()
     {
-        c_Stats  ??= GetComponent<C_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
         c_Health ??= GetComponent<C_Health>();
 
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing in P_Skills.", this);
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in P_Skills.", this);
         if (!c_Health) Debug.LogError($"{name}: C_Health missing in P_Skills.", this);
 
-        baseAD    = c_Stats.AD;
-        baseAP    = c_Stats.AP;
+        baseAD = c_Stats.AD;
+        baseAP = c_Stats.AP;
         baseMaxHP = c_Stats.maxHP;
-        baseAR    = c_Stats.AR;
-        baseMR    = c_Stats.MR;
-        baseMS    = c_Stats.MS;
-        baseKR    = c_Stats.KR;
-  
+        baseAR = c_Stats.AR;
+        baseMR = c_Stats.MR;
+        baseMS = c_Stats.MS;
+        baseKR = c_Stats.KR;
+
         Recalculate();
     }
 
@@ -45,13 +46,13 @@ public class P_StatsChanged : MonoBehaviour
     {
         switch (stat)
         {
-            case ST_SkillSO.Stat.AD:     upAD += delta; break;
-            case ST_SkillSO.Stat.AP:     upAP += delta; break;
-            case ST_SkillSO.Stat.MaxHP:  upHP += delta; break;
-            case ST_SkillSO.Stat.AR:     upAR += delta; break;
-            case ST_SkillSO.Stat.MR:     upMR += delta; break;
-            case ST_SkillSO.Stat.MS:     upMS += delta; break;
-            case ST_SkillSO.Stat.KR:     upKR += delta; break;
+            case ST_SkillSO.Stat.AD: upAD += delta; break;
+            case ST_SkillSO.Stat.AP: upAP += delta; break;
+            case ST_SkillSO.Stat.MaxHP: upHP += delta; break;
+            case ST_SkillSO.Stat.AR: upAR += delta; break;
+            case ST_SkillSO.Stat.MR: upMR += delta; break;
+            case ST_SkillSO.Stat.MS: upMS += delta; break;
+            case ST_SkillSO.Stat.KR: upKR += delta; break;
         }
         Recalculate();
     }
@@ -59,7 +60,7 @@ public class P_StatsChanged : MonoBehaviour
     public void SetLifestealPercent(float percent)
     {
         lifestealUnlocked = percent > 0f;
-        lifestealPercent  = percent;
+        lifestealPercent = percent;
     }
 
     void Recalculate()
