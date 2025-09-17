@@ -15,11 +15,12 @@ public class W_Projectile : MonoBehaviour
     // Runtime
     Transform owner;
     C_Stats attackerStats;
-    W_SO data;
+    W_SO weaponData;
     LayerMask targetMask;
-    Vector2 moveDir;
+    Vector2 fireDir;
+
     int remainingPierces;
-    readonly HashSet<int> hitOnce = new HashSet<int>();
+    readonly HashSet<int> alreadyHit = new HashSet<int>();
 
     void Awake()
     {
@@ -36,20 +37,21 @@ public class W_Projectile : MonoBehaviour
         rb.freezeRotation = true;
     }
 
-    public void Init(Transform owner, C_Stats attackerStats, W_SO data, Vector2 dir, LayerMask mask)
+    public void Init(Transform owner, C_Stats attackerStats, W_SO weaponData, Vector2 fireDir, LayerMask targetMask)
     {
         this.owner = owner;
         this.attackerStats = attackerStats;
-        this.data = data;
-        this.moveDir = dir.normalized;
-        this.targetMask = mask;
-        this.remainingPierces = Mathf.Max(0, data.pierceCount);
+        this.weaponData = weaponData;
+        this.fireDir = fireDir.normalized;
+        this.targetMask = targetMask;
+        this.remainingPierces = Mathf.Max(0, weaponData.pierceCount);
 
-        // Keep prefab’s arrow sprite (don’t overwrite with data.sprite which is bow art)
-        rb.linearVelocity = moveDir * data.projectileSpeed;
+        // Keep prefab’s arrow sprite (don’t overwrite with weaponData.sprite which is bow art)
+        rb.linearVelocity = fireDir * weaponData.projectileSpeed;
 
-        if (data.projectileLifetime > 0f)
-            Destroy(gameObject, data.projectileLifetime);
+        // Auto-destroy after lifetime
+        if (weaponData.projectileLifetime > 0f)
+            Destroy(gameObject, weaponData.projectileLifetime);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -59,10 +61,10 @@ public class W_Projectile : MonoBehaviour
         if (targetHealth == null) return;
 
         // per-projectile de-dup
-        if (!hitOnce.Add(root.GetInstanceID())) return;
+        if (!alreadyHit.Add(root.GetInstanceID())) return;
 
         // EFFECTS via W_Base static
-        W_Base.ApplyHitEffects(attackerStats, data, targetHealth, moveDir, other, this);
+        W_Base.ApplyHitEffects(attackerStats, weaponData, targetHealth, fireDir, other, this);
 
         // Consume pierce or stop now
         if (remainingPierces > 0)
@@ -71,10 +73,10 @@ public class W_Projectile : MonoBehaviour
             return;                  // keep flying
         }
 
-        // No more pierce: stick (if enabled) or destroy
-        if (data.stickOnHitSeconds > 0f)
+        // No more pierce: stick or destroy
+        if (weaponData.stickOnHitSeconds > 0f)
         {
-            StartCoroutine(StickAndDie(other, data.stickOnHitSeconds));
+            StartCoroutine(StickAndDie(other, weaponData.stickOnHitSeconds));
         }
         else
         {
@@ -87,7 +89,7 @@ public class W_Projectile : MonoBehaviour
         // Compute a precise surface point on the hit collider
         var dist = col.Distance(hitCol);          // distance info between our collider and hit collider
         Vector2 snap = dist.pointB;               // point on the *hit* collider
-        transform.position = snap + (moveDir * 0.02f); // tiny embed so it visually "bites" in
+        transform.position = snap + (fireDir * 0.02f); // tiny embed so it visually "bites" in
 
         // Pin it: stop physics & collisions, then parent to the *collider* (so it rides the sprite/bone)
         rb.linearVelocity = Vector2.zero;

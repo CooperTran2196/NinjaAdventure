@@ -29,7 +29,7 @@ public class P_Combat : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool autoKill;
 
-    Vector2 aimDir = Vector2.down; // default when starting the game
+    Vector2 attackDir = Vector2.down; // default when starting the game
     const float MIN_DISTANCE = 0.0001f;
     float cooldownTimer;
     public bool isAttacking { get; private set; }
@@ -76,7 +76,7 @@ public class P_Combat : MonoBehaviour
     {
         // Read aim from MOUSE
         Vector2 mouseAim = ReadMouseAim();
-        if (mouseAim.sqrMagnitude > MIN_DISTANCE) aimDir = mouseAim;
+        if (mouseAim.sqrMagnitude > MIN_DISTANCE) attackDir = mouseAim;
 
         // Inputs: Left Mouse  -> Melee, Right Mouse -> Ranged
         if (input.Player.MeleeAttack.triggered)  RequestAttack(meleeWeapon);
@@ -94,7 +94,7 @@ public class P_Combat : MonoBehaviour
         cooldownTimer = c_Stats.attackCooldown;
 
         // Face once at attack start
-        c_State.SetAttackDirection(aimDir);
+        c_State.SetAttackDirection(attackDir);
 
         
         StartCoroutine(AttackRoutine(weapon));
@@ -107,7 +107,7 @@ public class P_Combat : MonoBehaviour
 
         // Delay -> Attack -> Recover
         yield return new WaitForSeconds(hitDelay);
-        weapon.Attack(aimDir);
+        weapon.Attack(attackDir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
         // STATE: Attack END
@@ -120,7 +120,7 @@ public class P_Combat : MonoBehaviour
         if (!Camera.main || Mouse.current == null)
         {
             Debug.LogError("P_Combat: No main camera or mouse found for aiming.");
-            return aimDir;
+            return attackDir;
         }
 
         // screen-space mouse position
@@ -136,6 +136,6 @@ public class P_Combat : MonoBehaviour
         Vector2 d = (Vector2)(mw - transform.position);
 
         // return normalized direction if significant, else preserve aim
-        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : aimDir;
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : attackDir;
     }
 }

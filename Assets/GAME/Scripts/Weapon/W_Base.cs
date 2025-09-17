@@ -12,7 +12,7 @@ public abstract class W_Base : MonoBehaviour
     protected C_Stats c_Stats;
 
     [Header("Weapon Data")]
-    public W_SO data;
+    public W_SO weaponData;
 
     [Header("Owner + Targets")]
     public Transform owner;
@@ -36,8 +36,8 @@ public abstract class W_Base : MonoBehaviour
 
         // 2/ Collider mode + default visibility
         hitbox.isTrigger = true;     // trigger-based hit detection
-        sprite.enabled = false;      // show only during attack window
-        hitbox.enabled = false;
+        sprite.enabled   = false;      // show only during attack window
+        hitbox.enabled   = false;
 
         // 3/ Owner + deps
         owner = transform.root;
@@ -47,10 +47,10 @@ public abstract class W_Base : MonoBehaviour
         if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
         if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
         if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
-        if (!data)          Debug.LogError($"{name}: W_SO data is not assigned on {gameObject.name}", this);
+        if (!weaponData)    Debug.LogError($"{name}: W_SO weaponData is not assigned on {gameObject.name}", this);
 
         // 4/ Visual + hitbox sizing
-        if (data && sprite) sprite.sprite = data.sprite;
+        if (weaponData && sprite) sprite.sprite = weaponData.sprite;
         if (autoSizeFromSprite && sprite && sprite.sprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
@@ -58,13 +58,16 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    protected Vector3 PolarPosition(Vector2 rawAim) =>
-        owner.position + (Vector3)(rawAim * data.offsetRadius);
+    //
+    protected Vector3 GetPolarPosition(Vector2 attackDir) =>
+        owner.position + (Vector3)(attackDir * weaponData.offsetRadius);
 
-    protected float PolarAngle(Vector2 rawAim)
+    protected float GetPolarAngle(Vector2 attackDir)
     {
-        Vector2 baseline = data.pointsUp ? Vector2.up : Vector2.down;
-        return Vector2.SignedAngle(baseline, rawAim) + data.angleBiasDeg;
+        // Angle from up/down baseline + bias
+        Vector2 baseline = weaponData.pointsUp ? Vector2.up : Vector2.down;
+        // Get the signed angle between the baseline and the attack direction
+        return Vector2.SignedAngle(baseline, attackDir) + weaponData.angleBiasDeg;
     }
 
     // Position/rotate + show sprite, optionally enable hitbox
@@ -93,27 +96,27 @@ public abstract class W_Base : MonoBehaviour
     }
     
     // INSTANCE convenience wrappers for from W_Melee / W_Ranged
-    protected (C_Health target, GameObject root) TryGetTarget(Collider2D other)
-        => TryGetTarget(owner, targetMask, other);
+    protected (C_Health target, GameObject root) TryGetTarget(Collider2D targetCollider)
+        => TryGetTarget(owner, targetMask, targetCollider);
 
     // STATIC versions for W_Projectile
     public static (C_Health target, GameObject root)
-                TryGetTarget(Transform owner, LayerMask targetMask, Collider2D other)
+                TryGetTarget(Transform owner, LayerMask targetMask, Collider2D targetCollider)
     {
         // Layer filter
-        if ((targetMask.value & (1 << other.gameObject.layer)) == 0)
+        if ((targetMask.value & (1 << targetCollider.gameObject.layer)) == 0)
             return (null, null);
 
         // Ignore owner
-        if (other.transform == owner || other.transform.IsChildOf(owner))
+        if (targetCollider.transform == owner || targetCollider.transform.IsChildOf(owner))
             return (null, null);
 
         // Ignore weapon–weapon contacts
-        if (other.GetComponentInParent<W_Base>() != null)
+        if (targetCollider.GetComponentInParent<W_Base>() != null)
             return (null, null);
 
-        // Find target health on other's root
-        var target = other.GetComponentInParent<C_Health>();
+        // Find target health on targetCollider's root
+        var target = targetCollider.GetComponentInParent<C_Health>();
         if (target == null || !target.IsAlive)
             return (null, null);
 
@@ -122,40 +125,42 @@ public abstract class W_Base : MonoBehaviour
     }
 
     // INSTANCE convenience wrappers for from W_Melee / W_Ranged
-    protected void ApplyHitEffects(C_Stats attacker, W_SO d, C_Health target, Vector2 dir, Collider2D hitCol)
-        => ApplyHitEffects(attacker, d, target, dir, hitCol, this);
+    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider)
+                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this);
 
-    public static void ApplyHitEffects(C_Stats attacker, W_SO data,
-                                       C_Health target, Vector2 dir, Collider2D hitCol, MonoBehaviour weapon)
+    public static void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth,
+                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon)
     {
-        int attackerAD = attacker.AD, attackerAP = attacker.AP;
-        int weaponAD = data.AD, weaponAP = data.AP;
-        int dealt = target.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+        int attackerAD  = attackerStats.AD,     attackerAP = attackerStats.AP;
+        int weaponAD    = weaponData.AD,        weaponAP   = weaponData.AP;
+        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
         // Notify attacker of damage dealt (Player only)
-        var p_StatsChanged = attacker.GetComponent<P_StatsChanged>();
-        if (p_StatsChanged != null && dealt > 0)
+        var p_StatsChanged = attackerStats.GetComponent<P_StatsChanged>();
+        if (p_StatsChanged != null && dealtDamage > 0)
         {
-            p_StatsChanged.OnDealtDamage(dealt);
+            p_StatsChanged.OnDealtDamage(dealtDamage);
         }
 
-        if (data.knockbackForce > 0f)
-            W_Knockback.PushTarget(hitCol.gameObject, dir, data.knockbackForce);
+        // Hit effects
+        if (weaponData.knockbackForce > 0f)
+            W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
 
-        if (data.stunTime > 0f)
+        if (weaponData.stunTime > 0f)
         {
-            var pm = hitCol.GetComponentInParent<P_Movement>();
-            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, data.stunTime)); }
+            var pm = targetCollider.GetComponentInParent<P_Movement>();
+            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
             else
             {
-                var em = hitCol.GetComponentInParent<E_Movement>();
-                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, data.stunTime)); }
+                var em = targetCollider.GetComponentInParent<E_Movement>();
+                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
             }
         }
     }
 
-    public abstract void Attack(Vector2 dir);
+    public abstract void Attack(Vector2 attackDir);
 
+    // Called by owner when equipping
     public virtual void Equip(Transform newOwner)
     {
         owner = newOwner;
@@ -163,10 +168,11 @@ public abstract class W_Base : MonoBehaviour
         c_Stats = owner.GetComponent<C_Stats>();
     }
 
-    public void SetData(W_SO d, bool applySprite = true)
+    // Change weapon data at runtime
+    public void SetData(W_SO weaponData)
     {
-        data = d;
-        if (applySprite && data && sprite) sprite.sprite = data.sprite;
+        this.weaponData = weaponData;
+        sprite.sprite = this.weaponData.sprite;
     }
 
 
