@@ -75,9 +75,9 @@ public class W_Projectile : MonoBehaviour
         }
 
         // No more pierce: stick or destroy
-        if (weaponData.stickOnHitSeconds > 0f)
+        if (weaponData.stickOnHit > 0f)
         {
-            StartCoroutine(StickAndDie(targetCollider, weaponData.stickOnHitSeconds));
+            StartCoroutine(hit(targetCollider, weaponData.stickOnHit));
         }
         else
         {
@@ -85,7 +85,7 @@ public class W_Projectile : MonoBehaviour
         }
     }
 
-    IEnumerator StickAndDie(Collider2D targetCollider, float fadeDuration)
+    IEnumerator hit(Collider2D targetCollider, float fadeDuration)
     {
         // Compute a precise surface point on the hit collider
         var dist = col.Distance(targetCollider);          // distance info between our collider and hit collider
@@ -101,7 +101,7 @@ public class W_Projectile : MonoBehaviour
         // Optional: ensure it renders above the target while stuck
         sprite.sortingOrder += 1;
 
-        // Fade over 'seconds'
+        // Fade over seconds
         Color c = sprite.color;
         float t = 0f;
         while (t < fadeDuration)

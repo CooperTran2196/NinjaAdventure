@@ -30,6 +30,6 @@ public class W_SO : ScriptableObject
     public int manaCost = 0;
     public float projectileSpeed = 0f;
     public float projectileLifetime = 0f;
-    public float stickOnHitSeconds = 0f;
+    public float stickOnHit = 0f;
     public int   pierceCount = 0;
 }

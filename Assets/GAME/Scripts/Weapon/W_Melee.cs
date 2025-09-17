@@ -6,24 +6,24 @@ public class W_Melee : W_Base
 {
     Vector2 attackDir;
 
-    // Track hits to avoid multiple hits on same target during one swing
-    readonly HashSet<int> hitThisSwing = new HashSet<int>();
+    // Track hits to avoid multiple hits on same target during one git
+    readonly HashSet<int> alreadyHit = new HashSet<int>();
 
     public override void Attack(Vector2 aimDir)
     {
         attackDir = aimDir.normalized;
-        StartCoroutine(Swing());
+        StartCoroutine(Hit());
     }
 
-    IEnumerator Swing()
+    IEnumerator Hit()
     {
-        // Clear hit tracker after each swing
-        hitThisSwing.Clear();
+        // Clear hit tracker after each git
+        alreadyHit.Clear();
 
         // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector3 pos = GetPolarPosition(attackDir);
+        Vector3 posision = GetPolarPosition(attackDir);
         float angle = GetPolarAngle(attackDir);
-        BeginVisual(pos, angle, enableHitbox: true);
+        BeginVisual(posision, angle, enableHitbox: true);
 
         // Thrust
         yield return ThrustOverTime(attackDir, weaponData.showTime, weaponData.thrustDistance);
@@ -39,7 +39,7 @@ public class W_Melee : W_Base
         // Check if the collider is a valid target
         var (targetHealth, root) = TryGetTarget(targetCollider);
         if (targetHealth == null) return;
-        if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
+        if (!alreadyHit.Add(root.GetInstanceID())) return;   // one hit per swing
         ApplyHitEffects(c_Stats, weaponData, targetHealth, attackDir, targetCollider);
     }
 }

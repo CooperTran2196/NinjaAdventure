@@ -263,24 +263,24 @@ public class W_Melee : W_Base
 {
     Vector2 attackDir;
 
-    // Track hits to avoid multiple hits on same target during one swing
-    readonly HashSet<int> hitThisSwing = new HashSet<int>();
+    // Track hits to avoid multiple hits on same target during one git
+    readonly HashSet<int> alreadyHit = new HashSet<int>();
 
     public override void Attack(Vector2 aimDir)
     {
         attackDir = aimDir.normalized;
-        StartCoroutine(Swing());
+        StartCoroutine(Hit());
     }
 
-    IEnumerator Swing()
+    IEnumerator Hit()
     {
-        // Clear hit tracker after each swing
-        hitThisSwing.Clear();
+        // Clear hit tracker after each git
+        alreadyHit.Clear();
 
         // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector3 pos = GetPolarPosition(attackDir);
+        Vector3 posision = GetPolarPosition(attackDir);
         float angle = GetPolarAngle(attackDir);
-        BeginVisual(pos, angle, enableHitbox: true);
+        BeginVisual(posision, angle, enableHitbox: true);
 
         // Thrust
         yield return ThrustOverTime(attackDir, weaponData.showTime, weaponData.thrustDistance);
@@ -296,7 +296,7 @@ public class W_Melee : W_Base
         // Check if the collider is a valid target
         var (targetHealth, root) = TryGetTarget(targetCollider);
         if (targetHealth == null) return;
-        if (!hitThisSwing.Add(root.GetInstanceID())) return;   // one hit per swing
+        if (!alreadyHit.Add(root.GetInstanceID())) return;   // one hit per swing
         ApplyHitEffects(c_Stats, weaponData, targetHealth, attackDir, targetCollider);
     }
 }
@@ -341,6 +341,7 @@ public class W_Projectile : MonoBehaviour
         rb.freezeRotation = true;
     }
 
+    // Called by W_Ranged when spawning
     public void Init(Transform owner, C_Stats attackerStats, W_SO weaponData, Vector2 fireDir, LayerMask targetMask)
     {
         this.owner = owner;
@@ -358,17 +359,17 @@ public class W_Projectile : MonoBehaviour
             Destroy(gameObject, weaponData.projectileLifetime);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D targetCollider)
     {
         // FILTER via W_Base static
-        var (targetHealth, root) = W_Base.TryGetTarget(owner, targetMask, other);
+        var (targetHealth, root) = W_Base.TryGetTarget(owner, targetMask, targetCollider);
         if (targetHealth == null) return;
 
-        // per-projectile de-dup
+         // Track hits to avoid multiple hits on same target
         if (!alreadyHit.Add(root.GetInstanceID())) return;
 
         // EFFECTS via W_Base static
-        W_Base.ApplyHitEffects(attackerStats, weaponData, targetHealth, fireDir, other, this);
+        W_Base.ApplyHitEffects(attackerStats, weaponData, targetHealth, fireDir, targetCollider, this);
 
         // Consume pierce or stop now
         if (remainingPierces > 0)
@@ -378,9 +379,9 @@ public class W_Projectile : MonoBehaviour
         }
 
         // No more pierce: stick or destroy
-        if (weaponData.stickOnHitSeconds > 0f)
+        if (weaponData.stickOnHit > 0f)
         {
-            StartCoroutine(StickAndDie(other, weaponData.stickOnHitSeconds));
+            StartCoroutine(hit(targetCollider, weaponData.stickOnHit));
         }
         else
         {
@@ -388,34 +389,31 @@ public class W_Projectile : MonoBehaviour
         }
     }
 
-    IEnumerator StickAndDie(Collider2D hitCol, float seconds)
+    IEnumerator hit(Collider2D targetCollider, float fadeDuration)
     {
         // Compute a precise surface point on the hit collider
-        var dist = col.Distance(hitCol);          // distance info between our collider and hit collider
+        var dist = col.Distance(targetCollider);          // distance info between our collider and hit collider
         Vector2 snap = dist.pointB;               // point on the *hit* collider
         transform.position = snap + (fireDir * 0.02f); // tiny embed so it visually "bites" in
 
-        // Pin it: stop physics & collisions, then parent to the *collider* (so it rides the sprite/bone)
+        // Pin it: stop physics & collisions, then parent to the collider
         rb.linearVelocity = Vector2.zero;
         rb.isKinematic = true;
         col.enabled = false;
-        transform.SetParent(hitCol.transform, true);
+        transform.SetParent(targetCollider.transform, true);
 
         // Optional: ensure it renders above the target while stuck
-        if (sprite) sprite.sortingOrder += 1;
+        sprite.sortingOrder += 1;
 
-        // Fade over 'seconds'
-        if (sprite)
+        // Fade over seconds
+        Color c = sprite.color;
+        float t = 0f;
+        while (t < fadeDuration)
         {
-            Color c = sprite.color;
-            float t = 0f;
-            while (t < seconds)
-            {
-                t += Time.deltaTime;
-                float a = 1f - Mathf.Clamp01(t / seconds);
-                sprite.color = new Color(c.r, c.g, c.b, a);
-                yield return null;
-            }
+            t += Time.deltaTime;
+            float a = 1f - Mathf.Clamp01(t / fadeDuration);
+            sprite.color = new Color(c.r, c.g, c.b, a);
+            yield return null;
         }
 
         Destroy(gameObject);
@@ -508,7 +506,7 @@ public class W_SO : ScriptableObject
     public int manaCost = 0;
     public float projectileSpeed = 0f;
     public float projectileLifetime = 0f;
-    public float stickOnHitSeconds = 0f;
+    public float stickOnHit = 0f;
     public int   pierceCount = 0;
 }
 
