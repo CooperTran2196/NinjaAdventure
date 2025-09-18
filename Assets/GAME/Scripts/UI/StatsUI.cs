@@ -9,8 +9,8 @@ public class StatsUI : MonoBehaviour
     public CanvasGroup statsCanvas;
     public GameObject[] statsSlots;
 
-    private P_InputActions input;
-    private bool statsOpen = false;
+    P_InputActions input;
+    bool statsOpen = false;
 
     void Awake()
     {
@@ -27,33 +27,38 @@ public class StatsUI : MonoBehaviour
     void OnEnable()
     {
         if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;  // <-- add
+            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;
     }
 
     void OnDisable()
     {
         if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;  // <-- add
+            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;
     }
 
+    // Initialize all stats display
     void Start()
     {
         UpdateAllStats();
     }
 
+    // Toggle stats UI with input
     void Update()
     {
         if (input.UI.ToggleStats.WasPressedThisFrame())
             SetOpen(!statsOpen);
     }
 
+    //  Open/close the stats UI
     void SetOpen(bool open)
     {
+        statsOpen = open;
+
         Time.timeScale = open ? 0f : 1f;
         statsCanvas.alpha = open ? 1f : 0f;
-        statsOpen = open;
     }
 
+    // Update individual stat displays
     public void UpdateAD()
     {
         statsSlots[0].GetComponentInChildren<TMP_Text>().text =

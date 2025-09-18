@@ -148,20 +148,21 @@ using System;
 [DisallowMultipleComponent]
 public class P_Exp : MonoBehaviour
 {
-    [Header("Linear XP (tweak in Inspector)")]
+    [Header("Independent component to manage Player's XP, Level, and Skill Points")]
+    [Header("Linear XP curve")]
     public int level = 1;
     public int currentXP = 0;
     public int skillPoints = 0;
-    public int xpBase = 60;      // L1→L2
+    public int xpBase = 60;      // L1 -> L2
     public int xpStep = 30;      // linear add per level
     public int skillPointsPerLevel = 2;
 
     [Header("Debug")]
     public int debugXPAmount = 20;
 
-    public event Action<int> OnLevelUp;
-    public event Action<int,int> OnXPChanged;
-    public event Action<int> OnSkillPointsChanged;
+    public event Action<int>        OnLevelUp;
+    public event Action<int,int>    OnXPChanged;
+    public event Action<int>        OnSPChanged;
 
     void Start()
     {
@@ -173,13 +174,16 @@ public class P_Exp : MonoBehaviour
         AddXP(debugXPAmount);
     }
 
+    // Add XP and handle level up
     public void AddXP(int amount)
     {
         if (amount <= 0) return;
 
+        // Add XP and check for level up
         currentXP += amount;
         int req = GetXPRequiredForNext();
 
+        // Level up while enough XP for next level
         while (currentXP >= req)
         {
             currentXP -= req;
@@ -187,7 +191,7 @@ public class P_Exp : MonoBehaviour
             skillPoints += skillPointsPerLevel;
 
             OnLevelUp?.Invoke(level);
-            OnSkillPointsChanged?.Invoke(skillPoints);
+            OnSPChanged?.Invoke(skillPoints);
 
             req = GetXPRequiredForNext();
         }
@@ -195,17 +199,20 @@ public class P_Exp : MonoBehaviour
         OnXPChanged?.Invoke(currentXP, req);
     }
 
+    // Return true if successfully spent points
     public bool TrySpendSkillPoints(int amount)
     {
         // return false if not enough points
         if (amount <= 0) return false;
         if (skillPoints < amount) return false;
 
+        // spend points and return true
         skillPoints -= amount;
-        OnSkillPointsChanged?.Invoke(skillPoints);
+        OnSPChanged?.Invoke(skillPoints);
         return true;
     }
 
+    // XP required for next level
     public int GetXPRequiredForNext()
     {
         int n = Mathf.Max(1, level);
@@ -219,6 +226,7 @@ using UnityEngine;
 
 public class P_Movement : MonoBehaviour
 {
+    [Header("Independent component to manage Player's movement and animation")]
     [Header("References")]
     Rigidbody2D rb;
     Animator animator;
@@ -336,17 +344,17 @@ public class P_Movement : MonoBehaviour
 
 }
 
-// ----- File: P_SkillBonuses.cs -----
-
 // ----- File: P_StatsChanged.cs -----
 using UnityEngine;
 using System;
 
+[DisallowMultipleComponent]
 public class P_StatsChanged : MonoBehaviour
 {
+    [Header("Independent component to manage Player's stats changed by Skill Tree")]
     [Header("References")]
-    public C_Stats  c_Stats;
-    public C_Health c_Health;
+    C_Stats c_Stats;
+    C_Health c_Health;
 
     // Baseline snapshot
     int baseAD, baseAP, baseMaxHP, baseAR, baseMR;
@@ -357,27 +365,27 @@ public class P_StatsChanged : MonoBehaviour
     float upMS, upKR;
 
     // Lifesteal
-    public bool  lifestealUnlocked = false;
+    public bool lifestealUnlocked = false;
     [Range(0f, 1f)] public float lifestealPercent = 0f;
 
     public event Action OnStatsRecalculated;
 
     void Awake()
     {
-        c_Stats  ??= GetComponent<C_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
         c_Health ??= GetComponent<C_Health>();
 
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing in P_Skills.", this);
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in P_Skills.", this);
         if (!c_Health) Debug.LogError($"{name}: C_Health missing in P_Skills.", this);
 
-        baseAD    = c_Stats.AD;
-        baseAP    = c_Stats.AP;
+        baseAD = c_Stats.AD;
+        baseAP = c_Stats.AP;
         baseMaxHP = c_Stats.maxHP;
-        baseAR    = c_Stats.AR;
-        baseMR    = c_Stats.MR;
-        baseMS    = c_Stats.MS;
-        baseKR    = c_Stats.KR;
-  
+        baseAR = c_Stats.AR;
+        baseMR = c_Stats.MR;
+        baseMS = c_Stats.MS;
+        baseKR = c_Stats.KR;
+
         Recalculate();
     }
 
@@ -386,13 +394,13 @@ public class P_StatsChanged : MonoBehaviour
     {
         switch (stat)
         {
-            case ST_SkillSO.Stat.AD:     upAD += delta; break;
-            case ST_SkillSO.Stat.AP:     upAP += delta; break;
-            case ST_SkillSO.Stat.MaxHP:  upHP += delta; break;
-            case ST_SkillSO.Stat.AR:     upAR += delta; break;
-            case ST_SkillSO.Stat.MR:     upMR += delta; break;
-            case ST_SkillSO.Stat.MS:     upMS += delta; break;
-            case ST_SkillSO.Stat.KR:     upKR += delta; break;
+            case ST_SkillSO.Stat.AD: upAD += delta; break;
+            case ST_SkillSO.Stat.AP: upAP += delta; break;
+            case ST_SkillSO.Stat.MaxHP: upHP += delta; break;
+            case ST_SkillSO.Stat.AR: upAR += delta; break;
+            case ST_SkillSO.Stat.MR: upMR += delta; break;
+            case ST_SkillSO.Stat.MS: upMS += delta; break;
+            case ST_SkillSO.Stat.KR: upKR += delta; break;
         }
         Recalculate();
     }
@@ -400,7 +408,7 @@ public class P_StatsChanged : MonoBehaviour
     public void SetLifestealPercent(float percent)
     {
         lifestealUnlocked = percent > 0f;
-        lifestealPercent  = percent;
+        lifestealPercent = percent;
     }
 
     void Recalculate()

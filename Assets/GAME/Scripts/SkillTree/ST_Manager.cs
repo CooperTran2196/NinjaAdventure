@@ -14,7 +14,7 @@ public class ST_Manager : MonoBehaviour
     private P_InputActions input;
 
     [Header("UI Toggle")]
-    public CanvasGroup SkillsCanvas;
+    public CanvasGroup skillsCanvas;
     public bool panelToggle = false;
 
     void Awake()
@@ -22,16 +22,18 @@ public class ST_Manager : MonoBehaviour
         // Auto-wire UI components if not assigned in inspector
         p_Exp           ??= FindFirstObjectByType<P_Exp>();
         p_StatsChanged  ??= FindFirstObjectByType<P_StatsChanged>();
-        SkillsCanvas    ??= GetComponent<CanvasGroup>();
+        skillsCanvas    ??= GetComponent<CanvasGroup>();
         skillPointsText ??= GetComponentInChildren<TMP_Text>();
 
         if (!p_Exp)             Debug.LogError($"{name}: P_Exp missing in ST_Manager.", this);
         if (!p_StatsChanged)    Debug.LogError($"{name}: P_StatsChanged missing in ST_Manager.", this);
-        if (!SkillsCanvas)      Debug.LogError($"{name}: SkillsCanvas missing in ST_Manager.", this);
+        if (!skillsCanvas)      Debug.LogError($"{name}: SkillsCanvas missing in ST_Manager.", this);
         if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText missing in ST_Manager.", this);
 
         input = new P_InputActions();
         input.UI.ToggleSkillTree.Enable();
+
+        // start closed
         SetOpen(panelToggle);
     }
 
@@ -52,7 +54,8 @@ public class ST_Manager : MonoBehaviour
         ST_Slots.OnSkillUpgraded    -= HandleSkillUpgraded;
         ST_Slots.OnSkillMaxed       -= HandleSkillMaxed;
     }
-
+    
+    // Initialize skill buttons and UI state
     void Start()
     {
         foreach (var slot in st_Slots)
@@ -64,23 +67,25 @@ public class ST_Manager : MonoBehaviour
         HandleSPChanged(p_Exp.skillPoints);
     }
 
+    // Toggle skill tree UI with input
     void Update()
     {
         if (input.UI.ToggleSkillTree.WasPressedThisFrame())
             SetOpen(!panelToggle);
     }
 
-    //
+    // Open/close the skill tree UI
     void SetOpen(bool open)
     {
         panelToggle = open;
 
         Time.timeScale = open ? 0f : 1f;
-        SkillsCanvas.alpha = open ? 1f : 0f;
-        SkillsCanvas.interactable = open;
-        SkillsCanvas.blocksRaycasts = open;
+        skillsCanvas.alpha = open ? 1f : 0f;
+        skillsCanvas.interactable = open;
+        skillsCanvas.blocksRaycasts = open;
     }
 
+    // Called when a skill button is clicked
     void TryToUpgrade(ST_Slots slot)
     {
         // ST_Manager should check these first
@@ -91,18 +96,22 @@ public class ST_Manager : MonoBehaviour
             slot.UpgradeTheSkill();
     }
 
+    // Called when a skill is upgraded
     void HandleSkillUpgraded(ST_Slots slot)
     {
         var so = slot.st_skillSO;
         if (!so) return;
 
-        switch (so.kind)
+        // Apply the effect based on the skill type
+        switch (so.skillType)
         {
-            case ST_SkillSO.Kind.Stat:
+            // Apply stat increase
+            case ST_SkillSO.SkillType.Stat:
                 p_StatsChanged.ApplyStat(so.stat, so.pointPerLv);
                 break;
 
-            case ST_SkillSO.Kind.Lifesteal:
+            // Update lifesteal percent
+            case ST_SkillSO.SkillType.Lifesteal:
                 {
                     // Total lifesteal scales with current level
                     float totalPercent = slot.currentLevel * so.lifestealPercentPerLevel;
@@ -112,28 +121,28 @@ public class ST_Manager : MonoBehaviour
         }
     }
 
+    // Called when a skill is maxed out
     void HandleSkillMaxed(ST_Slots maxedSlot)
     {
         // When a skill maxed -> Check only its direct children to see if they can be unlocked
-        foreach (var ChildSlot in st_Slots)
+        foreach (var slot in st_Slots)
         {
-            // To be a child, it must not be unlocked and must have the maxed slot as a prerequisite
-            if (!ChildSlot.isUnlocked && ChildSlot.prerequisiteSkillSlots.Contains(maxedSlot))
+            // Check if this slot is a child of the maxed slot
+            if (!slot.isUnlocked && slot.prerequisiteSkillSlots.Contains(maxedSlot))
             {
-                // check if ALL its prerequisites are met
-                if (ChildSlot.CanUnlockSkill())
-                {
-                    ChildSlot.Unlock();
-                }
+                // Try to unlock it
+                slot.TryUnlock();
             }
         }
     }
 
+    // Called when skill points changed
     void HandleSPChanged(int sp)
     {
         skillPointsText.text = "SKILL POINTS: " + sp;
     }
 
+    // Called when player levels up
     void HandleLevelUp(int newLevel)
     {
         HandleSPChanged(p_Exp.skillPoints);

@@ -1,12 +1,13 @@
 using UnityEngine;
 using System;
 
+[DisallowMultipleComponent]
 public class P_StatsChanged : MonoBehaviour
 {
     [Header("Independent component to manage Player's stats changed by Skill Tree")]
     [Header("References")]
-    public C_Stats c_Stats;
-    public C_Health c_Health;
+    C_Stats c_Stats;
+    C_Health c_Health;
 
     // Baseline snapshot
     int baseAD, baseAP, baseMaxHP, baseAR, baseMR;

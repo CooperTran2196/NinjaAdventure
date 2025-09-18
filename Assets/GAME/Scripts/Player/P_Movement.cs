@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class P_Movement : MonoBehaviour
 {
+    [Header("Independent component to manage Player's movement and animation")]
     [Header("References")]
     Rigidbody2D rb;
     Animator animator;

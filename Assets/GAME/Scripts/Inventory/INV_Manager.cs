@@ -5,6 +5,7 @@ using TMPro;
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
 {
+    [Header("Central API for the Inventory system")]
     [Header("References")]
     INV_UseItem useItem;
 
@@ -39,7 +40,7 @@ public class INV_Manager : MonoBehaviour
         }
 
         // Stack into existing slots of the same item
-        foreach (var slot in inv_Slots) // SAME item AND room left
+        foreach (var slot in inv_Slots)
         {
             if (slot.item == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize)
             {
@@ -55,7 +56,7 @@ public class INV_Manager : MonoBehaviour
         }
 
         // Fill empty slots
-        foreach (var slot in inv_Slots) // items remain -> use empty slots
+        foreach (var slot in inv_Slots)
         {
             if (slot.item == null)
             {
@@ -88,7 +89,7 @@ public class INV_Manager : MonoBehaviour
         slot.UpdateUI();
     }
 
-
+    // Drops 1 item from the given slot at player position
     public void DropItemFromSlot(INV_Slots slot)
     {
         DropLoot(slot.item, 1);
@@ -97,12 +98,11 @@ public class INV_Manager : MonoBehaviour
         slot.UpdateUI();
     }
 
+    // Spawns loot prefab at player position with given item & quantity
     void DropLoot(INV_ItemSO item, int qty)
     {
-        if (!lootPrefab || !player) return;
-
         var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
         var loot = go.GetComponent<INV_Loot>();
-        if (loot) loot.Initialize(item, qty); // sets sprite/name & canBePickedUp=false
+        loot.Initialize(item, qty); // sets sprite/name & canBePickedUp=false
     }
 }

@@ -7,7 +7,7 @@ public class HealthUI : MonoBehaviour
     [Header("References")]
     public C_Stats p_Stats;
     public C_Health p_Health;
-    public P_StatsChanged p_StatsChanged; // Add reference to listen for stat changes
+    public P_StatsChanged p_StatsChanged;
     public Slider healthSlider;
     public TMP_Text healthText;
 
@@ -56,6 +56,7 @@ public class HealthUI : MonoBehaviour
         UpdateUI();
     }
 
+    // Update the health UI elements
     public void UpdateUI()
     {
         // Update the slider's max value and current value

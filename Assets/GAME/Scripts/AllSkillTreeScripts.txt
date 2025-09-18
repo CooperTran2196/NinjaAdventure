@@ -5,108 +5,114 @@ using TMPro;
 [DisallowMultipleComponent]
 public class ST_Manager : MonoBehaviour
 {
-    [Header("Refs")]
-    public ST_Slot[] skillSlots;
-    public TMP_Text pointsText;
+    [Header("Central API for the Skill Tree system")]
+    [Header("References")]
+    public ST_Slots[] st_Slots;
+    public TMP_Text skillPointsText;
     public P_Exp p_Exp;
     public P_StatsChanged p_StatsChanged;
 
-    [Header("UI Toggle")]
-    public CanvasGroup panel;     // assign your SkillTree panel CanvasGroup
-    public bool startClosed = true;
-
     private P_InputActions input;
-    private bool isOpen;
+
+    [Header("UI Toggle")]
+    public CanvasGroup skillsCanvas;
+    public bool panelToggle = false;
 
     void Awake()
     {
-        p_Exp ??= FindFirstObjectByType<P_Exp>();
-        p_StatsChanged ??= FindFirstObjectByType<P_StatsChanged>();
-        panel ??= GetComponent<CanvasGroup>();
-        pointsText ??= GetComponentInChildren<TMP_Text>();
+        // Auto-wire UI components if not assigned in inspector
+        p_Exp           ??= FindFirstObjectByType<P_Exp>();
+        p_StatsChanged  ??= FindFirstObjectByType<P_StatsChanged>();
+        skillsCanvas    ??= GetComponent<CanvasGroup>();
+        skillPointsText ??= GetComponentInChildren<TMP_Text>();
 
-        if (!p_Exp) Debug.LogError($"{name}: P_Exp not found for ST_Manager.", this);
-        if (!p_StatsChanged) Debug.LogError($"{name}: P_StatsChanged not found for ST_Manager.", this);
-        if (!panel) Debug.LogError($"{name}: CanvasGroup (panel) missing.", this);
-        if (!pointsText) Debug.LogWarning($"{name}: pointsText missing.", this);
+        if (!p_Exp)             Debug.LogError($"{name}: P_Exp missing in ST_Manager.", this);
+        if (!p_StatsChanged)    Debug.LogError($"{name}: P_StatsChanged missing in ST_Manager.", this);
+        if (!skillsCanvas)      Debug.LogError($"{name}: SkillsCanvas missing in ST_Manager.", this);
+        if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText missing in ST_Manager.", this);
 
         input = new P_InputActions();
-        input.UI.ToggleSkillTree.Enable(); // K per your action map
+        input.UI.ToggleSkillTree.Enable();
 
-        SetOpen(!startClosed);
+        // start closed
+        SetOpen(panelToggle);
     }
 
     void OnEnable()
     {
-        p_Exp.OnSkillPointsChanged += HandleSPChanged;
-        p_Exp.OnLevelUp += HandleLevelUp;
+        p_Exp.OnSPChanged           += HandleSPChanged;
+        p_Exp.OnLevelUp             += HandleLevelUp;
 
-        ST_Slot.OnSkillUpgraded += HandleSkillUpgraded;
-        ST_Slot.OnSkillMaxed += HandleSkillMaxed;
+        ST_Slots.OnSkillUpgraded    += HandleSkillUpgraded;
+        ST_Slots.OnSkillMaxed       += HandleSkillMaxed;
     }
 
     void OnDisable()
     {
-        p_Exp.OnSkillPointsChanged -= HandleSPChanged;
-        p_Exp.OnLevelUp -= HandleLevelUp;
+        p_Exp.OnSPChanged           -= HandleSPChanged;
+        p_Exp.OnLevelUp             -= HandleLevelUp;
 
-        ST_Slot.OnSkillUpgraded -= HandleSkillUpgraded;
-        ST_Slot.OnSkillMaxed -= HandleSkillMaxed;
+        ST_Slots.OnSkillUpgraded    -= HandleSkillUpgraded;
+        ST_Slots.OnSkillMaxed       -= HandleSkillMaxed;
     }
-
+    
+    // Initialize skill buttons and UI state
     void Start()
     {
-        foreach (var slot in skillSlots)
+        foreach (var slot in st_Slots)
         {
-            var s = slot;
-            s.skillButton.onClick.AddListener(() => TryToUpgrade(s));
+            slot.skillButton.onClick.AddListener(() => TryToUpgrade(slot));
         }
 
-        HandleSPChanged(p_Exp ? p_Exp.skillPoints : 0);
+        // Initial UI state
+        HandleSPChanged(p_Exp.skillPoints);
     }
 
+    // Toggle skill tree UI with input
     void Update()
     {
         if (input.UI.ToggleSkillTree.WasPressedThisFrame())
-            SetOpen(!isOpen);
+            SetOpen(!panelToggle);
     }
 
+    // Open/close the skill tree UI
     void SetOpen(bool open)
     {
-        isOpen = open;
+        panelToggle = open;
 
-        if (panel)
-        {
-            panel.alpha = open ? 1f : 0f;
-            panel.interactable = open;
-            panel.blocksRaycasts = open;
-        }
-
-        // Matches your Stats UI behavior
         Time.timeScale = open ? 0f : 1f;
+        skillsCanvas.alpha = open ? 1f : 0f;
+        skillsCanvas.interactable = open;
+        skillsCanvas.blocksRaycasts = open;
     }
 
-    void TryToUpgrade(ST_Slot slot)
+    // Called when a skill button is clicked
+    void TryToUpgrade(ST_Slots slot)
     {
+        // ST_Manager should check these first
         if (!slot.isUnlocked) return;
-        if (slot.currentLevel >= slot.skillSO.maxLevel) return;
+        if (slot.currentLevel >= slot.st_skillSO.maxLevel) return;
 
         if (p_Exp.TrySpendSkillPoints(1))
             slot.UpgradeTheSkill();
     }
 
-    void HandleSkillUpgraded(ST_Slot slot)
+    // Called when a skill is upgraded
+    void HandleSkillUpgraded(ST_Slots slot)
     {
-        var so = slot.skillSO;
+        var so = slot.st_skillSO;
         if (!so) return;
 
-        switch (so.kind)
+        // Apply the effect based on the skill type
+        switch (so.skillType)
         {
-            case ST_SkillSO.Kind.Stat:
+            // Apply stat increase
+            case ST_SkillSO.SkillType.Stat:
                 p_StatsChanged.ApplyStat(so.stat, so.pointPerLv);
                 break;
 
-            case ST_SkillSO.Kind.Lifesteal:
+            // Update lifesteal percent
+            case ST_SkillSO.SkillType.Lifesteal:
                 {
                     // Total lifesteal scales with current level
                     float totalPercent = slot.currentLevel * so.lifestealPercentPerLevel;
@@ -116,22 +122,28 @@ public class ST_Manager : MonoBehaviour
         }
     }
 
-    void HandleSkillMaxed(ST_Slot _)
+    // Called when a skill is maxed out
+    void HandleSkillMaxed(ST_Slots maxedSlot)
     {
-        // Unlock children that now satisfy prerequisites
-        for (int i = 0; i < skillSlots.Length; i++)
+        // When a skill maxed -> Check only its direct children to see if they can be unlocked
+        foreach (var slot in st_Slots)
         {
-            var s = skillSlots[i];
-            if (!s.isUnlocked && s.CanUnlockSkill())
-                s.Unlock();
+            // Check if this slot is a child of the maxed slot
+            if (!slot.isUnlocked && slot.prerequisiteSkillSlots.Contains(maxedSlot))
+            {
+                // Try to unlock it
+                slot.TryUnlock();
+            }
         }
     }
 
+    // Called when skill points changed
     void HandleSPChanged(int sp)
     {
-        pointsText.text = "SKILL POINTS: " + sp;
+        skillPointsText.text = "SKILL POINTS: " + sp;
     }
 
+    // Called when player levels up
     void HandleLevelUp(int newLevel)
     {
         HandleSPChanged(p_Exp.skillPoints);
@@ -144,18 +156,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSkill", menuName = "SkillTree")]
 public class ST_SkillSO : ScriptableObject
 {
-    public enum Kind { Stat, Lifesteal }
+    public enum SkillType { Stat, Lifesteal }
     public enum Stat { AD, AP, MS, MaxHP, AR, MR, KR }
 
+    [Header("Skill ScriptableObject Data")]
     [Header("Meta")]
     public string skillName = "Auto Filled";
     public Sprite skillIcon;
     [Min(1)] public int maxLevel = 1;
 
     [Header("Effect")]
-    public Kind kind = Kind.Stat;
+    public SkillType skillType = SkillType.Stat;
 
-    [Header("Only Used when Kind = Stat")]
+    [Header("Only Used when SkillType = Stat")]
     public Stat stat = Stat.AD;
 
     [Header("Added to the chosen stat per level")]
@@ -178,13 +191,14 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 
-public class ST_Slot : MonoBehaviour
+public class ST_Slots : MonoBehaviour
 {
+    [Header("Slot represents one skill in the Skill Tree")]
     [Header("Gate")]
-    public List<ST_Slot> prerequisiteSkillSlots;
+    public List<ST_Slots> prerequisiteSkillSlots;
 
-    [Header("Data")]
-    public ST_SkillSO skillSO;
+    [Header("Skill Data")]
+    public ST_SkillSO st_skillSO;
 
     [Header("State")]
     public int  currentLevel;
@@ -195,8 +209,8 @@ public class ST_Slot : MonoBehaviour
     public Button  skillButton;
     public TMP_Text skillLevelText;
 
-    public static event Action<ST_Slot> OnSkillUpgraded;
-    public static event Action<ST_Slot> OnSkillMaxed;
+    public static event Action<ST_Slots> OnSkillUpgraded;
+    public static event Action<ST_Slots> OnSkillMaxed;
 
     void Awake()
     {
@@ -205,60 +219,70 @@ public class ST_Slot : MonoBehaviour
         skillButton ??= GetComponent<Button>();
         skillLevelText ??= GetComponentInChildren<TMP_Text>();
 
-        if (!skillSO) Debug.LogError($"{name}: ST_SkillSO is not assigned on {GetType().Name}.", this);
+        if (!st_skillSO) Debug.LogError($"{name}: ST_SkillSO is not assigned on {GetType().Name}.", this);
         if (!SkillIcon) Debug.LogWarning($"{name}: SkillIcon is not assigned.", this);
         if (!skillButton) Debug.LogWarning($"{name}: skillButton is not assigned.", this);
         if (!skillLevelText) Debug.LogWarning($"{name}: skillLevelText is not assigned.", this);
 
-        prerequisiteSkillSlots ??= new List<ST_Slot>();
+        prerequisiteSkillSlots ??= new List<ST_Slots>();
 
         UpdateUI();
     }
 
     void OnValidate()
     {
-        if (skillSO != null && skillLevelText != null) UpdateUI();
+        if (st_skillSO != null && skillLevelText != null) UpdateUI();
     }
 
-    // Called by SkillTreeManager after it successfully spends a point
+    // Called by ST_Manager after it successfully spends a point
     public void UpgradeTheSkill()
     {
-        // Only for safety, SkillTreeManager should check these first
-        // Will use for cheat/debug buttons
+        // ST_Manager already check these first
+        // Avoid cheat/debug buttons go over limits
         if (!isUnlocked) return;
-        if (currentLevel >= skillSO.maxLevel) return;
+        if (currentLevel >= st_skillSO.maxLevel) return;
 
+        // Upgrade and fire events
         currentLevel++;
         OnSkillUpgraded?.Invoke(this);
-        if (currentLevel >= skillSO.maxLevel) OnSkillMaxed?.Invoke(this);
+        if (currentLevel >= st_skillSO.maxLevel) OnSkillMaxed?.Invoke(this);
 
         UpdateUI();
     }
 
-    public bool CanUnlockSkill()
+    // This method now checks all prerequisites and unlocks the skill if they are met
+    // It returns true if the skill was newly unlocked
+    public bool TryUnlock()
     {
-        foreach (var slot in prerequisiteSkillSlots)
+        // 1/ Don't do anything if the skill is already unlocked
+        if (isUnlocked)
         {
-            if (!slot.isUnlocked || slot.currentLevel < slot.skillSO.maxLevel)
-                return false;
+            return false;
         }
-        return true;
-    }
 
-    public void Unlock()
-    {
+        // 2/ Check if all prerequisite skills are maxed out
+        foreach (var prereq in prerequisiteSkillSlots)
+        {
+            if (prereq.currentLevel < prereq.st_skillSO.maxLevel)
+            {
+                return false;
+            }
+        }
+
+        // 3/ All prerequisites are met! Unlock the skill.
         isUnlocked = true;
         UpdateUI();
+        return true;
     }
 
     void UpdateUI()
     {
-        if (SkillIcon && skillSO) SkillIcon.sprite = skillSO.skillIcon;
+        SkillIcon.sprite = st_skillSO.skillIcon;
 
         if (isUnlocked)
         {
             skillButton.interactable = true;
-            skillLevelText.text = currentLevel + "/" + skillSO.maxLevel;
+            skillLevelText.text = currentLevel + "/" + st_skillSO.maxLevel;
             SkillIcon.color = Color.white;
         }
         else

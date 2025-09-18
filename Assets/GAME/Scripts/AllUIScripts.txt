@@ -18,6 +18,8 @@ public class ExpUI : MonoBehaviour
     {
         input = new P_InputActions();
         p_Exp ??= FindFirstObjectByType<P_Exp>();
+        expSlider ??= GetComponentInChildren<Slider>();
+        currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
         if (!p_Exp) Debug.LogError($"{name}: P_Exp in ExpUI missing.", this);
         if (!expSlider) Debug.LogError($"{name}: expSlider in ExpUI missing.", this);
@@ -27,36 +29,33 @@ public class ExpUI : MonoBehaviour
     void OnEnable()
     {
         input.Debug.Enable();
-        if (p_Exp != null)
-        {
-            p_Exp.OnLevelUp += HandleLevelUp;
-            p_Exp.OnXPChanged += HandleXPChanged;
-        }
+
+        p_Exp.OnLevelUp += HandleLevelUp;
+        p_Exp.OnXPChanged += HandleXPChanged;
+
         UpdateUI();
     }
 
     void OnDisable()
     {
         input.Debug.Disable();
-        if (p_Exp != null)
-        {
-            p_Exp.OnLevelUp -= HandleLevelUp;
-            p_Exp.OnXPChanged -= HandleXPChanged;
-        }
+
+        p_Exp.OnLevelUp -= HandleLevelUp;
+        p_Exp.OnXPChanged -= HandleXPChanged;
     }
 
     void Update()
     {
         if (input.Debug.GainExp.WasPressedThisFrame())
-            p_Exp?.AddDebugXP();
+            p_Exp.AddDebugXP();
     }
 
     void HandleLevelUp(int newLevel) => UpdateUI();
     void HandleXPChanged(int cur, int req) => UpdateUI();
 
+    // Update the XP bar and level text
     void UpdateUI()
     {
-        if (p_Exp == null) return;
         int cur = p_Exp.currentXP;
         int req = p_Exp.GetXPRequiredForNext();
         expSlider.maxValue = req;
@@ -75,7 +74,7 @@ public class HealthUI : MonoBehaviour
     [Header("References")]
     public C_Stats p_Stats;
     public C_Health p_Health;
-    public P_StatsChanged p_StatsChanged; // Add reference to listen for stat changes
+    public P_StatsChanged p_StatsChanged;
     public Slider healthSlider;
     public TMP_Text healthText;
 
@@ -124,6 +123,7 @@ public class HealthUI : MonoBehaviour
         UpdateUI();
     }
 
+    // Update the health UI elements
     public void UpdateUI()
     {
         // Update the slider's max value and current value
@@ -146,8 +146,8 @@ public class StatsUI : MonoBehaviour
     public CanvasGroup statsCanvas;
     public GameObject[] statsSlots;
 
-    private P_InputActions input;
-    private bool statsOpen = false;
+    P_InputActions input;
+    bool statsOpen = false;
 
     void Awake()
     {
@@ -164,39 +164,38 @@ public class StatsUI : MonoBehaviour
     void OnEnable()
     {
         if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;  // <-- add
+            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;
     }
 
     void OnDisable()
     {
         if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;  // <-- add
+            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;
     }
 
+    // Initialize all stats display
     void Start()
     {
         UpdateAllStats();
     }
 
+    // Toggle stats UI with input
     void Update()
     {
-        if (!input.UI.ToggleStats.WasPressedThisFrame()) return;
-
-        if (statsOpen) // Close
-        {
-            Time.timeScale  = 1;
-            statsCanvas.alpha = 0;
-            statsOpen = false;
-        }
-        else // Open
-        {
-            UpdateAllStats();
-            Time.timeScale  = 0;
-            statsCanvas.alpha = 1;
-            statsOpen = true;
-        }
+        if (input.UI.ToggleStats.WasPressedThisFrame())
+            SetOpen(!statsOpen);
     }
 
+    //  Open/close the stats UI
+    void SetOpen(bool open)
+    {
+        statsOpen = open;
+
+        Time.timeScale = open ? 0f : 1f;
+        statsCanvas.alpha = open ? 1f : 0f;
+    }
+
+    // Update individual stat displays
     public void UpdateAD()
     {
         statsSlots[0].GetComponentInChildren<TMP_Text>().text =

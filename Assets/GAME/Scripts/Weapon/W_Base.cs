@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class W_Base : MonoBehaviour
 {
+    [Header("Central API for all weapons")]
     [Header("References")]
     protected SpriteRenderer sprite;
     protected BoxCollider2D hitbox;
@@ -58,10 +59,11 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    //
+    // Get position around owner at offsetRadius along attackDir
     protected Vector3 GetPolarPosition(Vector2 attackDir) =>
         owner.position + (Vector3)(attackDir * weaponData.offsetRadius);
 
+    // Get angle in degrees from up/down baseline + bias
     protected float GetPolarAngle(Vector2 attackDir)
     {
         // Angle from up/down baseline + bias
@@ -128,11 +130,12 @@ public abstract class W_Base : MonoBehaviour
     protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider)
                 => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this);
 
+    // Apply damage + hit effects
     public static void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth,
                                         Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon)
     {
-        int attackerAD  = attackerStats.AD,     attackerAP = attackerStats.AP;
-        int weaponAD    = weaponData.AD,        weaponAP   = weaponData.AP;
+        int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
+        int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
         int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
         // Notify attacker of damage dealt (Player only)

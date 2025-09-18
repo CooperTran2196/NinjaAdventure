@@ -3,18 +3,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSkill", menuName = "SkillTree")]
 public class ST_SkillSO : ScriptableObject
 {
-    public enum Kind { Stat, Lifesteal }
+    public enum SkillType { Stat, Lifesteal }
     public enum Stat { AD, AP, MS, MaxHP, AR, MR, KR }
 
+    [Header("Skill ScriptableObject Data")]
     [Header("Meta")]
     public string skillName = "Auto Filled";
     public Sprite skillIcon;
     [Min(1)] public int maxLevel = 1;
 
     [Header("Effect")]
-    public Kind kind = Kind.Stat;
+    public SkillType skillType = SkillType.Stat;
 
-    [Header("Only Used when Kind = Stat")]
+    [Header("Only Used when SkillType = Stat")]
     public Stat stat = Stat.AD;
 
     [Header("Added to the chosen stat per level")]

@@ -5,11 +5,11 @@ using System;
 public class P_Exp : MonoBehaviour
 {
     [Header("Independent component to manage Player's XP, Level, and Skill Points")]
-    [Header("Linear XP (tweak in Inspector)")]
+    [Header("Linear XP curve")]
     public int level = 1;
     public int currentXP = 0;
     public int skillPoints = 0;
-    public int xpBase = 60;      // L1→L2
+    public int xpBase = 60;      // L1 -> L2
     public int xpStep = 30;      // linear add per level
     public int skillPointsPerLevel = 2;
 
@@ -30,13 +30,16 @@ public class P_Exp : MonoBehaviour
         AddXP(debugXPAmount);
     }
 
+    // Add XP and handle level up
     public void AddXP(int amount)
     {
         if (amount <= 0) return;
 
+        // Add XP and check for level up
         currentXP += amount;
         int req = GetXPRequiredForNext();
 
+        // Level up while enough XP for next level
         while (currentXP >= req)
         {
             currentXP -= req;
@@ -52,6 +55,7 @@ public class P_Exp : MonoBehaviour
         OnXPChanged?.Invoke(currentXP, req);
     }
 
+    // Return true if successfully spent points
     public bool TrySpendSkillPoints(int amount)
     {
         // return false if not enough points
@@ -64,6 +68,7 @@ public class P_Exp : MonoBehaviour
         return true;
     }
 
+    // XP required for next level
     public int GetXPRequiredForNext()
     {
         int n = Mathf.Max(1, level);

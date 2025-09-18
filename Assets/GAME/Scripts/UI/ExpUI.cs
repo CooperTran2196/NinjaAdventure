@@ -17,6 +17,8 @@ public class ExpUI : MonoBehaviour
     {
         input = new P_InputActions();
         p_Exp ??= FindFirstObjectByType<P_Exp>();
+        expSlider ??= GetComponentInChildren<Slider>();
+        currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
         if (!p_Exp) Debug.LogError($"{name}: P_Exp in ExpUI missing.", this);
         if (!expSlider) Debug.LogError($"{name}: expSlider in ExpUI missing.", this);
@@ -26,36 +28,33 @@ public class ExpUI : MonoBehaviour
     void OnEnable()
     {
         input.Debug.Enable();
-        if (p_Exp != null)
-        {
-            p_Exp.OnLevelUp += HandleLevelUp;
-            p_Exp.OnXPChanged += HandleXPChanged;
-        }
+
+        p_Exp.OnLevelUp += HandleLevelUp;
+        p_Exp.OnXPChanged += HandleXPChanged;
+
         UpdateUI();
     }
 
     void OnDisable()
     {
         input.Debug.Disable();
-        if (p_Exp != null)
-        {
-            p_Exp.OnLevelUp -= HandleLevelUp;
-            p_Exp.OnXPChanged -= HandleXPChanged;
-        }
+
+        p_Exp.OnLevelUp -= HandleLevelUp;
+        p_Exp.OnXPChanged -= HandleXPChanged;
     }
 
     void Update()
     {
         if (input.Debug.GainExp.WasPressedThisFrame())
-            p_Exp?.AddDebugXP();
+            p_Exp.AddDebugXP();
     }
 
     void HandleLevelUp(int newLevel) => UpdateUI();
     void HandleXPChanged(int cur, int req) => UpdateUI();
 
+    // Update the XP bar and level text
     void UpdateUI()
     {
-        if (p_Exp == null) return;
         int cur = p_Exp.currentXP;
         int req = p_Exp.GetXPRequiredForNext();
         expSlider.maxValue = req;

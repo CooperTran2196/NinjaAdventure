@@ -6,10 +6,11 @@ using System.Collections.Generic;
 
 public class ST_Slots : MonoBehaviour
 {
+    [Header("Slot represents one skill in the Skill Tree")]
     [Header("Gate")]
     public List<ST_Slots> prerequisiteSkillSlots;
 
-    [Header("Data")]
+    [Header("Skill Data")]
     public ST_SkillSO st_skillSO;
 
     [Header("State")]
@@ -62,25 +63,34 @@ public class ST_Slots : MonoBehaviour
         UpdateUI();
     }
 
-    public bool CanUnlockSkill()
+    // This method now checks all prerequisites and unlocks the skill if they are met
+    // It returns true if the skill was newly unlocked
+    public bool TryUnlock()
     {
-        foreach (var slot in prerequisiteSkillSlots)
+        // 1/ Don't do anything if the skill is already unlocked
+        if (isUnlocked)
         {
-            if (!slot.isUnlocked || slot.currentLevel < slot.st_skillSO.maxLevel)
-                return false;
+            return false;
         }
-        return true;
-    }
 
-    public void Unlock()
-    {
+        // 2/ Check if all prerequisite skills are maxed out
+        foreach (var prereq in prerequisiteSkillSlots)
+        {
+            if (prereq.currentLevel < prereq.st_skillSO.maxLevel)
+            {
+                return false;
+            }
+        }
+
+        // 3/ All prerequisites are met! Unlock the skill.
         isUnlocked = true;
         UpdateUI();
+        return true;
     }
 
     void UpdateUI()
     {
-        if (SkillIcon && st_skillSO) SkillIcon.sprite = st_skillSO.skillIcon;
+        SkillIcon.sprite = st_skillSO.skillIcon;
 
         if (isUnlocked)
         {
