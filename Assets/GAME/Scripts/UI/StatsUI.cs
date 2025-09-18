@@ -5,7 +5,7 @@ public class StatsUI : MonoBehaviour
 {
     [Header("References")]
     public C_Stats p_Stats;
-    public P_StatsChanged p_StatsChanged;
+    public C_StatsManager p_StatsManager;
     public CanvasGroup statsCanvas;
     public GameObject[] statsSlots;
 
@@ -18,7 +18,7 @@ public class StatsUI : MonoBehaviour
         input.UI.ToggleStats.Enable();
 
         p_Stats ??= FindFirstObjectByType<C_Stats>();
-        p_StatsChanged ??= FindFirstObjectByType<P_StatsChanged>();
+        p_StatsManager ??= FindFirstObjectByType<C_StatsManager>();
 
         // start closed
         statsCanvas.alpha = 0;
@@ -26,14 +26,14 @@ public class StatsUI : MonoBehaviour
     
     void OnEnable()
     {
-        if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated += UpdateAllStats;
+        if (p_StatsManager != null)
+            p_StatsManager.OnStatsChanged += UpdateAllStats;
     }
 
     void OnDisable()
     {
-        if (p_StatsChanged != null)
-            p_StatsChanged.OnStatsRecalculated -= UpdateAllStats;
+        if (p_StatsManager != null)
+            p_StatsManager.OnStatsChanged -= UpdateAllStats;
     }
 
     // Initialize all stats display

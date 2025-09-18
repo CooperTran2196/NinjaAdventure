@@ -7,7 +7,7 @@ public class HealthUI : MonoBehaviour
     [Header("References")]
     public C_Stats p_Stats;
     public C_Health p_Health;
-    public P_StatsChanged p_StatsChanged;
+    public C_StatsManager p_StatsManager;
     public Slider healthSlider;
     public TMP_Text healthText;
 
@@ -16,11 +16,11 @@ public class HealthUI : MonoBehaviour
         // Find references if not assigned
         p_Stats ??= FindFirstObjectByType<C_Stats>();
         p_Health ??= FindFirstObjectByType<C_Health>();
-        p_StatsChanged ??= FindFirstObjectByType<P_StatsChanged>();
+        p_StatsManager ??= FindFirstObjectByType<C_StatsManager>();
 
         if (!p_Stats) Debug.LogError($"{name}: C_Stats in HealthUI missing.", this);
         if (!p_Health) Debug.LogError($"{name}: C_Health in HealthUI missing.", this);
-        if (!p_StatsChanged) Debug.LogError($"{name}: P_StatsChanged in HealthUI missing.", this);
+        if (!p_StatsManager) Debug.LogError($"{name}: C_StatsManager in HealthUI missing.", this);
         if (!healthSlider) Debug.LogError($"{name}: healthSlider in HealthUI missing.", this);
 
         // Initialize slider
@@ -35,7 +35,7 @@ public class HealthUI : MonoBehaviour
         p_Health.OnHealed += HandleHealthChanged;
         p_Health.OnDied += UpdateUI;
 
-        p_StatsChanged.OnStatsRecalculated += UpdateUI;
+        p_StatsManager.OnStatsChanged += UpdateUI;
 
         UpdateUI();
     }
@@ -46,7 +46,7 @@ public class HealthUI : MonoBehaviour
         p_Health.OnHealed -= HandleHealthChanged;
         p_Health.OnDied -= UpdateUI;
 
-        p_StatsChanged.OnStatsRecalculated -= UpdateUI;
+        p_StatsManager.OnStatsChanged -= UpdateUI;
 
     }
 
