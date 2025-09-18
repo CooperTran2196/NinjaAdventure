@@ -3,7 +3,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class C_Stats : MonoBehaviour
 {
-    [Header("Core")]
+    [Header("Core Stats")]
     public int AD = 1; // Attack Damage
     public int AP = 0; // Ability Power
     public float MS = 5f; // Move Speed
@@ -13,6 +13,9 @@ public class C_Stats : MonoBehaviour
     public int AR = 0; // Armor
     public int MR = 0; // Magic Resist
     public float KR = 10f; // knockback Resist
+
+    [Header("Special Stats")]
+    public float lifestealPercent = 0f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

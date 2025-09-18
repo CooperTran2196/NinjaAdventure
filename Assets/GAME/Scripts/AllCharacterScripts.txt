@@ -535,6 +535,39 @@ public class C_State : MonoBehaviour
     }
 }
 
+// ----- File: C_StatModifier.cs -----
+using System;
+
+// A central enum for all stats that can be modified.
+public enum StatType
+{
+    // Core Stats
+    AttackDamage,
+    AbilityPower,
+    MoveSpeed,
+    MaxHealth,
+    Armor,
+    MagicResist,
+    KnockbackResist,
+
+    // Special Stats
+    LifestealPercent,
+
+    // Consumable-only Stats (don't have a base value)
+    Heal,
+}
+
+// A single, universal definition for any change to a stat.
+[Serializable]
+public class StatModifier
+{
+    public StatType Stat;
+    public float Value;
+    public float Duration; // 0 = permanent
+
+    // Optional: Could add a "ModifierType" enum here later (e.g., Flat vs. Percent)
+}
+
 // ----- File: C_Stats.cs -----
 using UnityEngine;
 
@@ -552,6 +585,9 @@ public class C_Stats : MonoBehaviour
     public int MR = 0; // Magic Resist
     public float KR = 10f; // knockback Resist
 
+    [Header("Special")]
+    public float lifestealPercent = 0f;
+
     [Header("Combat")]
     public float attackCooldown = 1.2f;
     public int   collisionDamage = 1;   // per-enemy
@@ -565,5 +601,101 @@ public class C_Stats : MonoBehaviour
     [Header("Placeholders")]
     public float knockbackForce = 0f;
     public float stunTime = 0f;
+}
+
+// ----- File: C_StatsManager.cs -----
+// d:\Google Drive\Code\Final project\NinjaAdventure\Assets\GAME\Scripts\Character\C_StatsManager.cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class C_StatsManager : MonoBehaviour
+{
+    [Header("Component References")]
+    public C_Stats c_Stats;
+    public C_Health c_Health;
+
+    // Tracking for temporary effects
+    private readonly List<StatModifier> activeTemporaryModifiers = new List<StatModifier>();
+    private readonly Dictionary<StatModifier, Coroutine> runningCoroutines = new Dictionary<StatModifier, Coroutine>();
+
+    void Awake()
+    {
+        c_Stats ??= GetComponent<C_Stats>();
+        c_Health ??= GetComponent<C_Health>();
+
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing.", this);
+    }
+
+    /// <summary>
+    /// The main entry point for applying any stat change to this character.
+    /// </summary>
+    public void ApplyModifier(StatModifier modifier)
+    {
+        // Handle one-shot effects like healing
+        if (modifier.Stat == StatType.Heal)
+        {
+            c_Health.ChangeHealth((int)modifier.Value);
+            return; // Heal is instant and doesn't need to be tracked
+        }
+
+        // Apply the stat change
+        ApplyStatChange(modifier.Stat, modifier.Value);
+
+        // If the effect is temporary, start a coroutine to revert it later
+        if (modifier.Duration > 0)
+        {
+            var coroutine = StartCoroutine(RevertModifierAfterDelay(modifier));
+            activeTemporaryModifiers.Add(modifier);
+            runningCoroutines.Add(modifier, coroutine);
+        }
+    }
+
+    private void ApplyStatChange(StatType stat, float value)
+    {
+        switch (stat)
+        {
+            case StatType.AttackDamage:
+                c_Stats.AD += (int)value;
+                break;
+            case StatType.AbilityPower:
+                c_Stats.AP += (int)value;
+                break;
+            case StatType.MoveSpeed:
+                c_Stats.MS += value;
+                break;
+            case StatType.MaxHealth:
+                c_Stats.maxHP += (int)value;
+                // Ensure current health doesn't exceed new max health after a debuff
+                c_Stats.currentHP = Mathf.Min(c_Stats.currentHP, c_Stats.maxHP);
+                break;
+            case StatType.Armor:
+                c_Stats.AR += (int)value;
+                break;
+            case StatType.MagicResist:
+                c_Stats.MR += (int)value;
+                break;
+            case StatType.KnockbackResist:
+                c_Stats.KR += value;
+                break;
+            case StatType.LifestealPercent:
+                c_Stats.lifestealPercent += value;
+                break;
+        }
+    }
+
+    private IEnumerator RevertModifierAfterDelay(StatModifier modifier)
+    {
+        yield return new WaitForSeconds(modifier.Duration);
+
+        // Apply the inverse of the modifier to remove its effect
+        ApplyStatChange(modifier.Stat, -modifier.Value);
+
+        // Clean up tracking
+        activeTemporaryModifiers.Remove(modifier);
+        runningCoroutines.Remove(modifier);
+    }
 }
 

@@ -7,7 +7,7 @@ public class INV_Manager : MonoBehaviour
 {
     [Header("Central API for the Inventory system")]
     [Header("References")]
-    INV_UseItem useItem;
+    public C_StatsManager statsManager; // <-- New reference
 
     public TMP_Text goldText;
     public GameObject lootPrefab;
@@ -20,8 +20,8 @@ public class INV_Manager : MonoBehaviour
 
     void Awake()
     {
-        useItem ??= GetComponent<INV_UseItem>();
-        if (!useItem) Debug.LogError($"{name}: INV_UseItem missing.", this);
+        statsManager ??= FindFirstObjectByType<C_StatsManager>();
+        if (!statsManager) Debug.LogError($"{name}: C_StatsManager missing.", this);
     }
 
     void Start()
@@ -82,8 +82,15 @@ public class INV_Manager : MonoBehaviour
 
     public void UseItem(INV_Slots slot)
     {
-        if (!useItem.ApplyItemEffects(slot.item)) return; // Heal at full HP
+        if (slot.item == null || slot.item.modifiers.Count == 0) return;
 
+        // Apply all modifiers from the item
+        foreach (var modifier in slot.item.modifiers)
+        {
+            statsManager.ApplyModifier(modifier);
+        }
+
+        // Consume the item
         slot.quantity -= 1;
         if (slot.quantity <= 0) slot.item = null;
         slot.UpdateUI();

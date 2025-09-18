@@ -139,11 +139,19 @@ public abstract class W_Base : MonoBehaviour
         int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
         int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
 
-        // Notify attacker of damage dealt (Player only)
-        var p_StatsChanged = attackerStats.GetComponent<P_StatsChanged>();
-        if (p_StatsChanged != null && dealtDamage > 0)
+        // LIFESTEAL LOGIC
+        // If damage was dealt and the attacker has lifesteal, heal the attacker.
+        if (dealtDamage > 0 && attackerStats.lifestealPercent > 0)
         {
-            p_StatsChanged.OnDealtDamage(dealtDamage);
+            var attackerHealth = attackerStats.GetComponent<C_Health>();
+            if (attackerHealth != null)
+            {
+                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifestealPercent);
+                if (healAmount > 0)
+                {
+                    attackerHealth.ChangeHealth(healAmount);
+                }
+            }
         }
 
         // Hit effects

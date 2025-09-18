@@ -9,7 +9,7 @@ public class ST_Manager : MonoBehaviour
     public ST_Slots[] st_Slots;
     public TMP_Text skillPointsText;
     public P_Exp p_Exp;
-    public P_StatsChanged p_StatsChanged;
+    public C_StatsManager statsManager; // <-- New reference
 
     private P_InputActions input;
 
@@ -21,12 +21,12 @@ public class ST_Manager : MonoBehaviour
     {
         // Auto-wire UI components if not assigned in inspector
         p_Exp           ??= FindFirstObjectByType<P_Exp>();
-        p_StatsChanged  ??= FindFirstObjectByType<P_StatsChanged>();
+        statsManager    ??= FindFirstObjectByType<C_StatsManager>();
         skillsCanvas    ??= GetComponent<CanvasGroup>();
         skillPointsText ??= GetComponentInChildren<TMP_Text>();
 
         if (!p_Exp)             Debug.LogError($"{name}: P_Exp missing in ST_Manager.", this);
-        if (!p_StatsChanged)    Debug.LogError($"{name}: P_StatsChanged missing in ST_Manager.", this);
+        if (!statsManager)      Debug.LogError($"{name}: C_StatsManager missing in ST_Manager.", this);
         if (!skillsCanvas)      Debug.LogError($"{name}: SkillsCanvas missing in ST_Manager.", this);
         if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText missing in ST_Manager.", this);
 
@@ -102,22 +102,11 @@ public class ST_Manager : MonoBehaviour
         var so = slot.st_skillSO;
         if (!so) return;
 
-        // Apply the effect based on the skill type
-        switch (so.skillType)
+        // Apply all modifiers from the skill upgrade
+        foreach (var modifier in so.modifiers)
         {
-            // Apply stat increase
-            case ST_SkillSO.SkillType.Stat:
-                p_StatsChanged.ApplyStat(so.stat, so.pointPerLv);
-                break;
-
-            // Update lifesteal percent
-            case ST_SkillSO.SkillType.Lifesteal:
-                {
-                    // Total lifesteal scales with current level
-                    float totalPercent = slot.currentLevel * so.lifestealPercentPerLevel;
-                    p_StatsChanged.SetLifestealPercent(totalPercent);
-                    break;
-                }
+            // Note: The modifier's value is the amount *per level*.
+            statsManager.ApplyModifier(modifier);
         }
     }
 
