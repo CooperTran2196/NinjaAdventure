@@ -123,18 +123,21 @@ using System.Collections;
 
 public class C_Dodge : MonoBehaviour
 {
+    [Header("Depend on C_Stats, C_State, and _Movement")]
     [Header("References")]
+    public C_Stats c_Stats;
+    public C_State c_State;
+
     Animator animator;
     P_InputActions input;
 
-    public C_Stats c_Stats;
-    public C_State c_State;
-    public P_Movement p_Movement; // read lastMove for direction
+    [Header("Only choose one")]
+    public P_Movement p_Movement;
     public E_Movement e_Movement;
     C_AfterimageSpawner afterimage;
 
-    [Header("Config")]
-    public bool useInput = true; // Player = true; Enemy can set false and call RequestDodge(dir) manually
+    [Header("Player = true, Enemy = false")]
+    public bool useInput = true;
 
     [Header("State (read-only)")]
     public bool IsDodging { get; private set; }
@@ -535,11 +538,11 @@ public class C_State : MonoBehaviour
     }
 }
 
-// ----- File: C_StatModifier.cs -----
+// ----- File: C_StatEffect.cs -----
 using System;
 using UnityEngine;
 
-// A central enum for all stats that can be modified.
+// A central enum for all stats that can be modified
 public enum StatType
 {
     // Core Stats
@@ -554,30 +557,30 @@ public enum StatType
     // Special Stats
     LifestealPercent,
 
-    // Consumable-only Stats
+    // Consumable Stats
     Heal,
 }
 
-// NEW: Defines how a modifier's value is applied.
-public enum ModifierType
+// Defines how a modifier's value is applied
+public enum EffectType
 {
-    Flat,       // Adds a fixed value (e.g., +10 Health).
-    Percent,    // Adds a percentage of the stat's base value (e.g., +10% Health).
+    Flat,
+    Percent,
 }
 
-// A single, universal definition for any change to a stat.
+// Core definition for any change to a stat
 [Serializable]
-public class StatModifier
+public class StatEffect
 {
     public StatType Stat;
-    public ModifierType Type; // Is this a Flat or Percent modifier?
+    public EffectType Type;
     public float Value;
 
-    [Header("0=Permanent, 1=Instant, >1=Timed Effect")]
-    public float Duration;
+    [Header("0 = Permanent, 1 = Instant, >1 = Timed Effect")]
+    public int Duration = 1;
 
-    [Header("Tick Effect (for Duration > 1)")]
-    public bool IsOverTime; // If true, Value is applied every second for Duration.
+    [Header("Tick Effect (for Duration > 1, Only Heal)")]
+    public bool IsOverTime = false;
 }
 
 // ----- File: C_Stats.cs -----
@@ -621,10 +624,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [DisallowMultipleComponent]
 public class C_StatsManager : MonoBehaviour
 {
+    public event Action OnStatsChanged;
+
     [Header("Component References")]
     public C_Stats c_Stats;
     public C_Health c_Health;
@@ -634,7 +640,7 @@ public class C_StatsManager : MonoBehaviour
     private float baseMS, baseKR, baseLifestealPercent;
 
     // List of temporary buffs/debuffs.
-    private readonly List<StatModifier> activeModifiers = new List<StatModifier>();
+    private readonly List<StatEffect> activeModifiers = new List<StatEffect>();
 
     void Awake()
     {
@@ -658,7 +664,7 @@ public class C_StatsManager : MonoBehaviour
     /// <summary>
     /// The main entry point for applying any stat change.
     /// </summary>
-    public void ApplyModifier(StatModifier modifier)
+    public void ApplyModifier(StatEffect modifier)
     {
         // Rule: Duration == 1 is an INSTANT, one-shot effect.
         if (modifier.Duration == 1)
@@ -696,10 +702,10 @@ public class C_StatsManager : MonoBehaviour
     /// <summary>
     /// Bakes a permanent modifier directly into the base stats.
     /// </summary>
-    private void PromoteModifierToBaseStats(StatModifier modifier)
+    private void PromoteModifierToBaseStats(StatEffect modifier)
     {
         // For now, we only support promoting Flat modifiers permanently.
-        if (modifier.Type == ModifierType.Percent)
+        if (modifier.Type == EffectType.Percent)
         {
             Debug.LogWarning($"Cannot permanently promote a Percentage modifier for {modifier.Stat}. This is not supported. Ignoring modifier.", this);
             return;
@@ -735,30 +741,43 @@ public class C_StatsManager : MonoBehaviour
         c_Stats.lifestealPercent = baseLifestealPercent;
 
         // 2. Apply all temporary FLAT modifiers.
-        foreach (var mod in activeModifiers.Where(m => m.Type == ModifierType.Flat))
+        foreach (var mod in activeModifiers.Where(m => m.Type == EffectType.Flat))
         {
             ApplySingleStatChange(mod.Stat, mod.Value, mod.Type);
         }
 
-        // 3. Apply all temporary PERCENT modifiers.
-        // This now scales on top of the (base + flat) values.
-        foreach (var mod in activeModifiers.Where(m => m.Type == ModifierType.Percent))
+        // 3. Calculate the SUM of all percentage bonuses for each stat.
+        var percentBonuses = new Dictionary<StatType, float>();
+        foreach (var mod in activeModifiers.Where(m => m.Type == EffectType.Percent))
         {
-            ApplySingleStatChange(mod.Stat, mod.Value, mod.Type);
+            if (!percentBonuses.ContainsKey(mod.Stat))
+                percentBonuses[mod.Stat] = 0;
+            percentBonuses[mod.Stat] += mod.Value;
+        }
+
+        // 4. Apply the final percentage bonuses based on the (Base + Flat) value.
+        foreach (var bonus in percentBonuses)
+        {
+            float basePlusFlatValue = GetCurrentStatValue(bonus.Key);
+            float percentageAmount = basePlusFlatValue * bonus.Value;
+            ApplySingleStatChange(bonus.Key, percentageAmount, EffectType.Flat); // Apply as a flat value
         }
 
         // Ensure current health is clamped after any MaxHP changes.
         c_Stats.currentHP = Mathf.Min(c_Stats.currentHP, c_Stats.maxHP);
+
+        OnStatsChanged?.Invoke();
     }
 
     /// <summary>
     /// Applies a single stat change. Handles Flat vs Percent logic.
     /// </summary>
-    private void ApplySingleStatChange(StatType stat, float value, ModifierType type)
+    private void ApplySingleStatChange(StatType stat, float value, EffectType type)
     {
-        if (type == ModifierType.Percent)
+        // This check is now only relevant for INSTANT effects.
+        // For timed buffs, the percentage calculation is handled in RecalculateAllStats.
+        if (type == EffectType.Percent)
         {
-            // For percentages, get the stat's current value and multiply.
             float currentValue = GetCurrentStatValue(stat);
             value = currentValue * value; // e.g., 150 * 0.10 = 15
         }
@@ -794,14 +813,14 @@ public class C_StatsManager : MonoBehaviour
         }
     }
 
-    private IEnumerator RevertModifierAfterDelay(StatModifier modifier)
+    private IEnumerator RevertModifierAfterDelay(StatEffect modifier)
     {
         yield return new WaitForSeconds(modifier.Duration);
         activeModifiers.Remove(modifier);
         RecalculateAllStats();
     }
 
-    private IEnumerator ApplyOverTimeEffect(StatModifier modifier)
+    private IEnumerator ApplyOverTimeEffect(StatEffect modifier)
     {
         // Rule: Only allow ticking effects for Heal.
         if (modifier.Stat != StatType.Heal)
@@ -815,7 +834,7 @@ public class C_StatsManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
             // Apply one "tick" of the effect. It's always Flat for ticking effects.
-            ApplySingleStatChange(modifier.Stat, modifier.Value, ModifierType.Flat);
+            ApplySingleStatChange(modifier.Stat, modifier.Value, EffectType.Flat);
             timePassed += 1.0f;
         }
     }

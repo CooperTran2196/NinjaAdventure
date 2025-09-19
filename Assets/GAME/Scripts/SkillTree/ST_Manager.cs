@@ -103,7 +103,7 @@ public class ST_Manager : MonoBehaviour
         if (!so) return;
 
         // Apply all modifiers from the skill upgrade
-        foreach (var modifier in so.modifiers)
+        foreach (StatEffect modifier in so.modifiers)
         {
             // Note: The modifier's value is the amount *per level*.
             statsManager.ApplyModifier(modifier);

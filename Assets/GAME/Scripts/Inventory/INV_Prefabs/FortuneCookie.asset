@@ -15,10 +15,16 @@ MonoBehaviour:
   itemName: FortuneCookie
   itemDescription: Yum yum
   icon: {fileID: 21300000, guid: cf4fa894aa1eba046a58478a362f8275, type: 3}
-  isGold: 0
-  currentHealth: 3
-  maxHealth: 0
-  speed: 0
-  damage: 0
   stackSize: 3
-  durationSec: 0
+  isGold: 0
+  modifiers:
+  - Stat: 0
+    Type: 0
+    Value: 1
+    Duration: 10
+    IsOverTime: 0
+  - Stat: 8
+    Type: 0
+    Value: 10
+    Duration: 1
+    IsOverTime: 0

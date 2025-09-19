@@ -3,18 +3,21 @@ using System.Collections;
 
 public class C_Dodge : MonoBehaviour
 {
+    [Header("Depend on C_Stats, C_State, and _Movement")]
     [Header("References")]
+    public C_Stats c_Stats;
+    public C_State c_State;
+
     Animator animator;
     P_InputActions input;
 
-    public C_Stats c_Stats;
-    public C_State c_State;
-    public P_Movement p_Movement; // read lastMove for direction
+    [Header("Only choose one")]
+    public P_Movement p_Movement;
     public E_Movement e_Movement;
     C_AfterimageSpawner afterimage;
 
-    [Header("Config")]
-    public bool useInput = true; // Player = true; Enemy can set false and call RequestDodge(dir) manually
+    [Header("Player = true, Enemy = false")]
+    public bool useInput = true;
 
     [Header("State (read-only)")]
     public bool IsDodging { get; private set; }

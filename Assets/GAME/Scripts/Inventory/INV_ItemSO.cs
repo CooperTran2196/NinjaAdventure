@@ -13,7 +13,7 @@ public class INV_ItemSO : ScriptableObject
     public bool isGold;
 
     [Header("Item Effects")]
-    public List<StatModifier> modifiers;
+    public List<StatEffect> modifiers;
 
     private void OnValidate()
     {
