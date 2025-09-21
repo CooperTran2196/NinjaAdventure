@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6addd2e0894da4bc2862ca5fc8e96ea7, type: 3}
   m_Name: S_HP2
   m_EditorClassIdentifier: Assembly-CSharp::SkillSO
-  skillName: S_HP1 1
+  skillName: S_HP2
   skillIcon: {fileID: 21300000, guid: c2185e948824427468216e24d8658881, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 3
-  pointPerLv: 15
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - statName: 3
+    Value: 15
+    Duration: 0
+    IsOverTime: 0

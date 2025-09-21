@@ -7,7 +7,7 @@ public class INV_Manager : MonoBehaviour
 {
     [Header("Central API for the Inventory system")]
     [Header("References")]
-    public C_StatsManager statsManager; // <-- New reference
+    public P_StatsManager statsManager;
 
     public TMP_Text goldText;
     public GameObject lootPrefab;
@@ -20,7 +20,7 @@ public class INV_Manager : MonoBehaviour
 
     void Awake()
     {
-        statsManager ??= FindFirstObjectByType<C_StatsManager>();
+        statsManager ??= FindFirstObjectByType<P_StatsManager>();
         if (!statsManager) Debug.LogError($"{name}: C_StatsManager missing.", this);
     }
 

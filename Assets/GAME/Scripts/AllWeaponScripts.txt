@@ -137,16 +137,19 @@ public abstract class W_Base : MonoBehaviour
     {
         int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
         int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
-        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+        float attackerArmorPen = attackerStats.armorPen;
+        float attackerMagicPen = attackerStats.magicPen;
+
+        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP, attackerArmorPen, attackerMagicPen);
 
         // LIFESTEAL LOGIC
         // If damage was dealt and the attacker has lifesteal, heal the attacker.
-        if (dealtDamage > 0 && attackerStats.lifestealPercent > 0)
+        if (dealtDamage > 0 && attackerStats.lifesteal > 0)
         {
             var attackerHealth = attackerStats.GetComponent<C_Health>();
             if (attackerHealth != null)
             {
-                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifestealPercent);
+                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifesteal);
                 if (healAmount > 0)
                 {
                     attackerHealth.ChangeHealth(healAmount);
@@ -170,6 +173,7 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
+    // Called by owner when attacking
     public abstract void Attack(Vector2 attackDir);
 
     // Called by owner when equipping
@@ -248,7 +252,7 @@ public static class W_Knockback
         if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    // Radial AoE push
+    // Radial AoE push (Still incomplete)
     public static int PushRadial(Vector2 center, float radius, float impulse, LayerMask mask)
     {
         int count = 0;
@@ -277,12 +281,14 @@ public class W_Melee : W_Base
     // Track hits to avoid multiple hits on same target during one git
     readonly HashSet<int> alreadyHit = new HashSet<int>();
 
+    // Override attack method
     public override void Attack(Vector2 aimDir)
     {
         attackDir = aimDir.normalized;
         StartCoroutine(Hit());
     }
 
+    // Coroutine for handling the hit process
     IEnumerator Hit()
     {
         // Clear hit tracker after each git

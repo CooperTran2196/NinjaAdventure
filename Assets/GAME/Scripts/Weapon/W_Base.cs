@@ -136,16 +136,19 @@ public abstract class W_Base : MonoBehaviour
     {
         int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
         int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
-        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP);
+        float attackerArmorPen = attackerStats.armorPen;
+        float attackerMagicPen = attackerStats.magicPen;
+
+        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP, attackerArmorPen, attackerMagicPen);
 
         // LIFESTEAL LOGIC
         // If damage was dealt and the attacker has lifesteal, heal the attacker.
-        if (dealtDamage > 0 && attackerStats.lifestealPercent > 0)
+        if (dealtDamage > 0 && attackerStats.lifesteal > 0)
         {
             var attackerHealth = attackerStats.GetComponent<C_Health>();
             if (attackerHealth != null)
             {
-                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifestealPercent);
+                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifesteal);
                 if (healAmount > 0)
                 {
                     attackerHealth.ChangeHealth(healAmount);
@@ -169,6 +172,7 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
+    // Called by owner when attacking
     public abstract void Attack(Vector2 attackDir);
 
     // Called by owner when equipping

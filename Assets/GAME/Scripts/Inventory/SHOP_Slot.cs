@@ -6,7 +6,7 @@ using TMPro;
 public class SHOP_Slot : MonoBehaviour
 {
     [Header("Runtime Data")]
-    public INV_ItemSO itemSO { get; private set; }
+    public INV_ItemSO inv_ItemSO { get; private set; }
     public int price { get; private set; }
 
     [Header("UI")]
@@ -33,18 +33,18 @@ public class SHOP_Slot : MonoBehaviour
     // called by SHOP_Manager at startup
     public void Initialize(INV_ItemSO newItemSO, int newPrice)
     {
-        itemSO = newItemSO;
+        inv_ItemSO = newItemSO;
         price  = newPrice;
 
         icon.enabled = true;
-        icon.sprite  = itemSO.icon;
-        nameText.text  = itemSO.itemName;
+        icon.sprite  = inv_ItemSO.icon;
+        nameText.text  = inv_ItemSO.itemName;
         priceText.text = price.ToString();
     }
 
     // keep this so the next video (buy) just works
     public void OnBuyButtonClicked()
     {
-        shop.TryBuyItem(itemSO, price);
+        shop.TryBuyItem(inv_ItemSO, price);
     }
 }

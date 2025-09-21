@@ -15,7 +15,8 @@ MonoBehaviour:
   skillName: S_MS1
   skillIcon: {fileID: 21300000, guid: 038dcb77ec46a7340aa147650d516496, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 2
-  pointPerLv: 1
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - statName: 2
+    Value: 0.5
+    Duration: 0
+    IsOverTime: 0

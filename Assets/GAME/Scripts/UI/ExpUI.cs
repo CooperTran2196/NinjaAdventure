@@ -43,6 +43,7 @@ public class ExpUI : MonoBehaviour
         p_Exp.OnXPChanged -= HandleXPChanged;
     }
 
+    // Debug: Gain XP with input
     void Update()
     {
         if (input.Debug.GainExp.WasPressedThisFrame())

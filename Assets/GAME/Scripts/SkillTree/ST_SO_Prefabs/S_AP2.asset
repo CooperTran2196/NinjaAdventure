@@ -15,7 +15,8 @@ MonoBehaviour:
   skillName: S_AP2
   skillIcon: {fileID: 21300000, guid: 7f84c63c4f82a914ea1834214b56faa7, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 1
-  pointPerLv: 2
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - statName: 1
+    Value: 2
+    Duration: 0
+    IsOverTime: 0

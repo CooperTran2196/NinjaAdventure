@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "INV_ItemSO", menuName = "INV_ItemSO")]
+[CreateAssetMenu(fileName = "INV_ItemSO", menuName = "Item")]
 public class INV_ItemSO : ScriptableObject
 {
     public string itemName = "Auto Filled";
@@ -33,7 +33,7 @@ public class INV_Loot : MonoBehaviour
     public static event Action<INV_ItemSO, int> OnItemLooted;
 
     [Header("References")]
-    public INV_ItemSO itemSO;
+    public INV_ItemSO inv_ItemSO;
 
     SpriteRenderer sr;
     Animator anim;
@@ -60,7 +60,7 @@ public class INV_Loot : MonoBehaviour
     // Called by INV_Manager when spawning overflow/right-click drops
     public void Initialize(INV_ItemSO so, int qty)
     {
-        itemSO = so;
+        inv_ItemSO = so;
         quantity = qty;
         canBePickedUp = false; // avoid instant repick
         RefreshAppearance();
@@ -68,10 +68,10 @@ public class INV_Loot : MonoBehaviour
 
     void RefreshAppearance()
     {
-        if (!sr || !itemSO) return;
+        if (!sr || !inv_ItemSO) return;
 
-        sr.sprite = itemSO.icon;
-        gameObject.name = itemSO.itemName;
+        sr.sprite = inv_ItemSO.icon;
+        gameObject.name = inv_ItemSO.itemName;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -79,7 +79,7 @@ public class INV_Loot : MonoBehaviour
         if (!other.CompareTag("Player") || !canBePickedUp) return;
 
         trigger.enabled = false;
-        OnItemLooted?.Invoke(itemSO, quantity);
+        OnItemLooted?.Invoke(inv_ItemSO, quantity);
         anim?.SetTrigger("Pickup");
         Destroy(gameObject, 0.5f); // Match animation length
     }
@@ -288,65 +288,6 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     }
 }
 
-// ----- File: INV_UseItem.cs -----
-// using System.Collections;
-// using UnityEngine;
-
-// public class INV_UseItem : MonoBehaviour
-// {
-//     [Header("Targets")]
-//     public C_Health c_Health;
-//     public P_StatsChanged p_Stats;
-
-//     void Awake()
-//     {
-//         c_Health ??= FindFirstObjectByType<C_Health>();
-//         p_Stats  ??= FindFirstObjectByType<P_StatsChanged>();
-
-//         if (!c_Health) Debug.LogError($"{name}: C_Health in INV_UseItemmissing.", this);
-//         if (!p_Stats)  Debug.LogError($"{name}: P_StatsChanged in INV_UseItemmissing missing.", this);
-//     }
-
-//     // Returns true if any effect actually applied
-//     public bool ApplyItemEffects(INV_ItemSO itemSO)
-//     {
-//         bool applied = false;
-//         var s = p_Stats.c_Stats; // holds currentHP / maxHP
-
-//         // Heal only if not already full (avoid consuming pointlessly)
-//         if (itemSO.currentHealth > 0 && s.currentHP < s.maxHP)
-//         {
-//             c_Health.ChangeHealth(itemSO.currentHealth); // positive = heal
-//             applied = true;
-//         }
-
-//         // Apply stat bumps immediately
-//         if (itemSO.maxHealth != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.MaxHP, itemSO.maxHealth); applied = true; }
-//         if (itemSO.speed     != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.MS,     itemSO.speed);     applied = true; }
-//         if (itemSO.damage    != 0) { p_Stats.ApplyStat(ST_SkillSO.Stat.AD,     itemSO.damage);    applied = true; }
-
-//         // Single timer for all temporary effects
-//         if (applied && itemSO.durationSec > 0f)
-//             StartCoroutine(EffectTimer(itemSO));
-
-//         return applied;
-//     }
-
-//     IEnumerator EffectTimer(INV_ItemSO itemSO)
-//     {
-//         var s = p_Stats.c_Stats;
-//         yield return new WaitForSeconds(itemSO.durationSec);
-
-//         if (itemSO.maxHealth != 0)
-//         {
-//             p_Stats.ApplyStat(ST_SkillSO.Stat.MaxHP, -itemSO.maxHealth);
-//             s.currentHP = Mathf.Min(s.currentHP, s.maxHP); // clamp after MaxHP shrink
-//         }
-//         if (itemSO.speed  != 0) p_Stats.ApplyStat(ST_SkillSO.Stat.MS, -itemSO.speed);
-//         if (itemSO.damage != 0) p_Stats.ApplyStat(ST_SkillSO.Stat.AD, -itemSO.damage);
-//     }
-// }
-
 // ----- File: SHOP_Manager.cs -----
 // Assets/GAME/Scripts/INV/SHOP_Manager.cs
 using System;
@@ -394,7 +335,7 @@ public class SHOP_Manager : MonoBehaviour
             var data = shopItems[i];
             var slot = shopSlots[i];
             slot.gameObject.SetActive(true);
-            slot.Initialize(data.itemSO, data.price);
+            slot.Initialize(data.inv_ItemSO, data.price);
         }
 
         // turn off the rest
@@ -403,23 +344,23 @@ public class SHOP_Manager : MonoBehaviour
     }
 
     // ---- next-video hooks (already here so you don’t refactor later) ----
-    public void TryBuyItem(INV_ItemSO itemSO, int price)
+    public void TryBuyItem(INV_ItemSO inv_ItemSO, int price)
     {
-        if (itemSO == null) return;
+        if (inv_ItemSO == null) return;
         if (!inv) return;
         if (inv.gold < price) return;
-        if (!HasSpace(itemSO)) return;
+        if (!HasSpace(inv_ItemSO)) return;
 
         inv.gold -= price;
         inv.goldText.text = inv.gold.ToString();
-        inv.AddItem(itemSO, 1);
+        inv.AddItem(inv_ItemSO, 1);
     }
 
-    public void SellItem(INV_ItemSO itemSO)
+    public void SellItem(INV_ItemSO inv_ItemSO)
     {
-        if (itemSO == null) return;
+        if (inv_ItemSO == null) return;
         if (!inv) return;
-        int price = GetPrice(itemSO);
+        int price = GetPrice(inv_ItemSO);
         if (price <= 0) return;
 
         inv.gold += price;
@@ -427,11 +368,11 @@ public class SHOP_Manager : MonoBehaviour
         // INV_Slots handles decreasing quantity & UpdateUI on click
     }
 
-    bool HasSpace(INV_ItemSO itemSO)
+    bool HasSpace(INV_ItemSO inv_ItemSO)
     {
         // same item with room
         foreach (var slot in inv.inv_Slots)
-            if (slot.item == itemSO && slot.quantity < itemSO.stackSize) return true;
+            if (slot.item == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize) return true;
 
         // empty slot
         foreach (var slot in inv.inv_Slots)
@@ -440,17 +381,17 @@ public class SHOP_Manager : MonoBehaviour
         return false;
     }
 
-    int GetPrice(INV_ItemSO itemSO)
+    int GetPrice(INV_ItemSO inv_ItemSO)
     {
         for (int i = 0; i < shopItems.Count; i++)
-            if (shopItems[i].itemSO == itemSO) return shopItems[i].price;
+            if (shopItems[i].inv_ItemSO == inv_ItemSO) return shopItems[i].price;
         return 0;
     }
 
     [Serializable]
     public class ShopItem
     {
-        public INV_ItemSO itemSO;
+        public INV_ItemSO inv_ItemSO;
         public int price = 1;
     }
 }
@@ -464,7 +405,7 @@ using TMPro;
 public class SHOP_Slot : MonoBehaviour
 {
     [Header("Runtime Data")]
-    public INV_ItemSO itemSO { get; private set; }
+    public INV_ItemSO inv_ItemSO { get; private set; }
     public int price { get; private set; }
 
     [Header("UI")]
@@ -491,19 +432,19 @@ public class SHOP_Slot : MonoBehaviour
     // called by SHOP_Manager at startup
     public void Initialize(INV_ItemSO newItemSO, int newPrice)
     {
-        itemSO = newItemSO;
+        inv_ItemSO = newItemSO;
         price  = newPrice;
 
         icon.enabled = true;
-        icon.sprite  = itemSO.icon;
-        nameText.text  = itemSO.itemName;
+        icon.sprite  = inv_ItemSO.icon;
+        nameText.text  = inv_ItemSO.itemName;
         priceText.text = price.ToString();
     }
 
     // keep this so the next video (buy) just works
     public void OnBuyButtonClicked()
     {
-        shop.TryBuyItem(itemSO, price);
+        shop.TryBuyItem(inv_ItemSO, price);
     }
 }
 

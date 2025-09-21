@@ -15,7 +15,9 @@ public class C_Stats : MonoBehaviour
     public float KR = 10f; // knockback Resist
 
     [Header("Special Stats")]
-    public float lifestealPercent = 0f;
+    public float lifesteal = 0f;
+    public float armorPen = 0f;
+    public float magicPen = 0f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;

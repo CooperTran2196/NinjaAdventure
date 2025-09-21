@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "INV_ItemSO", menuName = "INV_ItemSO")]
+[CreateAssetMenu(fileName = "INV_ItemSO", menuName = "Item")]
 public class INV_ItemSO : ScriptableObject
 {
     public string itemName = "Auto Filled";

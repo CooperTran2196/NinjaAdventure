@@ -72,51 +72,6 @@ public class C_AfterimageSpawner : MonoBehaviour
     }
 }
 
-// ----- File: C_Anim.cs -----
-using UnityEngine;
-
-public static class C_Anim
-{
-    // Writes only the directional floats on the Animator
-    public static void UpdateAnimDirections(
-        Animator animator,
-        bool busy,
-        Vector2 moveAxis,
-        Vector2 lastMove,
-        float MIN_DISTANCE)
-    {
-        // Only write move floats when not locked by another state
-        if (!busy && moveAxis.sqrMagnitude > MIN_DISTANCE)
-        {
-            animator.SetFloat("moveX", moveAxis.x);
-            animator.SetFloat("moveY", moveAxis.y);
-        }
-
-        // Always refresh idle facing sso the character remembers direction
-        animator.SetFloat("idleX", lastMove.x);
-        animator.SetFloat("idleY", lastMove.y);
-    }
-
-    // Single place to write attack-facing
-    public static void SetAttackDirection(Animator animator, Vector2 dir)
-    {
-        animator.SetFloat("atkX", dir.x);
-        animator.SetFloat("atkY", dir.y);
-    }
-
-    // Read back the attack facing used by Movement while attacking
-    public static Vector2 GetAttackDirection(Animator animator)
-    {
-        return new Vector2(animator.GetFloat("atkX"), animator.GetFloat("atkY"));
-    }
-
-    // Read idle facing
-    public static Vector2 GetIdleDirection(Animator animator)
-    {
-        return new Vector2(animator.GetFloat("idleX"), animator.GetFloat("idleY"));
-    }
-}
-
 // ----- File: C_Dodge.cs -----
 using UnityEngine;
 using System.Collections;
@@ -329,33 +284,29 @@ public class C_Health : MonoBehaviour
     {
         input ??= new P_InputActions();
         input.Debug.Enable();
+        
+        // subscribe to FX events
+        fxDamagedHandler ??= _ => fx.FlashOnDamaged();
+        fxHealedHandler ??= _ => fx.FlashOnHealed();
+        fxDiedHandler ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
 
-        if (fx != null)
-        {
-            fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-            fxHealedHandler  ??= _ => fx.FlashOnHealed();
-            fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
-
-            OnDamaged += fxDamagedHandler;
-            OnHealed  += fxHealedHandler;
-            OnDied    += fxDiedHandler;
-        }
+        OnDamaged += fxDamagedHandler;
+        OnHealed += fxHealedHandler;
+        OnDied += fxDiedHandler;
     }
 
     void OnDisable()
     {
         input?.Debug.Disable();
 
-        if (fx != null)
-        {
-            OnDamaged -= fxDamagedHandler;
-            OnHealed  -= fxHealedHandler;
-            OnDied    -= fxDiedHandler;
-        }
+        OnDamaged -= fxDamagedHandler;
+        OnHealed  -= fxHealedHandler;
+        OnDied    -= fxDiedHandler;
     }
 
     void Update()
     {
+        // Debug keys
         if (input.Debug.OnDamaged.WasPressedThisFrame())
             ChangeHealth(-Mathf.Abs(takingDamageAmount));
 
@@ -364,15 +315,26 @@ public class C_Health : MonoBehaviour
     }
 
     // AD+AP combined calculation (armor/mres as % 0–100)
-    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP)
+    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP, float attackerArmorPen, float attackerMagicPen)
     {
+        // Ignore if dead or dodging with IFrames
         if (!IsAlive) return 0;
         if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
 
-        int total =
-            Mathf.RoundToInt((attackerAD + weaponAD) * (1f - Mathf.Clamp01(AR / 100f))) +
-            Mathf.RoundToInt((attackerAP + weaponAP) * (1f - Mathf.Clamp01(MR / 100f)));
+        // Calculate effective armor and magic resist after penetration
+        float effectiveAR = AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
+        float effectiveMR = MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
 
+        // Calculate damage reduction from effective armor and magic resist
+        float damageReductionAR = 1f - Mathf.Clamp01(effectiveAR / 100f);
+        float damageReductionMR = 1f - Mathf.Clamp01(effectiveMR / 100f);
+
+        // Final damage calculation
+        int total =
+            Mathf.RoundToInt((attackerAD + weaponAD) * damageReductionAR) +
+            Mathf.RoundToInt((attackerAP + weaponAP) * damageReductionMR);
+
+        // Clamp to valid range and apply
         int before = CurrentHP;
         int dealt = Mathf.Clamp(total, 0, before);
         if (dealt > 0) ChangeHealth(-dealt);
@@ -382,19 +344,22 @@ public class C_Health : MonoBehaviour
     // Single entrypoint for damage/heal
     public void ChangeHealth(int amount)
     {
+        // Ignore if dead, healing 0, or dodging with IFrames
         if (!IsAlive || (amount < 0 && useDodgeIFrames && c_Dodge.IsDodging)) return;
 
+        // Clamp to valid range and apply
         int before    = CurrentHP;
         int after     = Mathf.Clamp(before + amount, 0, MaxHP);
         int actual    = after - before;
             CurrentHP = after;
 
+        // Invoke events
         if (actual < 0) OnDamaged?.Invoke(-actual);
         else if (actual > 0) OnHealed?.Invoke(actual);
-
         if (after == 0) OnDied?.Invoke();
     }
 
+    // Kill instantly
     public void Kill() => ChangeHealth(-MaxHP);
 }
 
@@ -428,30 +393,30 @@ public class C_State : MonoBehaviour
 
     void Awake()
     {
-        rb ??= GetComponent<Rigidbody2D>();
+        rb          ??= GetComponent<Rigidbody2D>();
         animator ??= GetComponent<Animator>();
 
-        p_Movement ??= GetComponent<P_Movement>();
-        p_Combat ??= GetComponent<P_Combat>();
-        e_Movement ??= GetComponent<E_Movement>();
-        e_Combat ??= GetComponent<E_Combat>();
-        c_Dodge ??= GetComponent<C_Dodge>();
-        c_Health   ??= GetComponent<C_Health>();
+        p_Movement  ??= GetComponent<P_Movement>();
+        p_Combat    ??= GetComponent<P_Combat>();
+        e_Movement  ??= GetComponent<E_Movement>();
+        e_Combat    ??= GetComponent<E_Combat>();
+        c_Dodge     ??= GetComponent<C_Dodge>();
+        c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in C_State missing.");
+        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
+        if (!animator)                  Debug.LogError($"{name}: Animator in C_State missing.");
         if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_State missing.");
         if (!p_Combat   && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing.");
     }
 
     void OnEnable()
     {
-        if (c_Health != null) c_Health.OnDied += OnDiedHandler;
+        c_Health.OnDied += OnDiedHandler;
     }
 
     void OnDisable()
     {
-        if (c_Health != null) c_Health.OnDied -= OnDiedHandler;
+        c_Health.OnDied -= OnDiedHandler;
     }
     void OnDiedHandler()
     {
@@ -465,6 +430,7 @@ public class C_State : MonoBehaviour
 
     void Update()
     {
+        // Pick next state
         var next = PickState();
         if (next != CurrentState) CurrentState = next;
         ApplyAnimator(CurrentState);
@@ -479,6 +445,7 @@ public class C_State : MonoBehaviour
     //  Public API for Bool
     public bool CheckIsBusy()
     {
+        // busy if dodging, or attacking and movement is locked
         if (Is(ActorState.Dodge)) return true;
         if (Is(ActorState.Attack) && lockMove) return true;
         return false;
@@ -490,7 +457,7 @@ public class C_State : MonoBehaviour
         // Dodge (optional component)
         if (c_Dodge && c_Dodge.IsDodging) return ActorState.Dodge;
 
-        // Attack (player OR enemy driving isAttacking)
+        // Attack
         if ((p_Combat && p_Combat.isAttacking) || (e_Combat && e_Combat.isAttacking))
             return ActorState.Attack;
 
@@ -521,17 +488,18 @@ public class C_State : MonoBehaviour
         animator.SetFloat("idleY", lastMove.y);
     }
 
+    // Public API for Attack direction
     public void SetAttackDirection(Vector2 dir)
     {
         animator.SetFloat("atkX", dir.x);
         animator.SetFloat("atkY", dir.y);
     }
 
+    // Get current attack/idle direction from animator
     public Vector2 GetAttackDirection()
     {
         return new Vector2(animator.GetFloat("atkX"), animator.GetFloat("atkY"));
     }
-
     public Vector2 GetIdleDirection()
     {
         return new Vector2(animator.GetFloat("idleX"), animator.GetFloat("idleY"));
@@ -543,7 +511,7 @@ using System;
 using UnityEngine;
 
 // A central enum for all stats that can be modified
-public enum StatType
+public enum StatName
 {
     // Core Stats
     AttackDamage,
@@ -552,34 +520,30 @@ public enum StatType
     MaxHealth,
     Armor,
     MagicResist,
+    ArmorPen,
+    MagicPen,
     KnockbackResist,
 
     // Special Stats
-    LifestealPercent,
+    Lifesteal,
 
     // Consumable Stats
     Heal,
-}
-
-// Defines how a modifier's value is applied
-public enum EffectType
-{
-    Flat,
-    Percent,
 }
 
 // Core definition for any change to a stat
 [Serializable]
 public class StatEffect
 {
-    public StatType Stat;
-    public EffectType Type;
+    public StatName statName;
     public float Value;
 
     [Header("0 = Permanent, 1 = Instant, >1 = Timed Effect")]
     public int Duration = 1;
 
     [Header("Tick Effect (for Duration > 1, Only Heal)")]
+    [Header("True = Repeatedly, once per second")]
+    [Header("False = One-time at start")]
     public bool IsOverTime = false;
 }
 
@@ -601,7 +565,9 @@ public class C_Stats : MonoBehaviour
     public float KR = 10f; // knockback Resist
 
     [Header("Special Stats")]
-    public float lifestealPercent = 0f;
+    public float lifesteal = 0f;
+    public float armorPen = 0f;
+    public float magicPen = 0f;
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;
@@ -619,7 +585,6 @@ public class C_Stats : MonoBehaviour
 }
 
 // ----- File: C_StatsManager.cs -----
-// d:\Google Drive\Code\Final project\NinjaAdventure\Assets\GAME\Scripts\Character\C_StatsManager.cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -629,138 +594,131 @@ using System;
 [DisallowMultipleComponent]
 public class C_StatsManager : MonoBehaviour
 {
-    public event Action OnStatsChanged;
+    [Header("Depend on C_Stats and C_Health")]
 
-    [Header("Component References")]
-    public C_Stats c_Stats;
-    public C_Health c_Health;
+    [Header("References")]
+    C_Stats c_Stats;
+    C_Health c_Health;
 
-    // Base stats that can be permanently modified.
+    // Base stats that can be modified
     private int baseAD, baseAP, baseMaxHP, baseAR, baseMR;
-    private float baseMS, baseKR, baseLifestealPercent;
+    private float baseMS, baseKR, baseLifesteal, baseArmorPen, baseMagicPen;
 
     // List of temporary buffs/debuffs.
-    private readonly List<StatEffect> activeModifiers = new List<StatEffect>();
+    private readonly List<StatEffect> statsEffectList = new List<StatEffect>();
+
+    public event Action OnStatsChanged;
 
     void Awake()
     {
-        c_Stats ??= GetComponent<C_Stats>();
+        c_Stats  ??= GetComponent<C_Stats>();
         c_Health ??= GetComponent<C_Health>();
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing.", this);
-        if (!c_Health) Debug.LogError($"{name}: C_Health is missing.", this);
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in C_StatsManager is missing.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health in C_StatsManager is missing.", this);
 
-        // Snapshot the initial stats from the editor into our base stats.
-        baseAD = c_Stats.AD;
-        baseAP = c_Stats.AP;
-        baseMS = c_Stats.MS;
-        baseMaxHP = c_Stats.maxHP;
-        baseAR = c_Stats.AR;
-        baseMR = c_Stats.MR;
-        baseKR = c_Stats.KR;
-        baseLifestealPercent = c_Stats.lifestealPercent;
+        // Make copy of basic Stats
+        baseAD      = c_Stats.AD;
+        baseAP      = c_Stats.AP;
+        baseMS      = c_Stats.MS;
+        baseMaxHP   = c_Stats.maxHP;
+        baseAR      = c_Stats.AR;
+        baseMR      = c_Stats.MR;
+        baseKR      = c_Stats.KR;
+
+        // Special stats
+        baseLifesteal = c_Stats.lifesteal;
+        baseArmorPen  = c_Stats.armorPen;
+        baseMagicPen  = c_Stats.magicPen;
     }
 
-    /// <summary>
-    /// The main entry point for applying any stat change.
-    /// </summary>
-    public void ApplyModifier(StatEffect modifier)
+    /// The main entry point for applying any stat change
+    public void ApplyModifier(StatEffect stat)
     {
-        // Rule: Duration == 1 is an INSTANT, one-shot effect.
-        if (modifier.Duration == 1)
+        // Duration == 0 is a PERMANENT
+        if (stat.Duration == 0)
         {
-            ApplySingleStatChange(modifier.Stat, modifier.Value, modifier.Type);
-            return; // It's done. Do not store or track it.
-        }
-
-        // Rule: Duration == 0 is a PERMANENT upgrade to base stats.
-        if (modifier.Duration == 0)
-        {
-            PromoteModifierToBaseStats(modifier);
-            RecalculateAllStats(); // Recalculate to apply the new base stat.
+            ApplyPermanentEffect(stat);
+            RecalculateAllStats();
             return;
         }
 
-        // Rule: Duration > 1 is a TIMED effect.
-        if (modifier.Duration > 1)
+        // Duration == 1 is an INSTANT, treat as permanent for stat boosts
+        if (stat.Duration == 1)
         {
-            if (modifier.IsOverTime)
+            // Instantaneous effects like Heal are handled directly
+            if (stat.statName == StatName.Heal)
             {
-                // This is a ticking effect, like Heal-over-Time.
-                StartCoroutine(ApplyOverTimeEffect(modifier));
+                CommitStatChange(stat.statName, stat.Value);
+            }
+            // Other stat changes are made permanent
+            else
+            {
+                ApplyPermanentEffect(stat);
+                RecalculateAllStats();
+            }
+            return;
+        }
+
+        // Duration > 1 is a OVER TIME effect
+        if (stat.Duration > 1)
+        {
+            if (stat.IsOverTime)
+            {
+                // Repeatedly, once per second
+                StartCoroutine(ApplyOverTimeEffect(stat));
             }
             else
             {
-                // This is a temporary buff, like +10 AD for 10s.
-                activeModifiers.Add(modifier);
+                // One-time at start
+                statsEffectList.Add(stat);
                 RecalculateAllStats();
-                StartCoroutine(RevertModifierAfterDelay(modifier));
+                StartCoroutine(StartEffectTimer(stat));
             }
         }
     }
 
-    /// <summary>
-    /// Bakes a permanent modifier directly into the base stats.
-    /// </summary>
-    private void PromoteModifierToBaseStats(StatEffect modifier)
+    /// Handles permanent stat changes
+    private void ApplyPermanentEffect(StatEffect stat)
     {
-        // For now, we only support promoting Flat modifiers permanently.
-        if (modifier.Type == EffectType.Percent)
+        // Apply the permanent change to the BASE stat
+        switch (stat.statName)
         {
-            Debug.LogWarning($"Cannot permanently promote a Percentage modifier for {modifier.Stat}. This is not supported. Ignoring modifier.", this);
-            return;
-        }
+            case StatName.AttackDamage:     baseAD      += (int)stat.Value; break;
+            case StatName.AbilityPower:     baseAP      += (int)stat.Value; break;
+            case StatName.MoveSpeed:        baseMS      +=      stat.Value; break;
+            case StatName.MaxHealth:        baseMaxHP   += (int)stat.Value; break;
+            case StatName.Armor:            baseAR      += (int)stat.Value; break;
+            case StatName.MagicResist:      baseMR      += (int)stat.Value; break;
+            case StatName.KnockbackResist:  baseKR      +=      stat.Value; break;
 
-        switch (modifier.Stat)
-        {
-            case StatType.AttackDamage:     baseAD += (int)modifier.Value; break;
-            case StatType.AbilityPower:     baseAP += (int)modifier.Value; break;
-            case StatType.MoveSpeed:        baseMS += modifier.Value; break;
-            case StatType.MaxHealth:        baseMaxHP += (int)modifier.Value; break;
-            case StatType.Armor:            baseAR += (int)modifier.Value; break;
-            case StatType.MagicResist:      baseMR += (int)modifier.Value; break;
-            case StatType.KnockbackResist:  baseKR += modifier.Value; break;
-            case StatType.LifestealPercent: baseLifestealPercent += modifier.Value; break;
-            case StatType.Heal:             c_Health.ChangeHealth((int)modifier.Value); break; // Permanent heal is just an instant heal.
+            case StatName.Lifesteal:        baseLifesteal += stat.Value; break;
+            case StatName.ArmorPen:         baseArmorPen  += stat.Value; break;
+            case StatName.MagicPen:         baseMagicPen  += stat.Value; break;
+            case StatName.Heal:             c_Health.ChangeHealth((int)stat.Value); break; // Permanent heal is just an instant heal
         }
     }
 
-    /// <summary>
-    /// Recalculates final stats based on: Base Stats + Flat Buffs + Percent Buffs.
-    /// </summary>
+    /// Recalculates final stats based on: Base Stats + Flat Buffs
     private void RecalculateAllStats()
     {
-        // 1. Reset stats to their current base values.
-        c_Stats.AD = baseAD;
-        c_Stats.AP = baseAP;
-        c_Stats.MS = baseMS;
-        c_Stats.maxHP = baseMaxHP;
-        c_Stats.AR = baseAR;
-        c_Stats.MR = baseMR;
-        c_Stats.KR = baseKR;
-        c_Stats.lifestealPercent = baseLifestealPercent;
+        // 1/ Reset stats to their current base values
+        c_Stats.AD      = baseAD;
+        c_Stats.AP      = baseAP;
+        c_Stats.MS      = baseMS;
+        c_Stats.maxHP   = baseMaxHP;
+        c_Stats.AR      = baseAR;
+        c_Stats.MR      = baseMR;
+        c_Stats.KR      = baseKR;
 
-        // 2. Apply all temporary FLAT modifiers.
-        foreach (var mod in activeModifiers.Where(m => m.Type == EffectType.Flat))
-        {
-            ApplySingleStatChange(mod.Stat, mod.Value, mod.Type);
-        }
+        c_Stats.lifesteal = baseLifesteal;
+        c_Stats.armorPen  = baseArmorPen;
+        c_Stats.magicPen  = baseMagicPen;
 
-        // 3. Calculate the SUM of all percentage bonuses for each stat.
-        var percentBonuses = new Dictionary<StatType, float>();
-        foreach (var mod in activeModifiers.Where(m => m.Type == EffectType.Percent))
+        // 2/ Find all active effects and apply them
+        foreach (var stat in statsEffectList)
         {
-            if (!percentBonuses.ContainsKey(mod.Stat))
-                percentBonuses[mod.Stat] = 0;
-            percentBonuses[mod.Stat] += mod.Value;
-        }
-
-        // 4. Apply the final percentage bonuses based on the (Base + Flat) value.
-        foreach (var bonus in percentBonuses)
-        {
-            float basePlusFlatValue = GetCurrentStatValue(bonus.Key);
-            float percentageAmount = basePlusFlatValue * bonus.Value;
-            ApplySingleStatChange(bonus.Key, percentageAmount, EffectType.Flat); // Apply as a flat value
+            CommitStatChange(stat.statName, stat.Value);
         }
 
         // Ensure current health is clamped after any MaxHP changes.
@@ -769,73 +727,53 @@ public class C_StatsManager : MonoBehaviour
         OnStatsChanged?.Invoke();
     }
 
-    /// <summary>
-    /// Applies a single stat change. Handles Flat vs Percent logic.
-    /// </summary>
-    private void ApplySingleStatChange(StatType stat, float value, EffectType type)
+    /// Applies temporary adjustments on top of the base stats
+    private void CommitStatChange(StatName statName, float value)
     {
-        // This check is now only relevant for INSTANT effects.
-        // For timed buffs, the percentage calculation is handled in RecalculateAllStats.
-        if (type == EffectType.Percent)
+        switch (statName)
         {
-            float currentValue = GetCurrentStatValue(stat);
-            value = currentValue * value; // e.g., 150 * 0.10 = 15
-        }
 
-        switch (stat)
-        {
-            case StatType.Heal:             c_Health.ChangeHealth((int)value); break;
-            case StatType.AttackDamage:     c_Stats.AD += (int)value; break;
-            case StatType.AbilityPower:     c_Stats.AP += (int)value; break;
-            case StatType.MoveSpeed:        c_Stats.MS += value; break;
-            case StatType.MaxHealth:        c_Stats.maxHP += (int)value; break;
-            case StatType.Armor:            c_Stats.AR += (int)value; break;
-            case StatType.MagicResist:      c_Stats.MR += (int)value; break;
-            case StatType.KnockbackResist:  c_Stats.KR += value; break;
-            case StatType.LifestealPercent: c_Stats.lifestealPercent += value; break;
+            case StatName.AttackDamage:     c_Stats.AD      += (int)value; break;
+            case StatName.AbilityPower:     c_Stats.AP      += (int)value; break;
+            case StatName.MoveSpeed:        c_Stats.MS      +=      value; break;
+            case StatName.MaxHealth:        c_Stats.maxHP   += (int)value; break;
+            case StatName.Armor:            c_Stats.AR      += (int)value; break;
+            case StatName.MagicResist:      c_Stats.MR      += (int)value; break;
+            case StatName.KnockbackResist:  c_Stats.KR      +=      value; break;
+
+            case StatName.Lifesteal:        c_Stats.lifesteal += value; break;
+            case StatName.ArmorPen:         c_Stats.armorPen  += value; break;
+            case StatName.MagicPen:         c_Stats.magicPen  += value; break;
+            case StatName.Heal:             c_Health.ChangeHealth((int)value); break;
         }
     }
 
-    // Helper to get the LIVE value of a stat for percentage calculations.
-    private float GetCurrentStatValue(StatType stat)
+    // Timer for temporary effects
+    private IEnumerator StartEffectTimer(StatEffect stat)
     {
-        switch (stat)
-        {
-            case StatType.AttackDamage: return c_Stats.AD;
-            case StatType.AbilityPower: return c_Stats.AP;
-            case StatType.MoveSpeed: return c_Stats.MS;
-            case StatType.MaxHealth: return c_Stats.maxHP;
-            case StatType.Armor: return c_Stats.AR;
-            case StatType.MagicResist: return c_Stats.MR;
-            case StatType.KnockbackResist: return c_Stats.KR;
-            case StatType.LifestealPercent: return c_Stats.lifestealPercent;
-            default: return 0;
-        }
-    }
-
-    private IEnumerator RevertModifierAfterDelay(StatEffect modifier)
-    {
-        yield return new WaitForSeconds(modifier.Duration);
-        activeModifiers.Remove(modifier);
+        yield return new WaitForSeconds(stat.Duration);
+        statsEffectList.Remove(stat);
         RecalculateAllStats();
     }
 
-    private IEnumerator ApplyOverTimeEffect(StatEffect modifier)
+    // Over-time effects (1 per second)
+    private IEnumerator ApplyOverTimeEffect(StatEffect stat)
     {
-        // Rule: Only allow ticking effects for Heal.
-        if (modifier.Stat != StatType.Heal)
+        // RULE: Only allow ticking effects for Heal
+        if (stat.statName != StatName.Heal)
         {
-            Debug.LogWarning($"Stat Modifier for {modifier.Stat} has IsOverTime=true, but this is only supported for Heal. Ignoring.", this);
+            Debug.LogWarning($"Stat Effect for {stat.statName} has IsOverTime=true, but this is only supported for Heal. Ignoring.", this);
             yield break;
         }
 
-        float timePassed = 0;
-        while (timePassed < modifier.Duration)
+        // Repeat once per second for the duration
+        int timePassed = 0;
+        while (timePassed < stat.Duration)
         {
-            yield return new WaitForSeconds(1.0f);
-            // Apply one "tick" of the effect. It's always Flat for ticking effects.
-            ApplySingleStatChange(modifier.Stat, modifier.Value, EffectType.Flat);
-            timePassed += 1.0f;
+            yield return new WaitForSeconds(1);
+            // Apply one "tick" of the effect
+            CommitStatChange(stat.statName, stat.Value);
+            timePassed += 1;
         }
     }
 }

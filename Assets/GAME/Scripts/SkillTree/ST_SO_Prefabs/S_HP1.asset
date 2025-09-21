@@ -15,7 +15,8 @@ MonoBehaviour:
   skillName: S_HP1
   skillIcon: {fileID: 21300000, guid: c2185e948824427468216e24d8658881, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 3
-  pointPerLv: 15
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - statName: 3
+    Value: 15
+    Duration: 0
+    IsOverTime: 0

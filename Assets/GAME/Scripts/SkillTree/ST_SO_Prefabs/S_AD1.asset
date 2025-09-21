@@ -15,7 +15,9 @@ MonoBehaviour:
   skillName: S_AD1
   skillIcon: {fileID: 21300000, guid: e3cb3c39a98c57649915b6fbb8ee3b79, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 0
-  pointPerLv: 1
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - Stat: 0
+    Type: 0
+    Value: 1
+    Duration: 0
+    IsOverTime: 0

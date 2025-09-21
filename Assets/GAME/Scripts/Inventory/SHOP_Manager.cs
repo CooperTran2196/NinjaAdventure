@@ -44,7 +44,7 @@ public class SHOP_Manager : MonoBehaviour
             var data = shopItems[i];
             var slot = shopSlots[i];
             slot.gameObject.SetActive(true);
-            slot.Initialize(data.itemSO, data.price);
+            slot.Initialize(data.inv_ItemSO, data.price);
         }
 
         // turn off the rest
@@ -53,23 +53,23 @@ public class SHOP_Manager : MonoBehaviour
     }
 
     // ---- next-video hooks (already here so you don’t refactor later) ----
-    public void TryBuyItem(INV_ItemSO itemSO, int price)
+    public void TryBuyItem(INV_ItemSO inv_ItemSO, int price)
     {
-        if (itemSO == null) return;
+        if (inv_ItemSO == null) return;
         if (!inv) return;
         if (inv.gold < price) return;
-        if (!HasSpace(itemSO)) return;
+        if (!HasSpace(inv_ItemSO)) return;
 
         inv.gold -= price;
         inv.goldText.text = inv.gold.ToString();
-        inv.AddItem(itemSO, 1);
+        inv.AddItem(inv_ItemSO, 1);
     }
 
-    public void SellItem(INV_ItemSO itemSO)
+    public void SellItem(INV_ItemSO inv_ItemSO)
     {
-        if (itemSO == null) return;
+        if (inv_ItemSO == null) return;
         if (!inv) return;
-        int price = GetPrice(itemSO);
+        int price = GetPrice(inv_ItemSO);
         if (price <= 0) return;
 
         inv.gold += price;
@@ -77,11 +77,11 @@ public class SHOP_Manager : MonoBehaviour
         // INV_Slots handles decreasing quantity & UpdateUI on click
     }
 
-    bool HasSpace(INV_ItemSO itemSO)
+    bool HasSpace(INV_ItemSO inv_ItemSO)
     {
         // same item with room
         foreach (var slot in inv.inv_Slots)
-            if (slot.item == itemSO && slot.quantity < itemSO.stackSize) return true;
+            if (slot.item == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize) return true;
 
         // empty slot
         foreach (var slot in inv.inv_Slots)
@@ -90,17 +90,17 @@ public class SHOP_Manager : MonoBehaviour
         return false;
     }
 
-    int GetPrice(INV_ItemSO itemSO)
+    int GetPrice(INV_ItemSO inv_ItemSO)
     {
         for (int i = 0; i < shopItems.Count; i++)
-            if (shopItems[i].itemSO == itemSO) return shopItems[i].price;
+            if (shopItems[i].inv_ItemSO == inv_ItemSO) return shopItems[i].price;
         return 0;
     }
 
     [Serializable]
     public class ShopItem
     {
-        public INV_ItemSO itemSO;
+        public INV_ItemSO inv_ItemSO;
         public int price = 1;
     }
 }

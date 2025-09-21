@@ -252,10 +252,13 @@ public class ST_Slots : MonoBehaviour
         return true;
     }
 
+    // Update the UI elements based on the current state
     void UpdateUI()
     {
+        // Update icon and level text
         SkillIcon.sprite = st_skillSO.skillIcon;
 
+        // Gray out if locked, show level if unlocked
         if (isUnlocked)
         {
             skillButton.interactable = true;

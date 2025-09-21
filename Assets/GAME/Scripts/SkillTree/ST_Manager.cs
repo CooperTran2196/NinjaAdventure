@@ -9,7 +9,7 @@ public class ST_Manager : MonoBehaviour
     public ST_Slots[] st_Slots;
     public TMP_Text skillPointsText;
     public P_Exp p_Exp;
-    public C_StatsManager statsManager; // <-- New reference
+    public P_StatsManager statsManager;
 
     private P_InputActions input;
 
@@ -21,7 +21,7 @@ public class ST_Manager : MonoBehaviour
     {
         // Auto-wire UI components if not assigned in inspector
         p_Exp           ??= FindFirstObjectByType<P_Exp>();
-        statsManager    ??= FindFirstObjectByType<C_StatsManager>();
+        statsManager    ??= FindFirstObjectByType<P_StatsManager>();
         skillsCanvas    ??= GetComponent<CanvasGroup>();
         skillPointsText ??= GetComponentInChildren<TMP_Text>();
 

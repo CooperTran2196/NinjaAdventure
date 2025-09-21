@@ -27,30 +27,30 @@ public class C_State : MonoBehaviour
 
     void Awake()
     {
-        rb ??= GetComponent<Rigidbody2D>();
+        rb          ??= GetComponent<Rigidbody2D>();
         animator ??= GetComponent<Animator>();
 
-        p_Movement ??= GetComponent<P_Movement>();
-        p_Combat ??= GetComponent<P_Combat>();
-        e_Movement ??= GetComponent<E_Movement>();
-        e_Combat ??= GetComponent<E_Combat>();
-        c_Dodge ??= GetComponent<C_Dodge>();
-        c_Health   ??= GetComponent<C_Health>();
+        p_Movement  ??= GetComponent<P_Movement>();
+        p_Combat    ??= GetComponent<P_Combat>();
+        e_Movement  ??= GetComponent<E_Movement>();
+        e_Combat    ??= GetComponent<E_Combat>();
+        c_Dodge     ??= GetComponent<C_Dodge>();
+        c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in C_State missing.");
+        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
+        if (!animator)                  Debug.LogError($"{name}: Animator in C_State missing.");
         if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_State missing.");
         if (!p_Combat   && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing.");
     }
 
     void OnEnable()
     {
-        if (c_Health != null) c_Health.OnDied += OnDiedHandler;
+        c_Health.OnDied += OnDiedHandler;
     }
 
     void OnDisable()
     {
-        if (c_Health != null) c_Health.OnDied -= OnDiedHandler;
+        c_Health.OnDied -= OnDiedHandler;
     }
     void OnDiedHandler()
     {
@@ -64,6 +64,7 @@ public class C_State : MonoBehaviour
 
     void Update()
     {
+        // Pick next state
         var next = PickState();
         if (next != CurrentState) CurrentState = next;
         ApplyAnimator(CurrentState);
@@ -78,6 +79,7 @@ public class C_State : MonoBehaviour
     //  Public API for Bool
     public bool CheckIsBusy()
     {
+        // busy if dodging, or attacking and movement is locked
         if (Is(ActorState.Dodge)) return true;
         if (Is(ActorState.Attack) && lockMove) return true;
         return false;
@@ -89,7 +91,7 @@ public class C_State : MonoBehaviour
         // Dodge (optional component)
         if (c_Dodge && c_Dodge.IsDodging) return ActorState.Dodge;
 
-        // Attack (player OR enemy driving isAttacking)
+        // Attack
         if ((p_Combat && p_Combat.isAttacking) || (e_Combat && e_Combat.isAttacking))
             return ActorState.Attack;
 
@@ -120,17 +122,18 @@ public class C_State : MonoBehaviour
         animator.SetFloat("idleY", lastMove.y);
     }
 
+    // Public API for Attack direction
     public void SetAttackDirection(Vector2 dir)
     {
         animator.SetFloat("atkX", dir.x);
         animator.SetFloat("atkY", dir.y);
     }
 
+    // Get current attack/idle direction from animator
     public Vector2 GetAttackDirection()
     {
         return new Vector2(animator.GetFloat("atkX"), animator.GetFloat("atkY"));
     }
-
     public Vector2 GetIdleDirection()
     {
         return new Vector2(animator.GetFloat("idleX"), animator.GetFloat("idleY"));

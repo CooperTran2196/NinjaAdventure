@@ -9,12 +9,14 @@ public class W_Melee : W_Base
     // Track hits to avoid multiple hits on same target during one git
     readonly HashSet<int> alreadyHit = new HashSet<int>();
 
+    // Override attack method
     public override void Attack(Vector2 aimDir)
     {
         attackDir = aimDir.normalized;
         StartCoroutine(Hit());
     }
 
+    // Coroutine for handling the hit process
     IEnumerator Hit()
     {
         // Clear hit tracker after each git

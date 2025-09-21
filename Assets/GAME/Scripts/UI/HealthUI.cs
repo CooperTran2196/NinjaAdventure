@@ -7,7 +7,7 @@ public class HealthUI : MonoBehaviour
     [Header("References")]
     public C_Stats p_Stats;
     public C_Health p_Health;
-    public C_StatsManager p_StatsManager;
+    public P_StatsManager p_StatsManager;
     public Slider healthSlider;
     public TMP_Text healthText;
 
@@ -16,7 +16,7 @@ public class HealthUI : MonoBehaviour
         // Find references if not assigned
         p_Stats ??= FindFirstObjectByType<C_Stats>();
         p_Health ??= FindFirstObjectByType<C_Health>();
-        p_StatsManager ??= FindFirstObjectByType<C_StatsManager>();
+        p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
         if (!p_Stats) Debug.LogError($"{name}: C_Stats in HealthUI missing.", this);
         if (!p_Health) Debug.LogError($"{name}: C_Health in HealthUI missing.", this);

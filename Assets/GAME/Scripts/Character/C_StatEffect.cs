@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 // A central enum for all stats that can be modified
-public enum StatType
+public enum StatName
 {
     // Core Stats
     AttackDamage,
@@ -11,28 +11,22 @@ public enum StatType
     MaxHealth,
     Armor,
     MagicResist,
+    ArmorPen,
+    MagicPen,
     KnockbackResist,
 
     // Special Stats
-    LifestealPercent,
+    Lifesteal,
 
     // Consumable Stats
     Heal,
-}
-
-// Defines how a modifier's value is applied
-public enum EffectType
-{
-    Flat,
-    Percent,
 }
 
 // Core definition for any change to a stat
 [Serializable]
 public class StatEffect
 {
-    public StatType Stat;
-    public EffectType Type;
+    public StatName statName;
     public float Value;
 
     [Header("0 = Permanent, 1 = Instant, >1 = Timed Effect")]

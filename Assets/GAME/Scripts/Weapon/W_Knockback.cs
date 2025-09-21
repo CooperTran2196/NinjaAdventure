@@ -24,7 +24,7 @@ public static class W_Knockback
         if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
     }
 
-    // Radial AoE push
+    // Radial AoE push (Still incomplete)
     public static int PushRadial(Vector2 center, float radius, float impulse, LayerMask mask)
     {
         int count = 0;

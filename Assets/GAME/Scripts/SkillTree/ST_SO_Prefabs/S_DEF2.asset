@@ -15,7 +15,8 @@ MonoBehaviour:
   skillName: S_DEF2
   skillIcon: {fileID: 21300000, guid: 55c7235010aa69e49b620ce58919c2ba, type: 3}
   maxLevel: 1
-  kind: 0
-  stat: 5
-  pointPerLv: 10
-  lifestealPercentPerLevel: 0
+  modifiers:
+  - statName: 5
+    Value: 5
+    Duration: 0
+    IsOverTime: 0

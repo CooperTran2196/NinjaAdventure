@@ -49,33 +49,29 @@ public class C_Health : MonoBehaviour
     {
         input ??= new P_InputActions();
         input.Debug.Enable();
+        
+        // subscribe to FX events
+        fxDamagedHandler ??= _ => fx.FlashOnDamaged();
+        fxHealedHandler ??= _ => fx.FlashOnHealed();
+        fxDiedHandler ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
 
-        if (fx != null)
-        {
-            fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-            fxHealedHandler  ??= _ => fx.FlashOnHealed();
-            fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
-
-            OnDamaged += fxDamagedHandler;
-            OnHealed  += fxHealedHandler;
-            OnDied    += fxDiedHandler;
-        }
+        OnDamaged += fxDamagedHandler;
+        OnHealed += fxHealedHandler;
+        OnDied += fxDiedHandler;
     }
 
     void OnDisable()
     {
         input?.Debug.Disable();
 
-        if (fx != null)
-        {
-            OnDamaged -= fxDamagedHandler;
-            OnHealed  -= fxHealedHandler;
-            OnDied    -= fxDiedHandler;
-        }
+        OnDamaged -= fxDamagedHandler;
+        OnHealed  -= fxHealedHandler;
+        OnDied    -= fxDiedHandler;
     }
 
     void Update()
     {
+        // Debug keys
         if (input.Debug.OnDamaged.WasPressedThisFrame())
             ChangeHealth(-Mathf.Abs(takingDamageAmount));
 
@@ -84,15 +80,26 @@ public class C_Health : MonoBehaviour
     }
 
     // AD+AP combined calculation (armor/mres as % 0–100)
-    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP)
+    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP, float attackerArmorPen, float attackerMagicPen)
     {
+        // Ignore if dead or dodging with IFrames
         if (!IsAlive) return 0;
         if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
 
-        int total =
-            Mathf.RoundToInt((attackerAD + weaponAD) * (1f - Mathf.Clamp01(AR / 100f))) +
-            Mathf.RoundToInt((attackerAP + weaponAP) * (1f - Mathf.Clamp01(MR / 100f)));
+        // Calculate effective armor and magic resist after penetration
+        float effectiveAR = AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
+        float effectiveMR = MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
 
+        // Calculate damage reduction from effective armor and magic resist
+        float damageReductionAR = 1f - Mathf.Clamp01(effectiveAR / 100f);
+        float damageReductionMR = 1f - Mathf.Clamp01(effectiveMR / 100f);
+
+        // Final damage calculation
+        int total =
+            Mathf.RoundToInt((attackerAD + weaponAD) * damageReductionAR) +
+            Mathf.RoundToInt((attackerAP + weaponAP) * damageReductionMR);
+
+        // Clamp to valid range and apply
         int before = CurrentHP;
         int dealt = Mathf.Clamp(total, 0, before);
         if (dealt > 0) ChangeHealth(-dealt);
@@ -102,18 +109,21 @@ public class C_Health : MonoBehaviour
     // Single entrypoint for damage/heal
     public void ChangeHealth(int amount)
     {
+        // Ignore if dead, healing 0, or dodging with IFrames
         if (!IsAlive || (amount < 0 && useDodgeIFrames && c_Dodge.IsDodging)) return;
 
+        // Clamp to valid range and apply
         int before    = CurrentHP;
         int after     = Mathf.Clamp(before + amount, 0, MaxHP);
         int actual    = after - before;
             CurrentHP = after;
 
+        // Invoke events
         if (actual < 0) OnDamaged?.Invoke(-actual);
         else if (actual > 0) OnHealed?.Invoke(actual);
-
         if (after == 0) OnDied?.Invoke();
     }
 
+    // Kill instantly
     public void Kill() => ChangeHealth(-MaxHP);
 }
