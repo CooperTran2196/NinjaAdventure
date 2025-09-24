@@ -18,8 +18,7 @@ MonoBehaviour:
   stackSize: 3
   isGold: 0
   modifiers:
-  - Stat: 8
-    Type: 0
+  - statName: 10
     Value: 7
     Duration: 1
     IsOverTime: 0

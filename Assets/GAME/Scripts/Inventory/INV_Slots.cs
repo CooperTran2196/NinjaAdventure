@@ -8,6 +8,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     [Header("Data")]
     public INV_ItemSO item;
     public int quantity;
+    public UI_ItemInfoPanel infoPanel;
 
     [Header("UI")]
     public Image itemImage;
@@ -19,16 +20,16 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     void Awake()
     {
 
-        itemImage  ??= transform.Find("Icon")?.GetComponent<Image>();
+        itemImage ??= transform.Find("Icon")?.GetComponent<Image>();
         amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
-        inv        ??= GetComponentInParent<INV_Manager>();
+        inv ??= GetComponentInParent<INV_Manager>();
 
-        if (!itemImage)  Debug.LogError($"{name}: Item Image missing.", this);
+        if (!itemImage) Debug.LogError($"{name}: Item Image missing.", this);
         if (!amountText) Debug.LogError($"{name}: Amount Text missing.", this);
-        if (!inv)        Debug.LogError($"{name}: INV_Manager missing in parent.", this);
+        if (!inv) Debug.LogError($"{name}: INV_Manager missing in parent.", this);
     }
 
-    void OnEnable()  => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
+    void OnEnable() => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
     void OnDisable() => SHOP_Manager.OnShopStateChanged -= HandleShopStateChanged;
 
     void HandleShopStateChanged(SHOP_Manager shop, bool isOpen)

@@ -15,10 +15,10 @@ MonoBehaviour:
   itemName: Kunai
   itemDescription: Yum yum
   icon: {fileID: 21300000, guid: 4a456b81b8a9a24489f915ea2519f45c, type: 3}
-  isGold: 0
-  currentHealth: 2
-  maxHealth: 0
-  speed: 0
-  damage: 0
   stackSize: 3
-  durationSec: 0
+  isGold: 0
+  modifiers:
+  - statName: 0
+    Value: 1
+    Duration: 10
+    IsOverTime: 0
