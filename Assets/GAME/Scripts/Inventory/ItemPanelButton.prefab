@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1794618823821553023}
   - component: {fileID: 8009891618826356565}
   m_Layer: 5
-  m_Name: ItemName
+  m_Name: itemNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,10 +284,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb3e04fd28bb4e91bd30837912d9b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SHOP_Slot
-  icon: {fileID: 432883109841607588}
-  nameText: {fileID: 8009891618826356565}
-  priceText: {fileID: 5034157867984466564}
-  shop: {fileID: 0}
+  shop_Manager: {fileID: 0}
+  inv_ItemInfo: {fileID: 0}
+  itemImage: {fileID: 432883109841607588}
+  itemNameText: {fileID: 8009891618826356565}
+  itemPriceText: {fileID: 5034157867984466564}
+  inv_ItemSO: {fileID: 0}
+  price: 0
 --- !u!1 &8413900787429807378
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +303,7 @@ GameObject:
   - component: {fileID: 2309359618015126976}
   - component: {fileID: 432883109841607588}
   m_Layer: 5
-  m_Name: ItemImage
+  m_Name: itemImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,7 +378,7 @@ GameObject:
   - component: {fileID: 517646186640992823}
   - component: {fileID: 5034157867984466564}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: itemPriceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

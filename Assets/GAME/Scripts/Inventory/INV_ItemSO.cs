@@ -4,9 +4,10 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "INV_ItemSO", menuName = "Item")]
 public class INV_ItemSO : ScriptableObject
 {
+    [Header("Item Data")]
     public string itemName = "Auto Filled";
     [TextArea] public string itemDescription;
-    public Sprite icon;
+    public Sprite image;
     public int stackSize = 3;
 
     [Header("Flags")]
@@ -15,6 +16,7 @@ public class INV_ItemSO : ScriptableObject
     [Header("Item Effects")]
     public List<StatEffect> modifiers;
 
+    // Auto-update name in Editor
     private void OnValidate()
     {
         if (itemName != name)

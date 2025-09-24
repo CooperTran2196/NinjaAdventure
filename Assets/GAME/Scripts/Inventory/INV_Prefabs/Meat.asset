@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Meat
   itemDescription: Yum yum
-  icon: {fileID: 21300000, guid: 48847e6f6be04ce44af5d36e662707fa, type: 3}
+  image: {fileID: 21300000, guid: 48847e6f6be04ce44af5d36e662707fa, type: 3}
   stackSize: 3
   isGold: 0
   modifiers:

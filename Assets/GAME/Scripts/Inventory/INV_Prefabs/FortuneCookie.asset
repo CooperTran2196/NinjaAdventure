@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: FortuneCookie
   itemDescription: Yum yum
-  icon: {fileID: 21300000, guid: cf4fa894aa1eba046a58478a362f8275, type: 3}
+  image: {fileID: 21300000, guid: cf4fa894aa1eba046a58478a362f8275, type: 3}
   stackSize: 3
   isGold: 0
   modifiers:

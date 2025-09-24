@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Sushi
   itemDescription: Yum yum
-  icon: {fileID: 21300000, guid: 5588c272309e701469452cca2d5cdea6, type: 3}
+  image: {fileID: 21300000, guid: 5588c272309e701469452cca2d5cdea6, type: 3}
   stackSize: 3
   isGold: 0
   modifiers:

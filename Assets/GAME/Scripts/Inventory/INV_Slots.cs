@@ -5,31 +5,32 @@ using UnityEngine.EventSystems;
 
 public class INV_Slots : MonoBehaviour, IPointerClickHandler
 {
+    [Header("References")]
+    INV_Manager inv_Manager;
+
+    [Header("MUST have for each slot")]
     [Header("Data")]
-    public INV_ItemSO item;
+    public INV_ItemSO itemSO;
     public int quantity;
-    public UI_ItemInfoPanel infoPanel;
 
     [Header("UI")]
     public Image itemImage;
     public TMP_Text amountText;
 
-    INV_Manager inv;
     static SHOP_Manager activeShop;
 
     void Awake()
     {
-
         itemImage ??= transform.Find("Icon")?.GetComponent<Image>();
         amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
-        inv ??= GetComponentInParent<INV_Manager>();
+        inv_Manager ??= GetComponentInParent<INV_Manager>();
 
-        if (!itemImage) Debug.LogError($"{name}: Item Image missing.", this);
-        if (!amountText) Debug.LogError($"{name}: Amount Text missing.", this);
-        if (!inv) Debug.LogError($"{name}: INV_Manager missing in parent.", this);
+        if (!itemImage)     Debug.LogError($"INV_Slots: itemImage missing.", this);
+        if (!amountText)    Debug.LogError($"INV_Slots: amountText missing.", this);
+        if (!inv_Manager)   Debug.LogError($"INV_Slots: INV_Manager missing in parent.", this);
     }
 
-    void OnEnable() => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
+    void OnEnable()  => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
     void OnDisable() => SHOP_Manager.OnShopStateChanged -= HandleShopStateChanged;
 
     void HandleShopStateChanged(SHOP_Manager shop, bool isOpen)
@@ -37,12 +38,13 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         activeShop = isOpen ? shop : null;
     }
 
+    // update icon and amount text
     public void UpdateUI()
     {
-        if (item != null)
+        if (itemSO)
         {
             itemImage.enabled = true;
-            itemImage.sprite = item.icon;
+            itemImage.sprite = itemSO.image;
             amountText.text = quantity.ToString();
         }
         else
@@ -52,27 +54,30 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData e)
+    // LEFT = use or sell; RIGHT = drop (ONLY IF shop closed)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (item == null || quantity <= 0) return;
+        if (itemSO == null || quantity <= 0) return;
 
-        // Shop open: LEFT = sell 1; disable use/drop while open
-        if (activeShop != null)
+        // Shop open: Right = sell 1; disable use/drop while open
+        if (activeShop)
         {
-            if (e.button == PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Right)
             {
-                activeShop.SellItem(item);
+                activeShop.SellItem(itemSO);
                 quantity -= 1;
-                if (quantity <= 0) item = null;
+                if (quantity <= 0) itemSO = null;
                 UpdateUI();
             }
             return;
         }
-
         // Shop closed: normal behavior
-        if (e.button == PointerEventData.InputButton.Left)
-            inv.UseItem(this);
-        else if (e.button == PointerEventData.InputButton.Right)
-            inv.DropItemFromSlot(this);
+        else
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                inv_Manager.UseItem(this);
+            else if (eventData.button == PointerEventData.InputButton.Right)
+                inv_Manager.DropItemFromSlot(this);
+        }
     }
 }
