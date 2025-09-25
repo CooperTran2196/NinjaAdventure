@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: S_DEF2
   skillIcon: {fileID: 21300000, guid: 55c7235010aa69e49b620ce58919c2ba, type: 3}
   maxLevel: 1
-  modifiers:
+  StatEffectList:
   - statName: 5
-    Value: 5
+    Value: 10
     Duration: 0
     IsOverTime: 0

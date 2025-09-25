@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: Kunai
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Kunai
-  itemDescription: Yum yum
+  description: 
   image: {fileID: 21300000, guid: 4a456b81b8a9a24489f915ea2519f45c, type: 3}
   stackSize: 3
+  price: 1
   isGold: 0
-  modifiers: []
+  StatEffectList:
+  - statName: 0
+    Value: 1
+    Duration: 0
+    IsOverTime: 0
