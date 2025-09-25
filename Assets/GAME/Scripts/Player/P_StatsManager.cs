@@ -18,7 +18,7 @@ public class P_StatsManager : MonoBehaviour
     private float baseMS, baseKR, baseLifesteal, baseArmorPen, baseMagicPen;
 
     // List of temporary buffs/debuffs.
-    private readonly List<StatEffect> statsEffectList = new List<StatEffect>();
+    private readonly List<P_StatEffect> statsEffectList = new List<P_StatEffect>();
 
     public event Action OnStatsChanged;
 
@@ -46,7 +46,7 @@ public class P_StatsManager : MonoBehaviour
     }
 
     /// The main entry point for applying any stat change
-    public void ApplyModifier(StatEffect stat)
+    public void ApplyModifier(P_StatEffect stat)
     {
         // Duration == 0 is a PERMANENT
         if (stat.Duration == 0)
@@ -92,7 +92,7 @@ public class P_StatsManager : MonoBehaviour
     }
 
     /// Handles permanent stat changes
-    private void ApplyPermanentEffect(StatEffect stat)
+    private void ApplyPermanentEffect(P_StatEffect stat)
     {
         // Apply the permanent change to the BASE stat
         switch (stat.statName)
@@ -162,7 +162,7 @@ public class P_StatsManager : MonoBehaviour
     }
 
     // Timer for temporary effects
-    private IEnumerator StartEffectTimer(StatEffect stat)
+    private IEnumerator StartEffectTimer(P_StatEffect stat)
     {
         yield return new WaitForSeconds(stat.Duration);
         statsEffectList.Remove(stat);
@@ -170,7 +170,7 @@ public class P_StatsManager : MonoBehaviour
     }
 
     // Over-time effects (1 per second)
-    private IEnumerator ApplyOverTimeEffect(StatEffect stat)
+    private IEnumerator ApplyOverTimeEffect(P_StatEffect stat)
     {
         // RULE: Only allow ticking effects for Heal
         if (stat.statName != StatName.Heal)

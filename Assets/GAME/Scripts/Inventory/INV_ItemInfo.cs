@@ -38,7 +38,7 @@ public class INV_ItemInfo : MonoBehaviour
 
         // header texts
         if (itemNameText) itemNameText.text = itemSO ? itemSO.itemName : string.Empty;
-        itemDescText.text = itemSO.itemDescription;
+        itemDescText.text = itemSO.description;
 
         // rebuild stat lines
         ClearStatLines();
@@ -82,11 +82,11 @@ public class INV_ItemInfo : MonoBehaviour
             return outLines;
         }
 
-        if (inv_ItemSO.modifiers != null)
+        if (inv_ItemSO.StatEffectList != null)
         {
-            for (int i = 0; i < inv_ItemSO.modifiers.Count; i++)
+            for (int i = 0; i < inv_ItemSO.StatEffectList.Count; i++)
             {
-                var effects = inv_ItemSO.modifiers[i];
+                var effects = inv_ItemSO.StatEffectList[i];
                 string line;
                 switch (effects.statName)
                 {

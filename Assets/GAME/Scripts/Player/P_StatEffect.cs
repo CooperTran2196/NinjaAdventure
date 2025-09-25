@@ -24,7 +24,7 @@ public enum StatName
 
 // Core definition for any change to a stat
 [Serializable]
-public class StatEffect
+public class P_StatEffect
 {
     public StatName statName;
     public float Value;
