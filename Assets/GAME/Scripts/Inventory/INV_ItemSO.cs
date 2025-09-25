@@ -6,7 +6,7 @@ public class INV_ItemSO : ScriptableObject
 {
     [Header("Item Data")]
     public string itemName = "Auto Filled";
-    [TextArea] public string itemDescription;
+    [TextArea] public string description;
     public Sprite image;
     public int stackSize = 3;
     public int price = 1;
@@ -15,7 +15,7 @@ public class INV_ItemSO : ScriptableObject
     public bool isGold;
 
     [Header("Item Effects")]
-    public List<StatEffect> modifiers;
+    public List<P_StatEffect> StatEffectList;
 
     // Auto-update name in Editor
     private void OnValidate()

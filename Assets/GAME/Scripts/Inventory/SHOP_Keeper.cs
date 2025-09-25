@@ -47,6 +47,7 @@ public class SHOP_Keeper : MonoBehaviour
                 shopCanvasGroup.alpha = 1; // Show the shop UI
                 shopCanvasGroup.interactable = true;
                 shopCanvasGroup.blocksRaycasts = true;
+                OpenItemShop();
 
             }
             else

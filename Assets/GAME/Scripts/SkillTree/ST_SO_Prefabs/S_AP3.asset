@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: S_AP3
   skillIcon: {fileID: 21300000, guid: 7f84c63c4f82a914ea1834214b56faa7, type: 3}
   maxLevel: 1
-  modifiers:
+  StatEffectList:
   - statName: 1
-    Value: 3
+    Value: 1
     Duration: 0
     IsOverTime: 0

@@ -91,10 +91,10 @@ public class INV_Manager : MonoBehaviour
     public void UseItem(INV_Slots slot)
     {
         // nothing to use
-        if (slot.itemSO == null || slot.itemSO.modifiers.Count == 0) return;
+        if (slot.itemSO == null || slot.itemSO.StatEffectList.Count == 0) return;
 
-        // Apply all modifiers from the item
-        foreach (var modifier in slot.itemSO.modifiers)
+        // Apply all StatEffectList from the item
+        foreach (var modifier in slot.itemSO.StatEffectList)
         {
             p_statsManager.ApplyModifier(modifier);
         }

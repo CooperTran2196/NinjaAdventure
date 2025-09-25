@@ -10,7 +10,7 @@ public class ST_SkillSO : ScriptableObject
     [Min(1)] public int maxLevel = 1;
 
     [Header("Effects Per Level")]
-    public List<StatEffect> modifiers;
+    public List<P_StatEffect> StatEffectList;
 
     private void OnValidate()
     {

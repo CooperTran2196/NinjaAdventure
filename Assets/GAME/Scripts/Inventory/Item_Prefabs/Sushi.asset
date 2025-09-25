@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Sushi
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Sushi
-  itemDescription: Yum yum
+  description: 
   image: {fileID: 21300000, guid: 5588c272309e701469452cca2d5cdea6, type: 3}
   stackSize: 3
+  price: 1
   isGold: 0
-  modifiers:
+  StatEffectList:
   - statName: 10
     Value: 5
     Duration: 1

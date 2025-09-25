@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: S_Lifesteal
   skillIcon: {fileID: 21300000, guid: 8151181a08a626e4f90be805af951d76, type: 3}
   maxLevel: 1
-  modifiers:
+  StatEffectList:
   - statName: 9
-    Value: 10
+    Value: 5
     Duration: 0
     IsOverTime: 0

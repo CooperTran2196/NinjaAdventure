@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5538212919996106074}
   - component: {fileID: 5289265894010467996}
   - component: {fileID: 2208270077513149812}
+  - component: {fileID: 1807677754524360382}
   m_Layer: 5
   m_Name: ShopCategoryButton
   m_TagString: Untagged
@@ -121,6 +122,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1807677754524360382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6385169149980716777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a0f6aca08b44a21834837d782c5800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SHOP_CategoryButtons
 --- !u!1 &8261412873505408546
 GameObject:
   m_ObjectHideFlags: 0

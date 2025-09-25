@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: S_MS3
   skillIcon: {fileID: 21300000, guid: 038dcb77ec46a7340aa147650d516496, type: 3}
   maxLevel: 1
-  modifiers:
+  StatEffectList:
   - statName: 2
-    Value: 0.5
+    Value: 1
     Duration: 0
     IsOverTime: 0
