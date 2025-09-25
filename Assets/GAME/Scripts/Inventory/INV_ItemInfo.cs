@@ -8,10 +8,13 @@ public class INV_ItemInfo : MonoBehaviour
     [Header("References")]
     public CanvasGroup canvasGroup;
     public RectTransform rectTransform;
+
     public TMP_Text itemNameText;
     public TMP_Text itemDescText;
-    public Transform statContainer;
     public TMP_Text statLinePrefab;
+    
+    public Transform statContainer;
+
     public Vector2 offset = new Vector2(12f, -8f);
 
     void Awake()
@@ -19,32 +22,33 @@ public class INV_ItemInfo : MonoBehaviour
         canvasGroup ??= GetComponent<CanvasGroup>();
         rectTransform ??= GetComponent<RectTransform>();
 
-        if (!canvasGroup)    Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
-        if (!rectTransform)  Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
+        if (!canvasGroup) Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
+        if (!rectTransform) Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
         // if (!itemNameText) Debug.LogError("INV_ItemInfo: itemNameText missing.", this);
-        if (!itemDescText)   Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
-        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+        if (!itemDescText) Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
         if (!statLinePrefab) Debug.LogError("INV_ItemInfo: statLinePrefab missing.", this);
+        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+
     }
 
-    public void Show(INV_ItemSO inv_ItemSO)
+    public void Show(INV_ItemSO itemSO)
     {
         // make visible
         canvasGroup.alpha = 1f;
 
         // header texts
-        if (itemNameText) itemNameText.text = inv_ItemSO ? inv_ItemSO.itemName : string.Empty;
-        if (itemDescText) itemDescText.text = inv_ItemSO ? inv_ItemSO.itemDescription : string.Empty;
+        if (itemNameText) itemNameText.text = itemSO ? itemSO.itemName : string.Empty;
+        itemDescText.text = itemSO.itemDescription;
 
         // rebuild stat lines
         ClearStatLines();
-        if (inv_ItemSO)
+        if (itemSO)
         {
-            var lines = BuildStatLines(inv_ItemSO);
-            for (int i = 0; i < lines.Count; i++)
+            var outLines = BuildStatLines(itemSO);
+            for (int i = 0; i < outLines.Count; i++)
             {
                 var line = Instantiate(statLinePrefab, statContainer);
-                line.text = lines[i];
+                line.text = outLines[i];
             }
         }
     }
@@ -53,9 +57,6 @@ public class INV_ItemInfo : MonoBehaviour
     public void Hide()
     {
         canvasGroup.alpha = 0f;
-        if (itemNameText) itemNameText.text = string.Empty;
-        itemDescText.text = string.Empty;
-        ClearStatLines();
     }
 
     public void FollowMouse(Vector2 screenPos)
@@ -85,21 +86,21 @@ public class INV_ItemInfo : MonoBehaviour
         {
             for (int i = 0; i < inv_ItemSO.modifiers.Count; i++)
             {
-                var fx = inv_ItemSO.modifiers[i];
+                var effects = inv_ItemSO.modifiers[i];
                 string line;
-                switch (fx.statName)
+                switch (effects.statName)
                 {
-                    case StatName.Heal:          line = $"Heals {fx.Value} HP"; break;
-                    case StatName.MaxHealth:     line = $"+{fx.Value} Max HP"; break;
-                    case StatName.AttackDamage:  line = $"+{fx.Value} Attack Damage"; break;
-                    case StatName.AbilityPower:  line = $"+{fx.Value} Ability Power"; break;
-                    case StatName.MoveSpeed:     line = $"+{fx.Value} Move Speed"; break;
-                    case StatName.Armor:         line = $"+{fx.Value} Armor"; break;
-                    case StatName.MagicResist:   line = $"+{fx.Value} Magic Resist"; break;
-                    case StatName.Lifesteal:     line = $"+{fx.Value}% Lifesteal"; break;
-                    default:                     line = $"+{fx.Value} {fx.statName}"; break;
+                    case StatName.Heal:          line = $"Heals {effects.Value} HP"; break;
+                    case StatName.MaxHealth:     line = $"+{effects.Value} Max HP"; break;
+                    case StatName.AttackDamage:  line = $"+{effects.Value} Attack Damage"; break;
+                    case StatName.AbilityPower:  line = $"+{effects.Value} Ability Power"; break;
+                    case StatName.MoveSpeed:     line = $"+{effects.Value} Move Speed"; break;
+                    case StatName.Armor:         line = $"+{effects.Value} Armor"; break;
+                    case StatName.MagicResist:   line = $"+{effects.Value} Magic Resist"; break;
+                    case StatName.Lifesteal:     line = $"+{effects.Value}% Lifesteal"; break;
+                    default:                     line = $"+{effects.Value} {effects.statName}"; break;
                 }
-                if (fx.Duration > 1) line = $"{line} ({fx.Duration}s)";
+                if (effects.Duration > 1) line = $"{line} in ({effects.Duration}s)";
                 outLines.Add(line);
             }
         }

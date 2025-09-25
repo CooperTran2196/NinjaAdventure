@@ -6,7 +6,7 @@ public class INV_Loot : MonoBehaviour
 {
     [Header("MUST have components for each loot prefab")]
     [Header("References")]
-    public INV_ItemSO inv_ItemSO;
+    public INV_ItemSO itemSO;
     SpriteRenderer sr;
     Animator anim;
     CircleCollider2D trigger;
@@ -34,26 +34,26 @@ public class INV_Loot : MonoBehaviour
     // Called by INV_Manager when spawning overflow/right-click drops
     public void Initialize(INV_ItemSO itemSO, int qty)
     {
-        inv_ItemSO = itemSO;
+        this.itemSO = itemSO;
         quantity = qty;
         canBePickedUp = false; // avoid instant repick
         RefreshAppearance();
     }
 
-    // update sprite and name
+    // Update sprite and name
     void RefreshAppearance()
     {
-        sr.sprite = inv_ItemSO.image;
-        gameObject.name = inv_ItemSO.itemName;
+        sr.sprite = itemSO.image;
+        gameObject.name = itemSO.itemName;
     }
 
-    // pickup when player enters trigger
+    // Pickup when player enters trigger
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player") || !canBePickedUp) return;
 
         trigger.enabled = false;
-        OnItemLooted?.Invoke(inv_ItemSO, quantity);
+        OnItemLooted?.Invoke(itemSO, quantity);
         anim.SetTrigger("Pickup");
         Destroy(gameObject, 0.5f); // MUST Match animation length
     }

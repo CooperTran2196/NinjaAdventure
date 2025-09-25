@@ -1,4 +1,3 @@
-// Assets/GAME/Scripts/INV/INV_InventoryManager.cs
 using UnityEngine;
 using TMPro;
 
@@ -9,10 +8,11 @@ public class INV_Manager : MonoBehaviour
     [Header("References")]
     public P_StatsManager p_statsManager;
 
-    // MUST wire MANUALLY in Inspector
+    [Header("MUST wire MANUALLY in Inspector")]
     public TMP_Text goldText;
     public GameObject lootPrefab;
     public Transform player;
+
     public int gold;
     public INV_Slots[] inv_Slots;
 
@@ -34,10 +34,10 @@ public class INV_Manager : MonoBehaviour
     }
 
     // Adds item to inventory, stacking into existing slots first
-    public void AddItem(INV_ItemSO inv_ItemSO, int quantity)
+    public void AddItem(INV_ItemSO itemSO, int quantity)
     {
         // Gold is special
-        if (inv_ItemSO.isGold)
+        if (itemSO.isGold)
         {
             gold += quantity;
             UpdateGoldText();
@@ -48,9 +48,9 @@ public class INV_Manager : MonoBehaviour
         foreach (var slot in inv_Slots)
         {
             // same item and not full
-            if (slot.itemSO == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize)
+            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
             {
-                int availableSpace = inv_ItemSO.stackSize - slot.quantity;
+                int availableSpace = itemSO.stackSize - slot.quantity;
                 int amountToAdd = Mathf.Min(availableSpace, quantity);
 
                 slot.quantity += amountToAdd;
@@ -66,9 +66,9 @@ public class INV_Manager : MonoBehaviour
         {
             if (slot.itemSO == null)
             {
-                int amountToAdd = Mathf.Min(inv_ItemSO.stackSize, quantity);
+                int amountToAdd = Mathf.Min(itemSO.stackSize, quantity);
 
-                slot.itemSO = inv_ItemSO;
+                slot.itemSO = itemSO;
                 slot.quantity = amountToAdd;
                 slot.UpdateUI();
 
@@ -78,7 +78,7 @@ public class INV_Manager : MonoBehaviour
         }
 
         // No room -> drop overflow at player
-        if (quantity > 0) DropLoot(inv_ItemSO, quantity);
+        if (quantity > 0) DropItem(itemSO, quantity);
     }
 
     // Update gold text UI
@@ -105,20 +105,12 @@ public class INV_Manager : MonoBehaviour
         slot.UpdateUI();
     }
 
-    // Drops 1 item from the given slot at player position
-    public void DropItemFromSlot(INV_Slots slot)
-    {
-        DropLoot(slot.itemSO, 1);
-        slot.quantity -= 1;
-        if (slot.quantity <= 0) slot.itemSO = null;
-        slot.UpdateUI();
-    }
-
     // Spawns loot prefab at player position with given item & quantity
-    void DropLoot(INV_ItemSO itemSO, int qty)
+    public void DropItem(INV_ItemSO itemSO, int quantity)
     {
+        if (!itemSO) return;
         var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
         var loot = go.GetComponent<INV_Loot>();
-        loot.Initialize(itemSO, qty); // sets sprite/name & canBePickedUp=false
+        loot.Initialize(itemSO, quantity); // sets sprite/name & canBePickedUp=false
     }
 }

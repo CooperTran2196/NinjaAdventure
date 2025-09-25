@@ -17,7 +17,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     public Image itemImage;
     public TMP_Text amountText;
 
-    static SHOP_Manager activeShop;
+    static SHOP_Manager shop_Manager;
 
     void Awake()
     {
@@ -30,12 +30,12 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         if (!inv_Manager)   Debug.LogError($"INV_Slots: INV_Manager missing in parent.", this);
     }
 
-    void OnEnable()  => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
-    void OnDisable() => SHOP_Manager.OnShopStateChanged -= HandleShopStateChanged;
+    void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;
+    void OnDisable() => SHOP_Keeper.OnShopStateChanged -= HandleShopStateChanged;
 
     void HandleShopStateChanged(SHOP_Manager shop, bool isOpen)
     {
-        activeShop = isOpen ? shop : null;
+        shop_Manager = isOpen ? shop : null;
     }
 
     // update icon and amount text
@@ -57,14 +57,14 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     // LEFT = use or sell; RIGHT = drop (ONLY IF shop closed)
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (itemSO == null || quantity <= 0) return;
+        if (itemSO == null) return;
 
         // Shop open: Right = sell 1; disable use/drop while open
-        if (activeShop)
+        if (shop_Manager)
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                activeShop.SellItem(itemSO);
+                shop_Manager.SellItem(itemSO);
                 quantity -= 1;
                 if (quantity <= 0) itemSO = null;
                 UpdateUI();
@@ -77,7 +77,12 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
             if (eventData.button == PointerEventData.InputButton.Left)
                 inv_Manager.UseItem(this);
             else if (eventData.button == PointerEventData.InputButton.Right)
-                inv_Manager.DropItemFromSlot(this);
+            {
+                inv_Manager.DropItem(itemSO, 1);
+                quantity -= 1;
+                if (quantity <= 0) itemSO = null;
+                UpdateUI();
+            }
         }
     }
 }

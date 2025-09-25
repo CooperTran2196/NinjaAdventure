@@ -9,6 +9,7 @@ public class INV_ItemSO : ScriptableObject
     [TextArea] public string itemDescription;
     public Sprite image;
     public int stackSize = 3;
+    public int price = 1;
 
     [Header("Flags")]
     public bool isGold;
