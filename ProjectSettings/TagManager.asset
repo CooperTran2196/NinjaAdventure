@@ -18,7 +18,7 @@ TagManager:
   - Enemy
   - Weapon
   - Loot
-  - 
+  - NPC
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 3040567335
+    locked: 0
+  - name: NPC
+    uniqueID: 2708519553
     locked: 0
   - name: Player
     uniqueID: 10905695

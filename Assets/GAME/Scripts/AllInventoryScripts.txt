@@ -9,10 +9,13 @@ public class INV_ItemInfo : MonoBehaviour
     [Header("References")]
     public CanvasGroup canvasGroup;
     public RectTransform rectTransform;
+
     public TMP_Text itemNameText;
     public TMP_Text itemDescText;
-    public Transform statContainer;
     public TMP_Text statLinePrefab;
+    
+    public Transform statContainer;
+
     public Vector2 offset = new Vector2(12f, -8f);
 
     void Awake()
@@ -20,32 +23,33 @@ public class INV_ItemInfo : MonoBehaviour
         canvasGroup ??= GetComponent<CanvasGroup>();
         rectTransform ??= GetComponent<RectTransform>();
 
-        if (!canvasGroup)    Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
-        if (!rectTransform)  Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
+        if (!canvasGroup) Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
+        if (!rectTransform) Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
         // if (!itemNameText) Debug.LogError("INV_ItemInfo: itemNameText missing.", this);
-        if (!itemDescText)   Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
-        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+        if (!itemDescText) Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
         if (!statLinePrefab) Debug.LogError("INV_ItemInfo: statLinePrefab missing.", this);
+        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+
     }
 
-    public void Show(INV_ItemSO inv_ItemSO)
+    public void Show(INV_ItemSO itemSO)
     {
         // make visible
         canvasGroup.alpha = 1f;
 
         // header texts
-        if (itemNameText) itemNameText.text = inv_ItemSO ? inv_ItemSO.itemName : string.Empty;
-        if (itemDescText) itemDescText.text = inv_ItemSO ? inv_ItemSO.itemDescription : string.Empty;
+        if (itemNameText) itemNameText.text = itemSO ? itemSO.itemName : string.Empty;
+        itemDescText.text = itemSO.description;
 
         // rebuild stat lines
         ClearStatLines();
-        if (inv_ItemSO)
+        if (itemSO)
         {
-            var lines = BuildStatLines(inv_ItemSO);
-            for (int i = 0; i < lines.Count; i++)
+            var outLines = BuildStatLines(itemSO);
+            for (int i = 0; i < outLines.Count; i++)
             {
                 var line = Instantiate(statLinePrefab, statContainer);
-                line.text = lines[i];
+                line.text = outLines[i];
             }
         }
     }
@@ -54,9 +58,6 @@ public class INV_ItemInfo : MonoBehaviour
     public void Hide()
     {
         canvasGroup.alpha = 0f;
-        if (itemNameText) itemNameText.text = string.Empty;
-        itemDescText.text = string.Empty;
-        ClearStatLines();
     }
 
     public void FollowMouse(Vector2 screenPos)
@@ -82,25 +83,25 @@ public class INV_ItemInfo : MonoBehaviour
             return outLines;
         }
 
-        if (inv_ItemSO.modifiers != null)
+        if (inv_ItemSO.StatEffectList != null)
         {
-            for (int i = 0; i < inv_ItemSO.modifiers.Count; i++)
+            for (int i = 0; i < inv_ItemSO.StatEffectList.Count; i++)
             {
-                var fx = inv_ItemSO.modifiers[i];
+                var effects = inv_ItemSO.StatEffectList[i];
                 string line;
-                switch (fx.statName)
+                switch (effects.statName)
                 {
-                    case StatName.Heal:          line = $"Heals {fx.Value} HP"; break;
-                    case StatName.MaxHealth:     line = $"+{fx.Value} Max HP"; break;
-                    case StatName.AttackDamage:  line = $"+{fx.Value} Attack Damage"; break;
-                    case StatName.AbilityPower:  line = $"+{fx.Value} Ability Power"; break;
-                    case StatName.MoveSpeed:     line = $"+{fx.Value} Move Speed"; break;
-                    case StatName.Armor:         line = $"+{fx.Value} Armor"; break;
-                    case StatName.MagicResist:   line = $"+{fx.Value} Magic Resist"; break;
-                    case StatName.Lifesteal:     line = $"+{fx.Value}% Lifesteal"; break;
-                    default:                     line = $"+{fx.Value} {fx.statName}"; break;
+                    case StatName.Heal:          line = $"Heals {effects.Value} HP"; break;
+                    case StatName.MaxHealth:     line = $"+{effects.Value} Max HP"; break;
+                    case StatName.AttackDamage:  line = $"+{effects.Value} Attack Damage"; break;
+                    case StatName.AbilityPower:  line = $"+{effects.Value} Ability Power"; break;
+                    case StatName.MoveSpeed:     line = $"+{effects.Value} Move Speed"; break;
+                    case StatName.Armor:         line = $"+{effects.Value} Armor"; break;
+                    case StatName.MagicResist:   line = $"+{effects.Value} Magic Resist"; break;
+                    case StatName.Lifesteal:     line = $"+{effects.Value}% Lifesteal"; break;
+                    default:                     line = $"+{effects.Value} {effects.statName}"; break;
                 }
-                if (fx.Duration > 1) line = $"{line} ({fx.Duration}s)";
+                if (effects.Duration > 1) line = $"{line} in ({effects.Duration}s)";
                 outLines.Add(line);
             }
         }
@@ -117,15 +118,16 @@ public class INV_ItemSO : ScriptableObject
 {
     [Header("Item Data")]
     public string itemName = "Auto Filled";
-    [TextArea] public string itemDescription;
+    [TextArea] public string description;
     public Sprite image;
     public int stackSize = 3;
+    public int price = 1;
 
     [Header("Flags")]
     public bool isGold;
 
     [Header("Item Effects")]
-    public List<StatEffect> modifiers;
+    public List<P_StatEffect> StatEffectList;
 
     // Auto-update name in Editor
     private void OnValidate()
@@ -144,7 +146,7 @@ public class INV_Loot : MonoBehaviour
 {
     [Header("MUST have components for each loot prefab")]
     [Header("References")]
-    public INV_ItemSO inv_ItemSO;
+    public INV_ItemSO itemSO;
     SpriteRenderer sr;
     Animator anim;
     CircleCollider2D trigger;
@@ -172,26 +174,26 @@ public class INV_Loot : MonoBehaviour
     // Called by INV_Manager when spawning overflow/right-click drops
     public void Initialize(INV_ItemSO itemSO, int qty)
     {
-        inv_ItemSO = itemSO;
+        this.itemSO = itemSO;
         quantity = qty;
         canBePickedUp = false; // avoid instant repick
         RefreshAppearance();
     }
 
-    // update sprite and name
+    // Update sprite and name
     void RefreshAppearance()
     {
-        sr.sprite = inv_ItemSO.image;
-        gameObject.name = inv_ItemSO.itemName;
+        sr.sprite = itemSO.image;
+        gameObject.name = itemSO.itemName;
     }
 
-    // pickup when player enters trigger
+    // Pickup when player enters trigger
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player") || !canBePickedUp) return;
 
         trigger.enabled = false;
-        OnItemLooted?.Invoke(inv_ItemSO, quantity);
+        OnItemLooted?.Invoke(itemSO, quantity);
         anim.SetTrigger("Pickup");
         Destroy(gameObject, 0.5f); // MUST Match animation length
     }
@@ -216,10 +218,11 @@ public class INV_Manager : MonoBehaviour
     [Header("References")]
     public P_StatsManager p_statsManager;
 
-    // MUST wire MANUALLY in Inspector
+    [Header("MUST wire MANUALLY in Inspector")]
     public TMP_Text goldText;
     public GameObject lootPrefab;
     public Transform player;
+
     public int gold;
     public INV_Slots[] inv_Slots;
 
@@ -241,10 +244,10 @@ public class INV_Manager : MonoBehaviour
     }
 
     // Adds item to inventory, stacking into existing slots first
-    public void AddItem(INV_ItemSO inv_ItemSO, int quantity)
+    public void AddItem(INV_ItemSO itemSO, int quantity)
     {
         // Gold is special
-        if (inv_ItemSO.isGold)
+        if (itemSO.isGold)
         {
             gold += quantity;
             UpdateGoldText();
@@ -255,9 +258,9 @@ public class INV_Manager : MonoBehaviour
         foreach (var slot in inv_Slots)
         {
             // same item and not full
-            if (slot.itemSO == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize)
+            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
             {
-                int availableSpace = inv_ItemSO.stackSize - slot.quantity;
+                int availableSpace = itemSO.stackSize - slot.quantity;
                 int amountToAdd = Mathf.Min(availableSpace, quantity);
 
                 slot.quantity += amountToAdd;
@@ -273,9 +276,9 @@ public class INV_Manager : MonoBehaviour
         {
             if (slot.itemSO == null)
             {
-                int amountToAdd = Mathf.Min(inv_ItemSO.stackSize, quantity);
+                int amountToAdd = Mathf.Min(itemSO.stackSize, quantity);
 
-                slot.itemSO = inv_ItemSO;
+                slot.itemSO = itemSO;
                 slot.quantity = amountToAdd;
                 slot.UpdateUI();
 
@@ -285,7 +288,7 @@ public class INV_Manager : MonoBehaviour
         }
 
         // No room -> drop overflow at player
-        if (quantity > 0) DropLoot(inv_ItemSO, quantity);
+        if (quantity > 0) DropItem(itemSO, quantity);
     }
 
     // Update gold text UI
@@ -298,10 +301,10 @@ public class INV_Manager : MonoBehaviour
     public void UseItem(INV_Slots slot)
     {
         // nothing to use
-        if (slot.itemSO == null || slot.itemSO.modifiers.Count == 0) return;
+        if (slot.itemSO == null || slot.itemSO.StatEffectList.Count == 0) return;
 
-        // Apply all modifiers from the item
-        foreach (var modifier in slot.itemSO.modifiers)
+        // Apply all StatEffectList from the item
+        foreach (var modifier in slot.itemSO.StatEffectList)
         {
             p_statsManager.ApplyModifier(modifier);
         }
@@ -312,21 +315,13 @@ public class INV_Manager : MonoBehaviour
         slot.UpdateUI();
     }
 
-    // Drops 1 item from the given slot at player position
-    public void DropItemFromSlot(INV_Slots slot)
-    {
-        DropLoot(slot.itemSO, 1);
-        slot.quantity -= 1;
-        if (slot.quantity <= 0) slot.itemSO = null;
-        slot.UpdateUI();
-    }
-
     // Spawns loot prefab at player position with given item & quantity
-    void DropLoot(INV_ItemSO itemSO, int qty)
+    public void DropItem(INV_ItemSO itemSO, int quantity)
     {
+        if (!itemSO) return;
         var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
         var loot = go.GetComponent<INV_Loot>();
-        loot.Initialize(itemSO, qty); // sets sprite/name & canBePickedUp=false
+        loot.Initialize(itemSO, quantity); // sets sprite/name & canBePickedUp=false
     }
 }
 
@@ -350,7 +345,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     public Image itemImage;
     public TMP_Text amountText;
 
-    static SHOP_Manager activeShop;
+    static SHOP_Manager shop_Manager;
 
     void Awake()
     {
@@ -363,12 +358,12 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         if (!inv_Manager)   Debug.LogError($"INV_Slots: INV_Manager missing in parent.", this);
     }
 
-    void OnEnable()  => SHOP_Manager.OnShopStateChanged += HandleShopStateChanged;
-    void OnDisable() => SHOP_Manager.OnShopStateChanged -= HandleShopStateChanged;
+    void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;
+    void OnDisable() => SHOP_Keeper.OnShopStateChanged -= HandleShopStateChanged;
 
     void HandleShopStateChanged(SHOP_Manager shop, bool isOpen)
     {
-        activeShop = isOpen ? shop : null;
+        shop_Manager = isOpen ? shop : null;
     }
 
     // update icon and amount text
@@ -390,14 +385,14 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     // LEFT = use or sell; RIGHT = drop (ONLY IF shop closed)
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (itemSO == null || quantity <= 0) return;
+        if (itemSO == null) return;
 
         // Shop open: Right = sell 1; disable use/drop while open
-        if (activeShop)
+        if (shop_Manager)
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                activeShop.SellItem(itemSO);
+                shop_Manager.SellItem(itemSO);
                 quantity -= 1;
                 if (quantity <= 0) itemSO = null;
                 UpdateUI();
@@ -410,8 +405,141 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
             if (eventData.button == PointerEventData.InputButton.Left)
                 inv_Manager.UseItem(this);
             else if (eventData.button == PointerEventData.InputButton.Right)
-                inv_Manager.DropItemFromSlot(this);
+            {
+                inv_Manager.DropItem(itemSO, 1);
+                quantity -= 1;
+                if (quantity <= 0) itemSO = null;
+                UpdateUI();
+            }
         }
+    }
+}
+
+// ----- File: SHOP_CategoryButtons.cs -----
+using UnityEngine;
+
+public class SHOP_CategoryButtons : MonoBehaviour
+{
+    public void OpenItemShop()
+    {
+        if (SHOP_Keeper.currentShopKeeper != null)
+        {
+            SHOP_Keeper.currentShopKeeper.OpenItemShop();
+        }
+    }
+
+    public void OpenWeaponShop()
+    {
+        if (SHOP_Keeper.currentShopKeeper != null)
+        {
+            SHOP_Keeper.currentShopKeeper.OpenWeaponShop();
+        }
+    }
+
+    public void OpenArmourShop()
+    {
+        if (SHOP_Keeper.currentShopKeeper != null)
+        {
+            SHOP_Keeper.currentShopKeeper.OpenArmourShop();
+        }
+    }
+    
+}
+
+// ----- File: SHOP_Keeper.cs -----
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class SHOP_Keeper : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] Animator Anim;
+    [SerializeField] CircleCollider2D trigger;
+    public SHOP_Manager shop_Manager;
+    public CanvasGroup shopCanvasGroup;
+    public static SHOP_Keeper currentShopKeeper;
+
+    bool playerInRange;
+    bool isShopOpen = false;
+    P_InputActions input;
+
+    [SerializeField] private List<INV_ItemSO> shopItems;
+    [SerializeField] private List<INV_ItemSO> shopWeapons;
+    [SerializeField] private List<INV_ItemSO> shopArmors;
+
+    public static event Action<SHOP_Manager, bool> OnShopStateChanged;
+
+    void Awake()
+    {
+        Anim ??= GetComponentInChildren<Animator>(true);
+        trigger ??= GetComponent<CircleCollider2D>();
+
+        input = new P_InputActions();
+        input.UI.ToggleShop.Enable();
+    }
+
+    void OnEnable() => input.Enable();
+    void OnDisable() => input.Disable();
+
+    void Update()
+    {
+        if (playerInRange && input.UI.ToggleShop.WasPressedThisFrame())
+        {
+            if (!isShopOpen)
+            {
+                Time.timeScale = 0; // Pause the game
+                currentShopKeeper = this;
+                isShopOpen = true;
+                OnShopStateChanged?.Invoke(shop_Manager, true);
+                shopCanvasGroup.alpha = 1; // Show the shop UI
+                shopCanvasGroup.interactable = true;
+                shopCanvasGroup.blocksRaycasts = true;
+                OpenItemShop();
+
+            }
+            else
+            {
+                Time.timeScale = 1; // Resume the game
+                currentShopKeeper = null;
+                isShopOpen = false;
+                OnShopStateChanged?.Invoke(shop_Manager, false);
+                shopCanvasGroup.alpha = 0; // Hide the shop UI
+                shopCanvasGroup.interactable = false;
+                shopCanvasGroup.blocksRaycasts = false;
+            }
+        }
+    }
+
+    public void OpenItemShop()
+    {
+        shop_Manager.PopulateShopItems(shopItems);
+    }
+
+    public void OpenWeaponShop()
+    {
+        shop_Manager.PopulateShopItems(shopWeapons);
+    }
+    public void OpenArmourShop()
+    {
+        shop_Manager.PopulateShopItems(shopArmors);
+    }
+
+    // Detect player entering trigger area
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        playerInRange = true;
+        Anim?.SetBool("PlayerInRange", true);
+    }
+
+    // Detect player exiting trigger area
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        playerInRange = false;
+        Anim?.SetBool("PlayerInRange", false);
     }
 }
 
@@ -422,13 +550,10 @@ using UnityEngine;
 
 public class SHOP_Manager : MonoBehaviour
 {
-    public static event Action<SHOP_Manager, bool> OnShopStateChanged;
-
     [Header("Shopping List")]
-    [SerializeField] List<ShopItem> shopItems = new();   // per-shopkeeper list
 
     [Header("Slots")]
-    [SerializeField] SHOP_Slot[] shopSlots;
+    [SerializeField] SHOP_Slot[] shop_Slots;
 
     [Header("Inventory Link (for buy/sell step)")]
     public INV_Manager inv_Manager;
@@ -439,33 +564,23 @@ public class SHOP_Manager : MonoBehaviour
 
         if (!inv_Manager)
             Debug.LogError("SHOP_Manager: INV_Manager reference missing.", this);
-        if (shopSlots == null || shopSlots.Length == 0)
-            Debug.LogWarning($"{name}: No shopSlots assigned.", this);
+        if (shop_Slots == null || shop_Slots.Length == 0)
+            Debug.LogWarning("SHOP_Manager: No shopSlots assigned.", this);
     }
 
-    void Start()
-    {
-        PopulateShopItems();
-        OnShopStateChanged?.Invoke(this, true); // open by default for now
-    }
-
-    void OnDisable() => OnShopStateChanged?.Invoke(this, false);
-
-    public void PopulateShopItems()
+    public void PopulateShopItems(List<INV_ItemSO> inv_ItemSOList)
     {
         // fill used slots
-        int count = Mathf.Min(shopItems.Count, shopSlots.Length);
+        int count = Mathf.Min(inv_ItemSOList.Count, shop_Slots.Length);
         for (int i = 0; i < count; i++)
         {
-            var data = shopItems[i];
-            var slot = shopSlots[i];
-            slot.gameObject.SetActive(true);
-            slot.Initialize(data.inv_ItemSO, data.price);
+            shop_Slots[i].gameObject.SetActive(true);
+            shop_Slots[i].Initialize(inv_ItemSOList[i]);
         }
 
         // turn off the rest
-        for (int i = count; i < shopSlots.Length; i++)
-            shopSlots[i].gameObject.SetActive(false);
+        for (int i = count; i < shop_Slots.Length; i++)
+            shop_Slots[i].gameObject.SetActive(false);
     }
 
     // Attempt to buy item, checking gold and space
@@ -474,53 +589,44 @@ public class SHOP_Manager : MonoBehaviour
         if (inv_ItemSO == null) return;
         if (inv_Manager.gold < price) return;
         if (!HasSpace(inv_ItemSO)) return;
-        
+
         inv_Manager.gold -= price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
         inv_Manager.AddItem(inv_ItemSO, 1);
     }
 
     // Sell item from inventory to shop
-    public void SellItem(INV_ItemSO inv_ItemSO)
+    public void SellItem(INV_ItemSO itemSO)
     {
-        if (inv_ItemSO == null) return;
-        int price = GetPrice(inv_ItemSO);
-        if (price <= 0) return;
+        if (itemSO.price <= 0)
+        {
+            Debug.LogWarning("SHOP_Manager: Cannot sell item with zero or negative price.", this);
+            return;
+        }
 
-        inv_Manager.gold += price;
+        // Update gold
+        inv_Manager.gold += itemSO.price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
         // INV_Slots handles decreasing quantity & UpdateUI on click
     }
 
-    // Check if there's space in inventory for this item
-    bool HasSpace(INV_ItemSO inv_ItemSO)
+    // Return T/F if there's space in inventory for this item
+    bool HasSpace(INV_ItemSO itemSO)
     {
-        // same item with room
+        // Loop through inventory slots
         foreach (var slot in inv_Manager.inv_Slots)
-            if (slot.itemSO == inv_ItemSO && slot.quantity < inv_ItemSO.stackSize)
+            // same item with room
+            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
                 return true;
+            // empty slot
             else if (slot.itemSO == null)
                 return true;
+        // No space found
         return false;
     }
-
-    // Get price of item from shop list; 0 if not sold here
-    int GetPrice(INV_ItemSO inv_ItemSO)
-    {
-        for (int i = 0; i < shopItems.Count; i++)
-            if (shopItems[i].inv_ItemSO == inv_ItemSO)
-                return shopItems[i].price;
-        return 0;
-    }
-
-    // Simple struct for shop item data
-    [Serializable]
-    public class ShopItem
-    {
-        public INV_ItemSO inv_ItemSO;
-        public int price = 1;
-    }
 }
+
+
 
 // ----- File: SHOP_Slot.cs -----
 using UnityEngine;
@@ -540,58 +646,58 @@ public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public TMP_Text itemPriceText;
 
     [Header("Runtime Data")]
-    public INV_ItemSO inv_ItemSO;
+    public INV_ItemSO itemSO;
     public int price;
 
     void Awake()
     {
         shop_Manager     ??= GetComponentInParent<SHOP_Manager>();
-
+        
         itemNameText    ??= transform.Find("itemNameText")?.GetComponent<TMP_Text>();
         itemImage       ??= transform.Find("itemImage")?.GetComponent<Image>();
         itemPriceText   ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
 
         if (!shop_Manager) Debug.LogError("SHOP_Slot: SHOP_Manager missing in parent.", this);
-
+        if (!inv_ItemInfo) Debug.LogError("SHOP_Slot: INV_ItemInfo reference missing.", this);
         if (!itemImage)    Debug.LogError("SHOP_Slot: itemImage missing.", this);
         if (!itemNameText) Debug.LogError("SHOP_Slot: itemNameText missing.", this);
         if (!itemPriceText)Debug.LogError("SHOP_Slot: itemPriceText missing.", this);
     }
 
     // called by SHOP_Manager at startup
-    public void Initialize(INV_ItemSO newItemSO, int newPrice)
+    public void Initialize(INV_ItemSO itemSO)
     {
-        inv_ItemSO = newItemSO;
-        price = newPrice;
+        this.itemSO = itemSO;
+        price = itemSO.price;
 
         itemImage.enabled = true;
-        itemImage.sprite = inv_ItemSO.image;
-        itemNameText.text = inv_ItemSO.itemName;
+        itemImage.sprite = itemSO.image;
+        itemNameText.text = itemSO.itemName;
         itemPriceText.text = price.ToString();
     }
 
     // called by Buy button
     public void OnBuyButtonClicked()
     {
-        shop_Manager.TryBuyItem(inv_ItemSO, price);
+        shop_Manager.TryBuyItem(itemSO, price);
     }
     
     // Show item info on hover
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (inv_ItemSO != null) inv_ItemInfo?.Show(inv_ItemSO);
+        if (itemSO) inv_ItemInfo.Show(itemSO);
     }
 
     // Hide item info when not hovering
     public void OnPointerExit(PointerEventData eventData)
     {
-        inv_ItemInfo?.Hide();
+        inv_ItemInfo.Hide();
     }
 
     // Follow mouse while hovering
     public void OnPointerMove(PointerEventData eventData)
     {
-        if (inv_ItemSO != null) inv_ItemInfo?.FollowMouse(eventData.position);
+        if (itemSO) inv_ItemInfo.FollowMouse(eventData.position);
     }
 }
 

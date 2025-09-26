@@ -3,7 +3,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class C_State : MonoBehaviour
 {
-    public enum ActorState { Idle, Move, Attack, Dodge }
+    public enum ActorState { Idle, Move, Attack, Dodge, Wander }
 
     [Header("References")]
     Animator animator;
@@ -13,12 +13,15 @@ public class C_State : MonoBehaviour
     public P_Combat   p_Combat;
     public E_Movement e_Movement;
     public E_Combat   e_Combat;
+    public NPC_Movement npc_Movement;
     public C_Dodge    c_Dodge;
     C_Health   c_Health;
 
     [Header("Locks")]
     public bool lockMove  = true;
     public bool lockDodge = true;
+
+    public bool isWandering;
 
     // Current finite state
     public ActorState CurrentState = ActorState.Idle;
@@ -34,13 +37,14 @@ public class C_State : MonoBehaviour
         p_Combat    ??= GetComponent<P_Combat>();
         e_Movement  ??= GetComponent<E_Movement>();
         e_Combat    ??= GetComponent<E_Combat>();
+        npc_Movement ??= GetComponent<NPC_Movement>();
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
         if (!rb)                        Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
         if (!animator)                  Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_State missing.");
-        if (!p_Combat   && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing.");
+        if (!p_Movement && !e_Movement && !npc_Movement) Debug.LogError($"{name}: *_Movement in C_State is missing.");
+        if (npc_Movement == null && !p_Combat && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing for non-NPC.");
     }
 
     void OnEnable()
@@ -57,6 +61,7 @@ public class C_State : MonoBehaviour
         // lock movement
         p_Movement?.SetDisabled(true);
         e_Movement?.SetDisabled(true);
+        npc_Movement?.SetDisabled(true);
 
         // play death animation
         animator?.SetTrigger("Die");
@@ -75,12 +80,14 @@ public class C_State : MonoBehaviour
     public bool IsAttackingNow     => CurrentState == ActorState.Attack;
     public bool IsDodgingNow       => CurrentState == ActorState.Dodge;
     public bool IsMovingNow        => CurrentState == ActorState.Move;
+    public bool IsWanderingNow     => CurrentState == ActorState.Wander;
 
     //  Public API for Bool
     public bool CheckIsBusy()
     {
-        // busy if dodging, or attacking and movement is locked
+        // busy if dodging, wandering, or attacking and movement is locked
         if (Is(ActorState.Dodge)) return true;
+        if (Is(ActorState.Wander)) return true;
         if (Is(ActorState.Attack) && lockMove) return true;
         return false;
     }
@@ -88,6 +95,9 @@ public class C_State : MonoBehaviour
     // Pick the correct state
     ActorState PickState()
     {
+        // Wander
+        if (isWandering) return ActorState.Wander;
+
         // Dodge (optional component)
         if (c_Dodge && c_Dodge.IsDodging) return ActorState.Dodge;
 
@@ -104,6 +114,7 @@ public class C_State : MonoBehaviour
     void ApplyAnimator(ActorState s)
     {
         // Single source of truth for animator bools
+        animator.SetBool("isWandering", s == ActorState.Wander);
         animator.SetBool("isDodging",   s == ActorState.Dodge);
         animator.SetBool("isAttacking", s == ActorState.Attack);
         animator.SetBool("isMoving",    s == ActorState.Move);

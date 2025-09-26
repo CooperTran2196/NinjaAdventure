@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e8215e519554bdc4294e44c154805393
+guid: 05a4ef3a31feaec489a28e45ad5b72d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2340281215215964265
-    second: FacesetBox_0
+      213: -7527145504033472756
+    second: Faceset_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FacesetBox_0
+      name: Faceset_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
-        height: 48
+        width: 38
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 79f688452a6a58fd0800000000000000
-      internalID: -2340281215215964265
+      spriteID: c0ff76b6b053a8790800000000000000
+      internalID: -7527145504033472756
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FacesetBox_0: -2340281215215964265
+      Faceset_0: -7527145504033472756
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
