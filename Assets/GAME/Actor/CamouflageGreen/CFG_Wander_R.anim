@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sam_Wander_U
+  m_Name: CFG_Wander_R
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,11 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -982904232830982447, guid: e94d0da706dce7745937035884e19f2d, type: 3}
+      value: {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - time: 0.36666667
+      value: {fileID: 72081936, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
     - time: 0.75
-      value: {fileID: -72767647, guid: e94d0da706dce7745937035884e19f2d, type: 3}
+      value: {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - time: 1.1333333
+      value: {fileID: -1116650110, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
     - time: 1.5
-      value: {fileID: -1225568861, guid: e94d0da706dce7745937035884e19f2d, type: 3}
+      value: {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -48,9 +52,11 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -982904232830982447, guid: e94d0da706dce7745937035884e19f2d, type: 3}
-    - {fileID: -72767647, guid: e94d0da706dce7745937035884e19f2d, type: 3}
-    - {fileID: -1225568861, guid: e94d0da706dce7745937035884e19f2d, type: 3}
+    - {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - {fileID: 72081936, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - {fileID: -1116650110, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
+    - {fileID: 659797372610145418, guid: aa7e8575c447247e69f99d844450e7bc, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
