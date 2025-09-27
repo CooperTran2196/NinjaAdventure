@@ -4,6 +4,8 @@ using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
+[DisallowMultipleComponent]
+
 public abstract class W_Base : MonoBehaviour
 {
     [Header("Central API for all weapons")]
@@ -42,10 +44,10 @@ public abstract class W_Base : MonoBehaviour
         hitbox.enabled   = false;
 
         // 3/ Owner + deps
-        owner = transform.root;
-        ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
-        c_Stats ??= owner ? owner.GetComponent<C_Stats>() : null;
-        
+        owner               = transform.root;
+        ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
+        c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
+
         if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
         if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
         if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
@@ -312,7 +314,7 @@ public class W_Melee : W_Base
     {
         // Check if the collider is a valid target
         var (targetHealth, root) = TryGetTarget(targetCollider);
-        if (targetHealth == null) return;
+        if (!targetHealth) return;
         if (!alreadyHit.Add(root.GetInstanceID())) return;   // one hit per swing
         ApplyHitEffects(c_Stats, weaponData, targetHealth, attackDir, targetCollider);
     }
@@ -326,6 +328,8 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
+[DisallowMultipleComponent]
+
 public class W_Projectile : MonoBehaviour
 {
     // Cache
@@ -350,8 +354,8 @@ public class W_Projectile : MonoBehaviour
         rb     ??= GetComponent<Rigidbody2D>();
 
         if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!col) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
+        if (!col)    Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
 
         col.isTrigger = true;
         rb.gravityScale = 0f;

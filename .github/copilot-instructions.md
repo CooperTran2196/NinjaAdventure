@@ -22,7 +22,7 @@ Project conventions you must know
 Integration & data flows (examples)
 - Stat Modification: `ST_Manager` (on skill upgrade) or `INV_Manager` (on item use) iterates through the `StatEffect` list on the `ST_SkillSO` or `INV_ItemSO` and calls `P_StatsManager.ApplyModifier()` for each. `P_StatsManager` then handles the logic for permanent, instant, or temporary effects and recalculates the final stats in `C_Stats`.
 - Attack/aim flow: `P_Combat` reads mouse world position (ScreenToWorldPoint) → sets animator `atkX/atkY` → `W_Base` uses `ApplyHitEffects` to apply damage/stuns/knockback.
-- Movement vs attack locking: state lives in `C_State`; `CheckIsBusy()` is consulted by `P_Movement` to decide whether to apply velocity. `P_Combat` writes attack facing via `C_State.SetAttackDirection(animator, aimDir)` but movement `lastMove` should remain driven by WASD. `C_State` acts as a state machine (Idle, Move, Attack, Dodge) and is the single source of truth for animator states.
+- Movement vs attack locking: state lives in `C_State`; `CheckIsBusy()` is consulted by `P_Movement` to decide whether to apply velocity. `P_Combat` writes attack facing via `C_State.SetAttackDirection(Vector2 dir)` but movement `lastMove` should remain driven by WASD. `C_State` acts as a state machine (Idle, Move, Attack, Dodge) and is the single source of truth for animator states.
 - Rewards: `E_Reward` listens to enemy `C_Health.OnDied` and calls `P_Exp.AddXP(expReward)` (cached static reference).
 - Enemy AI: `E_Combat` uses a simple `ThinkLoop` coroutine to check for the player in `attackRange` and trigger an `AttackRoutine`. It uses `Physics2D.OverlapCircle` for detection.
 
@@ -38,4 +38,6 @@ Files to open first
 - `Assets/GAME/Scripts/Character/C_Health.cs` — health events and damage API
 - `Assets/GAME/Scripts/Weapon/W_Base.cs` and `Weapon/W_SO.cs` — weapon data + hit/effect pipeline
 - `Assets/GAME/Scripts/SkillTree/ST_Manager.cs` & `Inventory/INV_Manager.cs` — Triggers for stat changes.
+- `Assets/GAME/Scripts/Character/C_State.cs` — The character state machine.
+- `Assets/GAME/Scripts/Enemy/E_Movement.cs` — Example of wander/chase logic.
 

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1827560490837823701}
   - component: {fileID: 3702495835959095691}
   - component: {fileID: 2276528715175444466}
+  - component: {fileID: 2947998886119917866}
   - component: {fileID: 8270124747210223574}
   - component: {fileID: 6647624238643561171}
   - component: {fileID: 1849255543269782434}
@@ -218,6 +219,9 @@ MonoBehaviour:
   AR: 0
   MR: 0
   KR: 10
+  lifesteal: 0
+  armorPen: 0
+  magicPen: 0
   attackCooldown: 2
   collisionDamage: 1
   collisionTick: 1
@@ -242,9 +246,11 @@ MonoBehaviour:
   p_Combat: {fileID: 0}
   e_Movement: {fileID: 2276528715175444466}
   e_Combat: {fileID: 8270124747210223574}
+  c_Wander: {fileID: 0}
   c_Dodge: {fileID: 0}
-  lockMove: 1
+  lockMoveWhileAttacking: 1
   lockDodge: 1
+  canWander: 1
   CurrentState: 0
 --- !u!114 &2276528715175444466
 MonoBehaviour:
@@ -258,14 +264,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b00dc70f4431ee428add25ccf716bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  c_Stats: {fileID: 1827560490837823701}
-  c_State: {fileID: 3702495835959095691}
-  e_Combat: {fileID: 8270124747210223574}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   detectionRadius: 3
   lastMove: {x: 0, y: -1}
+--- !u!114 &2947998886119917866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391284430365616621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de9dec0ecc87f848bc17e8518f31399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_Wander
+  wanderingSpeed: 1
+  width: 6
+  height: 4
+  pauseDuration: 1
+  isWandering: 0
 --- !u!114 &8270124747210223574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +303,7 @@ MonoBehaviour:
   e_Movement: {fileID: 2276528715175444466}
   e_Health: {fileID: 6647624238643561171}
   activeWeapon: {fileID: 7030323333335645133}
+  c_Wander: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64

@@ -1,11 +1,16 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
-public class C_State : MonoBehaviour
-{
-    public enum ActorState { Idle, Move, Attack, Dodge, Wander }
 
-    [Header("References")]
+public class C_State : MonoBehaviour
+{   
+    // Finite State Machine
+    public enum ActorState { Idle, Move, Attack, Dodge, Wander, Dead }
+
+    [Header("References(Only Player/Enemy/NPC)")]
     Animator animator;
     Rigidbody2D rb;
 
@@ -13,15 +18,16 @@ public class C_State : MonoBehaviour
     public P_Combat   p_Combat;
     public E_Movement e_Movement;
     public E_Combat   e_Combat;
-    public NPC_Movement npc_Movement;
+    public C_Wander   c_Wander;
     public C_Dodge    c_Dodge;
     C_Health   c_Health;
 
-    [Header("Locks")]
-    public bool lockMove  = true;
+    [Header("Locks Certain Actions")]
+    public bool lockMoveWhileAttacking = true;
     public bool lockDodge = true;
 
-    public bool isWandering;
+    [Header("Wandering Ability")]
+    public bool canWander;
 
     // Current finite state
     public ActorState CurrentState = ActorState.Idle;
@@ -31,20 +37,20 @@ public class C_State : MonoBehaviour
     void Awake()
     {
         rb          ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponent<Animator>();
+        animator    ??= GetComponent<Animator>();
 
         p_Movement  ??= GetComponent<P_Movement>();
         p_Combat    ??= GetComponent<P_Combat>();
         e_Movement  ??= GetComponent<E_Movement>();
         e_Combat    ??= GetComponent<E_Combat>();
-        npc_Movement ??= GetComponent<NPC_Movement>();
+        c_Wander    ??= GetComponent<C_Wander>();
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator)                  Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement && !npc_Movement) Debug.LogError($"{name}: *_Movement in C_State is missing.");
-        if (npc_Movement == null && !p_Combat && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing for non-NPC.");
+        if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
+        if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
+        if (!p_Movement && !e_Movement && !c_Wander) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
+        if (!p_Combat && !e_Combat && !c_Wander)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
     }
 
     void OnEnable()
@@ -56,17 +62,24 @@ public class C_State : MonoBehaviour
     {
         c_Health.OnDied -= OnDiedHandler;
     }
+
+    // Handle death
     void OnDiedHandler()
     {
         // lock movement
         p_Movement?.SetDisabled(true);
         e_Movement?.SetDisabled(true);
-        npc_Movement?.SetDisabled(true);
 
         // play death animation
-        animator?.SetTrigger("Die");
+        animator.SetTrigger("Die");
+
+        // stop wandering and freeze state at Dead
+        if (c_Wander) c_Wander.enabled = false;
+        rb.linearVelocity = Vector2.zero;
+        CurrentState = ActorState.Dead;
     }
 
+    // Update is called once per frame
     void Update()
     {
         // Pick next state
@@ -76,48 +89,47 @@ public class C_State : MonoBehaviour
     }
 
     // Public API for Enum
-    public bool Is(ActorState s) => CurrentState == s;
-    public bool IsAttackingNow     => CurrentState == ActorState.Attack;
-    public bool IsDodgingNow       => CurrentState == ActorState.Dodge;
-    public bool IsMovingNow        => CurrentState == ActorState.Move;
-    public bool IsWanderingNow     => CurrentState == ActorState.Wander;
+    public bool Is(ActorState s)   => CurrentState == s;
 
     //  Public API for Bool
     public bool CheckIsBusy()
     {
-        // busy if dodging, wandering, or attacking and movement is locked
+        // busy if dodging, or attacking and movement is locked
         if (Is(ActorState.Dodge)) return true;
-        if (Is(ActorState.Wander)) return true;
-        if (Is(ActorState.Attack) && lockMove) return true;
+        if (Is(ActorState.Attack) && lockMoveWhileAttacking) return true;
         return false;
     }
     
     // Pick the correct state
     ActorState PickState()
     {
-        // Wander
-        if (isWandering) return ActorState.Wander;
+        // If dead, remain dead (no further transitions)
+        if (CurrentState == ActorState.Dead || !c_Health.IsAlive)
+            return ActorState.Dead;
 
-        // Dodge (optional component)
+        // Dodge is optional
         if (c_Dodge && c_Dodge.IsDodging) return ActorState.Dodge;
 
         // Attack
         if ((p_Combat && p_Combat.isAttacking) || (e_Combat && e_Combat.isAttacking))
             return ActorState.Attack;
 
-        // Movement inferred from body velocity (respects ForcedVelocity/knockback)
+        // Wander (must have wander component active & allowed) takes precedence over plain Move
+        if (c_Wander && c_Wander.isWandering) return ActorState.Wander;
+
+        // Movement inferred from body velocity (respects ForcedVelocity/knockback) for non-wander movement
         if (rb.linearVelocity.sqrMagnitude > MIN_DISTANCE) return ActorState.Move;
 
         return ActorState.Idle;
     }
 
+    // Single source of truth for animator bools
     void ApplyAnimator(ActorState s)
     {
-        // Single source of truth for animator bools
-        animator.SetBool("isWandering", s == ActorState.Wander);
-        animator.SetBool("isDodging",   s == ActorState.Dodge);
+        animator.SetBool("isDodging", s == ActorState.Dodge);
         animator.SetBool("isAttacking", s == ActorState.Attack);
-        animator.SetBool("isMoving",    s == ActorState.Move);
+        animator.SetBool("isMoving", s == ActorState.Move);
+        animator.SetBool("isWandering", s == ActorState.Wander);
     }
 
     // Public API for Floats

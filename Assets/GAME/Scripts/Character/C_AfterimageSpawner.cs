@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[DisallowMultipleComponent]
+
 public class C_AfterimageSpawner : MonoBehaviour
 {
     [Header("Trail")]
@@ -10,12 +13,12 @@ public class C_AfterimageSpawner : MonoBehaviour
     public int sortingOrderOffset = -1; // draw behind player
 
     // Cached
-    SpriteRenderer srcSR;
+    SpriteRenderer sr;
 
     void Awake()
     {
-        srcSR ??= GetComponent<SpriteRenderer>();
-        if (!srcSR) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
+        sr ??= GetComponent<SpriteRenderer>();
+        if (!sr) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
     }
 
     // Burst where every ghost uses the SAME locked sprite & flips (captured at dodge start)
@@ -40,7 +43,7 @@ public class C_AfterimageSpawner : MonoBehaviour
 
     void SpawnGhost(Sprite sprite, bool flipX, bool flipY)
     {
-        // Assumes srcSR exists & sprite provided (per your style: Inspector preconditions are correct)
+        // Assumes sr exists & sprite provided (per your style: Inspector preconditions are correct)
         var g = new GameObject("Afterimage");
         g.transform.SetPositionAndRotation(transform.position, transform.rotation);
         g.transform.localScale = transform.localScale;
@@ -49,8 +52,8 @@ public class C_AfterimageSpawner : MonoBehaviour
         gsr.sprite = sprite;
         gsr.flipX = flipX;
         gsr.flipY = flipY;
-        gsr.sortingLayerID = srcSR.sortingLayerID;
-        gsr.sortingOrder = srcSR.sortingOrder + sortingOrderOffset;
+        gsr.sortingLayerID = sr.sortingLayerID;
+        gsr.sortingOrder = sr.sortingOrder + sortingOrderOffset;
         gsr.color = ghostTint;
 
         StartCoroutine(FadeAndDestroy(gsr));

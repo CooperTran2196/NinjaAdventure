@@ -1,5 +1,13 @@
-using System;
 using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_State))]
+[RequireComponent(typeof(E_Combat))]
+[RequireComponent(typeof(C_Wander))]
+[DisallowMultipleComponent]
 
 public class E_Movement : MonoBehaviour
 {
@@ -7,10 +15,11 @@ public class E_Movement : MonoBehaviour
     SpriteRenderer sprite;
     Rigidbody2D rb;
     Animator animator;
-    
-    public C_Stats c_Stats;   
-    public C_State c_State;
-    public E_Combat e_Combat;
+
+    C_Stats c_Stats;
+    C_State c_State;
+    E_Combat e_Combat;
+    C_Wander c_Wander;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -28,38 +37,46 @@ public class E_Movement : MonoBehaviour
     Vector2 knockback;
 
     const float MIN_DISTANCE = 0.000001f;
-    
+
     void Awake()
     {
-        sprite      ??= GetComponent<SpriteRenderer>();
-        rb          ??= GetComponent<Rigidbody2D>();
-        animator    ??= GetComponent<Animator>();
+        sprite   ??= GetComponent<SpriteRenderer>();
+        rb       ??= GetComponent<Rigidbody2D>();
+        animator ??= GetComponent<Animator>();
 
-        c_Stats     ??= GetComponent<C_Stats>();
-        c_State ??= GetComponent<C_State>();
-        e_Combat    ??= GetComponent<E_Combat>();
-        
+        c_Stats  ??= GetComponent<C_Stats>();
+        c_State  ??= GetComponent<C_State>();
+        e_Combat ??= GetComponent<E_Combat>();
+        c_Wander ??= GetComponent<C_Wander>();
 
-        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer in E_Movement missing.");
-        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D in E_Movement missing.");
-        if (animator    == null) Debug.LogError($"{name}: Animator in E_Movement missing.");
-        
-        if (c_Stats     == null) Debug.LogError($"{name}: E_Stats in E_Movement missing.");
-        if (e_Combat    == null) Debug.LogError($"{name}: E_Combat in E_Movement missing.");
+        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in E_Movement is missing.");
+
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
+        if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
+        if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
+        if (!c_Wander) Debug.LogError($"{name}: C_Wander in E_Movement is missing.");
     }
 
     void Update()
     {
         Chase();
-            if (c_State.Is(C_State.ActorState.Attack))
-            {
-                lastMove = c_State.GetAttackDirection();
-            }
-            c_State.UpdateAnimDirections(moveAxis, lastMove);
+        
+        // Preserve lastMove during pauses/idle
+        if (c_State.Is(C_State.ActorState.Attack))
+        {
+            lastMove = c_State.GetAttackDirection();
+        }
+        c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
     void FixedUpdate()
     {
+        // Skip movement if wandering
+        if (c_State.Is(C_State.ActorState.Wander)) return;
+
+        // Apply movement + knockback
         Vector2 final = velocity + knockback;
         rb.linearVelocity = final; // replace linearVelocity
 
@@ -72,9 +89,29 @@ public class E_Movement : MonoBehaviour
 
     void Chase()
     {
+        // If dead, ensure everything stays stopped and wander cannot reactivate
+        if (c_State.Is(C_State.ActorState.Dead))
+        {
+            if (c_Wander.enabled) c_Wander.enabled = false;
+            moveAxis = Vector2.zero;
+            velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         // Setup target if player comes close
         var hit = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
         target = hit ? hit.transform : null;
+
+        // Toggle wandering by detection
+        if (target != null)
+        {
+            c_Wander.enabled = false; // disable wander while chasing
+        }
+        else
+        {
+            c_Wander.enabled = true; // re-enable wander when no target
+        }
 
         if (disabled)
         {
@@ -116,11 +153,14 @@ public class E_Movement : MonoBehaviour
         }
     }
 
+    // External knockback request
     public void ReceiveKnockback(Vector2 force) { knockback += force; }
 
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;
 
+
+    // Debug: show detection radius
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.55f, 0f, 0.9f); // orange detection ring

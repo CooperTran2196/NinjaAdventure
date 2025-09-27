@@ -40,7 +40,7 @@ public class W_Melee : W_Base
     {
         // Check if the collider is a valid target
         var (targetHealth, root) = TryGetTarget(targetCollider);
-        if (targetHealth == null) return;
+        if (!targetHealth) return;
         if (!alreadyHit.Add(root.GetInstanceID())) return;   // one hit per swing
         ApplyHitEffects(c_Stats, weaponData, targetHealth, attackDir, targetCollider);
     }

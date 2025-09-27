@@ -1,16 +1,18 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_FX))]
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
-    [Header("References (Only P or E _Stats)")]
+    [Header("References")]
     public C_Stats c_Stats;
     public C_Dodge c_Dodge;
-    public C_FX fx;
+    C_FX fx;
 
     P_InputActions input;
-    [Header("Allow Dodge/IFrames?")]
+    [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
 
     [Header("Debug Keys (N/B)")]
@@ -23,10 +25,7 @@ public class C_Health : MonoBehaviour
     public event Action OnDied;
 
     // Accessors
-    int MaxHP    => c_Stats.maxHP;
     int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
-    public int AR => c_Stats.AR;
-    public int MR => c_Stats.MR;
     public bool IsAlive => CurrentHP > 0;
 
     // cached delegates so we can unsubscribe
@@ -40,9 +39,9 @@ public class C_Health : MonoBehaviour
         c_Dodge ??= GetComponent<C_Dodge>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
         if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
-        if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+        if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
     void OnEnable()
@@ -52,12 +51,12 @@ public class C_Health : MonoBehaviour
         
         // subscribe to FX events
         fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-        fxHealedHandler ??= _ => fx.FlashOnHealed();
-        fxDiedHandler ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
+        fxHealedHandler  ??= _ => fx.FlashOnHealed();
+        fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
 
         OnDamaged += fxDamagedHandler;
-        OnHealed += fxHealedHandler;
-        OnDied += fxDiedHandler;
+        OnHealed  += fxHealedHandler;
+        OnDied    += fxDiedHandler;
     }
 
     void OnDisable()
@@ -87,8 +86,8 @@ public class C_Health : MonoBehaviour
         if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
 
         // Calculate effective armor and magic resist after penetration
-        float effectiveAR = AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
-        float effectiveMR = MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
+        float effectiveAR = c_Stats.AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
+        float effectiveMR = c_Stats.MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
 
         // Calculate damage reduction from effective armor and magic resist
         float damageReductionAR = 1f - Mathf.Clamp01(effectiveAR / 100f);
@@ -114,16 +113,16 @@ public class C_Health : MonoBehaviour
 
         // Clamp to valid range and apply
         int before    = CurrentHP;
-        int after     = Mathf.Clamp(before + amount, 0, MaxHP);
+        int after     = Mathf.Clamp(before + amount, 0, c_Stats.maxHP);
         int actual    = after - before;
             CurrentHP = after;
 
         // Invoke events
-        if (actual < 0) OnDamaged?.Invoke(-actual);
+        if      (actual < 0) OnDamaged?.Invoke(-actual);
         else if (actual > 0) OnHealed?.Invoke(actual);
-        if (after == 0) OnDied?.Invoke();
+        if      (after == 0) OnDied?.Invoke();
     }
 
     // Kill instantly
-    public void Kill() => ChangeHealth(-MaxHP);
+    public void Kill() => ChangeHealth(-c_Stats.maxHP);
 }

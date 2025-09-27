@@ -3,17 +3,27 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_State))]
+[RequireComponent(typeof(E_Movement))]
+[RequireComponent(typeof(C_Health))]
+[RequireComponent(typeof(C_Wander))]
+[DisallowMultipleComponent]
+
 public class E_Combat : MonoBehaviour
 {
     [Header("References")]
-    SpriteRenderer sprite;
-    Animator animator;
+    SpriteRenderer sr;
+    Animator anim;
 
-    public C_Stats c_Stats;
-    public C_State c_State;
-    public E_Movement e_Movement;
-    public C_Health e_Health;
+    C_Stats c_Stats;
+    C_State c_State;
+    E_Movement e_Movement;
+    C_Health e_Health;
     public W_Base activeWeapon;
+    C_Wander c_Wander;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -30,7 +40,7 @@ public class E_Combat : MonoBehaviour
     [SerializeField] bool autoKill;
 
     // Quick state check
-    public bool isAttacking { get;  private set; }
+    public bool isAttacking { get; private set; }
     public bool IsAlive => c_Stats.currentHP > 0;
     const float MIN_DISTANCE = 0.0001f;
     float contactTimer;   // for collision damage
@@ -38,22 +48,24 @@ public class E_Combat : MonoBehaviour
 
     void Awake()
     {
-        sprite          ??= GetComponent<SpriteRenderer>();
-        animator        ??= GetComponent<Animator>();
+        sr           ??= GetComponent<SpriteRenderer>();
+        anim         ??= GetComponent<Animator>();
 
-        c_Stats         ??= GetComponent<C_Stats>();
-        c_State         ??= GetComponent<C_State>();
-        e_Movement      ??= GetComponent<E_Movement>();
-        e_Health        ??= GetComponent<C_Health>();
-        activeWeapon    ??= GetComponentInChildren<W_Melee>();
+        c_Stats      ??= GetComponent<C_Stats>();
+        c_State      ??= GetComponent<C_State>();
+        e_Movement   ??= GetComponent<E_Movement>();
+        e_Health     ??= GetComponent<C_Health>();
+        activeWeapon ??= GetComponentInChildren<W_Melee>();
+        c_Wander     ??= GetComponent<C_Wander>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in E_Combat missing.");
+        if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
+        if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in E_Combat missing.");
-        if (!e_Movement) Debug.LogError($"{name}: E_Movement in E_Combat missing.");
-        if (!e_Health) Debug.LogError($"{name}: C_Health in E_Combat missing.");
-        if (!activeWeapon) Debug.LogError($"{name}: W_Melee in E_Combat missing.");
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats in E_Combat missing.");
+        if (!e_Movement)    Debug.LogError($"{name}: E_Movement in E_Combat missing.");
+        if (!e_Health)      Debug.LogError($"{name}: C_Health in E_Combat missing.");
+        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee in E_Combat missing.");
+        // c_Wander optional: only log verbose if enemy expected to wander? (skip error)
     }
 
     void OnEnable()
@@ -77,10 +89,11 @@ public class E_Combat : MonoBehaviour
 
             if (!isAttacking)
             {
+                // Check if player is in range
                 bool inAttackRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
 
-                bool lockMoveFlag = (c_State && c_State.lockMove);
-                bool shouldHold = inAttackRange && cooldownTimer > 0f && lockMoveFlag;
+                // Decide if should hold position (idle) or chase
+                bool shouldHold = inAttackRange && cooldownTimer > 0f && c_State.lockMoveWhileAttacking;
                 e_Movement.SetHoldInRange(shouldHold);
 
                 // If close enough and off cooldown, begin an attack
@@ -95,7 +108,7 @@ public class E_Combat : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision)
     {
         if (!IsAlive) return;
-        
+
         // Filter to only player layer
         if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
             return;
@@ -118,7 +131,7 @@ public class E_Combat : MonoBehaviour
 
         // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
         Vector2 dir = ReadAimToPlayer();
-        
+
         // Set facing direction
         c_State.SetAttackDirection(dir);
 
@@ -127,9 +140,9 @@ public class E_Combat : MonoBehaviour
         // Placeholder
         activeWeapon?.Attack(dir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
-        
+
         // Decide keep chasing/idle based on lockDuringAttack (MODE)
-        bool lockMoveFlag = (c_State && c_State.lockMove);
+        bool lockMoveFlag = (c_State && c_State.lockMoveWhileAttacking);
         bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         e_Movement.SetHoldInRange(lockMoveFlag && stillInRange);
 
@@ -147,6 +160,7 @@ public class E_Combat : MonoBehaviour
         return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : Vector2.down;
     }
 
+    // Debug: show attack range
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0f, 0f, 0.9f); // red attack ring
@@ -160,11 +174,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
+[DisallowMultipleComponent]
+
 public class E_HealthBarSlider : MonoBehaviour
 {
     [Header("References")]
-    public C_Health e_Health; // owner
-    public Slider   slider;   // green current HP
+    CanvasGroup cg;
+
+    public C_Health e_Health; // Health in parent
+    public Slider   slider;   // slider in child
 
     [Header("World Positioning")]
     public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
@@ -173,8 +191,6 @@ public class E_HealthBarSlider : MonoBehaviour
     public float visibleTime = 2f;   // auto-hide delay
     public bool  startHidden = true; // start invisible until first event
 
-    // cached
-    CanvasGroup cg;
     float hideTimer;
 
     void Awake()
@@ -182,13 +198,13 @@ public class E_HealthBarSlider : MonoBehaviour
         cg       ??= GetComponent<CanvasGroup>();
         e_Health ??= GetComponentInParent<C_Health>();
 
-        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider missing.", this);
-        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider missing.", this);
+        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider is missing.", this);
+        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider is missing.", this);
     }
 
     void OnEnable()
     {
-        var s = e_Health.c_Stats;      // current/max HP live here
+        var s           = e_Health.c_Stats;      // current/max HP live here
         slider.maxValue = s.maxHP;     // make slider track the true max
         slider.value    = s.currentHP; // initialize to current
 
@@ -206,6 +222,7 @@ public class E_HealthBarSlider : MonoBehaviour
         e_Health.OnDied    -= OnDied;
     }
 
+    // LateUpdate to ensure it runs after all movement
     void LateUpdate()
     {
         // follow owner
@@ -219,7 +236,7 @@ public class E_HealthBarSlider : MonoBehaviour
         }
     }
 
-    // ——— health event handlers ———
+    // Event handlers
     void OnDamaged(int amount)
     {
         slider.value = e_Health.c_Stats.currentHP;
@@ -245,8 +262,16 @@ public class E_HealthBarSlider : MonoBehaviour
 }
 
 // ----- File: E_Movement.cs -----
-using System;
 using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_State))]
+[RequireComponent(typeof(E_Combat))]
+[RequireComponent(typeof(C_Wander))]
+[DisallowMultipleComponent]
 
 public class E_Movement : MonoBehaviour
 {
@@ -254,10 +279,11 @@ public class E_Movement : MonoBehaviour
     SpriteRenderer sprite;
     Rigidbody2D rb;
     Animator animator;
-    
-    public C_Stats c_Stats;   
-    public C_State c_State;
-    public E_Combat e_Combat;
+
+    C_Stats c_Stats;
+    C_State c_State;
+    E_Combat e_Combat;
+    C_Wander c_Wander;
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -275,38 +301,46 @@ public class E_Movement : MonoBehaviour
     Vector2 knockback;
 
     const float MIN_DISTANCE = 0.000001f;
-    
+
     void Awake()
     {
-        sprite      ??= GetComponent<SpriteRenderer>();
-        rb          ??= GetComponent<Rigidbody2D>();
-        animator    ??= GetComponent<Animator>();
+        sprite   ??= GetComponent<SpriteRenderer>();
+        rb       ??= GetComponent<Rigidbody2D>();
+        animator ??= GetComponent<Animator>();
 
-        c_Stats     ??= GetComponent<C_Stats>();
-        c_State ??= GetComponent<C_State>();
-        e_Combat    ??= GetComponent<E_Combat>();
-        
+        c_Stats  ??= GetComponent<C_Stats>();
+        c_State  ??= GetComponent<C_State>();
+        e_Combat ??= GetComponent<E_Combat>();
+        c_Wander ??= GetComponent<C_Wander>();
 
-        if (sprite      == null) Debug.LogError($"{name}: SpriteRenderer in E_Movement missing.");
-        if (rb          == null) Debug.LogError($"{name}: Rigidbody2D in E_Movement missing.");
-        if (animator    == null) Debug.LogError($"{name}: Animator in E_Movement missing.");
-        
-        if (c_Stats     == null) Debug.LogError($"{name}: E_Stats in E_Movement missing.");
-        if (e_Combat    == null) Debug.LogError($"{name}: E_Combat in E_Movement missing.");
+        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
+        if (!animator) Debug.LogError($"{name}: Animator in E_Movement is missing.");
+
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
+        if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
+        if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
+        if (!c_Wander) Debug.LogError($"{name}: C_Wander in E_Movement is missing.");
     }
 
     void Update()
     {
         Chase();
-            if (c_State.Is(C_State.ActorState.Attack))
-            {
-                lastMove = c_State.GetAttackDirection();
-            }
-            c_State.UpdateAnimDirections(moveAxis, lastMove);
+        
+        // Preserve lastMove during pauses/idle
+        if (c_State.Is(C_State.ActorState.Attack))
+        {
+            lastMove = c_State.GetAttackDirection();
+        }
+        c_State.UpdateAnimDirections(moveAxis, lastMove);
     }
 
     void FixedUpdate()
     {
+        // Skip movement if wandering
+        if (c_State.Is(C_State.ActorState.Wander)) return;
+
+        // Apply movement + knockback
         Vector2 final = velocity + knockback;
         rb.linearVelocity = final; // replace linearVelocity
 
@@ -319,9 +353,29 @@ public class E_Movement : MonoBehaviour
 
     void Chase()
     {
+        // If dead, ensure everything stays stopped and wander cannot reactivate
+        if (c_State.Is(C_State.ActorState.Dead))
+        {
+            if (c_Wander.enabled) c_Wander.enabled = false;
+            moveAxis = Vector2.zero;
+            velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         // Setup target if player comes close
         var hit = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
         target = hit ? hit.transform : null;
+
+        // Toggle wandering by detection
+        if (target != null)
+        {
+            c_Wander.enabled = false; // disable wander while chasing
+        }
+        else
+        {
+            c_Wander.enabled = true; // re-enable wander when no target
+        }
 
         if (disabled)
         {
@@ -363,11 +417,14 @@ public class E_Movement : MonoBehaviour
         }
     }
 
+    // External knockback request
     public void ReceiveKnockback(Vector2 force) { knockback += force; }
 
     // Combat asks to idle-in-place during cooldown
     public void SetHoldInRange(bool v) => holdInRange = v;
 
+
+    // Debug: show detection radius
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.55f, 0f, 0.9f); // orange detection ring
@@ -379,6 +436,7 @@ public class E_Movement : MonoBehaviour
 using UnityEngine;
 
 [DisallowMultipleComponent]
+
 public class E_Reward : MonoBehaviour
 {
     [Header("Rewards")]

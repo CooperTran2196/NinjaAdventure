@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+
 public class C_FX : MonoBehaviour
 {
     [Header("References")]
-    SpriteRenderer sprite;
+    SpriteRenderer sr;
 
     [Header("Flash")]
     public float flashDuration = 0.1f;
@@ -18,10 +20,10 @@ public class C_FX : MonoBehaviour
 
     void Awake()
     {
-        sprite ??= GetComponent<SpriteRenderer>();
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
+        sr ??= GetComponent<SpriteRenderer>();
+        if (!sr) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
 
-        baseRGB = sprite.color;
+        baseRGB = sr.color;
     }
 
     public void FlashOnDamaged() => StartCoroutine(Flash(damageTint));
@@ -29,21 +31,21 @@ public class C_FX : MonoBehaviour
 
     IEnumerator Flash(Color tint)
     {
-        float a = sprite.color.a;
-        sprite.color = new Color(tint.r, tint.g, tint.b, a);
+        float a = sr.color.a;
+        sr.color = new Color(tint.r, tint.g, tint.b, a);
         yield return new WaitForSeconds(flashDuration);
-        sprite.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
+        sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
     }
 
     public IEnumerator FadeAndDestroy(GameObject go)
     {
         float t = 0f;
-        var c = sprite.color;
+        var c = sr.color;
         while (t < deathFadeTime)
         {
             t += Time.deltaTime;
             float k = 1f - Mathf.Clamp01(t / deathFadeTime);
-            sprite.color = new Color(c.r, c.g, c.b, k);
+            sr.color = new Color(c.r, c.g, c.b, k);
             yield return null;
         }
         Destroy(go);

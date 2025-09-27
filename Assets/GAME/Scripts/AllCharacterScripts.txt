@@ -2,6 +2,9 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[DisallowMultipleComponent]
+
 public class C_AfterimageSpawner : MonoBehaviour
 {
     [Header("Trail")]
@@ -11,12 +14,12 @@ public class C_AfterimageSpawner : MonoBehaviour
     public int sortingOrderOffset = -1; // draw behind player
 
     // Cached
-    SpriteRenderer srcSR;
+    SpriteRenderer sr;
 
     void Awake()
     {
-        srcSR ??= GetComponent<SpriteRenderer>();
-        if (!srcSR) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
+        sr ??= GetComponent<SpriteRenderer>();
+        if (!sr) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
     }
 
     // Burst where every ghost uses the SAME locked sprite & flips (captured at dodge start)
@@ -41,7 +44,7 @@ public class C_AfterimageSpawner : MonoBehaviour
 
     void SpawnGhost(Sprite sprite, bool flipX, bool flipY)
     {
-        // Assumes srcSR exists & sprite provided (per your style: Inspector preconditions are correct)
+        // Assumes sr exists & sprite provided (per your style: Inspector preconditions are correct)
         var g = new GameObject("Afterimage");
         g.transform.SetPositionAndRotation(transform.position, transform.rotation);
         g.transform.localScale = transform.localScale;
@@ -50,8 +53,8 @@ public class C_AfterimageSpawner : MonoBehaviour
         gsr.sprite = sprite;
         gsr.flipX = flipX;
         gsr.flipY = flipY;
-        gsr.sortingLayerID = srcSR.sortingLayerID;
-        gsr.sortingOrder = srcSR.sortingOrder + sortingOrderOffset;
+        gsr.sortingLayerID = sr.sortingLayerID;
+        gsr.sortingOrder = sr.sortingOrder + sortingOrderOffset;
         gsr.color = ghostTint;
 
         StartCoroutine(FadeAndDestroy(gsr));
@@ -76,12 +79,19 @@ public class C_AfterimageSpawner : MonoBehaviour
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_State))]
+[RequireComponent(typeof(P_Movement))]
+[RequireComponent(typeof(E_Movement))]
+[RequireComponent(typeof(C_AfterimageSpawner))]
+[DisallowMultipleComponent]
+
 public class C_Dodge : MonoBehaviour
 {
-    [Header("Depend on C_Stats, C_State, and _Movement")]
     [Header("References")]
-    public C_Stats c_Stats;
-    public C_State c_State;
+    C_Stats c_Stats;
+    C_State c_State;
 
     Animator animator;
     P_InputActions input;
@@ -92,7 +102,7 @@ public class C_Dodge : MonoBehaviour
     C_AfterimageSpawner afterimage;
 
     [Header("Player = true, Enemy = false")]
-    public bool useInput = true;
+    public bool usePlayerInput = true;
 
     [Header("State (read-only)")]
     public bool IsDodging { get; private set; }
@@ -103,34 +113,35 @@ public class C_Dodge : MonoBehaviour
 
     void Awake()
     {
-        animator ??= GetComponent<Animator>();
-        c_Stats ??= GetComponent<C_Stats>();
-        c_State ??= GetComponent<C_State>();
-        p_Movement ??= GetComponent<P_Movement>();
-        afterimage ??= GetComponent<C_AfterimageSpawner>();
+        animator    ??= GetComponent<Animator>();
+        c_Stats     ??= GetComponent<C_Stats>();
+        c_State     ??= GetComponent<C_State>();
+        p_Movement  ??= GetComponent<P_Movement>();
+        e_Movement  ??= GetComponent<E_Movement>();
+        afterimage  ??= GetComponent<C_AfterimageSpawner>();
 
         input ??= new P_InputActions();
 
-        if (!animator) Debug.LogError($"{name}: Animator in C_Dodge missing.");
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Dodge missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_Dodge missing.");
-        if (!afterimage)  Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge missing.");
+        if (!animator)                   Debug.LogError($"{name}: Animator in C_Dodge is missing.");
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Dodge is missing.");
+        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement in C_Dodge is missing.");
+        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge is missing.");
     }
 
     void OnEnable()
     {
-        if (useInput) input.Player.Dodge.Enable();
+        if (usePlayerInput) input.Player.Dodge.Enable();
     }
 
     void OnDisable()
     {
-        if (useInput) input.Player.Dodge.Disable();
+        if (usePlayerInput) input.Player.Dodge.Disable();
     }
 
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-        if (!useInput) return;
+        if (!usePlayerInput) return;
 
         if (input.Player.Dodge.WasPressedThisFrame())
         {
@@ -183,10 +194,12 @@ public class C_Dodge : MonoBehaviour
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+
 public class C_FX : MonoBehaviour
 {
     [Header("References")]
-    SpriteRenderer sprite;
+    SpriteRenderer sr;
 
     [Header("Flash")]
     public float flashDuration = 0.1f;
@@ -200,10 +213,10 @@ public class C_FX : MonoBehaviour
 
     void Awake()
     {
-        sprite ??= GetComponent<SpriteRenderer>();
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
+        sr ??= GetComponent<SpriteRenderer>();
+        if (!sr) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
 
-        baseRGB = sprite.color;
+        baseRGB = sr.color;
     }
 
     public void FlashOnDamaged() => StartCoroutine(Flash(damageTint));
@@ -211,21 +224,21 @@ public class C_FX : MonoBehaviour
 
     IEnumerator Flash(Color tint)
     {
-        float a = sprite.color.a;
-        sprite.color = new Color(tint.r, tint.g, tint.b, a);
+        float a = sr.color.a;
+        sr.color = new Color(tint.r, tint.g, tint.b, a);
         yield return new WaitForSeconds(flashDuration);
-        sprite.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
+        sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
     }
 
     public IEnumerator FadeAndDestroy(GameObject go)
     {
         float t = 0f;
-        var c = sprite.color;
+        var c = sr.color;
         while (t < deathFadeTime)
         {
             t += Time.deltaTime;
             float k = 1f - Mathf.Clamp01(t / deathFadeTime);
-            sprite.color = new Color(c.r, c.g, c.b, k);
+            sr.color = new Color(c.r, c.g, c.b, k);
             yield return null;
         }
         Destroy(go);
@@ -236,16 +249,18 @@ public class C_FX : MonoBehaviour
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_FX))]
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
-    [Header("References (Only P or E _Stats)")]
+    [Header("References")]
     public C_Stats c_Stats;
     public C_Dodge c_Dodge;
-    public C_FX fx;
+    C_FX fx;
 
     P_InputActions input;
-    [Header("Allow Dodge/IFrames?")]
+    [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
 
     [Header("Debug Keys (N/B)")]
@@ -258,10 +273,7 @@ public class C_Health : MonoBehaviour
     public event Action OnDied;
 
     // Accessors
-    int MaxHP    => c_Stats.maxHP;
     int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
-    public int AR => c_Stats.AR;
-    public int MR => c_Stats.MR;
     public bool IsAlive => CurrentHP > 0;
 
     // cached delegates so we can unsubscribe
@@ -275,9 +287,9 @@ public class C_Health : MonoBehaviour
         c_Dodge ??= GetComponent<C_Dodge>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
         if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
-        if (!fx) Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+        if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
     void OnEnable()
@@ -287,12 +299,12 @@ public class C_Health : MonoBehaviour
         
         // subscribe to FX events
         fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-        fxHealedHandler ??= _ => fx.FlashOnHealed();
-        fxDiedHandler ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
+        fxHealedHandler  ??= _ => fx.FlashOnHealed();
+        fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
 
         OnDamaged += fxDamagedHandler;
-        OnHealed += fxHealedHandler;
-        OnDied += fxDiedHandler;
+        OnHealed  += fxHealedHandler;
+        OnDied    += fxDiedHandler;
     }
 
     void OnDisable()
@@ -322,8 +334,8 @@ public class C_Health : MonoBehaviour
         if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
 
         // Calculate effective armor and magic resist after penetration
-        float effectiveAR = AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
-        float effectiveMR = MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
+        float effectiveAR = c_Stats.AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
+        float effectiveMR = c_Stats.MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
 
         // Calculate damage reduction from effective armor and magic resist
         float damageReductionAR = 1f - Mathf.Clamp01(effectiveAR / 100f);
@@ -349,29 +361,34 @@ public class C_Health : MonoBehaviour
 
         // Clamp to valid range and apply
         int before    = CurrentHP;
-        int after     = Mathf.Clamp(before + amount, 0, MaxHP);
+        int after     = Mathf.Clamp(before + amount, 0, c_Stats.maxHP);
         int actual    = after - before;
             CurrentHP = after;
 
         // Invoke events
-        if (actual < 0) OnDamaged?.Invoke(-actual);
+        if      (actual < 0) OnDamaged?.Invoke(-actual);
         else if (actual > 0) OnHealed?.Invoke(actual);
-        if (after == 0) OnDied?.Invoke();
+        if      (after == 0) OnDied?.Invoke();
     }
 
     // Kill instantly
-    public void Kill() => ChangeHealth(-MaxHP);
+    public void Kill() => ChangeHealth(-c_Stats.maxHP);
 }
 
 // ----- File: C_State.cs -----
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
-public class C_State : MonoBehaviour
-{
-    public enum ActorState { Idle, Move, Attack, Dodge }
 
-    [Header("References")]
+public class C_State : MonoBehaviour
+{   
+    // Finite State Machine
+    public enum ActorState { Idle, Move, Attack, Dodge, Wander, Dead }
+
+    [Header("References(Only Player/Enemy/NPC)")]
     Animator animator;
     Rigidbody2D rb;
 
@@ -379,12 +396,16 @@ public class C_State : MonoBehaviour
     public P_Combat   p_Combat;
     public E_Movement e_Movement;
     public E_Combat   e_Combat;
+    public C_Wander   c_Wander;
     public C_Dodge    c_Dodge;
     C_Health   c_Health;
 
-    [Header("Locks")]
-    public bool lockMove  = true;
+    [Header("Locks Certain Actions")]
+    public bool lockMoveWhileAttacking = true;
     public bool lockDodge = true;
+
+    [Header("Wandering Ability")]
+    public bool canWander;
 
     // Current finite state
     public ActorState CurrentState = ActorState.Idle;
@@ -394,19 +415,20 @@ public class C_State : MonoBehaviour
     void Awake()
     {
         rb          ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponent<Animator>();
+        animator    ??= GetComponent<Animator>();
 
         p_Movement  ??= GetComponent<P_Movement>();
         p_Combat    ??= GetComponent<P_Combat>();
         e_Movement  ??= GetComponent<E_Movement>();
         e_Combat    ??= GetComponent<E_Combat>();
+        c_Wander    ??= GetComponent<C_Wander>();
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator)                  Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_State missing.");
-        if (!p_Combat   && !e_Combat)   Debug.LogError($"{name}: *_Combat in C_State missing.");
+        if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
+        if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
+        if (!p_Movement && !e_Movement && !c_Wander) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
+        if (!p_Combat && !e_Combat && !c_Wander)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
     }
 
     void OnEnable()
@@ -418,6 +440,8 @@ public class C_State : MonoBehaviour
     {
         c_Health.OnDied -= OnDiedHandler;
     }
+
+    // Handle death
     void OnDiedHandler()
     {
         // lock movement
@@ -425,9 +449,15 @@ public class C_State : MonoBehaviour
         e_Movement?.SetDisabled(true);
 
         // play death animation
-        animator?.SetTrigger("Die");
+        animator.SetTrigger("Die");
+
+        // stop wandering and freeze state at Dead
+        if (c_Wander) c_Wander.enabled = false;
+        rb.linearVelocity = Vector2.zero;
+        CurrentState = ActorState.Dead;
     }
 
+    // Update is called once per frame
     void Update()
     {
         // Pick next state
@@ -437,42 +467,47 @@ public class C_State : MonoBehaviour
     }
 
     // Public API for Enum
-    public bool Is(ActorState s) => CurrentState == s;
-    public bool IsAttackingNow     => CurrentState == ActorState.Attack;
-    public bool IsDodgingNow       => CurrentState == ActorState.Dodge;
-    public bool IsMovingNow        => CurrentState == ActorState.Move;
+    public bool Is(ActorState s)   => CurrentState == s;
 
     //  Public API for Bool
     public bool CheckIsBusy()
     {
         // busy if dodging, or attacking and movement is locked
         if (Is(ActorState.Dodge)) return true;
-        if (Is(ActorState.Attack) && lockMove) return true;
+        if (Is(ActorState.Attack) && lockMoveWhileAttacking) return true;
         return false;
     }
     
     // Pick the correct state
     ActorState PickState()
     {
-        // Dodge (optional component)
+        // If dead, remain dead (no further transitions)
+        if (CurrentState == ActorState.Dead || !c_Health.IsAlive)
+            return ActorState.Dead;
+
+        // Dodge is optional
         if (c_Dodge && c_Dodge.IsDodging) return ActorState.Dodge;
 
         // Attack
         if ((p_Combat && p_Combat.isAttacking) || (e_Combat && e_Combat.isAttacking))
             return ActorState.Attack;
 
-        // Movement inferred from body velocity (respects ForcedVelocity/knockback)
+        // Wander (must have wander component active & allowed) takes precedence over plain Move
+        if (c_Wander && c_Wander.isWandering) return ActorState.Wander;
+
+        // Movement inferred from body velocity (respects ForcedVelocity/knockback) for non-wander movement
         if (rb.linearVelocity.sqrMagnitude > MIN_DISTANCE) return ActorState.Move;
 
         return ActorState.Idle;
     }
 
+    // Single source of truth for animator bools
     void ApplyAnimator(ActorState s)
     {
-        // Single source of truth for animator bools
-        animator.SetBool("isDodging",   s == ActorState.Dodge);
+        animator.SetBool("isDodging", s == ActorState.Dodge);
         animator.SetBool("isAttacking", s == ActorState.Attack);
-        animator.SetBool("isMoving",    s == ActorState.Move);
+        animator.SetBool("isMoving", s == ActorState.Move);
+        animator.SetBool("isWandering", s == ActorState.Wander);
     }
 
     // Public API for Floats
@@ -541,5 +576,163 @@ public class C_Stats : MonoBehaviour
     [Header("Placeholders")]
     public float knockbackForce = 0f;
     public float stunTime = 0f;
+}
+
+// ----- File: C_Wander.cs -----
+using UnityEngine;
+using System.Collections;
+using NUnit.Framework;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(C_State))]
+[DisallowMultipleComponent]
+
+public class C_Wander : MonoBehaviour
+{
+    [Header("References")]
+    Rigidbody2D rb;
+    C_State c_State;
+
+    [Header("Wander Area")]
+    public float wanderingSpeed = 1f;
+    public float width = 6f;
+    public float height = 4f;
+    Vector2 startCenter;
+
+    [Header("Idle time at edges / on bump")]
+    public float pauseDuration = 1f;
+
+    [Header("Phase flag: true = moving to the destination/ false = paused")]
+    public bool isWandering;
+
+    Vector2 destination;
+    Vector2 dir;
+    Vector2 lastMove; // preserves facing during pauses
+
+    const float MIN_DISTANCE = 0.1f;
+
+    void Awake()
+    {
+        rb      ??= GetComponent<Rigidbody2D>();
+        c_State ??= GetComponent<C_State>();
+
+        if (!rb)        Debug.LogError($"{name}: Rigidbody2D is missing in C_Wander.");
+        if (!c_State)   Debug.LogError($"{name}: C_State is missing in C_Wander.");
+
+        // Setup wander area at start
+        startCenter = (Vector2)transform.position;
+    }
+
+    // Start wandering when enabled
+    void OnEnable()
+    {
+        if (c_State.canWander) StartCoroutine(StopAndPickNewDestination());
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
+        isWandering = false;
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Check if wandering is allowed in C_State
+        if (!c_State.canWander) return;
+        // Check if currently wandering
+        if (!isWandering) return;
+
+        // If reached destination, pause and pick a new one
+        if (Vector2.Distance(transform.position, destination) < MIN_DISTANCE)
+        {
+            StopAllCoroutines();
+            StartCoroutine(StopAndPickNewDestination());
+            return;
+        }
+
+        dir = (destination - (Vector2)transform.position).normalized;
+
+        if (dir.sqrMagnitude > 0f) lastMove = dir;
+        c_State.UpdateAnimDirections(dir, lastMove); // facing via C_State
+    }
+
+    // Apply movement in FixedUpdate
+    void FixedUpdate()
+    {
+        // Check if wandering is allowed in C_State or currently wandering
+        if (!c_State.canWander || !isWandering)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        // Move towards destination
+        rb.linearVelocity = dir * wanderingSpeed;
+    }
+
+    // Stop movement then pick a new destination
+    IEnumerator StopAndPickNewDestination()
+    {
+        // Stop movement
+        isWandering = false;
+        rb.linearVelocity = Vector2.zero;
+
+        // Stop for a bit
+        yield return new WaitForSeconds(pauseDuration);
+
+        // Pick new destination
+        destination = GetRandomEdgePoint();
+        isWandering = true;
+    }
+
+    // Pick a random point on the edge of the rectangle
+    Vector2 GetRandomEdgePoint()
+    {
+        // Get half dimensions
+        float halfW = width * 0.5f;
+        float halfH = height * 0.5f;
+
+        // 0=Left, 1=Right, 2=Bottom, 3=Top
+        int edge = Random.Range(0, 4); 
+
+        // Pick a random point on the edge
+        switch (edge)
+        {
+            case 0: // Left
+                return new Vector2(startCenter.x - halfW,
+                    Random.Range(startCenter.y - halfH, startCenter.y + halfH));
+            case 1: // Right
+                return new Vector2(startCenter.x + halfW,
+                    Random.Range(startCenter.y - halfH, startCenter.y + halfH));
+            case 2: // Bottom
+                return new Vector2(
+                    Random.Range(startCenter.x - halfW, startCenter.x + halfW),
+                    startCenter.y - halfH);
+            case 3: // Top
+                return new Vector2(
+                    Random.Range(startCenter.x - halfW, startCenter.x + halfW),
+                    startCenter.y + halfH);
+        }
+        return startCenter;
+    }
+
+    // On bump, pause and pick a new destination
+    void OnCollisionEnter2D(Collision2D _)
+    {
+        if (c_State.canWander && isWandering)
+            StartCoroutine(StopAndPickNewDestination());
+    }
+
+
+    // Visualize wander area in editor
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        var size = new Vector3(width, height, 0f);
+        var center = Application.isPlaying ? (Vector3)startCenter : transform.position;
+        Gizmos.DrawWireCube(center, size);
+    }
 }
 

@@ -3,11 +3,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
+[DisallowMultipleComponent]
+
 public class E_HealthBarSlider : MonoBehaviour
 {
     [Header("References")]
-    public C_Health e_Health; // owner
-    public Slider   slider;   // green current HP
+    CanvasGroup cg;
+
+    public C_Health e_Health; // Health in parent
+    public Slider   slider;   // slider in child
 
     [Header("World Positioning")]
     public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
@@ -16,8 +20,6 @@ public class E_HealthBarSlider : MonoBehaviour
     public float visibleTime = 2f;   // auto-hide delay
     public bool  startHidden = true; // start invisible until first event
 
-    // cached
-    CanvasGroup cg;
     float hideTimer;
 
     void Awake()
@@ -25,13 +27,13 @@ public class E_HealthBarSlider : MonoBehaviour
         cg       ??= GetComponent<CanvasGroup>();
         e_Health ??= GetComponentInParent<C_Health>();
 
-        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider missing.", this);
-        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider missing.", this);
+        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider is missing.", this);
+        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider is missing.", this);
     }
 
     void OnEnable()
     {
-        var s = e_Health.c_Stats;      // current/max HP live here
+        var s           = e_Health.c_Stats;      // current/max HP live here
         slider.maxValue = s.maxHP;     // make slider track the true max
         slider.value    = s.currentHP; // initialize to current
 
@@ -49,6 +51,7 @@ public class E_HealthBarSlider : MonoBehaviour
         e_Health.OnDied    -= OnDied;
     }
 
+    // LateUpdate to ensure it runs after all movement
     void LateUpdate()
     {
         // follow owner
@@ -62,7 +65,7 @@ public class E_HealthBarSlider : MonoBehaviour
         }
     }
 
-    // ——— health event handlers ———
+    // Event handlers
     void OnDamaged(int amount)
     {
         slider.value = e_Health.c_Stats.currentHP;

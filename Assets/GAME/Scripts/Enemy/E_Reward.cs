@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
+
 public class E_Reward : MonoBehaviour
 {
     [Header("Rewards")]

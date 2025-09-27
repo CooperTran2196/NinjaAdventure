@@ -1,12 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_State))]
+[RequireComponent(typeof(P_Movement))]
+[RequireComponent(typeof(E_Movement))]
+[RequireComponent(typeof(C_AfterimageSpawner))]
+[DisallowMultipleComponent]
+
 public class C_Dodge : MonoBehaviour
 {
-    [Header("Depend on C_Stats, C_State, and _Movement")]
     [Header("References")]
-    public C_Stats c_Stats;
-    public C_State c_State;
+    C_Stats c_Stats;
+    C_State c_State;
 
     Animator animator;
     P_InputActions input;
@@ -17,7 +24,7 @@ public class C_Dodge : MonoBehaviour
     C_AfterimageSpawner afterimage;
 
     [Header("Player = true, Enemy = false")]
-    public bool useInput = true;
+    public bool usePlayerInput = true;
 
     [Header("State (read-only)")]
     public bool IsDodging { get; private set; }
@@ -28,34 +35,35 @@ public class C_Dodge : MonoBehaviour
 
     void Awake()
     {
-        animator ??= GetComponent<Animator>();
-        c_Stats ??= GetComponent<C_Stats>();
-        c_State ??= GetComponent<C_State>();
-        p_Movement ??= GetComponent<P_Movement>();
-        afterimage ??= GetComponent<C_AfterimageSpawner>();
+        animator    ??= GetComponent<Animator>();
+        c_Stats     ??= GetComponent<C_Stats>();
+        c_State     ??= GetComponent<C_State>();
+        p_Movement  ??= GetComponent<P_Movement>();
+        e_Movement  ??= GetComponent<E_Movement>();
+        afterimage  ??= GetComponent<C_AfterimageSpawner>();
 
         input ??= new P_InputActions();
 
-        if (!animator) Debug.LogError($"{name}: Animator in C_Dodge missing.");
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in C_Dodge missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement in C_Dodge missing.");
-        if (!afterimage)  Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge missing.");
+        if (!animator)                   Debug.LogError($"{name}: Animator in C_Dodge is missing.");
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Dodge is missing.");
+        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement in C_Dodge is missing.");
+        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge is missing.");
     }
 
     void OnEnable()
     {
-        if (useInput) input.Player.Dodge.Enable();
+        if (usePlayerInput) input.Player.Dodge.Enable();
     }
 
     void OnDisable()
     {
-        if (useInput) input.Player.Dodge.Disable();
+        if (usePlayerInput) input.Player.Dodge.Disable();
     }
 
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-        if (!useInput) return;
+        if (!usePlayerInput) return;
 
         if (input.Player.Dodge.WasPressedThisFrame())
         {

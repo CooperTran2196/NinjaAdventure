@@ -3,6 +3,8 @@ using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
+[DisallowMultipleComponent]
+
 public abstract class W_Base : MonoBehaviour
 {
     [Header("Central API for all weapons")]
@@ -41,10 +43,10 @@ public abstract class W_Base : MonoBehaviour
         hitbox.enabled   = false;
 
         // 3/ Owner + deps
-        owner = transform.root;
-        ownerAnimator ??= owner ? owner.GetComponent<Animator>() : null;
-        c_Stats ??= owner ? owner.GetComponent<C_Stats>() : null;
-        
+        owner               = transform.root;
+        ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
+        c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
+
         if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
         if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
         if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);

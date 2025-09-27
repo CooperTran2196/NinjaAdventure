@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
+[DisallowMultipleComponent]
+
 public class W_Projectile : MonoBehaviour
 {
     // Cache
@@ -29,8 +31,8 @@ public class W_Projectile : MonoBehaviour
         rb     ??= GetComponent<Rigidbody2D>();
 
         if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!col) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
+        if (!col)    Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
 
         col.isTrigger = true;
         rb.gravityScale = 0f;
