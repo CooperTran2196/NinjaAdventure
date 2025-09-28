@@ -1,14 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-[DisallowMultipleComponent]
 public class State_Attack : MonoBehaviour
 {
     [Header("Animation States")]
     public string idleState   = "Idle";
-    public string attackState = "Attack"; // clip name (no bools)
+    public string attackState = "Attack"; // clip name
     public LayerMask playerLayer;
 
     [Header("Timing")]
@@ -30,7 +27,7 @@ public class State_Attack : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
 
-    // Runtime
+    // Runtime variables
     Transform target;
     Vector2 knockback, lastFace = Vector2.down;
     float cooldownTimer;
@@ -50,7 +47,6 @@ public class State_Attack : MonoBehaviour
     {
         lastPlayed = null;
         PlayIfChanged(idleState);
-        StartCoroutine(AttackLoop());
     }
 
     void OnDisable()
@@ -62,12 +58,33 @@ public class State_Attack : MonoBehaviour
     }
 
     public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float detect, float atk) { detectionRange = detect; attackRange = atk; }
+    public void SetRanges(float detectionRange, float attackRange)
+    {
+        this.detectionRange = detectionRange;
+        this.attackRange    = attackRange;
+    }
 
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-        // No movement here; controller handles Chase. We only face & strike.
+        
+        // Integrated former AttackLoop polling logic
+        if (target)
+        {
+            // Inner ring test (collider-based so edge contact counts)
+            bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+            Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+            float d = to.magnitude;
+            Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+            // Continuously update idle facing (even during attack so idle pose rotates, atkX/atkY stay locked)
+            UpdateIdleFacing(dir);
+
+            // Start attack immediately upon entering inner ring and off cooldown
+            if (!isAttacking && inInner && cooldownTimer <= 0f)
+                StartCoroutine(AttackRoutine(dir));
+        }
     }
 
     void FixedUpdate()
@@ -84,35 +101,10 @@ public class State_Attack : MonoBehaviour
         }
     }
 
-    IEnumerator AttackLoop()
-    {
-        var wait = new WaitForSeconds(0.06f); // light polling
+    // (Former AttackLoop removed; logic now lives inside Update())
 
-        while (true)
-        {
-            if (target)
-            {
-                // Use collider-based ring test so "touching" the ring counts
-                bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-
-                Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-                float d = to.magnitude;
-                Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
-
-                // keep facing with idle floats while we wait
-                UpdateIdleFacing(dir);
-
-                // START ATTACK immediately on touch (if off cooldown)
-                if (!isAttacking && inInner && cooldownTimer <= 0f)
-                    StartCoroutine(AttackRoutine(dir));
-            }
-
-            yield return wait;
-        }
-    }
-
-
-
+    // NON-INTERUPTIBLE ATTACK ROUTINE
+    // lock facing, play clip, wait for hit, wait for end, cooldown
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;

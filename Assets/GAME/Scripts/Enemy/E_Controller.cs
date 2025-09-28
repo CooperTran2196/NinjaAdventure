@@ -1,67 +1,80 @@
 using UnityEngine;
 
+[RequireComponent(typeof(State_Idle))]
+[RequireComponent(typeof(State_Wander))]
+[RequireComponent(typeof(State_Chase))]
+[RequireComponent(typeof(State_Attack))]
 [DisallowMultipleComponent]
+
 public class E_Controller : MonoBehaviour
 {
     public enum EState { Idle, Wander, Chase, Attack }
 
-    [Header("Ranges")]
+    [Header("Main controller for enemy AI states")]
+    [Header("Ranges and Layers")]
+    [Min(3f)] public float detectionRange = 3f;
+    [Min(1.2f)] public float attackRange = 1.2f;
     public LayerMask playerLayer;
-    [Min(0.1f)] public float detectionRange = 3f;   // outer ring
-    [Min(0.1f)] public float attackRange    = 1.2f; // inner ring
 
     [Header("States")]
-    public EState defaultState = EState.Idle;  // you can change per prefab
-    public State_Idle   idle;                  // shared with NPC
-    public State_Wander wander;                // shared with NPC (optional)
-    public State_Chase  chase;                 // new
-    public State_Attack attack;                // new
+    public EState defaultState = EState.Idle;
+    EState currentState;
+    public State_Idle idle;
+    public State_Wander wander;
+    public State_Chase chase;
+    public State_Attack attack;
 
-    EState current;
+    // Runtime variables
     Transform currentTarget;
+    bool targetInsideAttackCircle;
+    bool targetInsideDetectionCircle;
 
     void Awake()
     {
-        idle   ??= GetComponent<State_Idle>();
-        wander ??= GetComponent<State_Wander>();
-        chase  ??= GetComponent<State_Chase>();
-        attack ??= GetComponent<State_Attack>();
+        idle = GetComponent<State_Idle>();
+        wander = GetComponent<State_Wander>();
+        chase = GetComponent<State_Chase>();
+        attack = GetComponent<State_Attack>();
 
-        if (!idle)   Debug.LogError($"{name}: Missing State_Idle.");
-        if (!chase)  Debug.LogError($"{name}: Missing State_Chase.");
-        if (!attack) Debug.LogError($"{name}: Missing State_Attack.");
+        if (!idle) Debug.LogError($"{name}: Missing State_Idle in E_Controller.");
+        if (!wander) Debug.LogError($"{name}: Missing State_Wander in E_Controller.");
+        if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
+        if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
     }
 
     void OnEnable() => SwitchState(defaultState);
 
     void OnDisable()
     {
-        if (idle)   idle.enabled   = false;
+        if (idle) idle.enabled = false;
         if (wander) wander.enabled = false;
-        if (chase)  chase.enabled  = false;
+        if (chase) chase.enabled = false;
         if (attack) attack.enabled = false;
     }
 
     void Update()
     {
-        // Always check INNER first so inner implies outer
-        Collider2D innerHit = Physics2D.OverlapCircle((Vector2)transform.position, attackRange,    playerLayer);
-        Collider2D outerHit = innerHit ? innerHit
-                                       : Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+        // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
+        Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        // If attackCircle not null, reuse it. Otherwise check the detectionCircle
+        Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+        // Check true/false for each circle depending on player location
+        targetInsideAttackCircle = attackCircle;
+        targetInsideDetectionCircle = detectionCircle;
 
-        bool hitInner = innerHit;
-        bool hitOuter = outerHit; // includes inner
+        if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
 
-        if (hitOuter) currentTarget = outerHit.transform;
-        // Pass ranges to whoever is active (keeps states in sync with inspector)
-        if (chase  && chase.enabled)  chase.SetRanges(detectionRange, attackRange);
-        if (attack && attack.enabled) attack.SetRanges(detectionRange, attackRange);
+        // Optional: the current state reacts immediately without forcing a state change
+        if (chase.enabled) chase.SetRanges(detectionRange, attackRange);
+        if (attack.enabled) attack.SetRanges(detectionRange, attackRange);
 
-        switch (current)
+        switch (currentState)
         {
             case EState.Idle:
+
+            // If the player is detected, switch to the chase state
             case EState.Wander:
-                if (hitOuter)
+                if (targetInsideDetectionCircle)
                 {
                     chase.SetTarget(currentTarget);
                     SwitchState(EState.Chase);
@@ -69,31 +82,34 @@ public class E_Controller : MonoBehaviour
                 break;
 
             case EState.Chase:
-                if (!hitOuter)
+                // If the player goes out of detection range, return to default state
+                if (!targetInsideDetectionCircle)
                 {
                     currentTarget = null;
                     SwitchState(defaultState);
                 }
-                else if (hitInner)
+                // If the player is close enough, switch to attack state
+                else if (targetInsideAttackCircle)
                 {
                     attack.SetTarget(currentTarget);
                     SwitchState(EState.Attack);
                 }
+                // Else remain in chase state
                 else
                 {
-                    // keep feeding target/ranges while chasing
                     chase.SetTarget(currentTarget);
                 }
                 break;
 
             case EState.Attack:
-                // Never interrupt the clip. Only switch once it's finished.
-                if (!hitOuter && !attack.IsAttacking)
+                // If the player goes out of detection range, return to default state (non-interrupt the attack)
+                if (!targetInsideDetectionCircle && !attack.IsAttacking)
                 {
                     currentTarget = null;
                     SwitchState(defaultState);
                 }
-                else if (!hitInner && !attack.IsAttacking)
+                // If the player goes out of attack range, chase again (non-interrupt the attack)
+                else if (!targetInsideAttackCircle && !attack.IsAttacking)
                 {
                     // Still in outer ring but out of inner -> chase again
                     chase.SetTarget(currentTarget);
@@ -109,24 +125,34 @@ public class E_Controller : MonoBehaviour
 
     public void SwitchState(EState s)
     {
-        if (current == s) return;
-        current = s;
+        if (currentState == s) return;
+        currentState = s;
 
-        if (idle)   idle.enabled   = (s == EState.Idle);
-        if (wander) wander.enabled = (s == EState.Wander);
-        if (chase)  chase.enabled  = (s == EState.Chase);
-        if (attack) attack.enabled = (s == EState.Attack);
+        idle.enabled = (s == EState.Idle);
+        wander.enabled = (s == EState.Wander);
+        chase.enabled = (s == EState.Chase);
+        attack.enabled = (s == EState.Attack);
 
         // On enter, provide context to newly enabled state
-        if (s == EState.Chase && chase)
+        if (s == EState.Chase)
         {
             chase.SetTarget(currentTarget);
             chase.SetRanges(detectionRange, attackRange);
         }
-        else if (s == EState.Attack && attack)
+        else if (s == EState.Attack)
         {
             attack.SetTarget(currentTarget);
             attack.SetRanges(detectionRange, attackRange);
         }
     }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.65f, 0f);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
 }
