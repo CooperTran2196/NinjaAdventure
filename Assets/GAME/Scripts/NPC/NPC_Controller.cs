@@ -7,9 +7,9 @@ public class NPC_Controller : MonoBehaviour
 
     [Header("States")]
     public NPCState defaultState = NPCState.Wander;
-    public NPC_State_Wander wander;
-    public NPC_State_Talk talk;        // new
-    public NPC_State_Idle idle;        // new
+    public State_Wander wander;
+    public State_Talk talk;        // new
+    public State_Idle idle;        // new
 
     NPCState current;
     PlayerInput currentPlayer;
@@ -17,9 +17,9 @@ public class NPC_Controller : MonoBehaviour
 
     void Awake()
     {
-        wander ??= GetComponent<NPC_State_Wander>();
-        talk   ??= GetComponent<NPC_State_Talk>();
-        idle   ??= GetComponent<NPC_State_Idle>();
+        wander ??= GetComponent<State_Wander>();
+        talk   ??= GetComponent<State_Talk>();
+        idle   ??= GetComponent<State_Idle>();
 
         if (!wander) Debug.LogError($"{name}: NPC_State_Wander missing for NPC_Controller.");
         if (!talk)   Debug.LogError($"{name}: NPC_State_Talk missing for NPC_Controller.");

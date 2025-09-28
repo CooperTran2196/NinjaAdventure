@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class NPC_State_Talk : MonoBehaviour
+public class State_Talk : MonoBehaviour
 {
     [Header("References")]
     public Rigidbody2D rb;
-    public Animator characterAnimator;   // NPC sprite animator (Idle/Walk graph)
-    public Animator interactAnimator;    // icon animator with states: Idle (default), WantToTalk
+    public Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
 
     // Facing direction set by the controller
     Vector2 facingDir; 
@@ -13,7 +13,7 @@ public class NPC_State_Talk : MonoBehaviour
     void Awake()
     {
         rb                ??= GetComponent<Rigidbody2D>();
-        characterAnimator ??= GetComponentInChildren<Animator>();
+        characterAnim      ??= GetComponentInChildren<Animator>();
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Talk.");
     }
@@ -25,18 +25,18 @@ public class NPC_State_Talk : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic;
 
         // Face a direction
-        characterAnimator?.SetFloat("idleX", facingDir.x);
-        characterAnimator?.SetFloat("idleY", facingDir.y);
+        characterAnim?.SetFloat("idleX", facingDir.x);
+        characterAnim?.SetFloat("idleY", facingDir.y);
 
         // Play animations
-        characterAnimator?.Play("Idle");       // idle while talking
-        interactAnimator?.Play("WantToTalk");  // open talk icon
+        characterAnim?.Play("Idle");       // idle while talking
+        interactAnim?.Play("WantToTalk");  // open talk icon
     }
 
     void OnDisable()
     {
         rb.bodyType = RigidbodyType2D.Dynamic;  // restore normal physics
-        interactAnimator?.Play("Idle");        // close talk icon
+        interactAnim?.Play("Idle");        // close talk icon
         facingDir = Vector2.zero;           // clear after use
     }
 

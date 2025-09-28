@@ -4,7 +4,7 @@ using System.Collections;
 
 // Exclusive wander state for NPCs (tutorial-style).
 // Does NOT depend on C_State. Single writer of rb.linearVelocity while enabled.
-public class NPC_State_Wander : MonoBehaviour
+public class State_Wander : MonoBehaviour
 {
     [Header("References")]
     public Rigidbody2D rb;
@@ -73,7 +73,7 @@ public class NPC_State_Wander : MonoBehaviour
 
         if (dir.sqrMagnitude > 0f) lastMove = dir;
 
-        // Update animator floats to keep facing consistent with your project
+        // Update animator floats to keep facing consistent
         characterAnimator?.SetFloat("moveX", dir.x);
         characterAnimator?.SetFloat("moveY", dir.y);
         characterAnimator?.SetFloat("idleX", lastMove.x);

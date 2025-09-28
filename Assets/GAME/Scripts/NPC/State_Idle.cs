@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPC_State_Idle : MonoBehaviour
+public class State_Idle : MonoBehaviour
 {
     [Header("References")]
     public Rigidbody2D rb;
