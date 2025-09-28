@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(C_Health))]
+
 [DisallowMultipleComponent]
 
 public class C_State : MonoBehaviour
@@ -73,7 +73,7 @@ public class C_State : MonoBehaviour
         // play death animation
         animator.SetTrigger("Die");
 
-        // stop wandering and freeze state at Dead
+        // stop wandering and freeze state at Dead (not for player)
         if (c_Wander) c_Wander.enabled = false;
         rb.linearVelocity = Vector2.zero;
         CurrentState = ActorState.Dead;

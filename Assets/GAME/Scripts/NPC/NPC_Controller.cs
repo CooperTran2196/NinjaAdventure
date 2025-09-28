@@ -1,0 +1,69 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class NPC_Controller : MonoBehaviour
+{
+    public enum NPCState { Idle, Wander, Talk }
+
+    [Header("States")]
+    public NPCState defaultState = NPCState.Wander;
+    public NPC_State_Wander wander;
+    public NPC_State_Talk talk;        // new
+    public NPC_State_Idle idle;        // new
+
+    NPCState current;
+    PlayerInput currentPlayer;
+    InputAction interactAction;
+
+    void Awake()
+    {
+        wander ??= GetComponent<NPC_State_Wander>();
+        talk   ??= GetComponent<NPC_State_Talk>();
+        idle   ??= GetComponent<NPC_State_Idle>();
+
+        if (!wander) Debug.LogError($"{name}: NPC_State_Wander missing for NPC_Controller.");
+        if (!talk)   Debug.LogError($"{name}: NPC_State_Talk missing for NPC_Controller.");
+        if (!idle)   Debug.LogError($"{name}: NPC_State_Idle missing for NPC_Controller.");
+    }
+
+    void OnEnable()
+    {
+        SwitchState(defaultState);
+    }
+
+    void OnDisable()
+    {
+        if (wander) wander.enabled = false;
+        if (talk)   talk.enabled   = false;
+        if (idle)   idle.enabled   = false;
+    }
+
+    public void SwitchState(NPCState newState)
+    {
+        if (current == newState) return;
+        current = newState;
+
+        // Enable exactly one state
+        idle.enabled    = newState == NPCState.Idle;
+        wander.enabled  = newState == NPCState.Wander;
+        talk.enabled    = newState == NPCState.Talk;
+    }
+
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        // Make Talk face the player before switching
+        if (talk) talk.FaceTarget(other.transform);
+
+        SwitchState(NPCState.Talk);
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        SwitchState(defaultState);
+    }
+
+}

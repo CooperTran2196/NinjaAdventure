@@ -80,11 +80,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_State))]
-[RequireComponent(typeof(P_Movement))]
-[RequireComponent(typeof(E_Movement))]
-[RequireComponent(typeof(C_AfterimageSpawner))]
+
 [DisallowMultipleComponent]
 
 public class C_Dodge : MonoBehaviour
@@ -154,7 +150,7 @@ public class C_Dodge : MonoBehaviour
     // External API for AI/other scripts
     public void RequestDodge(Vector2 dir)
     {
-        if (c_State && c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
+        if (c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
         if (IsDodging) return;
         if (cooldownTimer > 0f) return;
 
@@ -249,8 +245,7 @@ public class C_FX : MonoBehaviour
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_FX))]
+
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
@@ -380,7 +375,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(C_Health))]
+
 [DisallowMultipleComponent]
 
 public class C_State : MonoBehaviour
@@ -451,7 +446,7 @@ public class C_State : MonoBehaviour
         // play death animation
         animator.SetTrigger("Die");
 
-        // stop wandering and freeze state at Dead
+        // stop wandering and freeze state at Dead (not for player)
         if (c_Wander) c_Wander.enabled = false;
         rb.linearVelocity = Vector2.zero;
         CurrentState = ActorState.Dead;
@@ -584,7 +579,7 @@ using System.Collections;
 using NUnit.Framework;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(C_State))]
+
 [DisallowMultipleComponent]
 
 public class C_Wander : MonoBehaviour
@@ -675,6 +670,8 @@ public class C_Wander : MonoBehaviour
     // Stop movement then pick a new destination
     IEnumerator StopAndPickNewDestination()
     {
+        if (c_State.Is(C_State.ActorState.Dead)) yield break;
+
         // Stop movement
         isWandering = false;
         rb.linearVelocity = Vector2.zero;

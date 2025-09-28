@@ -5,11 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_State))]
-[RequireComponent(typeof(E_Movement))]
-[RequireComponent(typeof(C_Health))]
-[RequireComponent(typeof(C_Wander))]
+
 [DisallowMultipleComponent]
 
 public class E_Combat : MonoBehaviour
@@ -41,7 +37,7 @@ public class E_Combat : MonoBehaviour
 
     // Quick state check
     public bool isAttacking { get; private set; }
-    public bool IsAlive => c_Stats.currentHP > 0;
+    // Removed IsAlive; use c_State.Is(ActorState.Dead) as single source of truth
     const float MIN_DISTANCE = 0.0001f;
     float contactTimer;   // for collision damage
     float cooldownTimer;  // for attacking cooldown
@@ -85,7 +81,7 @@ public class E_Combat : MonoBehaviour
 
         while (true)
         {
-            if (!IsAlive) yield break;
+            if (c_State.Is(C_State.ActorState.Dead)) yield break;
 
             if (!isAttacking)
             {
@@ -107,7 +103,7 @@ public class E_Combat : MonoBehaviour
     // Collision Damage
     void OnCollisionStay2D(Collision2D collision)
     {
-        if (!IsAlive) return;
+        if (c_State.Is(C_State.ActorState.Dead)) return;
 
         // Filter to only player layer
         if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
@@ -145,7 +141,6 @@ public class E_Combat : MonoBehaviour
         bool lockMoveFlag = (c_State && c_State.lockMoveWhileAttacking);
         bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         e_Movement.SetHoldInRange(lockMoveFlag && stillInRange);
-
 
         isAttacking = false;
 

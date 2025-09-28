@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_FX))]
+
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {

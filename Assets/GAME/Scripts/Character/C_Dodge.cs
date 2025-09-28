@@ -2,11 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_State))]
-[RequireComponent(typeof(P_Movement))]
-[RequireComponent(typeof(E_Movement))]
-[RequireComponent(typeof(C_AfterimageSpawner))]
+
 [DisallowMultipleComponent]
 
 public class C_Dodge : MonoBehaviour
@@ -76,7 +72,7 @@ public class C_Dodge : MonoBehaviour
     // External API for AI/other scripts
     public void RequestDodge(Vector2 dir)
     {
-        if (c_State && c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
+        if (c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
         if (IsDodging) return;
         if (cooldownTimer > 0f) return;
 

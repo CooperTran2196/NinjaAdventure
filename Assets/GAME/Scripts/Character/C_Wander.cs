@@ -3,7 +3,7 @@ using System.Collections;
 using NUnit.Framework;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(C_State))]
+
 [DisallowMultipleComponent]
 
 public class C_Wander : MonoBehaviour
@@ -94,6 +94,8 @@ public class C_Wander : MonoBehaviour
     // Stop movement then pick a new destination
     IEnumerator StopAndPickNewDestination()
     {
+        if (c_State.Is(C_State.ActorState.Dead)) yield break;
+
         // Stop movement
         isWandering = false;
         rb.linearVelocity = Vector2.zero;
