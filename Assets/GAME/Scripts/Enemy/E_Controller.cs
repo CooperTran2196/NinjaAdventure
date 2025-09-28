@@ -19,9 +19,9 @@ public class E_Controller : MonoBehaviour
         wander ??= GetComponent<State_Wander>();
         attack ??= GetComponent<State_Attack>();
 
-        if (!idle)   Debug.LogError($"{name}: State_Idle missing for E_Controller.");
-        if (!wander) Debug.LogWarning($"{name}: State_Wander not found (optional).");
-        if (!attack) Debug.LogError($"{name}: State_Attack missing for E_Controller.");
+        if (!idle)   Debug.LogError($"{name}: State_Idle is missing in E_Controller.");
+        if (!wander) Debug.LogWarning($"{name}: State_Wander is missing in E_Controller.");
+        if (!attack) Debug.LogError($"{name}: State_Attack is missing in E_Controller.");
     }
 
     void OnEnable()
@@ -38,25 +38,24 @@ public class E_Controller : MonoBehaviour
 
     void Update()
     {
-        if (!attack) return;
+        // Compute detection once per frame and reuse below
+        var target = Physics2D.OverlapCircle((Vector2)transform.position, attack.detectionRadius, attack.playerLayer);
 
-        // 1) If NOT in Attack, scan outer circle and enter Attack on sight
+        // 1) If NOT in Attack, enter Attack on sight
         if (current != EState.Attack)
         {
-            var col = Physics2D.OverlapCircle((Vector2)transform.position, attack.detectionRadius, attack.playerLayer);
-            if (col)
+            if (target)
             {
-                attack.SetTarget(col.transform);
+                attack.SetTarget(target.transform);
                 SwitchState(EState.Attack);
             }
             return;
         }
 
-        // 2) While in Attack, leave only when target left outer ring AND attack isn't mid-clip
+        // 2) Only switch out of Attack State if the attack is done
         if (!attack.IsAttacking)
         {
-            var col = Physics2D.OverlapCircle((Vector2)transform.position, attack.detectionRadius, attack.playerLayer);
-            if (!col) SwitchState(defaultState);
+            if (!target) SwitchState(defaultState);
         }
     }
 
@@ -65,8 +64,8 @@ public class E_Controller : MonoBehaviour
         if (current == newState) return;
         current = newState;
 
-        if (idle)   idle.enabled   = (newState == EState.Idle);
-        if (wander) wander.enabled = (newState == EState.Wander);
-        if (attack) attack.enabled = (newState == EState.Attack);
+        idle.enabled   = (newState == EState.Idle);
+        wander.enabled = (newState == EState.Wander);
+        attack.enabled = (newState == EState.Attack);
     }
 }

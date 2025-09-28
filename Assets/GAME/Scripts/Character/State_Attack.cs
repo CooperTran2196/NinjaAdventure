@@ -8,11 +8,12 @@ public class State_Attack : MonoBehaviour
 {
     [Header("Detection (two rings)")]
     public LayerMask playerLayer;
-    [Min(0.1f)] public float detectionRadius = 3f; // outer ring
-    [Min(0.1f)] public float attackRange     = 1.2f; // inner ring
+    public C_Stats c_Stats;
+    [Min(3f)] public float detectionRadius = 3f; // outer ring
+    [Min(1.2f)] public float attackRange   = 1.2f; // inner ring
 
     [Header("Chase")]
-    public float moveSpeed   = 2.2f;
+    // public float moveSpeed   = 2.2f;
     public float stopBuffer  = 0.10f; // hover just outside inner ring
 
     [Header("Attack")]
@@ -65,6 +66,7 @@ public class State_Attack : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
     }
 
+    // Counter for attack cooldown
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
@@ -92,60 +94,63 @@ public class State_Attack : MonoBehaviour
 
         while (true)
         {
-            // Acquire/validate target using outer ring if missing
-            if (!target)
-            {
-                var col = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
-                target = col ? col.transform : null;
-            }
+            // If the target is lost, controller will exit this state
+            // if (!target)
+            // {
+            //     velocity = Vector2.zero;
+            //     UpdateAnimFloats(Vector2.zero);
+            //     yield return wait;
+            //     continue; // controller will handle the exit
+            // }
 
             if (target)
             {
-                Vector2 toTarget = (Vector2)target.position - (Vector2)transform.position;
-                float   dist     = toTarget.magnitude;
-                bool inOuter = dist <= detectionRadius;
-                bool inInner = dist <= attackRange;
+                Vector2 toTarget = ((Vector2)target.position - (Vector2)transform.position).normalized;
+                float   distance     = toTarget.magnitude;
+                bool inOuter = distance <= detectionRadius;
+                bool inInner = distance <= attackRange;
 
+                // If not attacking, can move
                 if (!isAttacking)
                 {
+                    // If in outer ring, chase; else hold
                     if (inOuter && !inInner)
                     {
                         // CHASE
-                        Vector2 dir = toTarget.normalized;
-                        velocity = dir * moveSpeed;
+                        velocity = toTarget * c_Stats.MS; // use C_Stats move speed
 
                         // stop just before entering the strike ring to avoid jitter
-                        if (dist <= (attackRange + stopBuffer))
+                        if (distance <= (attackRange + stopBuffer))
                             velocity = Vector2.zero;
 
                         UpdateAnimFloats(velocity);
                     }
                     else
                     {
-                        // HOLD (either inner on cooldown, or lost outer)
+                        // HOLD (either attack on cooldown, or outside outer ring)
                         velocity = Vector2.zero;
                         UpdateAnimFloats(Vector2.zero);
                     }
 
-                    // START STRIKE
+                    // START ATTACK
                     if (inInner && cooldownTimer <= 0f)
                         StartCoroutine(AttackRoutine(toTarget.normalized));
                 }
                 else
                 {
-                    // Attacking: do not move, but keep idle facing consistent
+                    // While Attacking: do not move, but keep idle facing consistent
                     velocity = Vector2.zero;
                     UpdateAnimFloats(Vector2.zero);
                 }
 
-                // If not attacking and lost outer ring, controller will flip us out
+                // If not attacking and lost outer ring, controller will flip out
             }
-            else
-            {
-                // No target: stand still; controller will exit this state
-                velocity = Vector2.zero;
-                UpdateAnimFloats(Vector2.zero);
-            }
+            // else
+            // {
+            //     // No target: stand still; controller will exit this state
+            //     velocity = Vector2.zero;
+            //     UpdateAnimFloats(Vector2.zero);
+            // }
 
             yield return wait;
         }
@@ -168,8 +173,7 @@ public class State_Attack : MonoBehaviour
         activeWeapon?.Attack(dirAtStart);
 
         // Finish clip
-        float remain = Mathf.Max(0f, attackDuration - hitDelay);
-        yield return new WaitForSeconds(remain);
+        yield return new WaitForSeconds(attackDuration - hitDelay);
 
         cooldownTimer = attackCooldown;
         isAttacking   = false;

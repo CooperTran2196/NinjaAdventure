@@ -12,8 +12,6 @@ public class NPC_Controller : MonoBehaviour
     public State_Idle idle;        // new
 
     NPCState current;
-    PlayerInput currentPlayer;
-    InputAction interactAction;
 
     void Awake()
     {
