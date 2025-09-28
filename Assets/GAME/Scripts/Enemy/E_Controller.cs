@@ -39,7 +39,7 @@ public class E_Controller : MonoBehaviour
     void Update()
     {
         // Compute detection once per frame and reuse below
-        var target = Physics2D.OverlapCircle((Vector2)transform.position, attack.detectionRadius, attack.playerLayer);
+        var target = Physics2D.OverlapCircle((Vector2)transform.position, attack.detectionRange, attack.playerLayer);
 
         // 1) If NOT in Attack, enter Attack on sight
         if (current != EState.Attack)
