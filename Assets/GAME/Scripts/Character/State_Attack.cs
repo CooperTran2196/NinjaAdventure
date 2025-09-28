@@ -6,38 +6,36 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class State_Attack : MonoBehaviour
 {
-    [Header("Detection (two rings)")]
+    [Header("Animation States")]
+    public string idleState   = "Idle";
+    public string attackState = "Attack"; // clip name (no bools)
     public LayerMask playerLayer;
-    public C_Stats c_Stats;
-    [Min(3f)] public float detectionRange = 3f; // outer ring
-    [Min(1.2f)] public float attackRange   = 1.2f; // inner ring
 
-    [Header("Chase")]
-    // public float moveSpeed   = 2.2f;
-    public float stopBuffer  = 0.10f; // hover just outside inner ring
+    [Header("Timing")]
+    public float attackCooldown = 0.80f;
+    public float attackDuration = 0.45f;
+    public float hitDelay       = 0.15f;
 
-    [Header("Attack")]
-    public float attackCooldown  = 0.80f;
-    public float attackDuration  = 0.45f;  // full, uninterruptible clip length
-    public float hitDelay        = 0.15f;  // hit timing inside the clip
-    public string attackTrigger  = "Attack";
+    // Ranges are injected by controller
+    float detectionRange = 3f; // not used for logic here, but kept for gizmos if you want
+    float attackRange    = 1.2f;
 
-    [Header("Weapon (auto-cached)")]
-    public W_Base activeWeapon; // any W_Base (melee/ranged)
+    [Header("Weapon")]
+    public W_Base activeWeapon;
 
     [Header("Knockback")]
-    public float knockbackRecovery = 30f;  // units/sec back to zero
+    public float knockbackRecovery = 30f;
 
-    // Cached
+    // Cache
     Rigidbody2D rb;
     Animator anim;
 
     // Runtime
     Transform target;
-    Vector2 velocity, knockback;
-    Vector2 lastMove;       // remembered for idleX/idleY
+    Vector2 knockback, lastFace = Vector2.down;
     float cooldownTimer;
     bool isAttacking;
+    string lastPlayed;
 
     public bool IsAttacking => isAttacking;
 
@@ -46,130 +44,128 @@ public class State_Attack : MonoBehaviour
         rb   ??= GetComponent<Rigidbody2D>();
         anim ??= GetComponent<Animator>();
         activeWeapon ??= GetComponentInChildren<W_Base>();
-
-        if (!rb)   Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (!anim) Debug.LogError($"{name}: Animator missing.");
-        if (!activeWeapon) Debug.LogWarning($"{name}: No weapon found; attacks will be animation-only.");
     }
 
     void OnEnable()
     {
-        // AI logic is now in Update()
+        lastPlayed = null;
+        PlayIfChanged(idleState);
+        StartCoroutine(AttackLoop());
     }
 
     void OnDisable()
     {
-        StopAllCoroutines(); // Stop any running AttackRoutine
+        StopAllCoroutines();
         isAttacking = false;
-        velocity    = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
+        lastPlayed = null;
     }
 
-    // Counter for attack cooldown & AI logic
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float detect, float atk) { detectionRange = detect; attackRange = atk; }
+
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-
-        // --- AI Logic (from former ThinkLoop) ---
-        if (target)
-        {
-            Vector2 toTargetVector = (Vector2)target.position - (Vector2)transform.position;
-            float   distance       = toTargetVector.magnitude;
-            Vector2 toTargetDir    = toTargetVector.normalized;
-
-            bool inOuter = distance <= detectionRange;
-            bool inInner = distance <= attackRange;
-
-            // If not attacking, can move
-            if (!isAttacking)
-            {
-                // If in outer ring, chase; else hold
-                if (inOuter && !inInner)
-                {
-                    // CHASE
-                    velocity = toTargetDir * c_Stats.MS; // use C_Stats move speed
-
-                    // stop just before entering the strike ring to avoid jitter
-                    if (distance <= (attackRange + stopBuffer))
-                        velocity = Vector2.zero;
-
-                    UpdateAnimFloats(velocity);
-                }
-                else
-                {
-                    // HOLD (either attack on cooldown, or outside outer ring)
-                    velocity = Vector2.zero;
-                    UpdateAnimFloats(Vector2.zero);
-                }
-
-                // START ATTACK
-                if (inInner && cooldownTimer <= 0f)
-                    StartCoroutine(AttackRoutine(toTargetDir));
-            }
-            else
-            {
-                // While Attacking: do not move, but keep idle facing consistent
-                velocity = Vector2.zero;
-                UpdateAnimFloats(Vector2.zero);
-            }
-        }
-        else
-        {
-            // No target: stand still; controller will exit this state
-            velocity = Vector2.zero;
-            UpdateAnimFloats(Vector2.zero);
-        }
+        // No movement here; controller handles Chase. We only face & strike.
     }
 
     void FixedUpdate()
     {
-        // Apply motion + knockback
-        Vector2 final = velocity + knockback;
-        rb.linearVelocity = final;
-
         if (knockback.sqrMagnitude > 0f)
         {
             float step = knockbackRecovery * Time.fixedDeltaTime;
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+            rb.linearVelocity = knockback;
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
-    public void SetTarget(Transform t) => target = t;
+    IEnumerator AttackLoop()
+    {
+        var wait = new WaitForSeconds(0.06f); // light polling
+
+        while (true)
+        {
+            if (target)
+            {
+                // Use collider-based ring test so "touching" the ring counts
+                bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+                Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+                float d = to.magnitude;
+                Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+                // keep facing with idle floats while we wait
+                UpdateIdleFacing(dir);
+
+                // START ATTACK immediately on touch (if off cooldown)
+                if (!isAttacking && inInner && cooldownTimer <= 0f)
+                    StartCoroutine(AttackRoutine(dir));
+            }
+
+            yield return wait;
+        }
+    }
+
 
 
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;
 
-        // Face once at the start of the clip; animation plays fully (no bools)
-        lastMove = dirAtStart.sqrMagnitude > 0f ? dirAtStart.normalized : lastMove;
-        anim?.SetTrigger(attackTrigger);
+        // Lock attack facing into atkX/atkY once at the start
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
 
-        // Lock movement during the clip
-        velocity = Vector2.zero;
-        UpdateAnimFloats(Vector2.zero); // keeps idleX/idleY = lastMove
+        // play full clip (non-interruptible)
+        PlayIfChanged(attackState);
 
-        // Hit timing
+        // movement stays zero while striking; just hold idle facing
+        UpdateIdleFacing(lastFace);
+
         yield return new WaitForSeconds(hitDelay);
-        activeWeapon?.Attack(dirAtStart);
+        activeWeapon?.Attack(lastFace);
 
-        // Finish clip
-        yield return new WaitForSeconds(attackDuration - hitDelay);
-
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
         cooldownTimer = attackCooldown;
-        isAttacking   = false;
+        isAttacking = false;
+
+        // fall back to idle pose; controller will decide next state
+        PlayIfChanged(idleState);
     }
 
-    void UpdateAnimFloats(Vector2 move)
+    void UpdateIdleFacing(Vector2 faceDir)
     {
-        // moveX/moveY reflect current motion; idleX/idleY remember last facing
-        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        // moveX/moveY are zero in attack state; idleX/idleY carry facing
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
 
-        anim?.SetFloat("moveX", move.x);
-        anim?.SetFloat("moveY", move.y);
-        anim?.SetFloat("idleX", lastMove.x);
-        anim?.SetFloat("idleY", lastMove.y);
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
+    }
+
+    void PlayIfChanged(string stateName)
+    {
+        if (lastPlayed == stateName) return;
+        anim.Play(stateName);
+        lastPlayed = stateName;
     }
 
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.65f, 0f);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+#endif
 }

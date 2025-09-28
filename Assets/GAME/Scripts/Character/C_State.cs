@@ -18,7 +18,7 @@ public class C_State : MonoBehaviour
     public P_Combat   p_Combat;
     public E_Movement e_Movement;
     public E_Combat   e_Combat;
-    public C_Wander   c_Wander;
+
     public C_Dodge    c_Dodge;
     C_Health   c_Health;
 
@@ -43,14 +43,14 @@ public class C_State : MonoBehaviour
         p_Combat    ??= GetComponent<P_Combat>();
         e_Movement  ??= GetComponent<E_Movement>();
         e_Combat    ??= GetComponent<E_Combat>();
-        c_Wander    ??= GetComponent<C_Wander>();
+
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
         if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
         if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement && !c_Wander) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
-        if (!p_Combat && !e_Combat && !c_Wander)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
+        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
+        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
     }
 
     void OnEnable()
@@ -74,7 +74,7 @@ public class C_State : MonoBehaviour
         animator.SetTrigger("Die");
 
         // stop wandering and freeze state at Dead (not for player)
-        if (c_Wander) c_Wander.enabled = false;
+
         rb.linearVelocity = Vector2.zero;
         CurrentState = ActorState.Dead;
     }
@@ -115,7 +115,7 @@ public class C_State : MonoBehaviour
             return ActorState.Attack;
 
         // Wander (must have wander component active & allowed) takes precedence over plain Move
-        if (c_Wander && c_Wander.isWandering) return ActorState.Wander;
+
 
         // Movement inferred from body velocity (respects ForcedVelocity/knockback) for non-wander movement
         if (rb.linearVelocity.sqrMagnitude > MIN_DISTANCE) return ActorState.Move;

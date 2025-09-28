@@ -18,7 +18,6 @@ public class E_Combat : MonoBehaviour
     E_Movement e_Movement;
     C_Health e_Health;
     public W_Base activeWeapon;
-    C_Wander c_Wander;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -51,7 +50,7 @@ public class E_Combat : MonoBehaviour
         e_Movement   ??= GetComponent<E_Movement>();
         e_Health     ??= GetComponent<C_Health>();
         activeWeapon ??= GetComponentInChildren<W_Melee>();
-        c_Wander     ??= GetComponent<C_Wander>();
+
 
         if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
         if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");

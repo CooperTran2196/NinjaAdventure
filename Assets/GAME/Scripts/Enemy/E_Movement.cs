@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_State))]
 [RequireComponent(typeof(E_Combat))]
-[RequireComponent(typeof(C_Wander))]
 [DisallowMultipleComponent]
 
 public class E_Movement : MonoBehaviour
@@ -19,7 +18,7 @@ public class E_Movement : MonoBehaviour
     C_Stats c_Stats;
     C_State c_State;
     E_Combat e_Combat;
-    C_Wander c_Wander;
+
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -47,7 +46,7 @@ public class E_Movement : MonoBehaviour
         c_Stats  ??= GetComponent<C_Stats>();
         c_State  ??= GetComponent<C_State>();
         e_Combat ??= GetComponent<E_Combat>();
-        c_Wander ??= GetComponent<C_Wander>();
+
 
         if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
         if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
@@ -56,7 +55,7 @@ public class E_Movement : MonoBehaviour
         if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
         if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
         if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
-        if (!c_Wander) Debug.LogError($"{name}: C_Wander in E_Movement is missing.");
+
     }
 
     void Update()
@@ -90,28 +89,14 @@ public class E_Movement : MonoBehaviour
     void Chase()
     {
         // If dead, ensure everything stays stopped and wander cannot reactivate
-        if (c_State.Is(C_State.ActorState.Dead))
-        {
-            if (c_Wander.enabled) c_Wander.enabled = false;
-            moveAxis = Vector2.zero;
-            velocity = Vector2.zero;
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+
 
         // Setup target if player comes close
         var hit = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
         target = hit ? hit.transform : null;
 
         // Toggle wandering by detection
-        if (target != null)
-        {
-            c_Wander.enabled = false; // disable wander while chasing
-        }
-        else
-        {
-            c_Wander.enabled = true; // re-enable wander when no target
-        }
+
 
         if (disabled)
         {
