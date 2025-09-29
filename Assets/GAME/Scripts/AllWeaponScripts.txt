@@ -169,10 +169,17 @@ public abstract class W_Base : MonoBehaviour
             if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
             else
             {
-                var em = targetCollider.GetComponentInParent<E_Movement>();
-                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                var ec = targetCollider.GetComponentInParent<E_Controller>();
+                if (ec) { weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime)); }
+                else
+                {
+                    var em = targetCollider.GetComponentInParent<E_Movement>();
+                    if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                }
             }
+
         }
+
     }
 
     // Called by owner when attacking
@@ -241,13 +248,10 @@ public static class W_Knockback
     // Push target
     public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
-        // 1) New system: attack/chase states (enemy)
-        var sa = target.GetComponentInParent<State_Attack>();
-        if (sa != null) { sa.ReceiveKnockback(direction * knockbackForce); return; }
+        // New system (unified): controller handles knockback for all states
+        var ec = target.GetComponentInParent<E_Controller>();
+        if (ec != null) { ec.ReceiveKnockback(direction * knockbackForce); return; }
 
-        var sc = target.GetComponentInParent<State_Chase>();
-        if (sc != null) { sc.ReceiveKnockback(direction * knockbackForce); return; }
-        
         // Player
         var pm = target.GetComponentInParent<P_Movement>();
         if (pm != null) { pm.ReceiveKnockback(direction * knockbackForce); return; }
@@ -552,12 +556,21 @@ public static class W_Stun
         m.SetDisabled(false);
     }
 
-    // Stun Enemy
+    // Stun Old-Enemy
     public static IEnumerator Apply(E_Movement m, float time)
     {
         m.SetDisabled(true);
         yield return new WaitForSeconds(time);
         m.SetDisabled(false);
+    }
+
+    // Stun New-Enemy (preferred)
+    public static IEnumerator Apply(E_Controller ec, float time)
+    {
+        if (!ec) yield break;
+        ec.SetDisabled(true);
+        yield return new WaitForSeconds(time);
+        ec.SetDisabled(false);
     }
 }
 

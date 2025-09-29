@@ -191,6 +191,32 @@ public class E_Controller : MonoBehaviour
 
     // Runtime variables
     Transform currentTarget;
+    // Movement blend + FX
+    [Header("Movement / FX")]
+    public string deathTrigger = "Die";
+    public float defaultKR = 30f; // fallback if stats.KR not present
+    public bool autoKill;
+
+    Rigidbody2D rb;
+    Animator animator;
+    C_Stats stats;
+    C_Health health;
+    Collider2D[] cols;
+
+    // Unified movement intent + knockback
+    Vector2 desiredVelocity;
+    Vector2 knockback;
+    int disableLocks;
+
+    // Keep the same API signature
+    public void SetDisabled(bool v)
+    {
+        if (v) disableLocks++;
+        else disableLocks = Mathf.Max(0, disableLocks - 1);
+
+        if (disableLocks > 0 && rb) rb.linearVelocity = Vector2.zero;
+    }
+
 
     void Awake()
     {
@@ -203,17 +229,44 @@ public class E_Controller : MonoBehaviour
         if (!wander) Debug.LogError($"{name}: Missing State_Wander in E_Controller.");
         if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
         if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
+
+        rb       ??= GetComponent<Rigidbody2D>();
+        animator ??= GetComponentInChildren<Animator>();
+        stats    ??= GetComponent<C_Stats>();
+        health   ??= GetComponent<C_Health>();
+        cols     ??= GetComponentsInChildren<Collider2D>(true);
+
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing.");
+        if (!health) Debug.LogError($"{name}: C_Health missing.");
     }
 
-    void OnEnable() => SwitchState(defaultState);
+
+    void OnEnable()
+    {
+        if (health) health.OnDied += HandleDeath;
+
+        if (autoKill && health)
+        {
+            autoKill = false;
+            health.Kill(); // uses stats.maxHP internally per your style
+        }
+
+        SwitchState(defaultState);
+    }
 
     void OnDisable()
     {
+        if (health) health.OnDied -= HandleDeath;
         idle.enabled   = false;
         wander.enabled = false;
         chase.enabled  = false;
         attack.enabled = false;
     }
+    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
+
+
+    // W_Knockback now calls this first, so all states get shoved uniformly
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
     void Update()
     {
@@ -261,6 +314,44 @@ public class E_Controller : MonoBehaviour
                 break;
         }
     }
+    void FixedUpdate()
+    {
+        if (!rb) return;
+
+        // 1) Apply this frame’s intent + knockback
+        Vector2 final = (disableLocks > 0) ? Vector2.zero : (desiredVelocity + knockback);
+        rb.linearVelocity = final;
+
+        // 2) Then decay knockback for the NEXT frame
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float kr = stats ? stats.KR : defaultKR;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, kr * Time.fixedDeltaTime);
+        }
+    }
+
+
+    void HandleDeath()
+    {
+        SetDisabled(true);
+        // Stop AI scripts immediately so no more actions are scheduled
+        if (idle) idle.enabled = false;
+        if (wander) wander.enabled = false;
+        if (chase) chase.enabled = false;
+        if (attack) attack.enabled = false;
+
+        // Turn off all hit/hurt boxes so this enemy can’t hit or be hit while fading
+        if (cols != null) foreach (var c in cols) c.enabled = false;
+
+        // Freeze motion
+        desiredVelocity = Vector2.zero;
+        knockback = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
+
+        // Play death anim; let C_Health/C_FX handle FadeAndDestroy (do NOT call fade here)
+        animator?.SetTrigger(string.IsNullOrEmpty(deathTrigger) ? "Die" : deathTrigger);
+    }
+
 
     public void SwitchState(EState s)
     {

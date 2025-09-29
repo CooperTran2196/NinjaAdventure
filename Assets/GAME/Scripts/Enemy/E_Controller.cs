@@ -29,7 +29,6 @@ public class E_Controller : MonoBehaviour
     // Movement blend + FX
     [Header("Movement / FX")]
     public string deathTrigger = "Die";
-    public float defaultKR = 30f; // fallback if stats.KR not present
     public bool autoKill;
 
     Rigidbody2D rb;
@@ -41,16 +40,9 @@ public class E_Controller : MonoBehaviour
     // Unified movement intent + knockback
     Vector2 desiredVelocity;
     Vector2 knockback;
-    int disableLocks;
-
-    // Keep the same API signature
-    public void SetDisabled(bool v)
-    {
-        if (v) disableLocks++;
-        else disableLocks = Mathf.Max(0, disableLocks - 1);
-
-        if (disableLocks > 0 && rb) rb.linearVelocity = Vector2.zero;
-    }
+    bool isStunned;
+    bool isDead;
+    Coroutine stunRoutine;
 
 
     void Awake()
@@ -153,23 +145,44 @@ public class E_Controller : MonoBehaviour
     {
         if (!rb) return;
 
-        // 1) Apply this frame’s intent + knockback
-        Vector2 final = (disableLocks > 0) ? Vector2.zero : (desiredVelocity + knockback);
-        rb.linearVelocity = final;
+        // 1) Apply this frame: block state intent when stunned/dead, but still allow knockback
+        Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
+        rb.linearVelocity = baseVel + knockback;
 
-        // 2) Then decay knockback for the NEXT frame
+        // 2) Decay knockback for the NEXT frame — no defaultKR, require stats.KR
         if (knockback.sqrMagnitude > 0f)
         {
-            float kr = stats ? stats.KR : defaultKR;
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, kr * Time.fixedDeltaTime);
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, stats.KR * Time.fixedDeltaTime);
         }
+    }
+
+
+
+    public void Stun(float duration)
+    {
+        if (stunRoutine != null) StopCoroutine(stunRoutine);
+        stunRoutine = StartCoroutine(StunRoutine(duration));
+    }
+
+
+    System.Collections.IEnumerator StunRoutine(float t)
+    {
+        isStunned = true;
+        yield return new WaitForSeconds(t);
+        isStunned = false;
+        stunRoutine = null;
+
     }
 
 
     void HandleDeath()
     {
-        SetDisabled(true);
+        isDead = true;
+        desiredVelocity = Vector2.zero;
+
         // Stop AI scripts immediately so no more actions are scheduled
+
+
         if (idle) idle.enabled = false;
         if (wander) wander.enabled = false;
         if (chase) chase.enabled = false;

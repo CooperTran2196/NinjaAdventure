@@ -160,24 +160,46 @@ public abstract class W_Base : MonoBehaviour
 
         // Hit effects
         if (weaponData.knockbackForce > 0f)
-            W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+        {
+            // NEW system first: direct call into E_Controller
+            var ec = targetCollider.GetComponentInParent<E_Controller>();
+            if (ec != null)
+            {
+                ec.ReceiveKnockback(dir * weaponData.knockbackForce);
+            }
+            else
+            {
+                // OLD system fallback (player/old enemy/rigidbody)
+                W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+            }
+        }
+
 
         if (weaponData.stunTime > 0f)
         {
+            // Player (OLD)
             var pm = targetCollider.GetComponentInParent<P_Movement>();
-            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
+            if (pm)
+            {
+                weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
+            }
             else
             {
+                // NEW system: call into E_Controller (controller implements stun)
                 var ec = targetCollider.GetComponentInParent<E_Controller>();
-                if (ec) { weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime)); }
+                if (ec)
+                {
+                    weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime));
+                }
                 else
                 {
+                    // OLD enemy (legacy)
                     var em = targetCollider.GetComponentInParent<E_Movement>();
-                    if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                    if (em) weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime));
                 }
             }
-
         }
+
 
     }
 

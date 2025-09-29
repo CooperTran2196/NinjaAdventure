@@ -1,0 +1,1093 @@
+// ----- File: C_Health.cs -----
+using System;
+using UnityEngine;
+
+
+[DisallowMultipleComponent]
+public class C_Health : MonoBehaviour
+{
+    [Header("References")]
+    public C_Stats c_Stats;
+    public C_Dodge c_Dodge;
+    C_FX fx;
+
+    P_InputActions input;
+    [Header("Allow Dodge/IFrames? (Only for Player)")]
+    public bool useDodgeIFrames = true;
+
+    [Header("Debug Keys (N/B)")]
+    public int takingDamageAmount = 1;
+    public int healingAmount = 1;
+
+    // Events
+    public event Action<int> OnDamaged;
+    public event Action<int> OnHealed;
+    public event Action OnDied;
+
+    // Accessors
+    int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
+    public bool IsAlive => CurrentHP > 0;
+
+    // cached delegates so we can unsubscribe
+    Action<int> fxDamagedHandler;
+    Action<int> fxHealedHandler;
+    Action      fxDiedHandler;
+
+    void Awake()
+    {
+        c_Stats ??= GetComponent<C_Stats>();
+        c_Dodge ??= GetComponent<C_Dodge>();
+        fx      ??= GetComponent<C_FX>();
+
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
+        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
+        if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+    }
+
+    void OnEnable()
+    {
+        input ??= new P_InputActions();
+        input.Debug.Enable();
+        
+        // subscribe to FX events
+        fxDamagedHandler ??= _ => fx.FlashOnDamaged();
+        fxHealedHandler  ??= _ => fx.FlashOnHealed();
+        fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
+
+        OnDamaged += fxDamagedHandler;
+        OnHealed  += fxHealedHandler;
+        OnDied    += fxDiedHandler;
+    }
+
+    void OnDisable()
+    {
+        input?.Debug.Disable();
+
+        OnDamaged -= fxDamagedHandler;
+        OnHealed  -= fxHealedHandler;
+        OnDied    -= fxDiedHandler;
+    }
+
+    void Update()
+    {
+        // Debug keys
+        if (input.Debug.OnDamaged.WasPressedThisFrame())
+            ChangeHealth(-Mathf.Abs(takingDamageAmount));
+
+        if (input.Debug.OnHealed.WasPressedThisFrame())
+            ChangeHealth(Mathf.Abs(healingAmount));
+    }
+
+    // AD+AP combined calculation (armor/mres as % 0–100)
+    public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP, float attackerArmorPen, float attackerMagicPen)
+    {
+        // Ignore if dead or dodging with IFrames
+        if (!IsAlive) return 0;
+        if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
+
+        // Calculate effective armor and magic resist after penetration
+        float effectiveAR = c_Stats.AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
+        float effectiveMR = c_Stats.MR * (1f - Mathf.Clamp01(attackerMagicPen / 100f));
+
+        // Calculate damage reduction from effective armor and magic resist
+        float damageReductionAR = 1f - Mathf.Clamp01(effectiveAR / 100f);
+        float damageReductionMR = 1f - Mathf.Clamp01(effectiveMR / 100f);
+
+        // Final damage calculation
+        int total =
+            Mathf.RoundToInt((attackerAD + weaponAD) * damageReductionAR) +
+            Mathf.RoundToInt((attackerAP + weaponAP) * damageReductionMR);
+
+        // Clamp to valid range and apply
+        int before = CurrentHP;
+        int dealt = Mathf.Clamp(total, 0, before);
+        if (dealt > 0) ChangeHealth(-dealt);
+        return dealt;
+    }
+
+    // Single entrypoint for damage/heal
+    public void ChangeHealth(int amount)
+    {
+        // Ignore if dead, healing 0, or dodging with IFrames
+        if (!IsAlive || (amount < 0 && useDodgeIFrames && c_Dodge.IsDodging)) return;
+
+        // Clamp to valid range and apply
+        int before    = CurrentHP;
+        int after     = Mathf.Clamp(before + amount, 0, c_Stats.maxHP);
+        int actual    = after - before;
+            CurrentHP = after;
+
+        // Invoke events
+        if      (actual < 0) OnDamaged?.Invoke(-actual);
+        else if (actual > 0) OnHealed?.Invoke(actual);
+        if      (after == 0) OnDied?.Invoke();
+    }
+
+    // Kill instantly
+    public void Kill() => ChangeHealth(-c_Stats.maxHP);
+}
+
+// ----- File: C_Stats.cs -----
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class C_Stats : MonoBehaviour
+{
+    [Header("Core Stats")]
+    public int AD = 1; // Attack Damage
+    public int AP = 0; // Ability Power
+    public float MS = 5f; // Move Speed
+
+    public int maxHP = 10;
+    public int currentHP = 10;
+    public int AR = 0; // Armor
+    public int MR = 0; // Magic Resist
+    public float KR = 10f; // knockback Resist
+
+    [Header("Special Stats")]
+    public float lifesteal = 0f;
+    public float armorPen = 0f;
+    public float magicPen = 0f;
+
+    [Header("Combat")]
+    public float attackCooldown = 1.2f;
+    public int   collisionDamage = 1;   // per-enemy
+    public float collisionTick   = 0.5f; // seconds between ticks while touching
+
+    [Header("Dodge (used by Player; Enemy can ignore)")]
+    public float dodgeSpeed = 11f;
+    public float dodgeDistance = 2.0f;
+    public float dodgeCooldown = 0.45f;
+
+    [Header("Placeholders")]
+    public float knockbackForce = 0f;
+    public float stunTime = 0f;
+}
+
+// ----- File: E_Combat.cs -----
+using System;
+using System.Collections;
+using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
+
+[DisallowMultipleComponent]
+
+public class E_Combat : MonoBehaviour
+{
+    [Header("References")]
+    SpriteRenderer sr;
+    Animator anim;
+
+    C_Stats c_Stats;
+    C_State c_State;
+    E_Movement e_Movement;
+    C_Health e_Health;
+    public W_Base activeWeapon;
+
+    [Header("AI")]
+    public LayerMask playerLayer;
+    [Min(1.3f)] public float attackRange = 1.3f;
+    [Min(0.5f)] public float thinkInterval = 0.5f;
+
+    [Header("Attack")]
+    [Header("ALWAYS matched full clip length (0.45)")]
+    public float attackDuration = 0.45f;
+    [Header("ALWAYS set when the hit happens (0.15)")]
+    public float hitDelay = 0.15f;
+
+    [Header("Debug")]
+    [SerializeField] bool autoKill;
+
+    // Quick state check
+    public bool isAttacking { get; private set; }
+    // Removed IsAlive; use c_State.Is(ActorState.Dead) as single source of truth
+    const float MIN_DISTANCE = 0.0001f;
+    float contactTimer;   // for collision damage
+    float cooldownTimer;  // for attacking cooldown
+
+    void Awake()
+    {
+        sr           ??= GetComponent<SpriteRenderer>();
+        anim         ??= GetComponent<Animator>();
+
+        c_Stats      ??= GetComponent<C_Stats>();
+        c_State      ??= GetComponent<C_State>();
+        e_Movement   ??= GetComponent<E_Movement>();
+        e_Health     ??= GetComponent<C_Health>();
+        activeWeapon ??= GetComponentInChildren<W_Melee>();
+
+
+        if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
+        if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");
+
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats in E_Combat missing.");
+        if (!e_Movement)    Debug.LogError($"{name}: E_Movement in E_Combat missing.");
+        if (!e_Health)      Debug.LogError($"{name}: C_Health in E_Combat missing.");
+        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee in E_Combat missing.");
+        // c_Wander optional: only log verbose if enemy expected to wander? (skip error)
+    }
+
+    void OnEnable()
+    {
+        StartCoroutine(ThinkLoop());
+    }
+
+    void Update()
+    {
+        if (autoKill) { autoKill = false; e_Health.ChangeHealth(-c_Stats.maxHP); }
+        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+    }
+
+    IEnumerator ThinkLoop()
+    {
+        var wait = new WaitForSeconds(thinkInterval);
+
+        while (true)
+        {
+            if (c_State.Is(C_State.ActorState.Dead)) yield break;
+
+            if (!isAttacking)
+            {
+                // Check if player is in range
+                bool inAttackRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+                // Decide if should hold position (idle) or chase
+                bool shouldHold = inAttackRange && cooldownTimer > 0f && c_State.lockMoveWhileAttacking;
+                e_Movement.SetHoldInRange(shouldHold);
+
+                // If close enough and off cooldown, begin an attack
+                if (inAttackRange && cooldownTimer <= 0f)
+                    StartCoroutine(AttackRoutine());
+            }
+            yield return wait;
+        }
+    }
+
+    // Collision Damage
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (c_State.Is(C_State.ActorState.Dead)) return;
+
+        // Filter to only player layer
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
+            return;
+        // Count down using physics timestep
+        if (contactTimer > 0f)
+        {
+            contactTimer -= Time.fixedDeltaTime;
+            return;
+        }
+        var playerHealth = collision.collider.GetComponent<C_Health>();
+        if (playerHealth == null || !playerHealth.IsAlive) return; // Only damage a live player
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage); //Apply damage
+        contactTimer = c_Stats.collisionTick; // reset tick window
+    }
+
+
+    IEnumerator AttackRoutine()
+    {
+        isAttacking = true;
+
+        // CONTINUOUS facing from player position at attack start (no lastMove / no snap)
+        Vector2 dir = ReadAimToPlayer();
+
+        // Set facing direction
+        c_State.SetAttackDirection(dir);
+
+        // Delay -> Attack -> recover
+        yield return new WaitForSeconds(hitDelay);
+        // Placeholder
+        activeWeapon?.Attack(dir);
+        yield return new WaitForSeconds(attackDuration - hitDelay);
+
+        // Decide keep chasing/idle based on lockDuringAttack (MODE)
+        bool lockMoveFlag = (c_State && c_State.lockMoveWhileAttacking);
+        bool stillInRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        e_Movement.SetHoldInRange(lockMoveFlag && stillInRange);
+
+        isAttacking = false;
+
+        cooldownTimer = c_Stats.attackCooldown;
+    }
+
+    Vector2 ReadAimToPlayer()
+    {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (!player) return Vector2.down;
+        Vector2 d = (Vector2)(player.transform.position - transform.position);
+        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : Vector2.down;
+    }
+
+    // Debug: show attack range
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0f, 0f, 0.9f); // red attack ring
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+}
+
+// ----- File: State_Attack.cs -----
+using System.Collections;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[DisallowMultipleComponent]
+public class State_Attack : MonoBehaviour
+{
+    [Header("Animation States")]
+    public LayerMask playerLayer;
+
+    [Header("Timing")]
+    public float attackCooldown = 0.80f;
+    public float attackDuration = 0.45f;
+    public float hitDelay       = 0.15f;
+
+    float attackRange = 1.2f;
+
+    [Header("Weapon")]
+    public W_Base activeWeapon;
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    E_Controller controller;
+
+    // Runtime
+    Transform target;
+    Vector2 lastFace = Vector2.down;
+    float cooldownTimer;
+    bool isAttacking;
+
+    public bool IsAttacking => isAttacking;
+
+    void Awake()
+    {
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponent<Animator>();
+        controller   = GetComponent<E_Controller>();
+        activeWeapon = GetComponentInChildren<W_Base>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
+        if (!anim) Debug.LogError($"{name}: Animator missing on State_Attack.");
+    }
+
+    void OnDisable()
+    {
+        isAttacking = false;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isAttacking", false);
+    }
+
+    void Update()
+    {
+        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+
+        // No movement while in attack state; controller still applies knockback globally
+        controller?.SetDesiredVelocity(Vector2.zero);
+
+        if (!target) return;
+
+        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+        float d = to.magnitude;
+        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+        UpdateIdleFacing(isAttacking ? lastFace : dir);
+
+        if (!isAttacking && inInner && cooldownTimer <= 0f)
+            StartCoroutine(AttackRoutine(dir));
+    }
+
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    IEnumerator AttackRoutine(Vector2 dirAtStart)
+    {
+        isAttacking = true;
+        anim.SetBool("isAttacking", true);
+
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+
+        UpdateIdleFacing(lastFace);
+
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon?.Attack(lastFace);
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        cooldownTimer = attackCooldown;
+        isAttacking = false;
+        anim.SetBool("isAttacking", false);
+    }
+
+    void UpdateIdleFacing(Vector2 faceDir)
+    {
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
+    }
+}
+
+// ----- File: State_Chase.cs -----
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[DisallowMultipleComponent]
+public class State_Chase : MonoBehaviour
+{
+    [Header("Tuning")]
+    public float stopBuffer = 0.10f;
+
+    float attackRange = 1.2f;
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    C_Stats stats;
+    E_Controller controller;
+
+    // Runtime
+    Transform target;
+    Vector2 velocity, lastMove = Vector2.down;
+
+    void Awake()
+    {
+        rb         ??= GetComponent<Rigidbody2D>();
+        anim       ??= GetComponent<Animator>();
+        stats      ??= GetComponent<C_Stats>();
+        controller ??= GetComponent<E_Controller>();
+        if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
+    }
+
+    void OnEnable() { anim.SetBool("isMoving", false); }
+
+    void OnDisable()
+    {
+        velocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isMoving", false);
+    }
+
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    void Update()
+    {
+        if (!target)
+        {
+            velocity = Vector2.zero;
+            controller?.SetDesiredVelocity(Vector2.zero);
+            UpdateFloats(Vector2.zero);
+            anim.SetBool("isMoving", false);
+            return;
+        }
+
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float   distance  = toTarget.magnitude;
+        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
+
+        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
+
+        controller?.SetDesiredVelocity(velocity);
+        UpdateFloats(velocity);
+    }
+
+    void UpdateFloats(Vector2 move)
+    {
+        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
+    }
+}
+
+// ----- File: State_Idle.cs -----
+using UnityEngine;
+
+public class State_Idle : MonoBehaviour
+{
+    [Header("References")]
+    public Rigidbody2D rb;
+    public Animator characterAnimator;
+
+    E_Controller controller;
+    C_Stats stats;
+
+    void Awake()
+    {
+        rb                ??= GetComponent<Rigidbody2D>();
+        characterAnimator ??= GetComponentInChildren<Animator>();
+        stats             ??= GetComponent<C_Stats>();
+        controller        ??= GetComponent<E_Controller>();
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Idle.");
+    }
+
+    void OnEnable()
+    {
+        rb.linearVelocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        var a = characterAnimator;
+        if (!a) return;
+        a.SetBool("isMoving", false);
+        a.SetBool("isWandering", false);
+        a.SetBool("isAttacking", false);
+    }
+
+    // Idle: no movement intent; controller handles knockback for all states
+    void Update() => controller?.SetDesiredVelocity(Vector2.zero);
+}
+
+// ----- File: State_Talk.cs -----
+using UnityEngine;
+
+public class State_Talk : MonoBehaviour
+{
+    [Header("References")]
+    public Rigidbody2D rb;
+    public Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
+
+    // Facing direction set by the controller
+    Vector2 facingDir; 
+
+    void Awake()
+    {
+        rb                ??= GetComponent<Rigidbody2D>();
+        characterAnim      ??= GetComponentInChildren<Animator>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Talk.");
+    }
+
+    void OnEnable()
+    {
+        // Stop movement and swallow any external forces
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        // Face a direction
+        characterAnim?.SetFloat("idleX", facingDir.x);
+        characterAnim?.SetFloat("idleY", facingDir.y);
+
+        // Play animations
+        characterAnim?.Play("Idle");       // idle while talking
+        interactAnim?.Play("WantToTalk");  // open talk icon
+    }
+
+    void OnDisable()
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;  // restore normal physics
+        interactAnim?.Play("Idle");        // close talk icon
+        facingDir = Vector2.zero;           // clear after use
+    }
+
+    // API for controller
+    public void FaceTarget(Transform target)
+    {
+        facingDir = ((Vector2)target.position - (Vector2)transform.position).normalized;
+    }
+}
+
+// ----- File: State_Wander.cs -----
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[DisallowMultipleComponent]
+public class State_Wander : MonoBehaviour
+{
+    [Header("References")]
+    Rigidbody2D rb;
+    Animator anim;
+    C_Stats c_Stats;
+    E_Controller controller;
+
+    [Header("Wander Area")]
+    public Vector2 startCenter;
+    public float width = 6f;
+    public float height = 4f;
+
+    [Header("Movement")]
+    public float pauseDuration = 1f;
+
+    [Header("Animation")]
+    public string idleState = "Idle";
+    public string walkState = "Walk";
+
+    // runtime
+    Vector2 destination;
+    Vector2 dir;
+    Vector2 lastMove;
+    bool isWandering;
+    const float MIN_DISTANCE = 0.1f;
+
+    void Awake()
+    {
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponentInChildren<Animator>();
+        c_Stats    = GetComponent<C_Stats>();
+        controller = GetComponent<E_Controller>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Wander.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in State_Wander.");
+        if (!anim) Debug.LogError($"{name}: Animator (in children) missing in State_Wander.");
+
+        if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
+    }
+
+    void OnEnable()
+    {
+        isWandering = true;
+        anim.SetBool("isWandering", true);
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        StopAllCoroutines();
+        StartCoroutine(PauseAndPickNewDestination());
+    }
+
+    void OnDisable()
+    {
+        anim.SetBool("isWandering", false);
+        StopAllCoroutines();
+        isWandering = false;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    void Update()
+    {
+        if (!isWandering)
+        {
+            controller?.SetDesiredVelocity(Vector2.zero);
+            return;
+        }
+
+        if (Vector2.Distance(transform.position, destination) < MIN_DISTANCE)
+        {
+            StopAllCoroutines();
+            StartCoroutine(PauseAndPickNewDestination());
+            controller?.SetDesiredVelocity(Vector2.zero);
+            return;
+        }
+
+        dir = (destination - (Vector2)transform.position).normalized;
+        if (dir.sqrMagnitude > 0f) lastMove = dir;
+
+        // Animator floats
+        anim.SetFloat("moveX", dir.x);
+        anim.SetFloat("moveY", dir.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
+
+        // Send intent to controller
+        controller?.SetDesiredVelocity(dir * c_Stats.MS);
+    }
+
+    IEnumerator PauseAndPickNewDestination()
+    {
+        isWandering = false;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim?.Play(idleState);
+
+        yield return new WaitForSeconds(pauseDuration);
+
+        destination = GetRandomEdgePoint();
+        isWandering = true;
+        anim?.Play(walkState);
+    }
+
+    Vector2 GetRandomEdgePoint()
+    {
+        float halfW = width * 0.5f;
+        float halfH = height * 0.5f;
+
+        int edge = Random.Range(0, 4);
+        switch (edge)
+        {
+            case 0: return new Vector2(startCenter.x - halfW, Random.Range(startCenter.y - halfH, startCenter.y + halfH));
+            case 1: return new Vector2(startCenter.x + halfW, Random.Range(startCenter.y - halfH, startCenter.y + halfH));
+            case 2: return new Vector2(Random.Range(startCenter.x - halfW, startCenter.x + halfW), startCenter.y - halfH);
+            case 3: return new Vector2(Random.Range(startCenter.x - halfW, startCenter.x + halfW), startCenter.y + halfH);
+        }
+        return startCenter;
+    }
+
+    void OnCollisionEnter2D(Collision2D _) { if (isWandering) StartCoroutine(PauseAndPickNewDestination()); }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        var size = new Vector3(width, height, 0f);
+        var center = Application.isPlaying ? (Vector3)startCenter : transform.position;
+        Gizmos.DrawWireCube(center, size);
+    }
+}
+
+// ----- File: W_Base.cs -----
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
+[DisallowMultipleComponent]
+
+public abstract class W_Base : MonoBehaviour
+{
+    [Header("Central API for all weapons")]
+    [Header("References")]
+    protected SpriteRenderer sprite;
+    protected BoxCollider2D hitbox;
+    protected Animator ownerAnimator;
+    protected C_Stats c_Stats;
+
+    [Header("Weapon Data")]
+    public W_SO weaponData;
+
+    [Header("Owner + Targets")]
+    public Transform owner;
+    public LayerMask targetMask;
+
+    [Header("Auto Sized Hitbox")]
+    public bool autoSizeFromSprite = true;
+
+    [Header("Debug")]
+    [SerializeField] bool debugDrawHitbox = false;
+    [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
+
+    void Awake()
+    {
+        // 1/ Cache weapon components
+        sprite ??= GetComponent<SpriteRenderer>();
+        hitbox ??= GetComponent<BoxCollider2D>();
+
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
+        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+
+        // 2/ Collider mode + default visibility
+        hitbox.isTrigger = true;     // trigger-based hit detection
+        sprite.enabled   = false;      // show only during attack window
+        hitbox.enabled   = false;
+
+        // 3/ Owner + deps
+        owner               = transform.root;
+        ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
+        c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
+
+        if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
+        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
+        if (!weaponData)    Debug.LogError($"{name}: W_SO weaponData is not assigned on {gameObject.name}", this);
+
+        // 4/ Visual + hitbox sizing
+        if (weaponData && sprite) sprite.sprite = weaponData.sprite;
+        if (autoSizeFromSprite && sprite && sprite.sprite)
+        {
+            hitbox.size = sprite.sprite.bounds.size;
+            hitbox.offset = Vector2.zero;
+        }
+    }
+
+    // Get position around owner at offsetRadius along attackDir
+    protected Vector3 GetPolarPosition(Vector2 attackDir) =>
+        owner.position + (Vector3)(attackDir * weaponData.offsetRadius);
+
+    // Get angle in degrees from up/down baseline + bias
+    protected float GetPolarAngle(Vector2 attackDir)
+    {
+        // Angle from up/down baseline + bias
+        Vector2 baseline = weaponData.pointsUp ? Vector2.up : Vector2.down;
+        // Get the signed angle between the baseline and the attack direction
+        return Vector2.SignedAngle(baseline, attackDir) + weaponData.angleBiasDeg;
+    }
+
+    // Position/rotate + show sprite, optionally enable hitbox
+    protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
+    {
+        transform.position = pos;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+        sprite.enabled = true;
+        hitbox.enabled = enableHitbox;
+    }
+
+    // Move forward/back along dir over showTime (no callback)
+    protected IEnumerator ThrustOverTime(Vector2 dir, float showTime, float thrustDist)
+    {
+        float t = 0f;
+        Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+
+        while (t < showTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / showTime);
+            transform.position = Vector3.Lerp(start, end, k);
+            yield return null;
+        }
+    }
+    
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected (C_Health target, GameObject root) TryGetTarget(Collider2D targetCollider)
+        => TryGetTarget(owner, targetMask, targetCollider);
+
+    // STATIC versions for W_Projectile
+    public static (C_Health target, GameObject root)
+                TryGetTarget(Transform owner, LayerMask targetMask, Collider2D targetCollider)
+    {
+        // Layer filter
+        if ((targetMask.value & (1 << targetCollider.gameObject.layer)) == 0)
+            return (null, null);
+
+        // Ignore owner
+        if (targetCollider.transform == owner || targetCollider.transform.IsChildOf(owner))
+            return (null, null);
+
+        // Ignore weapon–weapon contacts
+        if (targetCollider.GetComponentInParent<W_Base>() != null)
+            return (null, null);
+
+        // Find target health on targetCollider's root
+        var target = targetCollider.GetComponentInParent<C_Health>();
+        if (target == null || !target.IsAlive)
+            return (null, null);
+
+        // Success -> return C_Health and GameObject
+        return (target, target.gameObject);
+    }
+
+    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider)
+                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this);
+
+    // Apply damage + hit effects
+    public static void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth,
+                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon)
+    {
+        int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
+        int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
+        float attackerArmorPen = attackerStats.armorPen;
+        float attackerMagicPen = attackerStats.magicPen;
+
+        int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP, attackerArmorPen, attackerMagicPen);
+
+        // LIFESTEAL LOGIC
+        // If damage was dealt and the attacker has lifesteal, heal the attacker.
+        if (dealtDamage > 0 && attackerStats.lifesteal > 0)
+        {
+            var attackerHealth = attackerStats.GetComponent<C_Health>();
+            if (attackerHealth != null)
+            {
+                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifesteal);
+                if (healAmount > 0)
+                {
+                    attackerHealth.ChangeHealth(healAmount);
+                }
+            }
+        }
+
+        // Hit effects
+        if (weaponData.knockbackForce > 0f)
+            W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+
+        if (weaponData.stunTime > 0f)
+        {
+            var pm = targetCollider.GetComponentInParent<P_Movement>();
+            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
+            else
+            {
+                var ec = targetCollider.GetComponentInParent<E_Controller>();
+                if (ec) { weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime)); }
+                else
+                {
+                    var em = targetCollider.GetComponentInParent<E_Movement>();
+                    if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                }
+            }
+
+        }
+
+    }
+
+    // Called by owner when attacking
+    public abstract void Attack(Vector2 attackDir);
+
+    // Called by owner when equipping
+    public virtual void Equip(Transform newOwner)
+    {
+        owner = newOwner;
+        ownerAnimator = owner.GetComponent<Animator>();
+        c_Stats = owner.GetComponent<C_Stats>();
+    }
+
+    // Change weapon data at runtime
+    public void SetData(W_SO weaponData)
+    {
+        this.weaponData = weaponData;
+        sprite.sprite = this.weaponData.sprite;
+    }
+
+
+    // Debug: draw hitbox when active
+    void OnDrawGizmos()
+    {
+        if (!debugDrawHitbox) return;
+
+        // Use cached if available; fall back to GetComponent for edit-time draws
+        var sr = sprite ? sprite : GetComponent<SpriteRenderer>();
+        var bc = hitbox ? hitbox : GetComponent<BoxCollider2D>();
+        if (!bc) return;
+
+        // Only draw while the weapon is live: sprite visible OR collider enabled
+        if ((sr && sr.enabled) || bc.enabled)
+        {
+            var prevMatrix = Gizmos.matrix;
+            var prevColor = Gizmos.color;
+
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.color = debugHitboxColor;
+
+            // Fill (very faint) + outline so it’s easy to see
+            var fill = debugHitboxColor; fill.a = 0.12f;
+            Gizmos.color = fill; Gizmos.DrawCube(bc.offset, bc.size);
+            Gizmos.color = debugHitboxColor; Gizmos.DrawWireCube(bc.offset, bc.size);
+
+            Gizmos.matrix = prevMatrix;
+            Gizmos.color = prevColor;
+        }
+    }
+}
+
+
+
+
+// ----- File: W_Knockback.cs -----
+using UnityEngine;
+
+public static class W_Knockback
+{
+    // Push a rigidbody by an impulse along the direction
+    public static void Push(Rigidbody2D rb, Vector2 direction, float impulse)
+    {
+        rb.AddForce(direction * impulse, ForceMode2D.Impulse);
+    }
+
+    // Push target
+    public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
+    {
+        // New system (unified): controller handles knockback for all states
+        var ec = target.GetComponentInParent<E_Controller>();
+        if (ec != null) { ec.ReceiveKnockback(direction * knockbackForce); return; }
+
+        // Player
+        var pm = target.GetComponentInParent<P_Movement>();
+        if (pm != null) { pm.ReceiveKnockback(direction * knockbackForce); return; }
+        
+        // Enemy
+        var em = target.GetComponentInParent<E_Movement>();
+        if (em != null) { em.ReceiveKnockback(direction * knockbackForce); return; }
+
+        // Others
+        var rb = target.GetComponentInParent<Rigidbody2D>();
+        if (rb != null) rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+    }
+
+    // Radial AoE push (Still incomplete)
+    public static int PushRadial(Vector2 center, float radius, float impulse, LayerMask mask)
+    {
+        int count = 0;
+        var hits = Physics2D.OverlapCircleAll(center, radius, mask);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            var rb = hits[i].attachedRigidbody;
+            if (rb == null) continue;
+            Vector2 dir = (rb.position - center).normalized;
+            rb.AddForce(dir * impulse, ForceMode2D.Impulse);
+            count++;
+        }
+        return count;
+    }
+}
+
+// ----- File: W_SO.cs -----
+using UnityEngine;
+
+public enum WeaponType { Melee, Ranged, Magic }
+
+[CreateAssetMenu(menuName = "Weapon SO", fileName = "W_SO_NewWeapon")]
+public class W_SO : ScriptableObject
+{
+    [Header("Common")]
+    public string id = "weaponId";
+    public WeaponType type = WeaponType.Melee;
+    public Sprite sprite;
+    public bool pointsUp = false; // false = points down
+    public float offsetRadius = 0.7f; // polar placement radius
+    public float angleBiasDeg = 0f; // optional art twist
+
+    [Header("Damage (set either/both)")]
+    public int AD = 1;
+    public int AP = 0;
+
+    [Header("Impact")]
+    public float knockbackForce = 5f;
+    public float stunTime = .5f;
+
+    [Header("Melee timings + Thrust Distance")]
+    public float showTime = 0.3f;
+    public float thrustDistance = 0.25f;
+
+    [Header("Ranged + Magic")]
+    public GameObject projectilePrefab;
+    public int manaCost = 0;
+    public float projectileSpeed = 0f;
+    public float projectileLifetime = 0f;
+    public float stickOnHit = 0f;
+    public int   pierceCount = 0;
+}
+
+// ----- File: W_Stun.cs -----
+using System.Collections;
+using UnityEngine;
+
+public static class W_Stun
+{
+    // Stun Player
+    public static IEnumerator Apply(P_Movement m, float time)
+    {
+        m.SetDisabled(true);
+        yield return new WaitForSeconds(time);
+        m.SetDisabled(false);
+    }
+
+    // Stun Old-Enemy
+    public static IEnumerator Apply(E_Movement m, float time)
+    {
+        m.SetDisabled(true);
+        yield return new WaitForSeconds(time);
+        m.SetDisabled(false);
+    }
+
+    // Stun New-Enemy (preferred)
+    public static IEnumerator Apply(E_Controller ec, float time)
+    {
+        if (!ec) yield break;
+        ec.SetDisabled(true);
+        yield return new WaitForSeconds(time);
+        ec.SetDisabled(false);
+    }
+}
+
