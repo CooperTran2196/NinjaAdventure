@@ -4,41 +4,38 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(C_Stats))]
 [DisallowMultipleComponent]
-
 public class State_Chase : MonoBehaviour
 {
     [Header("Tuning")]
     public float stopBuffer = 0.10f;
 
-    // Ranges are injected by controller
-    float attackRange    = 1.2f;
+    float attackRange = 1.2f;
 
     // Cache
     Rigidbody2D rb;
     Animator anim;
     C_Stats stats;
+    E_Controller controller;
 
     // Runtime
     Transform target;
-    Vector2 velocity, knockback, lastMove = Vector2.down;
+    Vector2 velocity, lastMove = Vector2.down;
 
     void Awake()
     {
-        rb    ??= GetComponent<Rigidbody2D>();
-        anim  ??= GetComponent<Animator>();
-        stats ??= GetComponent<C_Stats>();
-
+        rb         ??= GetComponent<Rigidbody2D>();
+        anim       ??= GetComponent<Animator>();
+        stats      ??= GetComponent<C_Stats>();
+        controller ??= GetComponent<E_Controller>();
         if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
     }
 
-    void OnEnable()
-    {
-        anim.SetBool("isMoving", false);
-    }
+    void OnEnable() { anim.SetBool("isMoving", false); }
 
     void OnDisable()
     {
         velocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
         anim.SetBool("isMoving", false);
     }
@@ -48,10 +45,10 @@ public class State_Chase : MonoBehaviour
 
     void Update()
     {
-        // No target = no movement
         if (!target)
         {
             velocity = Vector2.zero;
+            controller?.SetDesiredVelocity(Vector2.zero);
             UpdateFloats(Vector2.zero);
             anim.SetBool("isMoving", false);
             return;
@@ -61,25 +58,12 @@ public class State_Chase : MonoBehaviour
         float   distance  = toTarget.magnitude;
         Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
 
-        // Move toward target while outside inner ring
         velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
         bool moving = velocity.sqrMagnitude > 0f;
         anim.SetBool("isMoving", moving);
 
-        // Update animator direction floats
+        controller?.SetDesiredVelocity(velocity);
         UpdateFloats(velocity);
-    }
-
-    void FixedUpdate()
-    {
-        Vector2 final = velocity + knockback;
-        rb.linearVelocity = final;
-
-        if (knockback.sqrMagnitude > 0f)
-        {
-            float step = stats.KR * Time.fixedDeltaTime;
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
-        }
     }
 
     void UpdateFloats(Vector2 move)
@@ -90,6 +74,4 @@ public class State_Chase : MonoBehaviour
         anim.SetFloat("idleX", lastMove.x);
         anim.SetFloat("idleY", lastMove.y);
     }
-
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 }

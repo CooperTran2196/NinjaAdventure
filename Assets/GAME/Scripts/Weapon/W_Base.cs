@@ -168,10 +168,17 @@ public abstract class W_Base : MonoBehaviour
             if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
             else
             {
-                var em = targetCollider.GetComponentInParent<E_Movement>();
-                if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                var ec = targetCollider.GetComponentInParent<E_Controller>();
+                if (ec) { weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime)); }
+                else
+                {
+                    var em = targetCollider.GetComponentInParent<E_Movement>();
+                    if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                }
             }
+
         }
+
     }
 
     // Called by owner when attacking
