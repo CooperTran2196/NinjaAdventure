@@ -4,17 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(C_Stats))]
 [DisallowMultipleComponent]
+
 public class State_Chase : MonoBehaviour
 {
-    [Header("Animation States")]
-    public string idleState = "Idle";
-    public string walkState = "Move";  // name in your Animator
-
     [Header("Tuning")]
-    public float stopBuffer = 0.10f;   // hover just outside the inner ring
+    public float stopBuffer = 0.10f;
 
     // Ranges are injected by controller
-    float detectionRange = 3f;
     float attackRange    = 1.2f;
 
     // Cache
@@ -25,7 +21,6 @@ public class State_Chase : MonoBehaviour
     // Runtime
     Transform target;
     Vector2 velocity, knockback, lastMove = Vector2.down;
-    string lastPlayed;
 
     void Awake()
     {
@@ -38,40 +33,41 @@ public class State_Chase : MonoBehaviour
 
     void OnEnable()
     {
-        lastPlayed = null;
-        PlayIfChanged(idleState);
+        anim.SetBool("isMoving", false);
     }
 
     void OnDisable()
     {
         velocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
-        lastPlayed = null;
+        anim.SetBool("isMoving", false);
     }
 
     public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float detect, float atk) { detectionRange = detect; attackRange = atk; }
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
     void Update()
     {
+        // No target = no movement
         if (!target)
         {
             velocity = Vector2.zero;
             UpdateFloats(Vector2.zero);
-            PlayIfChanged(idleState);
+            anim.SetBool("isMoving", false);
             return;
         }
 
-        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-        float   d  = to.magnitude;
-        Vector2 dir = d > 0.0001f ? to.normalized : lastMove;
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float   distance  = toTarget.magnitude;
+        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
 
         // Move toward target while outside inner ring
-        velocity = (d > (attackRange + stopBuffer)) ? dir * stats.MS : Vector2.zero;
+        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
 
-        // Anim
+        // Update animator direction floats
         UpdateFloats(velocity);
-        PlayIfChanged(velocity.sqrMagnitude > 0f ? walkState : idleState);
     }
 
     void FixedUpdate()
@@ -93,13 +89,6 @@ public class State_Chase : MonoBehaviour
         anim.SetFloat("moveY", move.y);
         anim.SetFloat("idleX", lastMove.x);
         anim.SetFloat("idleY", lastMove.y);
-    }
-
-    void PlayIfChanged(string stateName)
-    {
-        if (lastPlayed == stateName) return;
-        anim.Play(stateName);
-        lastPlayed = stateName;
     }
 
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;

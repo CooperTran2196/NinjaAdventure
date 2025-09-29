@@ -391,7 +391,7 @@ public class C_State : MonoBehaviour
     public P_Combat   p_Combat;
     public E_Movement e_Movement;
     public E_Combat   e_Combat;
-    public C_Wander   c_Wander;
+
     public C_Dodge    c_Dodge;
     C_Health   c_Health;
 
@@ -416,14 +416,14 @@ public class C_State : MonoBehaviour
         p_Combat    ??= GetComponent<P_Combat>();
         e_Movement  ??= GetComponent<E_Movement>();
         e_Combat    ??= GetComponent<E_Combat>();
-        c_Wander    ??= GetComponent<C_Wander>();
+
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
         if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
         if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement && !c_Wander) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
-        if (!p_Combat && !e_Combat && !c_Wander)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
+        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
+        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
     }
 
     void OnEnable()
@@ -447,7 +447,7 @@ public class C_State : MonoBehaviour
         animator.SetTrigger("Die");
 
         // stop wandering and freeze state at Dead (not for player)
-        if (c_Wander) c_Wander.enabled = false;
+
         rb.linearVelocity = Vector2.zero;
         CurrentState = ActorState.Dead;
     }
@@ -488,7 +488,7 @@ public class C_State : MonoBehaviour
             return ActorState.Attack;
 
         // Wander (must have wander component active & allowed) takes precedence over plain Move
-        if (c_Wander && c_Wander.isWandering) return ActorState.Wander;
+
 
         // Movement inferred from body velocity (respects ForcedVelocity/knockback) for non-wander movement
         if (rb.linearVelocity.sqrMagnitude > MIN_DISTANCE) return ActorState.Move;
@@ -573,128 +573,447 @@ public class C_Stats : MonoBehaviour
     public float stunTime = 0f;
 }
 
-// ----- File: C_Wander.cs -----
-using UnityEngine;
+// ----- File: State_Attack.cs -----
 using System.Collections;
-using NUnit.Framework;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-
+[RequireComponent(typeof(Animator))]
 [DisallowMultipleComponent]
 
-public class C_Wander : MonoBehaviour
+public class State_Attack : MonoBehaviour
 {
-    [Header("References")]
+    [Header("Animation States")]
+    public LayerMask playerLayer;
+
+    [Header("Timing")]
+    public float attackCooldown = 0.80f;
+    public float attackDuration = 0.45f;
+    public float hitDelay       = 0.15f;
+
+    // Ranges are injected by controller
+    float attackRange    = 1.2f;
+
+    [Header("Weapon")]
+    public W_Base activeWeapon;
+
+    [Header("Knockback")]
+    public float knockbackRecovery = 30f;
+
+    // Cache
     Rigidbody2D rb;
-    C_State c_State;
+    Animator anim;
 
-    [Header("Wander Area")]
-    public float wanderingSpeed = 1f;
-    public float width = 6f;
-    public float height = 4f;
-    Vector2 startCenter;
+    // Runtime variables
+    Transform target;
+    Vector2 knockback, lastFace = Vector2.down;
+    float cooldownTimer;
+    bool isAttacking;
 
-    [Header("Idle time at edges / on bump")]
-    public float pauseDuration = 1f;
-
-    [Header("Phase flag: true = moving to the destination/ false = paused")]
-    public bool isWandering;
-
-    Vector2 destination;
-    Vector2 dir;
-    Vector2 lastMove; // preserves facing during pauses
-
-    const float MIN_DISTANCE = 0.1f;
+    public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        rb      ??= GetComponent<Rigidbody2D>();
-        c_State ??= GetComponent<C_State>();
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponent<Animator>();
+        activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!rb)        Debug.LogError($"{name}: Rigidbody2D is missing in C_Wander.");
-        if (!c_State)   Debug.LogError($"{name}: C_State is missing in C_Wander.");
-
-        // Setup wander area at start
-        startCenter = (Vector2)transform.position;
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
+        if (!anim) Debug.LogError($"{name}: Animator missing on State_Attack.");
     }
 
-    // Start wandering when enabled
     void OnEnable()
     {
-        if (c_State.canWander) StartCoroutine(StopAndPickNewDestination());
+        // anim.SetBool("isAttacking", false);
     }
 
     void OnDisable()
     {
-        StopAllCoroutines();
-        isWandering = false;
+        // anim.SetBool("isAttacking", false);
+        isAttacking = false;
         rb.linearVelocity = Vector2.zero;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Check if wandering is allowed in C_State
-        if (!c_State.canWander) return;
-        // Check if currently wandering
+        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        
+        // Process attack logic only when we have a target
+        if (target)
+        {
+            // Inner ring test (collider-based so edge contact counts)
+            bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+            Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+            float d = to.magnitude;
+            Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+            // Continuously update idle facing (even during attack so idle pose rotates, atkX/atkY stay locked)
+            UpdateIdleFacing(isAttacking ? lastFace : dir);
+
+            // Start attack immediately upon entering inner ring and off cooldown
+            if (!isAttacking && inInner && cooldownTimer <= 0f)
+                StartCoroutine(AttackRoutine(dir));
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = knockbackRecovery * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+            rb.linearVelocity = knockback;
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // NON-INTERUPTIBLE ATTACK ROUTINE
+    // lock facing, play clip, wait for hit, wait for end, cooldown
+    IEnumerator AttackRoutine(Vector2 dirAtStart)
+    {
+        isAttacking = true;
+        anim.SetBool("isAttacking", true);
+
+        // Lock attack facing into atkX/atkY once at the start
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+
+        // Movement stays zero while striking; just update idle facing
+        UpdateIdleFacing(lastFace);
+
+        // Wait for hitDelay then start the hit
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon?.Attack(lastFace);
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        // Reset the attack cooldown
+        cooldownTimer = attackCooldown;
+        isAttacking = false;
+        anim.SetBool("isAttacking", false);
+    }
+
+    void UpdateIdleFacing(Vector2 faceDir)
+    {
+        // moveX/moveY are zero in attack state; idleX/idleY carry facing
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
+    }
+
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+
+}
+
+// ----- File: State_Chase.cs -----
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[DisallowMultipleComponent]
+
+public class State_Chase : MonoBehaviour
+{
+    [Header("Tuning")]
+    public float stopBuffer = 0.10f;
+
+    // Ranges are injected by controller
+    float attackRange    = 1.2f;
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    C_Stats stats;
+
+    // Runtime
+    Transform target;
+    Vector2 velocity, knockback, lastMove = Vector2.down;
+
+    void Awake()
+    {
+        rb    ??= GetComponent<Rigidbody2D>();
+        anim  ??= GetComponent<Animator>();
+        stats ??= GetComponent<C_Stats>();
+
+        if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
+    }
+
+    void OnEnable()
+    {
+        anim.SetBool("isMoving", false);
+    }
+
+    void OnDisable()
+    {
+        velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isMoving", false);
+    }
+
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    void Update()
+    {
+        // No target = no movement
+        if (!target)
+        {
+            velocity = Vector2.zero;
+            UpdateFloats(Vector2.zero);
+            anim.SetBool("isMoving", false);
+            return;
+        }
+
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float   distance  = toTarget.magnitude;
+        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
+
+        // Move toward target while outside inner ring
+        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
+
+        // Update animator direction floats
+        UpdateFloats(velocity);
+    }
+
+    void FixedUpdate()
+    {
+        Vector2 final = velocity + knockback;
+        rb.linearVelocity = final;
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = stats.KR * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
+    }
+
+    void UpdateFloats(Vector2 move)
+    {
+        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
+    }
+
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+}
+
+// ----- File: State_Idle.cs -----
+using UnityEngine;
+
+public class State_Idle : MonoBehaviour
+{
+    [Header("References")]
+    public Rigidbody2D rb;
+    public Animator characterAnimator;
+
+    void Awake()
+    {
+        rb                ??= GetComponent<Rigidbody2D>();
+        characterAnimator ??= GetComponentInChildren<Animator>();
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Idle.");
+    }
+
+    void OnEnable()
+    {
+        rb.linearVelocity = Vector2.zero;
+        var a = characterAnimator;
+        if (!a) return;
+        a.SetBool("isMoving", false);
+        a.SetBool("isWandering", false);
+        a.SetBool("isAttacking", false);
+        // Optionally set idleX/idleY to keep the last facing if you want
+    }
+
+}
+
+// ----- File: State_Talk.cs -----
+using UnityEngine;
+
+public class State_Talk : MonoBehaviour
+{
+    [Header("References")]
+    public Rigidbody2D rb;
+    public Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
+
+    // Facing direction set by the controller
+    Vector2 facingDir; 
+
+    void Awake()
+    {
+        rb                ??= GetComponent<Rigidbody2D>();
+        characterAnim      ??= GetComponentInChildren<Animator>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Talk.");
+    }
+
+    void OnEnable()
+    {
+        // Stop movement and swallow any external forces
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        // Face a direction
+        characterAnim?.SetFloat("idleX", facingDir.x);
+        characterAnim?.SetFloat("idleY", facingDir.y);
+
+        // Play animations
+        characterAnim?.Play("Idle");       // idle while talking
+        interactAnim?.Play("WantToTalk");  // open talk icon
+    }
+
+    void OnDisable()
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;  // restore normal physics
+        interactAnim?.Play("Idle");        // close talk icon
+        facingDir = Vector2.zero;           // clear after use
+    }
+
+    // API for controller
+    public void FaceTarget(Transform target)
+    {
+        facingDir = ((Vector2)target.position - (Vector2)transform.position).normalized;
+    }
+}
+
+// ----- File: State_Wander.cs -----
+// NPC_State_Wander.cs
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[DisallowMultipleComponent]
+
+// Exclusive wander state for NPCs (tutorial-style).
+// Does NOT depend on C_State. Single writer of rb.linearVelocity while enabled.
+public class State_Wander : MonoBehaviour
+{
+    [Header("References")]
+    Rigidbody2D rb;
+    Animator anim;  // NPC sprite animator (Idle/Walk graph)
+    C_Stats c_Stats;
+
+    [Header("Wander Area")]
+    public Vector2 startCenter;
+    public float width = 6f;
+    public float height = 4f;
+
+    [Header("Movement")]
+    public float pauseDuration = 1f; // idle time at edges / on bump
+
+    [Header("Animation")]
+    public string idleState = "Idle";
+    public string walkState = "Walk";
+
+    // runtime
+    Vector2 destination;
+    Vector2 dir;
+    Vector2 lastMove;
+    bool isWandering;
+    const float MIN_DISTANCE = 0.1f;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        c_Stats = GetComponent<C_Stats>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Wander.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in NPC_State_Wander.");
+        if (!anim) Debug.LogError($"{name}: Animator (in children) missing in NPC_State_Wander.");
+
+        // Use current spawn as center by default
+        if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
+    }
+
+    void OnEnable()
+    {
+        isWandering = true;
+        anim.SetBool("isWandering", true);
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        StopAllCoroutines();
+        StartCoroutine(PauseAndPickNewDestination());
+    }
+
+    void OnDisable()
+    {
+        anim.SetBool("isWandering", false);
+        StopAllCoroutines();
+        isWandering = false;
+        if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    void Update()
+    {
         if (!isWandering) return;
 
-        // If reached destination, pause and pick a new one
         if (Vector2.Distance(transform.position, destination) < MIN_DISTANCE)
         {
             StopAllCoroutines();
-            StartCoroutine(StopAndPickNewDestination());
+            StartCoroutine(PauseAndPickNewDestination());
             return;
         }
 
         dir = (destination - (Vector2)transform.position).normalized;
 
         if (dir.sqrMagnitude > 0f) lastMove = dir;
-        c_State.UpdateAnimDirections(dir, lastMove); // facing via C_State
+
+        // Update animator floats to keep facing consistent
+        anim.SetFloat("moveX", dir.x);
+        anim.SetFloat("moveY", dir.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
     }
 
-    // Apply movement in FixedUpdate
     void FixedUpdate()
     {
-        // Check if wandering is allowed in C_State or currently wandering
-        if (!c_State.canWander || !isWandering)
+        if (!isWandering)
         {
-            rb.linearVelocity = Vector2.zero;
+            if (rb.linearVelocity != Vector2.zero) rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // Move towards destination
-        rb.linearVelocity = dir * wanderingSpeed;
+        rb.linearVelocity = dir * c_Stats.MS; // speed from stats directly
     }
 
-    // Stop movement then pick a new destination
-    IEnumerator StopAndPickNewDestination()
+    IEnumerator PauseAndPickNewDestination()
     {
-        if (c_State.Is(C_State.ActorState.Dead)) yield break;
-
-        // Stop movement
+        // pause
         isWandering = false;
         rb.linearVelocity = Vector2.zero;
+        anim?.Play(idleState);
 
-        // Stop for a bit
         yield return new WaitForSeconds(pauseDuration);
 
-        // Pick new destination
+        // new target + resume
         destination = GetRandomEdgePoint();
         isWandering = true;
+        anim?.Play(walkState);
     }
 
-    // Pick a random point on the edge of the rectangle
     Vector2 GetRandomEdgePoint()
     {
-        // Get half dimensions
         float halfW = width * 0.5f;
         float halfH = height * 0.5f;
 
-        // 0=Left, 1=Right, 2=Bottom, 3=Top
-        int edge = Random.Range(0, 4); 
-
-        // Pick a random point on the edge
+        int edge = Random.Range(0, 4); // 0=Left, 1=Right, 2=Bottom, 3=Top
         switch (edge)
         {
             case 0: // Left
@@ -715,15 +1034,11 @@ public class C_Wander : MonoBehaviour
         return startCenter;
     }
 
-    // On bump, pause and pick a new destination
     void OnCollisionEnter2D(Collision2D _)
     {
-        if (c_State.canWander && isWandering)
-            StartCoroutine(StopAndPickNewDestination());
+        if (isWandering) StartCoroutine(PauseAndPickNewDestination());
     }
 
-
-    // Visualize wander area in editor
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;

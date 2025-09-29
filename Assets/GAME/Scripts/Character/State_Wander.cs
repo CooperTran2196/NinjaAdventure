@@ -2,14 +2,19 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[DisallowMultipleComponent]
+
 // Exclusive wander state for NPCs (tutorial-style).
 // Does NOT depend on C_State. Single writer of rb.linearVelocity while enabled.
 public class State_Wander : MonoBehaviour
 {
     [Header("References")]
-    public Rigidbody2D rb;
-    public Animator characterAnimator;  // NPC sprite animator (Idle/Walk graph)
-    public C_Stats c_Stats;
+    Rigidbody2D rb;
+    Animator anim;  // NPC sprite animator (Idle/Walk graph)
+    C_Stats c_Stats;
 
     [Header("Wander Area")]
     public Vector2 startCenter;
@@ -29,16 +34,17 @@ public class State_Wander : MonoBehaviour
     Vector2 lastMove;
     bool isWandering;
     const float MIN_DISTANCE = 0.1f;
+    Vector2 knockback;
 
     void Awake()
     {
-        rb               ??= GetComponent<Rigidbody2D>();
-        characterAnimator ??= GetComponentInChildren<Animator>();
-        c_Stats          ??= GetComponent<C_Stats>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        c_Stats = GetComponent<C_Stats>();
 
-        if (!rb)       Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Wander.");
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing in NPC_State_Wander.");
-        if (!characterAnimator) Debug.LogError($"{name}: Animator (in children) missing in NPC_State_Wander.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Wander.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in NPC_State_Wander.");
+        if (!anim) Debug.LogError($"{name}: Animator (in children) missing in NPC_State_Wander.");
 
         // Use current spawn as center by default
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
@@ -46,6 +52,8 @@ public class State_Wander : MonoBehaviour
 
     void OnEnable()
     {
+        isWandering = true;
+        anim.SetBool("isWandering", true);
         rb.bodyType = RigidbodyType2D.Dynamic;
         StopAllCoroutines();
         StartCoroutine(PauseAndPickNewDestination());
@@ -53,6 +61,7 @@ public class State_Wander : MonoBehaviour
 
     void OnDisable()
     {
+        anim.SetBool("isWandering", false);
         StopAllCoroutines();
         isWandering = false;
         if (rb) rb.linearVelocity = Vector2.zero;
@@ -74,10 +83,10 @@ public class State_Wander : MonoBehaviour
         if (dir.sqrMagnitude > 0f) lastMove = dir;
 
         // Update animator floats to keep facing consistent
-        characterAnimator?.SetFloat("moveX", dir.x);
-        characterAnimator?.SetFloat("moveY", dir.y);
-        characterAnimator?.SetFloat("idleX", lastMove.x);
-        characterAnimator?.SetFloat("idleY", lastMove.y);
+        anim.SetFloat("moveX", dir.x);
+        anim.SetFloat("moveY", dir.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
     }
 
     void FixedUpdate()
@@ -88,7 +97,15 @@ public class State_Wander : MonoBehaviour
             return;
         }
 
-        rb.linearVelocity = dir * c_Stats.MS; // speed from stats directly
+        Vector2 final = (dir * c_Stats.MS) + knockback;
+        rb.linearVelocity = final;
+
+        if (knockback.sqrMagnitude > 0f)
+        {
+            float step = c_Stats.KR * Time.fixedDeltaTime;
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+        }
+    
     }
 
     IEnumerator PauseAndPickNewDestination()
@@ -96,14 +113,14 @@ public class State_Wander : MonoBehaviour
         // pause
         isWandering = false;
         rb.linearVelocity = Vector2.zero;
-        characterAnimator?.Play(idleState);
+        anim?.Play(idleState);
 
         yield return new WaitForSeconds(pauseDuration);
 
         // new target + resume
         destination = GetRandomEdgePoint();
         isWandering = true;
-        characterAnimator?.Play(walkState);
+        anim?.Play(walkState);
     }
 
     Vector2 GetRandomEdgePoint()
@@ -134,12 +151,9 @@ public class State_Wander : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D _)
     {
-        if (isWandering)
-        {
-            StopAllCoroutines();
-            StartCoroutine(PauseAndPickNewDestination());
-        }
+        if (isWandering) StartCoroutine(PauseAndPickNewDestination());
     }
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
     void OnDrawGizmosSelected()
     {

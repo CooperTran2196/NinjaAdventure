@@ -26,8 +26,6 @@ public class E_Controller : MonoBehaviour
 
     // Runtime variables
     Transform currentTarget;
-    bool targetInsideAttackCircle;
-    bool targetInsideDetectionCircle;
 
     void Awake()
     {
@@ -46,10 +44,10 @@ public class E_Controller : MonoBehaviour
 
     void OnDisable()
     {
-        if (idle) idle.enabled = false;
-        if (wander) wander.enabled = false;
-        if (chase) chase.enabled = false;
-        if (attack) attack.enabled = false;
+        idle.enabled   = false;
+        wander.enabled = false;
+        chase.enabled  = false;
+        attack.enabled = false;
     }
 
     void Update()
@@ -59,66 +57,42 @@ public class E_Controller : MonoBehaviour
         // If attackCircle not null, reuse it. Otherwise check the detectionCircle
         Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
         // Check true/false for each circle depending on player location
-        targetInsideAttackCircle = attackCircle;
-        targetInsideDetectionCircle = detectionCircle;
+        bool targetInsideAttackCircle = attackCircle;
+        bool targetInsideDetectionCircle = detectionCircle;
 
         if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
 
         // Optional: the current state reacts immediately without forcing a state change
-        if (chase.enabled) chase.SetRanges(detectionRange, attackRange);
-        if (attack.enabled) attack.SetRanges(detectionRange, attackRange);
+        // if (chase.enabled) chase.SetRanges(attackRange);
+        // if (attack.enabled) attack.SetRanges(attackRange);
 
-        switch (currentState)
+        // Decide desired state from ring position
+        EState desiredState =
+        targetInsideAttackCircle    ? EState.Attack :
+        targetInsideDetectionCircle ? EState.Chase  :
+                                      defaultState;
+
+        // Never interrupt an active attack clip
+        if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
+        // If nothing changed just return
+        if (desiredState == currentState) return;
+
+        // Apply the change
+        switch (desiredState)
         {
-            case EState.Idle:
-
-            // If the player is detected, switch to the chase state
-            case EState.Wander:
-                if (targetInsideDetectionCircle)
-                {
-                    chase.SetTarget(currentTarget);
-                    SwitchState(EState.Chase);
-                }
+            case EState.Attack:
+                attack.SetTarget(currentTarget);
+                SwitchState(EState.Attack);
                 break;
 
             case EState.Chase:
-                // If the player goes out of detection range, return to default state
-                if (!targetInsideDetectionCircle)
-                {
-                    currentTarget = null;
-                    SwitchState(defaultState);
-                }
-                // If the player is close enough, switch to attack state
-                else if (targetInsideAttackCircle)
-                {
-                    attack.SetTarget(currentTarget);
-                    SwitchState(EState.Attack);
-                }
-                // Else remain in chase state
-                else
-                {
-                    chase.SetTarget(currentTarget);
-                }
+                chase.SetTarget(currentTarget);
+                SwitchState(EState.Chase);
                 break;
 
-            case EState.Attack:
-                // If the player goes out of detection range, return to default state (non-interrupt the attack)
-                if (!targetInsideDetectionCircle && !attack.IsAttacking)
-                {
-                    currentTarget = null;
-                    SwitchState(defaultState);
-                }
-                // If the player goes out of attack range, chase again (non-interrupt the attack)
-                else if (!targetInsideAttackCircle && !attack.IsAttacking)
-                {
-                    // Still in outer ring but out of inner -> chase again
-                    chase.SetTarget(currentTarget);
-                    SwitchState(EState.Chase);
-                }
-                else
-                {
-                    // stay attacking; controller does nothing mid-clip
-                }
+            default:
+                currentTarget = null;
+                SwitchState(defaultState);
                 break;
         }
     }
@@ -137,12 +111,12 @@ public class E_Controller : MonoBehaviour
         if (s == EState.Chase)
         {
             chase.SetTarget(currentTarget);
-            chase.SetRanges(detectionRange, attackRange);
+            chase.SetRanges(attackRange);
         }
         else if (s == EState.Attack)
         {
             attack.SetTarget(currentTarget);
-            attack.SetRanges(detectionRange, attackRange);
+            attack.SetRanges(attackRange);
         }
     }
 

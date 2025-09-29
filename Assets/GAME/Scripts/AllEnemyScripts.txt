@@ -19,7 +19,6 @@ public class E_Combat : MonoBehaviour
     E_Movement e_Movement;
     C_Health e_Health;
     public W_Base activeWeapon;
-    C_Wander c_Wander;
 
     [Header("AI")]
     public LayerMask playerLayer;
@@ -52,7 +51,7 @@ public class E_Combat : MonoBehaviour
         e_Movement   ??= GetComponent<E_Movement>();
         e_Health     ??= GetComponent<C_Health>();
         activeWeapon ??= GetComponentInChildren<W_Melee>();
-        c_Wander     ??= GetComponent<C_Wander>();
+
 
         if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
         if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");
@@ -163,6 +162,140 @@ public class E_Combat : MonoBehaviour
     }
 }
 
+// ----- File: E_Controller.cs -----
+using UnityEngine;
+
+[RequireComponent(typeof(State_Idle))]
+[RequireComponent(typeof(State_Wander))]
+[RequireComponent(typeof(State_Chase))]
+[RequireComponent(typeof(State_Attack))]
+[DisallowMultipleComponent]
+
+public class E_Controller : MonoBehaviour
+{
+    public enum EState { Idle, Wander, Chase, Attack }
+
+    [Header("Main controller for enemy AI states")]
+    [Header("Ranges and Layers")]
+    [Min(3f)] public float detectionRange = 3f;
+    [Min(1.2f)] public float attackRange = 1.2f;
+    public LayerMask playerLayer;
+
+    [Header("States")]
+    public EState defaultState = EState.Idle;
+    EState currentState;
+    public State_Idle idle;
+    public State_Wander wander;
+    public State_Chase chase;
+    public State_Attack attack;
+
+    // Runtime variables
+    Transform currentTarget;
+
+    void Awake()
+    {
+        idle = GetComponent<State_Idle>();
+        wander = GetComponent<State_Wander>();
+        chase = GetComponent<State_Chase>();
+        attack = GetComponent<State_Attack>();
+
+        if (!idle) Debug.LogError($"{name}: Missing State_Idle in E_Controller.");
+        if (!wander) Debug.LogError($"{name}: Missing State_Wander in E_Controller.");
+        if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
+        if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
+    }
+
+    void OnEnable() => SwitchState(defaultState);
+
+    void OnDisable()
+    {
+        idle.enabled   = false;
+        wander.enabled = false;
+        chase.enabled  = false;
+        attack.enabled = false;
+    }
+
+    void Update()
+    {
+        // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
+        Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        // If attackCircle not null, reuse it. Otherwise check the detectionCircle
+        Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+        // Check true/false for each circle depending on player location
+        bool targetInsideAttackCircle = attackCircle;
+        bool targetInsideDetectionCircle = detectionCircle;
+
+        if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
+
+        // Optional: the current state reacts immediately without forcing a state change
+        // if (chase.enabled) chase.SetRanges(attackRange);
+        // if (attack.enabled) attack.SetRanges(attackRange);
+
+        // Decide desired state from ring position
+        EState desiredState =
+        targetInsideAttackCircle    ? EState.Attack :
+        targetInsideDetectionCircle ? EState.Chase  :
+                                      defaultState;
+
+        // Never interrupt an active attack clip
+        if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
+        // If nothing changed just return
+        if (desiredState == currentState) return;
+
+        // Apply the change
+        switch (desiredState)
+        {
+            case EState.Attack:
+                attack.SetTarget(currentTarget);
+                SwitchState(EState.Attack);
+                break;
+
+            case EState.Chase:
+                chase.SetTarget(currentTarget);
+                SwitchState(EState.Chase);
+                break;
+
+            default:
+                currentTarget = null;
+                SwitchState(defaultState);
+                break;
+        }
+    }
+
+    public void SwitchState(EState s)
+    {
+        if (currentState == s) return;
+        currentState = s;
+
+        idle.enabled = (s == EState.Idle);
+        wander.enabled = (s == EState.Wander);
+        chase.enabled = (s == EState.Chase);
+        attack.enabled = (s == EState.Attack);
+
+        // On enter, provide context to newly enabled state
+        if (s == EState.Chase)
+        {
+            chase.SetTarget(currentTarget);
+            chase.SetRanges(attackRange);
+        }
+        else if (s == EState.Attack)
+        {
+            attack.SetTarget(currentTarget);
+            attack.SetRanges(attackRange);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.65f, 0f);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+}
+
 // ----- File: E_HealthBarSlider.cs -----
 // File: E_HealthBarSlider.cs  (enemy-only, green-only)
 using UnityEngine;
@@ -265,7 +398,6 @@ using UnityEngine;
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_State))]
 [RequireComponent(typeof(E_Combat))]
-[RequireComponent(typeof(C_Wander))]
 [DisallowMultipleComponent]
 
 public class E_Movement : MonoBehaviour
@@ -278,7 +410,7 @@ public class E_Movement : MonoBehaviour
     C_Stats c_Stats;
     C_State c_State;
     E_Combat e_Combat;
-    C_Wander c_Wander;
+
 
     [Header("Detection (OverlapCircle)")]
     public LayerMask playerLayer;
@@ -306,7 +438,7 @@ public class E_Movement : MonoBehaviour
         c_Stats  ??= GetComponent<C_Stats>();
         c_State  ??= GetComponent<C_State>();
         e_Combat ??= GetComponent<E_Combat>();
-        c_Wander ??= GetComponent<C_Wander>();
+
 
         if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
         if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
@@ -315,7 +447,7 @@ public class E_Movement : MonoBehaviour
         if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
         if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
         if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
-        if (!c_Wander) Debug.LogError($"{name}: C_Wander in E_Movement is missing.");
+
     }
 
     void Update()
@@ -349,28 +481,14 @@ public class E_Movement : MonoBehaviour
     void Chase()
     {
         // If dead, ensure everything stays stopped and wander cannot reactivate
-        if (c_State.Is(C_State.ActorState.Dead))
-        {
-            if (c_Wander.enabled) c_Wander.enabled = false;
-            moveAxis = Vector2.zero;
-            velocity = Vector2.zero;
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+
 
         // Setup target if player comes close
         var hit = Physics2D.OverlapCircle((Vector2)transform.position, detectionRadius, playerLayer);
         target = hit ? hit.transform : null;
 
         // Toggle wandering by detection
-        if (target != null)
-        {
-            c_Wander.enabled = false; // disable wander while chasing
-        }
-        else
-        {
-            c_Wander.enabled = true; // re-enable wander when no target
-        }
+
 
         if (disabled)
         {

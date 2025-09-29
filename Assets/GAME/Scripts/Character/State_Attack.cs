@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[DisallowMultipleComponent]
+
 public class State_Attack : MonoBehaviour
 {
     [Header("Animation States")]
-    public string idleState   = "Idle";
-    public string attackState = "Attack"; // clip name
     public LayerMask playerLayer;
 
     [Header("Timing")]
@@ -14,7 +16,6 @@ public class State_Attack : MonoBehaviour
     public float hitDelay       = 0.15f;
 
     // Ranges are injected by controller
-    float detectionRange = 3f; // not used for logic here, but kept for gizmos if you want
     float attackRange    = 1.2f;
 
     [Header("Weapon")]
@@ -32,43 +33,36 @@ public class State_Attack : MonoBehaviour
     Vector2 knockback, lastFace = Vector2.down;
     float cooldownTimer;
     bool isAttacking;
-    string lastPlayed;
 
     public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        rb   ??= GetComponent<Rigidbody2D>();
-        anim ??= GetComponent<Animator>();
-        activeWeapon ??= GetComponentInChildren<W_Base>();
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponent<Animator>();
+        activeWeapon = GetComponentInChildren<W_Base>();
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
+        if (!anim) Debug.LogError($"{name}: Animator missing on State_Attack.");
     }
 
     void OnEnable()
     {
-        lastPlayed = null;
-        PlayIfChanged(idleState);
+        // anim.SetBool("isAttacking", false);
     }
 
     void OnDisable()
     {
-        StopAllCoroutines();
+        // anim.SetBool("isAttacking", false);
         isAttacking = false;
         rb.linearVelocity = Vector2.zero;
-        lastPlayed = null;
-    }
-
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float detectionRange, float attackRange)
-    {
-        this.detectionRange = detectionRange;
-        this.attackRange    = attackRange;
     }
 
     void Update()
     {
         if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
         
-        // Integrated former AttackLoop polling logic
+        // Process attack logic only when we have a target
         if (target)
         {
             // Inner ring test (collider-based so edge contact counts)
@@ -79,7 +73,7 @@ public class State_Attack : MonoBehaviour
             Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
 
             // Continuously update idle facing (even during attack so idle pose rotates, atkX/atkY stay locked)
-            UpdateIdleFacing(dir);
+            UpdateIdleFacing(isAttacking ? lastFace : dir);
 
             // Start attack immediately upon entering inner ring and off cooldown
             if (!isAttacking && inInner && cooldownTimer <= 0f)
@@ -101,34 +95,33 @@ public class State_Attack : MonoBehaviour
         }
     }
 
-    // (Former AttackLoop removed; logic now lives inside Update())
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
     // NON-INTERUPTIBLE ATTACK ROUTINE
     // lock facing, play clip, wait for hit, wait for end, cooldown
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;
+        anim.SetBool("isAttacking", true);
 
         // Lock attack facing into atkX/atkY once at the start
         if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         anim.SetFloat("atkX", lastFace.x);
         anim.SetFloat("atkY", lastFace.y);
 
-        // play full clip (non-interruptible)
-        PlayIfChanged(attackState);
-
-        // movement stays zero while striking; just hold idle facing
+        // Movement stays zero while striking; just update idle facing
         UpdateIdleFacing(lastFace);
 
+        // Wait for hitDelay then start the hit
         yield return new WaitForSeconds(hitDelay);
         activeWeapon?.Attack(lastFace);
-
         yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        // Reset the attack cooldown
         cooldownTimer = attackCooldown;
         isAttacking = false;
-
-        // fall back to idle pose; controller will decide next state
-        PlayIfChanged(idleState);
+        anim.SetBool("isAttacking", false);
     }
 
     void UpdateIdleFacing(Vector2 faceDir)
@@ -142,22 +135,6 @@ public class State_Attack : MonoBehaviour
         anim.SetFloat("idleY", f.y);
     }
 
-    void PlayIfChanged(string stateName)
-    {
-        if (lastPlayed == stateName) return;
-        anim.Play(stateName);
-        lastPlayed = stateName;
-    }
-
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
-#if UNITY_EDITOR
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0.65f, 0f);
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-#endif
 }
