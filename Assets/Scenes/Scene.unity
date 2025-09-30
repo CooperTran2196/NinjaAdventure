@@ -20811,8 +20811,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f007a2ea05f504e8cf7230f6816e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
-  rb: {fileID: 1263878810}
-  characterAnim: {fileID: 1263878808}
   interactAnim: {fileID: 373828666}
 --- !u!114 &1263878806
 MonoBehaviour:
@@ -20840,7 +20838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6500e08894610634bbf18bd1726b6f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_Controller
-  defaultState: 1
+  defaultState: 0
   wander: {fileID: 1263878814}
   talk: {fileID: 1263878805}
   idle: {fileID: 1263878806}
@@ -21006,7 +21004,7 @@ Transform:
   m_GameObject: {fileID: 1263878799}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 37.73, y: 39.81, z: 0}
+  m_LocalPosition: {x: 39.73, y: 37.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -21676,7 +21674,7 @@ GameObject:
   - component: {fileID: 1339144783}
   - component: {fileID: 1339144782}
   m_Layer: 7
-  m_Name: Princess (2)
+  m_Name: Testing Enemy with new System
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

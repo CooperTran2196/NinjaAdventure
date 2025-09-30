@@ -1,9 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-[DisallowMultipleComponent]
 public class State_Attack : MonoBehaviour
 {
     [Header("Animation States")]
@@ -12,9 +9,8 @@ public class State_Attack : MonoBehaviour
     [Header("Timing")]
     public float attackCooldown = 0.80f;
     public float attackDuration = 0.45f;
-    public float hitDelay       = 0.15f;
-
-    float attackRange = 1.2f;
+    public float hitDelay = 0.15f;
+    float attackRange;
 
     [Header("Weapon")]
     public W_Base activeWeapon;
@@ -28,14 +24,13 @@ public class State_Attack : MonoBehaviour
     Transform target;
     Vector2 lastFace = Vector2.down;
     bool isAttacking;
-
     public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        rb           = GetComponent<Rigidbody2D>();
-        anim         = GetComponent<Animator>();
-        controller   = GetComponent<E_Controller>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        controller = GetComponent<E_Controller>();
         activeWeapon = GetComponentInChildren<W_Base>();
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
@@ -69,9 +64,11 @@ public class State_Attack : MonoBehaviour
             StartCoroutine(AttackRoutine(dir));
     }
 
+    // Set target + attack range
     public void SetTarget(Transform t) => target = t;
     public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
+    // Attack coroutine
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;
@@ -92,10 +89,12 @@ public class State_Attack : MonoBehaviour
         anim.SetBool("isAttacking", false);
     }
 
+    // Update facing for idle state
     void UpdateIdleFacing(Vector2 faceDir)
     {
         anim.SetFloat("moveX", 0f);
         anim.SetFloat("moveY", 0f);
+        // Compute idle facing from last move/attack direction
         Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
         anim.SetFloat("idleX", f.x);
         anim.SetFloat("idleY", f.y);

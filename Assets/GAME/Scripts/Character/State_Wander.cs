@@ -11,7 +11,7 @@ public class State_Wander : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
     C_Stats c_Stats;
-    E_Controller controller;
+    I_Controller controller;
 
     [Header("Wander Area")]
     public Vector2 startCenter;
@@ -37,11 +37,14 @@ public class State_Wander : MonoBehaviour
         rb         = GetComponent<Rigidbody2D>();
         anim       = GetComponentInChildren<Animator>();
         c_Stats    = GetComponent<C_Stats>();
-        controller = GetComponent<E_Controller>();
+        controller = (I_Controller)(GetComponent<E_Controller>() ??
+                        (Component)GetComponent<NPC_Controller>());
+
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Wander.");
         if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in State_Wander.");
         if (!anim) Debug.LogError($"{name}: Animator (in children) missing in State_Wander.");
+        if (controller == null) Debug.LogError($"{name}: A Controller missing in State_Wander.");
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }

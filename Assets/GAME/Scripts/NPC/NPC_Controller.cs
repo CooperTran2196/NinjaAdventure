@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class NPC_Controller : MonoBehaviour
+[DisallowMultipleComponent]
+public class NPC_Controller : MonoBehaviour, I_Controller
 {
     public enum NPCState { Idle, Wander, Talk }
 
@@ -13,19 +13,30 @@ public class NPC_Controller : MonoBehaviour
 
     NPCState current;
 
+    // --- Movement (controller is the single velocity writer) ---
+    Rigidbody2D rb;
+    C_Stats stats;
+    Vector2 desiredVelocity;
+
     void Awake()
     {
         wander ??= GetComponent<State_Wander>();
         talk   ??= GetComponent<State_Talk>();
         idle   ??= GetComponent<State_Idle>();
 
+        rb    ??= GetComponent<Rigidbody2D>();
+        stats ??= GetComponent<C_Stats>();
+
         if (!wander) Debug.LogError($"{name}: NPC_State_Wander missing for NPC_Controller.");
         if (!talk)   Debug.LogError($"{name}: NPC_State_Talk missing for NPC_Controller.");
         if (!idle)   Debug.LogError($"{name}: NPC_State_Idle missing for NPC_Controller.");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing for NPC_Controller.");
     }
 
     void OnEnable()
     {
+        desiredVelocity = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
         SwitchState(defaultState);
     }
 
@@ -34,6 +45,18 @@ public class NPC_Controller : MonoBehaviour
         if (wander) wander.enabled = false;
         if (talk)   talk.enabled   = false;
         if (idle)   idle.enabled   = false;
+
+        desiredVelocity = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    // States publish intent; controller applies in FixedUpdate
+    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
+
+    void FixedUpdate()
+    {
+        if (!rb) return;
+        rb.linearVelocity = desiredVelocity;
     }
 
     public void SwitchState(NPCState newState)
@@ -42,18 +65,20 @@ public class NPC_Controller : MonoBehaviour
         current = newState;
 
         // Enable exactly one state
-        idle.enabled    = newState == NPCState.Idle;
-        wander.enabled  = newState == NPCState.Wander;
-        talk.enabled    = newState == NPCState.Talk;
-    }
+        if (idle)   idle.enabled   = newState == NPCState.Idle;
+        if (wander) wander.enabled = newState == NPCState.Wander;
+        if (talk)   talk.enabled   = newState == NPCState.Talk;
 
+        // Reset movement intent on enter
+        desiredVelocity = Vector2.zero;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
 
         // Make Talk face the player before switching
-        if (talk) talk.FaceTarget(other.transform);
+        if (talk) talk.SetTarget(other.transform);
 
         SwitchState(NPCState.Talk);
     }
@@ -63,5 +88,4 @@ public class NPC_Controller : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         SwitchState(defaultState);
     }
-
 }

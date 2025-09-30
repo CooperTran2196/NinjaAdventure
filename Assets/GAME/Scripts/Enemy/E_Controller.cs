@@ -8,11 +8,9 @@ using UnityEngine;
 [RequireComponent(typeof(State_Attack))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
-
-
 [DisallowMultipleComponent]
 
-public class E_Controller : MonoBehaviour
+public class E_Controller : MonoBehaviour, I_Controller
 {
     public enum EState { Idle, Wander, Chase, Attack }
 
@@ -39,12 +37,8 @@ public class E_Controller : MonoBehaviour
     bool isStunned;
     bool isDead;
     float stunUntil;
-    float attackCooldown;
-
-    // Helper for State scripts to read/write movement intent + apply knockback
-    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
-    // W_Knockback now calls this first, so all states get shoved uniformly
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    float attackCooldown; // for State_Attack
+    float contactTimer;   // for collision damage
 
     void Awake()
     {
@@ -85,7 +79,8 @@ public class E_Controller : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        // Death override
         if (isDead) return;
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
         // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
@@ -132,13 +127,14 @@ public class E_Controller : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Death override
         if (isDead) return;
 
-        // 1) Apply this frame: block state intent when stunned/dead, but still allow knockback
+        // Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
         rb.linearVelocity = baseVel + knockback;
 
-        // 2) Decay knockback for the NEXT frame — no defaultKR, require stats.KR
+        // Decay knockback for the NEXT frame
         if (knockback.sqrMagnitude > 0f)
         {
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
@@ -152,6 +148,13 @@ public class E_Controller : MonoBehaviour
         this.attackCooldown = attackCooldown;
     }
 
+    // Only E_Controller handle the movement + knockback
+    // Helper for State scripts to read/write movement intent + apply knockback
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    // W_Knockback now calls this first, so all states get shoved uniformly
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+
+    // Stun coroutine called by W_Base when applying stun effect
     public IEnumerator StunFor(float duration)
     {
         if (duration <= 0f) yield break;
@@ -166,8 +169,7 @@ public class E_Controller : MonoBehaviour
         isStunned = false;
     }
 
-
-
+    // Handle death event from C_Health
     void HandleDeath()
     {
         // Mark as dead
@@ -187,7 +189,7 @@ public class E_Controller : MonoBehaviour
         anim.SetTrigger("Die");
     }
 
-
+    // Switch states, enabling the chosen one and disabling others
     public void SwitchState(EState s)
     {
         if (currentState == s) return;
@@ -209,6 +211,25 @@ public class E_Controller : MonoBehaviour
             attack.SetTarget(currentTarget);
             attack.SetRanges(attackRange);
         }
+    }
+
+    // Collision damage while touching player
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (isDead) return;
+
+        // Only interact with the player layer (you already have playerLayer on the controller)
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0) return;
+
+        // Throttle ticks using physics timestep
+        if (contactTimer > 0f) { contactTimer -= Time.fixedDeltaTime; return; }
+
+        // Apply damage if player has C_Health
+        var playerHealth = collision.collider.GetComponent<C_Health>();
+        if (!playerHealth.IsAlive) return;
+
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage);   // apply tick damage
+        contactTimer = c_Stats.collisionTick;                  // reset tick window
     }
 
     // DEBUG: visualize detection/attack ranges

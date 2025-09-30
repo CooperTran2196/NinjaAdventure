@@ -1,9 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
-[DisallowMultipleComponent]
 public class State_Chase : MonoBehaviour
 {
     [Header("Tuning")]
@@ -23,10 +19,11 @@ public class State_Chase : MonoBehaviour
 
     void Awake()
     {
-        rb         ??= GetComponent<Rigidbody2D>();
-        anim       ??= GetComponent<Animator>();
-        stats      ??= GetComponent<C_Stats>();
-        controller ??= GetComponent<E_Controller>();
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        stats      = GetComponent<C_Stats>();
+        controller = GetComponent<E_Controller>();
+
         if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
     }
 
@@ -40,11 +37,9 @@ public class State_Chase : MonoBehaviour
         anim.SetBool("isMoving", false);
     }
 
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
     void Update()
     {
+        // No movement while stunned/dead; controller still applies knockback globaly
         if (!target)
         {
             velocity = Vector2.zero;
@@ -54,18 +49,25 @@ public class State_Chase : MonoBehaviour
             return;
         }
 
+        // Chase target
         Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
         float   distance  = toTarget.magnitude;
         Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
 
+        // Move if outside attack range + buffer
         velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
         bool moving = velocity.sqrMagnitude > 0f;
         anim.SetBool("isMoving", moving);
 
-        controller?.SetDesiredVelocity(velocity);
+        controller.SetDesiredVelocity(velocity);
         UpdateFloats(velocity);
     }
 
+    // Set target + attack range
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // Update animator floats
     void UpdateFloats(Vector2 move)
     {
         if (move.sqrMagnitude > 0f) lastMove = move.normalized;
