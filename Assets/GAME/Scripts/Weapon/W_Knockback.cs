@@ -12,8 +12,6 @@ public static class W_Knockback
     public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
         // New system (unified): controller handles knockback for all states
-        var ec = target.GetComponentInParent<E_Controller>();
-        if (ec != null) { ec.ReceiveKnockback(direction * knockbackForce); return; }
 
         // Player
         var pm = target.GetComponentInParent<P_Movement>();

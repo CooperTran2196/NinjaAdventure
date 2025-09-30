@@ -177,28 +177,29 @@ public abstract class W_Base : MonoBehaviour
 
         if (weaponData.stunTime > 0f)
         {
-            // Player (OLD)
-            var pm = targetCollider.GetComponentInParent<P_Movement>();
-            if (pm)
+            // NEW system first: stun handled inside controller (single coroutine)
+            var ec = targetCollider.GetComponentInParent<E_Controller>();
+            if (ec)
             {
-                weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
+                ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
             }
             else
             {
-                // NEW system: call into E_Controller (controller implements stun)
-                var ec = targetCollider.GetComponentInParent<E_Controller>();
-                if (ec)
+                // OLD system fallbacks
+                var pm = targetCollider.GetComponentInParent<P_Movement>();
+                if (pm)
                 {
-                    weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime));
+                    weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
                 }
                 else
                 {
-                    // OLD enemy (legacy)
                     var em = targetCollider.GetComponentInParent<E_Movement>();
                     if (em) weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime));
                 }
             }
         }
+
+
 
 
     }

@@ -18,13 +18,4 @@ public static class W_Stun
         yield return new WaitForSeconds(time);
         m.SetDisabled(false);
     }
-
-    // Stun New-Enemy (preferred)
-    // Stun New-Enemy (NEW system does stun inside controller)
-    public static IEnumerator Apply(E_Controller ec, float time)
-    {
-        if (!ec) yield break;
-        ec.Stun(time);           // controller owns the logic + timing
-        yield break;             // no need to wait here; controller handles duration
-    }
 }

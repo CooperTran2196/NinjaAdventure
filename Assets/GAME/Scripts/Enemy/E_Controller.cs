@@ -1,9 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(State_Idle))]
 [RequireComponent(typeof(State_Wander))]
 [RequireComponent(typeof(State_Chase))]
 [RequireComponent(typeof(State_Attack))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
+
+
 [DisallowMultipleComponent]
 
 public class E_Controller : MonoBehaviour
@@ -11,92 +17,78 @@ public class E_Controller : MonoBehaviour
     public enum EState { Idle, Wander, Chase, Attack }
 
     [Header("Main controller for enemy AI states")]
-    [Header("Ranges and Layers")]
-    [Min(3f)] public float detectionRange = 3f;
+    [Header("References")]
+    [Min(3f)]   public float detectionRange = 3f;
     [Min(1.2f)] public float attackRange = 1.2f;
-    public LayerMask playerLayer;
-
-    [Header("States")]
-    public EState defaultState = EState.Idle;
+                public LayerMask playerLayer;
+                public EState defaultState = EState.Idle;
+    Rigidbody2D rb;
+    Animator anim;
     EState currentState;
-    public State_Idle idle;
-    public State_Wander wander;
-    public State_Chase chase;
-    public State_Attack attack;
+    State_Idle idle;
+    State_Wander wander;
+    State_Chase chase;
+    State_Attack attack;
+    C_Stats c_Stats;
+    C_Health c_Health;
 
-    // Runtime variables
-    Transform currentTarget;
-    // Movement blend + FX
     [Header("Movement / FX")]
     public string deathTrigger = "Die";
-    public bool autoKill;
 
-    Rigidbody2D rb;
-    Animator animator;
-    C_Stats stats;
-    C_Health health;
-    Collider2D[] cols;
-
-    // Unified movement intent + knockback
+    // Runtime vars
+    Transform currentTarget;
     Vector2 desiredVelocity;
     Vector2 knockback;
     bool isStunned;
     bool isDead;
-    Coroutine stunRoutine;
+    float stunUntil;
 
+    // Helper for State scripts to read/write movement intent + apply knockback
+    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
+    // W_Knockback now calls this first, so all states get shoved uniformly
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
     void Awake()
     {
+        rb       ??= GetComponent<Rigidbody2D>();
+        anim ??= GetComponentInChildren<Animator>();
         idle = GetComponent<State_Idle>();
         wander = GetComponent<State_Wander>();
         chase = GetComponent<State_Chase>();
         attack = GetComponent<State_Attack>();
+        c_Stats = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+        c_Stats    ??= GetComponent<C_Stats>();
+        c_Health   ??= GetComponent<C_Health>();
 
-        if (!idle) Debug.LogError($"{name}: Missing State_Idle in E_Controller.");
-        if (!wander) Debug.LogError($"{name}: Missing State_Wander in E_Controller.");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller.");
+        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller.");
+        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller.");
+        if (!wander) Debug.LogError($"{name}:State_Wander is missing in E_Controller.");
         if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
         if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
-
-        rb       ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponentInChildren<Animator>();
-        stats    ??= GetComponent<C_Stats>();
-        health   ??= GetComponent<C_Health>();
-        cols     ??= GetComponentsInChildren<Collider2D>(true);
-
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (!health) Debug.LogError($"{name}: C_Health missing.");
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing.");
+        if (!c_Health) Debug.LogError($"{name}: C_Health missing.");
     }
-
 
     void OnEnable()
     {
-        if (health) health.OnDied += HandleDeath;
-
-        if (autoKill && health)
-        {
-            autoKill = false;
-            health.Kill(); // uses stats.maxHP internally per your style
-        }
-
+        c_Health.OnDied += HandleDeath;
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        if (health) health.OnDied -= HandleDeath;
+        c_Health.OnDied -= HandleDeath;
         idle.enabled   = false;
         wander.enabled = false;
         chase.enabled  = false;
         attack.enabled = false;
     }
-    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
-
-
-    // W_Knockback now calls this first, so all states get shoved uniformly
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
     void Update()
     {
+        if (isDead) return;
         // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
         Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         // If attackCircle not null, reuse it. Otherwise check the detectionCircle
@@ -105,24 +97,21 @@ public class E_Controller : MonoBehaviour
         bool targetInsideAttackCircle = attackCircle;
         bool targetInsideDetectionCircle = detectionCircle;
 
+        // Set current target to the player if inside either circle, otherwise null
         if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
-
-        // Optional: the current state reacts immediately without forcing a state change
-        // if (chase.enabled) chase.SetRanges(attackRange);
-        // if (attack.enabled) attack.SetRanges(attackRange);
 
         // Decide desired state from ring position
         EState desiredState =
-        targetInsideAttackCircle    ? EState.Attack :
-        targetInsideDetectionCircle ? EState.Chase  :
-                                      defaultState;
+        targetInsideAttackCircle    ? EState.Attack :   // Attack if inside attack range
+        targetInsideDetectionCircle ? EState.Chase  :   // Chase if inside detection range
+                                      defaultState;     // Otherwise default (Idle/Wander)
 
         // Never interrupt an active attack clip
         if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
         // If nothing changed just return
         if (desiredState == currentState) return;
 
-        // Apply the change
+        // Apply state change
         switch (desiredState)
         {
             case EState.Attack:
@@ -141,9 +130,14 @@ public class E_Controller : MonoBehaviour
                 break;
         }
     }
+
     void FixedUpdate()
     {
-        if (!rb) return;
+        if (isDead)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
 
         // 1) Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
@@ -152,52 +146,39 @@ public class E_Controller : MonoBehaviour
         // 2) Decay knockback for the NEXT frame — no defaultKR, require stats.KR
         if (knockback.sqrMagnitude > 0f)
         {
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, stats.KR * Time.fixedDeltaTime);
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
         }
     }
 
-
-
-    public void Stun(float duration)
+    public IEnumerator StunFor(float duration)
     {
-        if (stunRoutine != null) StopCoroutine(stunRoutine);
-        stunRoutine = StartCoroutine(StunRoutine(duration));
-    }
+        if (duration <= 0f) yield break;
 
+        // Extend the stun end if a longer one arrives
+        float newEnd = Time.time + duration;
+        if (newEnd > stunUntil) stunUntil = newEnd;
 
-    System.Collections.IEnumerator StunRoutine(float t)
-    {
         isStunned = true;
-        yield return new WaitForSeconds(t);
+        while (Time.time < stunUntil) yield return null;
+
         isStunned = false;
-        stunRoutine = null;
-
     }
-
 
     void HandleDeath()
     {
-        isDead = true;
-        desiredVelocity = Vector2.zero;
+        knockback = Vector2.zero;
 
         // Stop AI scripts immediately so no more actions are scheduled
-
-
         if (idle) idle.enabled = false;
         if (wander) wander.enabled = false;
         if (chase) chase.enabled = false;
         if (attack) attack.enabled = false;
 
-        // Turn off all hit/hurt boxes so this enemy can’t hit or be hit while fading
-        if (cols != null) foreach (var c in cols) c.enabled = false;
-
         // Freeze motion
-        desiredVelocity = Vector2.zero;
-        knockback = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
 
         // Play death anim; let C_Health/C_FX handle FadeAndDestroy (do NOT call fade here)
-        animator?.SetTrigger(string.IsNullOrEmpty(deathTrigger) ? "Die" : deathTrigger);
+        anim.SetTrigger("Die");
     }
 
 
@@ -224,6 +205,7 @@ public class E_Controller : MonoBehaviour
         }
     }
 
+    // DEBUG: visualize detection/attack ranges
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.65f, 0f);
@@ -232,5 +214,4 @@ public class E_Controller : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
 }
