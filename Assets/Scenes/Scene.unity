@@ -21699,7 +21699,7 @@ MonoBehaviour:
     m_Bits: 64
   attackCooldown: 0.8
   attackDuration: 0.45
-  hitDelay: 0.15
+  hitDelay: 0
   activeWeapon: {fileID: 1532159222}
 --- !u!114 &1339144772
 MonoBehaviour:
@@ -21764,13 +21764,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   defaultState: 1
-  idle: {fileID: 1339144773}
-  wander: {fileID: 1339144774}
-  chase: {fileID: 1339144772}
-  attack: {fileID: 1339144771}
-  deathTrigger: Die
-  defaultKR: 30
-  autoKill: 0
 --- !u!114 &1339144776
 MonoBehaviour:
   m_ObjectHideFlags: 0

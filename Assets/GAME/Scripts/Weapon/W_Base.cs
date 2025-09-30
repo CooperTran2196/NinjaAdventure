@@ -198,10 +198,6 @@ public abstract class W_Base : MonoBehaviour
                 }
             }
         }
-
-
-
-
     }
 
     // Called by owner when attacking

@@ -32,9 +32,6 @@ public class E_Controller : MonoBehaviour
     C_Stats c_Stats;
     C_Health c_Health;
 
-    [Header("Movement / FX")]
-    public string deathTrigger = "Die";
-
     // Runtime vars
     Transform currentTarget;
     Vector2 desiredVelocity;
@@ -42,6 +39,7 @@ public class E_Controller : MonoBehaviour
     bool isStunned;
     bool isDead;
     float stunUntil;
+    float attackCooldown;
 
     // Helper for State scripts to read/write movement intent + apply knockback
     public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
@@ -89,6 +87,7 @@ public class E_Controller : MonoBehaviour
     void Update()
     {
         if (isDead) return;
+        if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
         // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
         Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         // If attackCircle not null, reuse it. Otherwise check the detectionCircle
@@ -133,11 +132,7 @@ public class E_Controller : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+        if (isDead) return;
 
         // 1) Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
@@ -148,6 +143,13 @@ public class E_Controller : MonoBehaviour
         {
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
         }
+    }
+
+    // Set/Get attack cooldown timer for use by State_Attack
+    public float GetAttackCooldown => attackCooldown;
+    public void SetAttackCooldown(float attackCooldown)
+    {
+        this.attackCooldown = attackCooldown;
     }
 
     public IEnumerator StunFor(float duration)
@@ -164,20 +166,24 @@ public class E_Controller : MonoBehaviour
         isStunned = false;
     }
 
+
+
     void HandleDeath()
     {
-        knockback = Vector2.zero;
-
-        // Stop AI scripts immediately so no more actions are scheduled
-        if (idle) idle.enabled = false;
-        if (wander) wander.enabled = false;
-        if (chase) chase.enabled = false;
-        if (attack) attack.enabled = false;
+        // Mark as dead
+        isDead = true;
 
         // Freeze motion
+        knockback = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
 
-        // Play death anim; let C_Health/C_FX handle FadeAndDestroy (do NOT call fade here)
+        // Stop AI scripts immediately so no more actions are scheduled
+        idle.enabled = false;
+        wander.enabled = false;
+        chase.enabled = false;
+        attack.enabled = false;
+
+        // Play death anim
         anim.SetTrigger("Die");
     }
 

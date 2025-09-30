@@ -27,7 +27,6 @@ public class State_Attack : MonoBehaviour
     // Runtime
     Transform target;
     Vector2 lastFace = Vector2.down;
-    float cooldownTimer;
     bool isAttacking;
 
     public bool IsAttacking => isAttacking;
@@ -46,17 +45,15 @@ public class State_Attack : MonoBehaviour
     void OnDisable()
     {
         isAttacking = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
+        controller.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
         anim.SetBool("isAttacking", false);
     }
 
     void Update()
     {
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-
         // No movement while in attack state; controller still applies knockback globally
-        controller?.SetDesiredVelocity(Vector2.zero);
+        controller.SetDesiredVelocity(Vector2.zero);
 
         if (!target) return;
 
@@ -68,7 +65,7 @@ public class State_Attack : MonoBehaviour
 
         UpdateIdleFacing(isAttacking ? lastFace : dir);
 
-        if (!isAttacking && inInner && cooldownTimer <= 0f)
+        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
             StartCoroutine(AttackRoutine(dir));
     }
 
@@ -90,7 +87,7 @@ public class State_Attack : MonoBehaviour
         activeWeapon?.Attack(lastFace);
         yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
 
-        cooldownTimer = attackCooldown;
+        controller.SetAttackCooldown(attackCooldown);
         isAttacking = false;
         anim.SetBool("isAttacking", false);
     }
