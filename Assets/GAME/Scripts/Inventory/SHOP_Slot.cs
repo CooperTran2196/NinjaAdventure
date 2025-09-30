@@ -26,11 +26,11 @@ public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         itemImage       ??= transform.Find("itemImage")?.GetComponent<Image>();
         itemPriceText   ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
 
-        if (!shop_Manager) Debug.LogError("SHOP_Slot: SHOP_Manager missing in parent.", this);
-        if (!inv_ItemInfo) Debug.LogError("SHOP_Slot: INV_ItemInfo reference missing.", this);
-        if (!itemImage)    Debug.LogError("SHOP_Slot: itemImage missing.", this);
-        if (!itemNameText) Debug.LogError("SHOP_Slot: itemNameText missing.", this);
-        if (!itemPriceText)Debug.LogError("SHOP_Slot: itemPriceText missing.", this);
+        if (shop_Manager == null) Debug.LogError($"{name}: SHOP_Manager is missing in SHOP_Slot");
+        if (inv_ItemInfo == null) Debug.LogError($"{name}: INV_ItemInfo is missing in SHOP_Slot");
+        if (itemImage == null)    Debug.LogError($"{name}: itemImage is missing in SHOP_Slot");
+        if (itemNameText == null) Debug.LogError($"{name}: itemNameText is missing in SHOP_Slot");
+        if (itemPriceText == null)Debug.LogError($"{name}: itemPriceText is missing in SHOP_Slot");
     }
 
     // called by SHOP_Manager at startup

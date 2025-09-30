@@ -53,14 +53,14 @@ public class E_Controller : MonoBehaviour, I_Controller
         c_Stats    ??= GetComponent<C_Stats>();
         c_Health   ??= GetComponent<C_Health>();
 
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller.");
-        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller.");
-        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller.");
-        if (!wander) Debug.LogError($"{name}:State_Wander is missing in E_Controller.");
-        if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
-        if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats missing.");
-        if (!c_Health) Debug.LogError($"{name}: C_Health missing.");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller");
+        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller");
+        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller");
+        if (!wander) Debug.LogError($"{name}: State_Wander is missing in E_Controller");
+        if (!chase) Debug.LogError($"{name}: State_Chase is missing in E_Controller");
+        if (!attack) Debug.LogError($"{name}: State_Attack is missing in E_Controller");
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Controller");
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Controller");
     }
 
     void OnEnable()

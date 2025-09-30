@@ -19,7 +19,7 @@ public class State_Talk : MonoBehaviour
         controller      = (I_Controller)(GetComponent<E_Controller>() ??
                             (Component)GetComponent<NPC_Controller>());
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Talk.");
+    if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Talk");
     }
     void Update()
     {

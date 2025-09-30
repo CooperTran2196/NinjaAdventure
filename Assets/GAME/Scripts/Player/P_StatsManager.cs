@@ -27,8 +27,8 @@ public class P_StatsManager : MonoBehaviour
         c_Stats  ??= GetComponent<C_Stats>();
         c_Health ??= GetComponent<C_Health>();
 
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in C_StatsManager is missing.", this);
-        if (!c_Health) Debug.LogError($"{name}: C_Health in C_StatsManager is missing.", this);
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in P_StatsManager");
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in P_StatsManager");
 
         // Make copy of basic Stats
         baseAD      = c_Stats.AD;

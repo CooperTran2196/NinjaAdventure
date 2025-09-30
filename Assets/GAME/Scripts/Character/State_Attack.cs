@@ -33,8 +33,8 @@ public class State_Attack : MonoBehaviour
         controller = GetComponent<E_Controller>();
         activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
-        if (!anim) Debug.LogError($"{name}: Animator missing on State_Attack.");
+        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
+        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
     }
 
     void OnDisable()

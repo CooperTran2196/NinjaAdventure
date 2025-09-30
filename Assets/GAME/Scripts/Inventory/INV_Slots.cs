@@ -25,9 +25,9 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
         inv_Manager ??= GetComponentInParent<INV_Manager>();
 
-        if (!itemImage)     Debug.LogError($"INV_Slots: itemImage missing.", this);
-        if (!amountText)    Debug.LogError($"INV_Slots: amountText missing.", this);
-        if (!inv_Manager)   Debug.LogError($"INV_Slots: INV_Manager missing in parent.", this);
+        if (!itemImage)     Debug.LogError($"{name}: itemImage is missing in INV_Slots");
+        if (!amountText)    Debug.LogError($"{name}: amountText is missing in INV_Slots");
+        if (!inv_Manager)   Debug.LogError($"{name}: INV_Manager is missing in INV_Slots");
     }
 
     void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;

@@ -22,12 +22,12 @@ public class INV_ItemInfo : MonoBehaviour
         canvasGroup ??= GetComponent<CanvasGroup>();
         rectTransform ??= GetComponent<RectTransform>();
 
-        if (!canvasGroup) Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
-        if (!rectTransform) Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
+        if (!canvasGroup) Debug.LogError($"{name}: CanvasGroup is missing in INV_ItemInfo");
+        if (!rectTransform) Debug.LogError($"{name}: RectTransform is missing in INV_ItemInfo");
         // if (!itemNameText) Debug.LogError("INV_ItemInfo: itemNameText missing.", this);
-        if (!itemDescText) Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
-        if (!statLinePrefab) Debug.LogError("INV_ItemInfo: statLinePrefab missing.", this);
-        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+        if (!itemDescText) Debug.LogError($"{name}: itemDescText is missing in INV_ItemInfo");
+        if (!statLinePrefab) Debug.LogError($"{name}: statLinePrefab is missing in INV_ItemInfo");
+        if (!statContainer)  Debug.LogError($"{name}: statContainer is missing in INV_ItemInfo");
 
     }
 

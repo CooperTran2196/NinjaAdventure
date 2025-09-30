@@ -40,10 +40,10 @@ public class C_Dodge : MonoBehaviour
 
         input ??= new P_InputActions();
 
-        if (!animator)                   Debug.LogError($"{name}: Animator in C_Dodge is missing.");
-        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Dodge is missing.");
-        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement in C_Dodge is missing.");
-        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge is missing.");
+        if (!animator)                   Debug.LogError($"{name}: Animator is missing in C_Dodge");
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Dodge");
+        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement is missing in C_Dodge");
+        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner is missing in C_Dodge");
     }
 
     void OnEnable()

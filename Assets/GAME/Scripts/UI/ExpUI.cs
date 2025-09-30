@@ -20,9 +20,9 @@ public class ExpUI : MonoBehaviour
         expSlider ??= GetComponentInChildren<Slider>();
         currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
-        if (!p_Exp) Debug.LogError($"{name}: P_Exp in ExpUI missing.", this);
-        if (!expSlider) Debug.LogError($"{name}: expSlider in ExpUI missing.", this);
-        if (!currentLevelText) Debug.LogError($"{name}: currentLevelText in ExpUI missing.", this);
+        if (!p_Exp) Debug.LogError($"{name}: P_Exp is missing in ExpUI");
+        if (!expSlider) Debug.LogError($"{name}: expSlider is missing in ExpUI");
+        if (!currentLevelText) Debug.LogError($"{name}: currentLevelText is missing in ExpUI");
     }
 
     void OnEnable()

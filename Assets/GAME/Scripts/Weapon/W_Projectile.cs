@@ -30,9 +30,9 @@ public class W_Projectile : MonoBehaviour
         col    ??= GetComponent<BoxCollider2D>();
         rb     ??= GetComponent<Rigidbody2D>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!col)    Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Projectile");
+        if (!col)    Debug.LogError($"{name}: BoxCollider2D is missing in W_Projectile");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in W_Projectile");
 
         col.isTrigger = true;
         rb.gravityScale = 0f;
@@ -96,7 +96,7 @@ public class W_Projectile : MonoBehaviour
 
         // Pin it: stop physics & collisions, then parent to the collider
         rb.linearVelocity = Vector2.zero;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
         col.enabled = false;
         transform.SetParent(targetCollider.transform, true);
 

@@ -38,8 +38,8 @@ public class C_Health : MonoBehaviour
         c_Dodge ??= GetComponent<C_Dodge>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
-        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Health");
+        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge is missing in C_Health");
         if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 

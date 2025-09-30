@@ -48,13 +48,13 @@ public class E_Movement : MonoBehaviour
         e_Combat ??= GetComponent<E_Combat>();
 
 
-        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
-        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in E_Movement is missing.");
+        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer is missing in E_Movement");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D is missing in E_Movement");
+        if (!animator) Debug.LogError($"{name}: Animator is missing in E_Movement");
 
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
-        if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
-        if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Movement");
+        if (!c_State)  Debug.LogError($"{name}: C_State is missing in E_Movement");
+        if (!e_Combat) Debug.LogError($"{name}: E_Combat is missing in E_Movement");
 
     }
 

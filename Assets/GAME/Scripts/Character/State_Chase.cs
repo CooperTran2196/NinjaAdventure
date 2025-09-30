@@ -24,7 +24,7 @@ public class State_Chase : MonoBehaviour
         stats      = GetComponent<C_Stats>();
         controller = GetComponent<E_Controller>();
 
-        if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
+        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
     }
 
     void OnEnable() { anim.SetBool("isMoving", false); }

@@ -15,8 +15,8 @@ public class E_Reward : MonoBehaviour
         c_Health ??= GetComponentInParent<C_Health>();
         if (!p_Exp) p_Exp = FindFirstObjectByType<P_Exp>();
 
-        if (!c_Health) Debug.LogError($"{name}: C_Health in E_Reward missing.", this);
-        if (!p_Exp) Debug.LogError($"{name}: P_Exp not found in scene.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Reward");
+        if (!p_Exp) Debug.LogError($"{name}: P_Exp is missing in E_Reward");
     }
 
     void OnEnable()

@@ -23,7 +23,7 @@ public class INV_Manager : MonoBehaviour
     {
         p_statsManager ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_statsManager) Debug.LogError("INV_Manager: P_StatsManager missing.", this);
+        if (!p_statsManager) Debug.LogError($"{name}: P_StatsManager is missing in INV_Manager");
     }
 
     // Update all slots & gold text at start

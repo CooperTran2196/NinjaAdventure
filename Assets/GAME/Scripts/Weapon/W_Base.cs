@@ -34,8 +34,8 @@ public abstract class W_Base : MonoBehaviour
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Base");
+        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D is missing in W_Base");
 
         // 2/ Collider mode + default visibility
         hitbox.isTrigger = true;     // trigger-based hit detection
@@ -47,10 +47,10 @@ public abstract class W_Base : MonoBehaviour
         ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
         c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
 
-        if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
-        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
-        if (!weaponData)    Debug.LogError($"{name}: W_SO weaponData is not assigned on {gameObject.name}", this);
+        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base");
+        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base");
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base");
+        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base");
 
         // 4/ Visual + hitbox sizing
         if (weaponData && sprite) sprite.sprite = weaponData.sprite;

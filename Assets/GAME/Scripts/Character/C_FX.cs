@@ -21,7 +21,7 @@ public class C_FX : MonoBehaviour
     void Awake()
     {
         sr ??= GetComponent<SpriteRenderer>();
-        if (!sr) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
+        if (!sr) Debug.LogError($"{name}: SpriteRenderer is missing in C_FX");
 
         baseRGB = sr.color;
     }

@@ -27,8 +27,8 @@ public class E_HealthBarSlider : MonoBehaviour
         cg       ??= GetComponent<CanvasGroup>();
         e_Health ??= GetComponentInParent<C_Health>();
 
-        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider is missing.", this);
-        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider is missing.", this);
+        if (!e_Health) Debug.LogError($"{name}: C_Health is missing in E_HealthBarSlider");
+        if (!slider)   Debug.LogError($"{name}: Slider is missing in E_HealthBarSlider");
     }
 
     void OnEnable()

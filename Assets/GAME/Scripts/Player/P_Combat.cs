@@ -53,13 +53,13 @@ public class P_Combat : MonoBehaviour
         magicWeapon  ??= null; // placeholder only
 
         
-        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer in P_Combat missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in P_Combat missing.");
+        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer is missing in P_Combat");
+        if (!animator) Debug.LogError($"{name}: Animator is missing in P_Combat");
 
-        if (!c_Stats) Debug.LogError($"{name}: P_Stats in P_Combat missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in P_Combat");
         
-        if (!p_Movement) Debug.LogError($"{name}: P_Movement in P_Combat missing.");
-        if (!c_Health) Debug.LogError($"{name}: C_Health in P_Combat missing.");
+        if (!p_Movement) Debug.LogError($"{name}: P_Movement is missing in P_Combat");
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in P_Combat");
     }
 
     void OnEnable()
@@ -119,7 +119,7 @@ public class P_Combat : MonoBehaviour
         // return previous aim if no camera/mouse
         if (!Camera.main || Mouse.current == null)
         {
-            Debug.LogError("P_Combat: No main camera or mouse found for aiming.");
+            Debug.LogError($"{name}: Camera or Mouse is missing in P_Combat");
             return attackDir;
         }
 

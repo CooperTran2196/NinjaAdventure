@@ -17,7 +17,7 @@ public class SHOP_Manager : MonoBehaviour
         inv_Manager ??= FindFirstObjectByType<INV_Manager>();
 
         if (!inv_Manager)
-            Debug.LogError("SHOP_Manager: INV_Manager reference missing.", this);
+            Debug.LogError($"{name}: INV_Manager is missing in SHOP_Manager");
         if (shop_Slots == null || shop_Slots.Length == 0)
             Debug.LogWarning("SHOP_Manager: No shopSlots assigned.", this);
     }

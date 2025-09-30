@@ -25,10 +25,10 @@ public class ST_Manager : MonoBehaviour
         skillsCanvas    ??= GetComponent<CanvasGroup>();
         skillPointsText ??= GetComponentInChildren<TMP_Text>();
 
-        if (!p_Exp)             Debug.LogError($"{name}: P_Exp missing in ST_Manager.", this);
-        if (!statsManager)      Debug.LogError($"{name}: C_StatsManager missing in ST_Manager.", this);
-        if (!skillsCanvas)      Debug.LogError($"{name}: SkillsCanvas missing in ST_Manager.", this);
-        if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText missing in ST_Manager.", this);
+        if (!p_Exp)             Debug.LogError($"{name}: P_Exp is missing in ST_Manager");
+        if (!statsManager)      Debug.LogError($"{name}: P_StatsManager is missing in ST_Manager");
+        if (!skillsCanvas)      Debug.LogError($"{name}: skillsCanvas is missing in ST_Manager");
+        if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText is missing in ST_Manager");
 
         input = new P_InputActions();
         input.UI.ToggleSkillTree.Enable();

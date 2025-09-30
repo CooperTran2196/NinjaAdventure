@@ -47,10 +47,10 @@ public class C_State : MonoBehaviour
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
-        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
+        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D is missing in C_State");
+        if (!animator)                  Debug.LogError($"{name}: Animator is missing in C_State");
+        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement is missing in C_State");
+        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat is missing in C_State");
     }
 
     void OnEnable()

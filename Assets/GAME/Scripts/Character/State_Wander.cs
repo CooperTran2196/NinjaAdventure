@@ -41,10 +41,10 @@ public class State_Wander : MonoBehaviour
                         (Component)GetComponent<NPC_Controller>());
 
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Wander.");
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in State_Wander.");
-        if (!anim) Debug.LogError($"{name}: Animator (in children) missing in State_Wander.");
-        if (controller == null) Debug.LogError($"{name}: A Controller missing in State_Wander.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in State_Wander");
+        if (!anim) Debug.LogError($"{name}: Animator is missing in State_Wander");
+        if (controller == null) Debug.LogError($"{name}: I_Controller is missing in State_Wander");
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }

@@ -36,13 +36,13 @@ public class P_Movement : MonoBehaviour
         c_Dodge ??= GetComponent<C_Dodge>();
         c_State ??= GetComponent<C_State>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D in P_Movement missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in P_Movement missing.");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in P_Movement");
+        if (!animator) Debug.LogError($"{name}: Animator is missing in P_Movement");
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats in P_Movement missing.");
-        if (!p_Combat) Debug.LogError($"{name}: P_Combat in P_Movement missing.");
-        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge in P_Movement missing.");
-        if (!c_State) Debug.LogError($"{name}: C_State in P_Movement missing.");
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in P_Movement");
+        if (!p_Combat) Debug.LogError($"{name}: P_Combat is missing in P_Movement");
+        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge is missing in P_Movement");
+        if (!c_State) Debug.LogError($"{name}: C_State is missing in P_Movement");
 
         animator?.SetFloat("moveX", 0f);
         animator?.SetFloat("moveY", -1f);

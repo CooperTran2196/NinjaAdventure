@@ -18,10 +18,10 @@ public class HealthUI : MonoBehaviour
         p_Health ??= FindFirstObjectByType<C_Health>();
         p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_Stats) Debug.LogError($"{name}: C_Stats in HealthUI missing.", this);
-        if (!p_Health) Debug.LogError($"{name}: C_Health in HealthUI missing.", this);
-        if (!p_StatsManager) Debug.LogError($"{name}: C_StatsManager in HealthUI missing.", this);
-        if (!healthSlider) Debug.LogError($"{name}: healthSlider in HealthUI missing.", this);
+        if (!p_Stats) Debug.LogError($"{name}: C_Stats is missing in HealthUI");
+        if (!p_Health) Debug.LogError($"{name}: C_Health is missing in HealthUI");
+        if (!p_StatsManager) Debug.LogError($"{name}: P_StatsManager is missing in HealthUI");
+        if (!healthSlider) Debug.LogError($"{name}: healthSlider is missing in HealthUI");
 
         // Initialize slider
         healthSlider.maxValue = p_Stats.maxHP;

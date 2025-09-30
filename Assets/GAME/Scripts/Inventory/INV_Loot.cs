@@ -23,9 +23,9 @@ public class INV_Loot : MonoBehaviour
         anim    ??= GetComponent<Animator>();
         trigger ??= GetComponent<CircleCollider2D>();
 
-        if (!sr)      Debug.LogError("INV_Loot: SpriteRenderer (sr) missing.", this);
-        if (!anim)    Debug.LogError("INV_Loot: Animator (anim) missing.", this);
-        if (!trigger) Debug.LogError("INV_Loot: CircleCollider2D (trigger) missing.", this);
+        if (!sr)      Debug.LogError($"{name}: SpriteRenderer is missing in INV_Loot");
+        if (!anim)    Debug.LogError($"{name}: Animator is missing in INV_Loot");
+        if (!trigger) Debug.LogError($"{name}: CircleCollider2D is missing in INV_Loot");
     }
 
     // Run in Edit Mode to update sprite in Inspector

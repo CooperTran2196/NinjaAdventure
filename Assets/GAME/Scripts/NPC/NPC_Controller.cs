@@ -27,10 +27,10 @@ public class NPC_Controller : MonoBehaviour, I_Controller
         rb    ??= GetComponent<Rigidbody2D>();
         stats ??= GetComponent<C_Stats>();
 
-        if (!wander) Debug.LogError($"{name}: NPC_State_Wander missing for NPC_Controller.");
-        if (!talk)   Debug.LogError($"{name}: NPC_State_Talk missing for NPC_Controller.");
-        if (!idle)   Debug.LogError($"{name}: NPC_State_Idle missing for NPC_Controller.");
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing for NPC_Controller.");
+        if (!wander) Debug.LogError($"{name}: State_Wander is missing in NPC_Controller");
+        if (!talk)   Debug.LogError($"{name}: State_Talk is missing in NPC_Controller");
+        if (!idle)   Debug.LogError($"{name}: State_Idle is missing in NPC_Controller");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in NPC_Controller");
     }
 
     void OnEnable()

@@ -15,7 +15,8 @@ public class State_Idle : MonoBehaviour
         characterAnimator ??= GetComponentInChildren<Animator>();
         stats             ??= GetComponent<C_Stats>();
         controller = (I_Controller)(GetComponent<E_Controller>() ??
-                        (Component)GetComponent<NPC_Controller>());        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Idle.");
+                        (Component)GetComponent<NPC_Controller>());
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Idle");
     }
 
     void OnEnable()

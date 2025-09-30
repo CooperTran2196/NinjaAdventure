@@ -52,13 +52,13 @@ public class E_Combat : MonoBehaviour
         activeWeapon ??= GetComponentInChildren<W_Melee>();
 
 
-        if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
-        if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");
+        if (!sr)            Debug.LogError($"{name}: SpriteRenderer is missing in E_Combat");
+        if (!anim)          Debug.LogError($"{name}: Animator is missing in E_Combat");
 
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats in E_Combat missing.");
-        if (!e_Movement)    Debug.LogError($"{name}: E_Movement in E_Combat missing.");
-        if (!e_Health)      Debug.LogError($"{name}: C_Health in E_Combat missing.");
-        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee in E_Combat missing.");
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in E_Combat");
+        if (!e_Movement)    Debug.LogError($"{name}: E_Movement is missing in E_Combat");
+        if (!e_Health)      Debug.LogError($"{name}: C_Health is missing in E_Combat");
+        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee is missing in E_Combat");
         // c_Wander optional: only log verbose if enemy expected to wander? (skip error)
     }
 
