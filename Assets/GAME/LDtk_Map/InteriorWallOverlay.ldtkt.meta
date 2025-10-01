@@ -1,0 +1,4816 @@
+fileFormatVersion: 2
+guid: ea20d8fff00574a3aa2005474fd4deb4
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f3268c876daf4890b6af6cd462063137, type: 3}
+  _reimportOnDependencyChange: 1
+  _pixelsPerUnit: 16
+  _overrideTexture: {instanceID: 0}
+  _sprites:
+  - name: InteriorWallOverlay_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 304
+      width: 16
+      height: 16
+    spriteID: c14281813da854273a45dbd80feb40be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 3129ea3b5a5c44cf5b71fd99a3502d52
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 2260a413cc0ad459c8906dbe4555000b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 304
+      width: 16
+      height: 16
+    spriteID: e61422ff422ab4df68cf31eb479e6f59
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 6f08e90a50b954b23b671b18dc032e93
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 4de1e42e4e2a542c283bcb768b190557
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_6
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 2652c04d7ca0648cb9d247b02f483678
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_7
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 7ec568e626def4010b243002b886161c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_8
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 97de960018fce4ed9ad65e421fe16965
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_9
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 74bde6f176c4d43be975484335b832d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_10
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 766e95787ff4249bf9c8696f3091a9c4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_11
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 8e0813f3a7eb44ea0ba9bc3b204588d8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_12
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 4b004e654e570477f9fe7f63c6e1e8a8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_13
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 76c8cd8a4e651456cafe906e38150867
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_14
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 612f01ead9d8d4122b7d8dec65f177a9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_15
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 304
+      width: 16
+      height: 16
+    spriteID: 19c919add11144b5c9779a9c05d934cc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_16
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 9b8e28d01a5f241d5bedf9ff3c705ed8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_17
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 288
+      width: 16
+      height: 16
+    spriteID: e35f46d0ef1d44225b860a6b76f9a4cc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_18
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 6c0bb534519b34910a14c6380b7d64b2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_19
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 288
+      width: 16
+      height: 16
+    spriteID: db1b8e8d7e1c24d3683f43f55938e49a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_20
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 5e119e4f121ed45b39ac8d4ba931da15
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_21
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 7782305c0ed93400c854d3259c18d8e2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_22
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 9a2b7a0d6874947ba95ac49df9f5c7be
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_23
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 1941c937f0e054cf090e6956926d2307
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_24
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 288
+      width: 16
+      height: 16
+    spriteID: f79f4b588e7204db09dc7f7649a92866
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_25
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 9a22a6e4133be420cb3fa1b1376ac68d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_26
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 2666460f9150e4418a794ff503fde818
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_27
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 1f3548979008348b19e95a5977de0f23
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_28
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 0c3182cd70a3348c0ba4ffaa43ce3428
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_29
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 60f889fe0f98347b485dd2b2c5792d80
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_30
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 288
+      width: 16
+      height: 16
+    spriteID: f35c5dc034b91446fb945de143915955
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_31
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 288
+      width: 16
+      height: 16
+    spriteID: 114a158e792f34e1da3fb5b900590a8f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_32
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 272
+      width: 16
+      height: 16
+    spriteID: f495ef0b30170448a8d8de0e0340c89d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_33
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 15aa5f82e478041abad095f44a85e6db
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_34
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 6409ba2ef04964367865f1632ec79bc8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_35
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 6aa041aea56174420abd53a1946c5a3c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_36
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 2c49147408a9e4135917acf4fcf3d858
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_37
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 272
+      width: 16
+      height: 16
+    spriteID: f8e739ade7841472f9ca832c836a2349
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_38
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 3e09922175cfa4a89b1fc37a410ee2e8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_39
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 944f9e337aece472eaec89e338e2332c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_40
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 272
+      width: 16
+      height: 16
+    spriteID: d46968072222144ffbace982093cd195
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_41
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 272
+      width: 16
+      height: 16
+    spriteID: a0a88c5c6f61d4e49a822ea095cc3398
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_42
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 7dcc02033abbe4d08be1b20384fb817a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_43
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 50524347e480745ecb0deb17236c4931
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_44
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 70c852beabaa74c06b15e044f813afc3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_45
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 272
+      width: 16
+      height: 16
+    spriteID: c290b2268dc6741b69bbbabc6937d8ad
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_46
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 272
+      width: 16
+      height: 16
+    spriteID: 29f32f8d36f1d4f3f9f504884163650f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_47
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 272
+      width: 16
+      height: 16
+    spriteID: c56413db894ea466db7554a117226aa2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_48
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 40f0da6b0f97a4e89b89a6c15f62ea4a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_49
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 9acfab2de1e03480da25ca79df659e81
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_50
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 5d4367e1e065e46cf8c34b739d49a887
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_51
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 256
+      width: 16
+      height: 16
+    spriteID: e10d405a50f3d4f1f972961c845332f0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_52
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 29fdbc2d3661244d9aae9533739297c3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_53
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 57d0afc9247ec41eca32de2a966bff79
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_54
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 99ce324d3b1b147f19e5108c83f17e61
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_55
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 256
+      width: 16
+      height: 16
+    spriteID: ca5865cd186a04bd2a217bc7ba862e33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_56
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 66eff541b2ae44236ad08602a6b9857d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_57
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 30d7b5fc80f2e4a538e3e9311249e4b2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_58
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 256
+      width: 16
+      height: 16
+    spriteID: a2ae9cbec67b1468a92a8ad90f0801fc
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_59
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 256
+      width: 16
+      height: 16
+    spriteID: eb7fe674c9a9f4c1ea23cb7779ec2815
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_60
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 7e75ef23780404bd895694f0e556f62e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_61
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 256
+      width: 16
+      height: 16
+    spriteID: 94907600e652b4bbebde5909631015f8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_62
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 256
+      width: 16
+      height: 16
+    spriteID: a9a8237a79fe047d099593044b1c2635
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_63
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 256
+      width: 16
+      height: 16
+    spriteID: b091a9eae9cbe4005a6f0bf9f30cb0f1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_64
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 409a161d7bf904e17bd5ba2e3bb0bd4f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_65
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 240
+      width: 16
+      height: 16
+    spriteID: b09e9515ebc214e58b83bcf193dc6392
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_66
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 6397d607ccdde4cafb25706049f464b9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_67
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 8d298ed7bcdf04b608c78b84840808f3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_68
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 6f7eabd1256ca456ab26e9886f38bb23
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_69
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 364ece51c5e364af6b618400f646bb84
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_70
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 41827af14196646f588c9491cc31a576
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_71
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 240
+      width: 16
+      height: 16
+    spriteID: d70ec3177274f4058b85ce107c326789
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_72
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 0756ca989c80f4e589c845c7c02c4ca9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_73
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 8f752c3a976a14a6d8fa96f69e8f7316
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_74
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 0bca1de6a8b12465b80dcbd85108c2b7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_75
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 240
+      width: 16
+      height: 16
+    spriteID: b953b9e8885a342b197adf6c4504f6a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_76
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 3b0390a8ac68342b4b327d1d9fc8495f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_77
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 240
+      width: 16
+      height: 16
+    spriteID: fb0b1d7d599774d49975427028b2409e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_78
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 240
+      width: 16
+      height: 16
+    spriteID: 50d554216bcb04b4db8c6e5cd87111a3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_79
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 240
+      width: 16
+      height: 16
+    spriteID: f144964175eb545c7ad287449e31e90c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_80
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 7665fce250f8f4e61b5ff36d67df7899
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_81
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 224
+      width: 16
+      height: 16
+    spriteID: ecd2a86ed0d644b66aa4c27c32c7bd82
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_82
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 315af770f0e364d6d9371581a7faf195
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_83
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 8d48e0db3f80d4e0ba0f261db6e71868
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_84
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 2c29a53a340834e3a8047e0faa7196c7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_85
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 224
+      width: 16
+      height: 16
+    spriteID: df1df8f7b0b4648c4ba4a86161888659
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_86
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 0b18344b079f649c4a39066d2d1f2a50
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_87
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 4cf4e4b05984f4dde9b4952c29aef565
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_88
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 224
+      width: 16
+      height: 16
+    spriteID: a57cfe5d52dd940c28505c735bfa75a4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_89
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 224
+      width: 16
+      height: 16
+    spriteID: f5f4dd5b4793549beacde18e0f77ceea
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_90
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 73913f089e56a4e2ea146a6a61d34455
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_91
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 224
+      width: 16
+      height: 16
+    spriteID: ac691d607c5ad4a4b8c96a8aa5a1764e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_92
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 37270cca7eb5c48b1a6535bae0737512
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_93
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 7ef6ea8c6fafd4c0b953d4830151def4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_94
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 8eb139b6424f242e1b4a83cc0ecdf481
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_95
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 224
+      width: 16
+      height: 16
+    spriteID: 6e8d3e641fb5b4ccf8fb7ba173325483
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_96
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 208
+      width: 16
+      height: 16
+    spriteID: b7552f00ed23b40c6b48ee28f9a54e06
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_97
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 7b532aa5c0ac041c88875c2dd80796b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_98
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 761f6f3b912964eafabeae8f36dea20a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_99
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 208
+      width: 16
+      height: 16
+    spriteID: ae40e0a39e5754b3bb55d286eb107db1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_100
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 208
+      width: 16
+      height: 16
+    spriteID: bd587b1e97f374df5a605a6d5bbd241f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_101
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 208
+      width: 16
+      height: 16
+    spriteID: ad1b2a826f74c4851846fdc66249b767
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_102
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 208
+      width: 16
+      height: 16
+    spriteID: cbfecc8ec9fa44dafb665dc232f5a6d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_103
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 7c0fe2472f8ad41eb99c60d7e4b5f10c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_104
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 208
+      width: 16
+      height: 16
+    spriteID: cfbeec2430a644119bd3350fe10939ae
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_105
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 3be41f4d76582413a9679deb3c0e8fc1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_106
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 500a7e204b55643f0a7bb3701c42c3eb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_107
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 1720854e1f00a4c1d8dbd86cc15bad64
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_108
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 00d69c5998ec64a6081b589798fa6365
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_109
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 961a2da1705b34d32b3f1f9683690f23
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_110
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 37cf7312589654bf18185a01fba02cdd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_111
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 208
+      width: 16
+      height: 16
+    spriteID: 771b55e1a33b743b9a0b1f0ec00a7287
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_112
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 192
+      width: 16
+      height: 16
+    spriteID: ed889a0a7be434a4dab9fd7482d96b5d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_113
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 050eff7df5fa84586920313bd8e3f8ef
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_114
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 192
+      width: 16
+      height: 16
+    spriteID: ef417ac072bc8404380a7771bc5cbc18
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_115
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 192
+      width: 16
+      height: 16
+    spriteID: a716dbc3af6674cb48cd6e2236d8b477
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_116
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 03f266535b8634a62913de753ea292e9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_117
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 192
+      width: 16
+      height: 16
+    spriteID: e57cd4c1c54e54770a64e9801fd63079
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_118
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 192
+      width: 16
+      height: 16
+    spriteID: af27c4126ade14f89abfb682dfd5aaa0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_119
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 192
+      width: 16
+      height: 16
+    spriteID: c65ef4e70c27c41c0a5bd6321b809269
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_120
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 74b043630dbd54c07924c0a5fb70275a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_121
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 192
+      width: 16
+      height: 16
+    spriteID: b56201009f08f4af1a068ce64697d0e0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_122
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 2670ecd19b1214d39a1e9b8d38112323
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_123
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 856c79b00e6d8476f82f6c997285f69f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_124
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 192
+      width: 16
+      height: 16
+    spriteID: 763abada2baf14d3fbc11a8156d1af33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_125
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 192
+      width: 16
+      height: 16
+    spriteID: eb4ba116ddcca4945aa529593f6eb8ff
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_126
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 192
+      width: 16
+      height: 16
+    spriteID: da26e1bafa6234108b0fb3c3e4a2d843
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_127
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 192
+      width: 16
+      height: 16
+    spriteID: e22c4e5c772a54df3ad3b1e68b307c5a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_128
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 094cd4c4a4a224d73a2551900311db44
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_129
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 7124d8f29346d4588b9158d60b3a25f9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_130
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 047667a46b4724dcea068b36ab39e55c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_131
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 4e323fef7a4f24b148e5bdcf55a1f276
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_132
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 0deaf847ea5df4bd5b00145fc67cca27
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_133
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 85a124bf46ab44b9796c1c428556d0d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_134
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c4711ca5434ac48dd8ef2f2cc8313e90
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_135
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 6e35732e300ed441ebe7439a2115cc36
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_136
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 18da80b4d682a4f4aa67e3270ec0705a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_137
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 168bff822484a4a57aea55dbbacf2cbd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_138
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 176
+      width: 16
+      height: 16
+    spriteID: c0100bd97bd914b80b8bd4828b5f0346
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_139
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 176
+      width: 16
+      height: 16
+    spriteID: b490bfdcacb7f4a4293c639dd6c4def4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_140
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 5792aeb09a22f437e8a37385988449e2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_141
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 176
+      width: 16
+      height: 16
+    spriteID: d5c0c373a30e64e378a70efa85632f77
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_142
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 21a98bbdeb7964bcda89fd558f8092b8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_143
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 176
+      width: 16
+      height: 16
+    spriteID: 6cd3651a0545340fdbdcd66296cd6a0d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_144
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 160
+      width: 16
+      height: 16
+    spriteID: c088850a4bc2d4a8aac7c56e78f263fb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_145
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 4942b7034322045a79b5aaa9e77058fd
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_146
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 75cadd5debd3240cab1070daf395d551
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_147
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 6269b3d3048fa468a9d539e12bdda8ca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_148
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 082a135f58ae84ffb9945752bfa8a600
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_149
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 9a05f53242d6b4a679fb373c11de9a06
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_150
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 661a810fd3a804537bd661da99e87524
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_151
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 160
+      width: 16
+      height: 16
+    spriteID: e1ce04ae4835d473ea2ed31547f26e85
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_152
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 160
+      width: 16
+      height: 16
+    spriteID: dfca6add772794693bc73b112f407ce2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_153
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 6977a71771600431a9804a17c49823f2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_154
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 160
+      width: 16
+      height: 16
+    spriteID: e3f744170dd6f457d956d19304447a1b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_155
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 160
+      width: 16
+      height: 16
+    spriteID: ac2f614bc51bc4bf191b4619a9290ee2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_156
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 864058c6a5d0b4308a6f27d79c184e82
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_157
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 0fbdaba3e775e4b9da0b407a70078976
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_158
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 5f8ed99bcc3ed4f2b9c7bafd664b7dfe
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_159
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 160
+      width: 16
+      height: 16
+    spriteID: 859618125c5024817aabe072f604fce7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_160
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 46aecd94440e74f549e03f55287cacd5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_161
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 0668ba07a74a04fcf80a80f83f4e5cb9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_162
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 0e05e28373b4a435fac5f6d782db26f3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_163
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 144
+      width: 16
+      height: 16
+    spriteID: f5811a4439a5744a98b5a5b5e427b395
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_164
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 25f7ffb6125ac43a284d5623c13ce4ea
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_165
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 144
+      width: 16
+      height: 16
+    spriteID: d247923b8ed5a45599429889cf650abb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_166
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 144
+      width: 16
+      height: 16
+    spriteID: fc5c58e62b2ae44a38a9eb520ed9434f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_167
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 0ed56ce8b6d774a08a1b2daf1b1b03c0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_168
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 10d513d32126d4531a7b8d0c517d9a9d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_169
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 9b44da2a3f5344ed8914988d635f24f5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_170
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 144
+      width: 16
+      height: 16
+    spriteID: a5c455a1234ea4aa1a5c9929cdec8cde
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_171
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 767b089f296684281addc2167f10077b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_172
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 07b250d813d3d4ff09f0fa4ab902b7ea
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_173
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 144
+      width: 16
+      height: 16
+    spriteID: f4e12b027b5864c03a9cead81f538219
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_174
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 144
+      width: 16
+      height: 16
+    spriteID: b6dfab2199bb141f592a3bcdb6717535
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_175
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 144
+      width: 16
+      height: 16
+    spriteID: 2350a1fdffe814e0fb19ca9487855960
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_176
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c4a559c88fb014cc9a53f4923ceb1df1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_177
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 128
+      width: 16
+      height: 16
+    spriteID: c6a800897c6b44e4db60a349dff21776
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_178
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 35b187efd75c9475eb7b9ab615c8ca18
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_179
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 698d89975fc6041a2a79d3e61f057fef
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_180
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 128
+      width: 16
+      height: 16
+    spriteID: ee2627bb352eb4c7583e0a28a7997af3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_181
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 128
+      width: 16
+      height: 16
+    spriteID: f9508dee285a245babdb45424796ce18
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_182
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 128
+      width: 16
+      height: 16
+    spriteID: d435920b41dab437e9beca4420c39c58
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_183
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 6f8bd2c9605664d68ab77a8e780d86f0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_184
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 7399586d1265f48e896aad6b22e77f05
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_185
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 63151d968b7ca4d06b6fa9da871522a1
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_186
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 128
+      width: 16
+      height: 16
+    spriteID: f1bd2153af6474e8bb77c1dcd2da52d4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_187
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 1fc16f4099ec141579495364c39bd994
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_188
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 0d4c00354c0c9427da71f553c60f6ea0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_189
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 5a9ded6d01ddd48b6a0bbde5eb9f9f5b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_190
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 128
+      width: 16
+      height: 16
+    spriteID: 8a80da141ab474fcab10e6d5a3838755
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_191
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 128
+      width: 16
+      height: 16
+    spriteID: e911c8ba14b40497389492ac14d0f736
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_192
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 9b3ea966cc44a4257a14c291f025c68d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_193
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 112
+      width: 16
+      height: 16
+    spriteID: cfda78b3411814a6daea2a812e4252c6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_194
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 112
+      width: 16
+      height: 16
+    spriteID: b842b222593fd4b1c9e7bfd640d3772d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_195
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 2c693dbd01e4449c2b02a04a5a786d97
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_196
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 437c672f6b8104db3aba9ecf137563a2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_197
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 1f517fd24625140b9afe51677b2fcedf
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_198
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 112
+      width: 16
+      height: 16
+    spriteID: d890d92f7c13d42109783f4a8038444f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_199
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 3c7915c1bb0af4947b23258bf657ed85
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_200
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c69b6412b7c6a4d96899265662029070
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_201
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 112
+      width: 16
+      height: 16
+    spriteID: a45878bde180343edb300ae48d076f71
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_202
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c5a47beb155aa4118b12b53abd1a50a9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_203
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 2a8991b96aa9e4174a60141851de39f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_204
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 112
+      width: 16
+      height: 16
+    spriteID: c210e6de04b9349f5bde6772f179bb30
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_205
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 112
+      width: 16
+      height: 16
+    spriteID: cf22d363796e24f07ae817c18122ee71
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_206
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 112
+      width: 16
+      height: 16
+    spriteID: 879399e21065a458f9e66fcd8c32c5ed
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_207
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 112
+      width: 16
+      height: 16
+    spriteID: ee27ad19ba85f442b8895a8ac00c382d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_208
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1ce2b1b2163f946afbad05839e422502
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_209
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 2196ca10be3bf4861b0b6018bfa31d63
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_210
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 7d4bbb921ce1249c98cdb3540cde367b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_211
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 963c147404c9d4b88be7c5ea03a6d711
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_212
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 86c0a7ff1be8e4c7aa39539d31f8bff8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_213
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 96
+      width: 16
+      height: 16
+    spriteID: e1407eb0e2a8e4925aa9fa76064ee619
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_214
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 2ab5ff0d15085447cbc9c13d69822965
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_215
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 96
+      width: 16
+      height: 16
+    spriteID: fb575df7a0abb4d6ba2b3aa7f87ae4d2
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_216
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 299719e953b574cb49704b1217c18f33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_217
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 96
+      width: 16
+      height: 16
+    spriteID: cc4928727df184c5fba3bf7febe49087
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_218
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 9fa6243ec7d674b208ba3a4b3dd2fe75
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_219
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 03d58da3df5fb438ca56aad44cf3cd0f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_220
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 3702d3ab758064096b7d7436ca50fd0c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_221
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 96
+      width: 16
+      height: 16
+    spriteID: 1878c68c6c264438bb1d478737490a7e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_222
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 96
+      width: 16
+      height: 16
+    spriteID: d8f6d55e806824e0b89fa4d1389cbd96
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_223
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 96
+      width: 16
+      height: 16
+    spriteID: e3433dc40ebbc41c88c6881f04007bb9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_224
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 4a164ac5df58a40dda225a88de504ec8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_225
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 80
+      width: 16
+      height: 16
+    spriteID: be9f8db87a67b47c39d66e92173de017
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_226
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 9bd35fbde98124d168dc9449c7ce00c9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_227
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 64ae3ead6bf4642d6892723fed76488b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_228
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 96d9a3c2494b64546bccfb4c9783fdca
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_229
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 292c8df6ee79f47779ce18c132f48733
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_230
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 7f6b351937c8b4a9193412f8295ec99e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_231
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 80
+      width: 16
+      height: 16
+    spriteID: a5b612ee33364459dbcb3adf8262641d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_232
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 691bc8cbb7003408d9db163b34583894
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_233
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 391def0d0bede405492c922e4f9f51eb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_234
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 11c339f4f40e44302815fff8b15aa9ee
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_235
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 80
+      width: 16
+      height: 16
+    spriteID: ffb70fb2e0d6949d18cf67e5655d4a70
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_236
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 0389c33534a8d4a38bda16c79432b692
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_237
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 29addaf84c8fc497cb8b9724ffdd3a80
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_238
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 80
+      width: 16
+      height: 16
+    spriteID: a0f06acbe64c94664b00004406ef753b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_239
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 80
+      width: 16
+      height: 16
+    spriteID: 8f8233cfee77349f8ad50db65748d81e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_240
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 503aea73cb0f542eb81ad9d9db77f85f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_241
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 64
+      width: 16
+      height: 16
+    spriteID: dfd9b2f31658e46d59e6bd6304b1c2c5
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_242
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 409f7b20e6a1b414b8c0cf2d6664ee43
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_243
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 64
+      width: 16
+      height: 16
+    spriteID: fa99da603bf864faea77da0bb291027f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_244
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 2eef33e0facd549358e3cab352a6ca84
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_245
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 64
+      width: 16
+      height: 16
+    spriteID: c7446d6b2517f46e8bfa0660f886133c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_246
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 1b44fb567bae44f61b9ea5b9c50bcd01
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_247
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 1cd5a49b7b51c4ed28dc7c4ece45be74
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_248
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 64
+      width: 16
+      height: 16
+    spriteID: d281b59fcdc8e47319ae87b08d1d5142
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_249
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 1c673cde6db0d46c29d1097810115e02
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_250
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 2054d560a9b4e41d9b94b85ae5f639d7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_251
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 8e84c4d6b038d4b5195759d47078ec60
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_252
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b0eb57b7cb69f4d54a9976aea0716210
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_253
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 64
+      width: 16
+      height: 16
+    spriteID: ab43608f11e604006b6b1a9258c8d59e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_254
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 64
+      width: 16
+      height: 16
+    spriteID: 66c82544f02c945f9a4f372151a41d4b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_255
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 64
+      width: 16
+      height: 16
+    spriteID: b682403c8eba941169b90166afe7ff36
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_256
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 0c495e16526be497793451616fc678da
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_257
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 0cd114c403f124cdaa99e7470afc99d9
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_258
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 301c2aef56f2d4b27a9fc20fa95f50b6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_259
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 48
+      width: 16
+      height: 16
+    spriteID: d750d94963c814af08cf0fbe755fecbb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_260
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 48
+      width: 16
+      height: 16
+    spriteID: d29178bfbd246414989ef4bd0974ca43
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_261
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 48
+      width: 16
+      height: 16
+    spriteID: b3af30e97a1004c91b3d9f80ccfbe064
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_262
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 89ede9a9a9870475e81846bd3b029246
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_263
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 382ef9091dbfc4ff79afa913d3b1308d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_264
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 48
+      width: 16
+      height: 16
+    spriteID: ce6233dbf57574507b635542f68b7958
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_265
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 65e26c1011f274178b2f9fd560390797
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_266
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 0f0e379a43923437fb55fd7a4ff1f45d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_267
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 48
+      width: 16
+      height: 16
+    spriteID: d90f75fde850f4282919eb7e8f6096b6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_268
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 049b5faae4fe649dea2ed6e325c08a69
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_269
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 48
+      width: 16
+      height: 16
+    spriteID: fd24406c4796446a5a6109d4e77723b7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_270
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 86fb27da9920246638b06ffa6f0c8145
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_271
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 48
+      width: 16
+      height: 16
+    spriteID: 733c1c3d55b7a413798230000b66410a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_272
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 32
+      width: 16
+      height: 16
+    spriteID: ea86ddbf93b024203bfe6424081b7fb7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_273
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 4888b31c6ed284c39ab31e72c3f72712
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_274
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 32
+      width: 16
+      height: 16
+    spriteID: a7e1116fb3eec47ba8bf0a215c325a33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_275
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 7c6f38daec77c4c8489c822c7a0e2bb7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_276
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 79726173f38224d9ca763a57c84dd99f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_277
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 5f76196f81c3f45f7b2f6a36d5865a35
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_278
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 8d0d982033f8a482cbffde0f7a0ecc52
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_279
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 32
+      width: 16
+      height: 16
+    spriteID: d77360422aee041b3bd915ea4906b2f7
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_280
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 32
+      width: 16
+      height: 16
+    spriteID: c6f525c8df560485ba4dae2ea53b4b9b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_281
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 1e8af2ac1cf534a8f88c7de06c70d4c4
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_282
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 5872d89e84d9b4c58b8226f96ed73cdb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_283
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 6c69b0a95aa2d428886705aa3b6a5247
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_284
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 32
+      width: 16
+      height: 16
+    spriteID: fb95368c6d37d498d946c5f1d98623c0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_285
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 32
+      width: 16
+      height: 16
+    spriteID: b41c6b397ffb44e1d853c1e8e3e2294c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_286
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 32
+      width: 16
+      height: 16
+    spriteID: 94e9f926dfaa8455d8937abeed3b3c7b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_287
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 32
+      width: 16
+      height: 16
+    spriteID: caac12cf119e046a8b23926861c2511e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_288
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 3d6c35bb42d50400fbce20f3fecd2ff3
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_289
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 16
+      width: 16
+      height: 16
+    spriteID: ced7f94a70d0746a6afbd469fc0adce0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_290
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9e7657c665c0440628d76a44e080906a
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_291
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 16
+      width: 16
+      height: 16
+    spriteID: dc2b7a33f400b48e9914850c00ee04aa
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_292
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 5f97962ab917d4dc9a8a539c87ed5bcb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_293
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9254d5d6f0ba84386b1c0716ae9f3651
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_294
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 09f7c4ceb6a4b43ccbcb3aaed45a63e0
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_295
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 16
+      width: 16
+      height: 16
+    spriteID: e10be10f9a896479aa6efadb8f7a1d33
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_296
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 9e1058592fbfb48b297bdfdfb3db4149
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_297
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 706b714f8005948ab8bbe3d5f56b4837
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_298
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 54c2a753f144c41ac8b3ec7777ab689d
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_299
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 72afb0fffccc84d71bcadf6846260b67
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_300
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 16
+      width: 16
+      height: 16
+    spriteID: e0197b39e5495401f8fc05ff2e8d6007
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_301
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 4ff305e75a6694120ba8d7b98de7926c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_302
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 7032d30e4121743588a6e009d0fa2345
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_303
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 16
+      width: 16
+      height: 16
+    spriteID: 43d3d770f09564a7db88caefaa228964
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_304
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 0d2236e9407d64693a89fbbd84b76d89
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_305
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 16
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2a3bf8496d3d54ae1b7bef7144c1106c
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_306
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 32
+      y: 0
+      width: 16
+      height: 16
+    spriteID: aa3718175671d4c979783fcb16522881
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_307
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 48
+      y: 0
+      width: 16
+      height: 16
+    spriteID: be3e9c5287357415eada9f1eae8db35f
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_308
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 64
+      y: 0
+      width: 16
+      height: 16
+    spriteID: a20874eba5fa1480694bdcff5623f11b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_309
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 80
+      y: 0
+      width: 16
+      height: 16
+    spriteID: f33acfc7525594ee380db97dd4cefab6
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_310
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 96
+      y: 0
+      width: 16
+      height: 16
+    spriteID: d1edeb80cc9924f65b9def8c40fdb5e8
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_311
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 112
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 9ac8a55abc78843bf8bbc7373ebde166
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_312
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 128
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 35e5a15702ee84f5ab6e15ada02bf746
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_313
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 144
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 834c14caea3f64bd7acfbc083b68f812
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_314
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 160
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 6c3852c0683a4461f92f7a3eabd2c37b
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_315
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 176
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 62a72a69dcc2d46049c7b08a0c4f9d2e
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_316
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 192
+      y: 0
+      width: 16
+      height: 16
+    spriteID: a3a203be4ba074860a216ab904a09674
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_317
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 208
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 2346ca60e4b8848948fe502846ec18fb
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_318
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 224
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 9f4bca6d9b4854df387c268b5b8a3630
+    spriteOutline: []
+    tessellationDetail: 0
+  - name: InteriorWallOverlay_319
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 240
+      y: 0
+      width: 16
+      height: 16
+    spriteID: 345412004cc8344bca81f670ab65e207
+    spriteOutline: []
+    tessellationDetail: 0
+  _secondaryTextures: []
+  _artifacts: {instanceID: 0}
