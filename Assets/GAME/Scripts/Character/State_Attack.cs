@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class State_Attack : MonoBehaviour
 {
-    [Header("Animation States")]
+    [Header("Target Layer")]
     public LayerMask playerLayer;
 
-    [Header("Timing")]
+    [Header("Attack Cooldown")]
     public float attackCooldown = 0.80f;
-    public float attackDuration = 0.45f;
-    public float hitDelay = 0.15f;
+    float attackDuration = 0.45f; // Default: 0.45f
+    float hitDelay = 0.15f; // Default: 0.15f
     float attackRange;
 
     [Header("Weapon")]

@@ -20,6 +20,11 @@ public class E_Controller : MonoBehaviour, I_Controller
     [Min(1.2f)] public float attackRange = 1.2f;
                 public LayerMask playerLayer;
                 public EState defaultState = EState.Idle;
+
+    [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
+    public float attackStartBuffer = 0.2f;
+           float attackInRangeTimer;  
+
     Rigidbody2D rb;
     Animator anim;
     EState currentState;
@@ -79,26 +84,37 @@ public class E_Controller : MonoBehaviour, I_Controller
     }
 
     void Update()
-    {   
+    {
         // Death override
         if (isDead) return;
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
+
         // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
         Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         // If attackCircle not null, reuse it. Otherwise check the detectionCircle
         Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+
         // Check true/false for each circle depending on player location
         bool targetInsideAttackCircle = attackCircle;
         bool targetInsideDetectionCircle = detectionCircle;
 
-        // Set current target to the player if inside either circle, otherwise null
+        // Set current target to the player if inside either circle
         if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
 
-        // Decide desired state from ring position
+        // Build/decay the "stay-in-range" buffer timer
+        if (targetInsideAttackCircle) attackInRangeTimer += Time.deltaTime;
+        else attackInRangeTimer = 0f;
+
+        // Only ready to attack if: inside attack circle long enough AND off cooldown
+        bool readyToAttack = targetInsideAttackCircle
+                          && attackInRangeTimer >= attackStartBuffer
+                          && attackCooldown <= 0f;
+
+        // Decide desired state
         EState desiredState =
-        targetInsideAttackCircle    ? EState.Attack :   // Attack if inside attack range
-        targetInsideDetectionCircle ? EState.Chase  :   // Chase if inside detection range
-                                      defaultState;     // Otherwise default (Idle/Wander)
+            readyToAttack ? EState.Attack :
+            targetInsideDetectionCircle ? EState.Chase :
+                                          defaultState;
 
         // Never interrupt an active attack clip
         if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
@@ -124,6 +140,8 @@ public class E_Controller : MonoBehaviour, I_Controller
                 break;
         }
     }
+
+
 
     void FixedUpdate()
     {
