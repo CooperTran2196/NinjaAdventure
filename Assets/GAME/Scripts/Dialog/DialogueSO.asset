@@ -17,5 +17,5 @@ MonoBehaviour:
     text: ahihi
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: lam cai gi nua
-  - speaker: {fileID: 0}
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: met qua ha`

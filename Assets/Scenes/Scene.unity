@@ -1905,10 +1905,10 @@ RectTransform:
   - {fileID: 829430670}
   m_Father: {fileID: 328283748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 900, y: -50}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &281410896
 MonoBehaviour:
@@ -14112,10 +14112,10 @@ RectTransform:
   - {fileID: 24265393}
   m_Father: {fileID: 328283748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -50}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &579661262
 MonoBehaviour:
@@ -14639,13 +14639,14 @@ GameObject:
   - component: {fileID: 648076225}
   - component: {fileID: 648076224}
   - component: {fileID: 648076223}
+  - component: {fileID: 648076228}
   m_Layer: 5
   m_Name: DialogCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &648076223
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -14741,6 +14742,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &648076228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648076222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b35e6c29c13dc418ce4eca5a99029d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_Manager
+  portrait: {fileID: 1073034803}
+  actorNameText: {fileID: 2052214417}
+  dialogueText: {fileID: 746686164}
+  canvasGroup: {fileID: 648076223}
+  currentDialogue: {fileID: 0}
+  isDialogueActive: 0
 --- !u!1 &652215504
 GameObject:
   m_ObjectHideFlags: 0
@@ -20793,7 +20812,7 @@ GameObject:
   - component: {fileID: 1263878806}
   - component: {fileID: 1263878805}
   m_Layer: 0
-  m_Name: Princess (1)
+  m_Name: Princess
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20812,6 +20831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 373828666}
+  conversation: {fileID: 11400000, guid: 0fc68c95b3fc64948b90fd4005b60557, type: 2}
 --- !u!114 &1263878806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21674,7 +21694,7 @@ GameObject:
   - component: {fileID: 1339144783}
   - component: {fileID: 1339144782}
   m_Layer: 7
-  m_Name: Testing Enemy with new System
+  m_Name: Samurai New
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21803,7 +21823,7 @@ Animator:
   m_GameObject: {fileID: 1339144770}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 4d57c3c705ac7754faf81fb75664cd3d, type: 2}
+  m_Controller: {fileID: 22100000, guid: 4d760cf81288cd141b402c76910fccb8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -21932,10 +21952,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1254399961
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5546671543968653177, guid: 8b5269799213d4c4badbc8226836eb27, type: 3}
+  m_Sprite: {fileID: 4723107735738678597, guid: b8dc5e692ef6dc548bf59a67a19a3504, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -23881,10 +23901,10 @@ RectTransform:
   - {fileID: 2059236222}
   m_Father: {fileID: 328283748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1450, y: -50}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1615356594
 MonoBehaviour:
@@ -23954,8 +23974,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2052214416}
   - {fileID: 1073034801}
+  - {fileID: 2052214416}
   - {fileID: 746686163}
   - {fileID: 328283748}
   m_Father: {fileID: 648076227}
