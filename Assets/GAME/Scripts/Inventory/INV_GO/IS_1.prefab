@@ -217,8 +217,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 26f6a0918a1f57c4a9ee6203fac69513, type: 2}
-  m_sharedMaterial: {fileID: 3367709972008649770, guid: 26f6a0918a1f57c4a9ee6203fac69513, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fa77dd3c5d6664f39a60d5101d223fc1, type: 2}
+  m_sharedMaterial: {fileID: -7845042390764733020, guid: fa77dd3c5d6664f39a60d5101d223fc1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -242,15 +242,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 27.2
+  m_fontSizeBase: 27.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 11.413879, y: -4.9898453, z: 13.306946, w: 13.814747}
+  m_margin: {x: 11.413879, y: -10.22192, z: 11.340637, w: 14.188026}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68845badf87848ff87aaa063ad4e421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::INV_Slot
-  item: {fileID: 0}
+  itemSO: {fileID: 0}
   quantity: 10
   itemImage: {fileID: 6824986526247649898}
   amountText: {fileID: 3286020334648711710}
