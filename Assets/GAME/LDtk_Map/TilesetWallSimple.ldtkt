@@ -1,0 +1,58 @@
+{
+  "Rects": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 80,
+      "h": 80
+    },
+    {
+      "x": 80,
+      "y": 0,
+      "w": 80,
+      "h": 80
+    },
+    {
+      "x": 0,
+      "y": 96,
+      "w": 80,
+      "h": 80
+    },
+    {
+      "x": 80,
+      "y": 96,
+      "w": 80,
+      "h": 80
+    }
+  ],
+  "Def": {
+    "__cHei": 11,
+    "__cWid": 10,
+    "cachedPixelData": {
+      "opaqueTiles": "11111111111000110001100011000110001100011111111111111111111111111111111100111001100011000110001100011111111111",
+      "averageColors": "fb98fb98fb98fca8fb98fb86fb86fb86fc86fb86fca90000cca9cca9fca9fc860000cc87cc87fc86fca90000cca9cca9fca9fc860000cc87cc87fc86fca9000000000000fca9fc86000000000000fc86f987fa87fa87fa87f987f975fa76fa76fa76f975f122f122f122f122f122f122f122f122f122f122f765f755f755f755f765f564f454f454f454f564f865f765c765c765f865f564f665c554c554f564f8650000c765c765f865f5640000c554c554f564f865000000000000f865f564000000000000f564f654f654f654f654f654f453f453f453f453f453"
+    },
+    "customData": [
+
+    ],
+    "embedAtlas": null,
+    "enumTags": [
+
+    ],
+    "identifier": "TilesetWallSimple",
+    "padding": 0,
+    "pxHei": 176,
+    "pxWid": 160,
+    "relPath": "Backgrounds/Tilesets/Interior/TilesetWallSimple.png",
+    "savedSelections": [
+
+    ],
+    "spacing": 0,
+    "tags": [
+
+    ],
+    "tagsSourceEnumUid": null,
+    "tileGridSize": 16,
+    "uid": 2437
+  }
+}
