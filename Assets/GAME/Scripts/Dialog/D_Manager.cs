@@ -4,55 +4,59 @@ using TMPro;
 
 public class D_Manager : MonoBehaviour
 {
-    // ---- Singleton ----
-    public static D_Manager Instance;
+    public static D_Manager Instance { get; private set; }
 
-    // ---- UI refs ----
     [Header("UI")]
     public Image portrait;
     public TMP_Text actorNameText;
     public TMP_Text dialogueText;
     public CanvasGroup canvasGroup;
 
-    // ---- State ----
-    public D_SO currentDialogue;
+    [Header("Choices")]
+    public Button[] choiceButtons; // drag your option buttons here (in order)
+
+    D_SO currentDialogue;
     int dialogueIndex;
-    public bool isDialogueActive;
+    public bool isDialogueActive { get; private set; }
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
-        // start hidden
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
+        // hide all option buttons at boot
+        foreach (var b in choiceButtons)
+            b.gameObject.SetActive(false);
     }
 
-    // Show current line then advance index
     void ShowDialogue()
     {
+        // advancing a line hides old choices, if any
+        ClearChoices();
+
         var line = currentDialogue.lines[dialogueIndex++];
-        portrait.sprite        = line.speaker.portrait;
-        actorNameText.text     = line.speaker.actorName;
-        dialogueText.text      = line.text;
+        portrait.sprite    = line.speaker.portrait;
+        actorNameText.text = line.speaker.actorName;
+        dialogueText.text  = line.text;
 
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
-    // Called by NPC to begin a conversation
     public void StartDialogue(D_SO dialogue)
     {
         currentDialogue = dialogue;
         dialogueIndex = 0;
         isDialogueActive = true;
+        ClearChoices();
         ShowDialogue();
     }
 
-    // Called when player presses Interact during an active convo
     public void AdvanceDialogue()
     {
         if (dialogueIndex < currentDialogue.lines.Length)
@@ -61,18 +65,70 @@ public class D_Manager : MonoBehaviour
         }
         else
         {
-            EndDialogue();
+            ShowChoices();
         }
     }
 
-    // Hide + reset
+    void ShowChoices()
+    {
+        ClearChoices();
+        var opts = currentDialogue.options;
+
+        if (opts != null && opts.Length > 0)
+        {
+            int count = Mathf.Min(opts.Length, choiceButtons.Length);
+            for (int i = 0; i < count; i++)
+            {
+                var btn = choiceButtons[i];
+                var opt = opts[i]; // capture for lambda
+
+                btn.GetComponentInChildren<TMP_Text>(true).text = opt.optionText;
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => ChooseOption(opt.nextDialogue));
+                btn.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            // no options → show a simple End button on slot 0
+            var endBtn = choiceButtons[0];
+            endBtn.GetComponentInChildren<TMP_Text>(true).text = "End";
+            endBtn.onClick.RemoveAllListeners();
+            endBtn.onClick.AddListener(EndDialogue);
+            endBtn.gameObject.SetActive(true);
+        }
+    }
+
+    void ChooseOption(D_SO nextDialogue)
+    {
+        ClearChoices();
+
+        if (nextDialogue == null)
+        {
+            EndDialogue();
+            return;
+        }
+
+        StartDialogue(nextDialogue);
+    }
+
     public void EndDialogue()
     {
         dialogueIndex = 0;
         isDialogueActive = false;
+        ClearChoices();
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    void ClearChoices()
+    {
+        foreach (var b in choiceButtons)
+        {
+            b.onClick.RemoveAllListeners();
+            b.gameObject.SetActive(false);
+        }
     }
 }
