@@ -20,10 +20,10 @@ MonoBehaviour:
   angleBiasDeg: 0
   AD: 1
   AP: 0
-  knockbackForce: 5
+  knockbackForce: 3
   stunTime: 0.5
-  showTime: 0.32
-  thrustDistance: 0.25
+  showTime: 1
+  thrustDistance: 0.61
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0
