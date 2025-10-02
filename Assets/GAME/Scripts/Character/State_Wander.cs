@@ -34,7 +34,8 @@ public class State_Wander : MonoBehaviour
         anim       = GetComponentInChildren<Animator>();
         c_Stats    = GetComponent<C_Stats>();
         controller = (I_Controller)(GetComponent<E_Controller>() ??
-                        (Component)GetComponent<NPC_Controller>());
+                        (Component)GetComponent<NPC_Controller>() ??
+                        (Component)GetComponent<B_Controller>());
 
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");

@@ -2,10 +2,6 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(State_Idle))]
-[RequireComponent(typeof(State_Wander))]
-[RequireComponent(typeof(State_Chase))]
-[RequireComponent(typeof(State_Attack))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
