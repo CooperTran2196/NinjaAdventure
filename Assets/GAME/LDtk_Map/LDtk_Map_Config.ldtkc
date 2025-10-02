@@ -61,6 +61,54 @@
             }
         },
         {
+            "_key": "InteriorWall_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWall_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWall_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWall_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWallSimple_1",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWallSimple_2",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWallSimple_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorWallSimple_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
             "_key": "InteriorFloor_1",
             "_asset": {
                 "instanceID": 0

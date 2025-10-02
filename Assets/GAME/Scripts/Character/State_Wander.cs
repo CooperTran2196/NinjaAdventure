@@ -21,10 +21,6 @@ public class State_Wander : MonoBehaviour
     [Header("Movement")]
     public float pauseDuration = 1f;
 
-    [Header("Animation")]
-    public string idleState = "Idle";
-    public string walkState = "Walk";
-
     // runtime
     Vector2 destination;
     Vector2 dir;
@@ -101,13 +97,13 @@ public class State_Wander : MonoBehaviour
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
-        anim?.Play(idleState);
+        anim.Play("Idle");
 
         yield return new WaitForSeconds(pauseDuration);
 
         destination = GetRandomEdgePoint();
         isWandering = true;
-        anim?.Play(walkState);
+        anim.Play("Wander");
     }
 
     Vector2 GetRandomEdgePoint()

@@ -4,21 +4,21 @@ using UnityEngine.SceneManagement;
 
 public class C_SceneTeleport : MonoBehaviour
 {
-    [Header("Target Scene")]
-    [SerializeField] string sceneToLoad = "level 1 room";
-    [SerializeField] string playerTag    = "Player";
-
-    [Header("Fade")]
-    [SerializeField] Animator fadeAnimator;   // Animator on the FadeCanvas Image
-    [SerializeField] string fadeOutState = "FadeOut";
-    [SerializeField] float  fadeTime     = 0.6f; // set to your FadeOut clip length
-
+    [Header("References")]
+    public string sceneToLoad = "The Name of the Scene to Load";
+    public Animator fadeAnimator;   // Animator on the FadeCanvas Image
+    public float fadeTime = 0.6f;
     Collider2D col;
+
+    [Header("Target Scene")]
+    string playerTag = "Player";
+
+
 
     void Awake()
     {
         col ??= GetComponent<Collider2D>();
-        if (!col) Debug.LogError($"{name}: needs a Collider2D set as Trigger.");
+        Debug.LogError($"{name}: needs a Collider2D set as Trigger.");
         if (!fadeAnimator) Debug.LogError($"{name}: fadeAnimator not set.");
     }
 
@@ -33,7 +33,7 @@ public class C_SceneTeleport : MonoBehaviour
         col.enabled = false;                            // avoid double-trigger
         player.GetComponent<P_Movement>()?.SetDisabled(true);
 
-        fadeAnimator?.Play(fadeOutState, 0, 0f);       // play FadeOut
+        fadeAnimator?.Play("FadeToWhite", 0, 0f);       // play FadeOut
         yield return new WaitForSeconds(fadeTime);     // wait for fade
 
         SceneManager.LoadScene(sceneToLoad);           // load the new scene
