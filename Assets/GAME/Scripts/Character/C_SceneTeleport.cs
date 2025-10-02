@@ -18,7 +18,8 @@ public class C_SceneTeleport : MonoBehaviour
     void Awake()
     {
         col ??= GetComponent<Collider2D>();
-        Debug.LogError($"{name}: needs a Collider2D set as Trigger.");
+        
+        if (!col) Debug.LogError($"{name}: needs a Collider2D set as Trigger.");
         if (!fadeAnimator) Debug.LogError($"{name}: fadeAnimator not set.");
     }
 
