@@ -8,35 +8,30 @@ public class C_SceneTeleport : MonoBehaviour
     public string sceneToLoad = "The Name of the Scene to Load";
     public Animator fadeAnimator;   // Animator on the FadeCanvas Image
     public float fadeTime = 0.6f;
-    Collider2D col;
+    public Vector2 newPlayerPosition;
+    private Transform player;
 
     [Header("Target Scene")]
     string playerTag = "Player";
 
-
-
     void Awake()
-    {
-        col ??= GetComponent<Collider2D>();
-        
-        if (!col) Debug.LogError($"{name}: needs a Collider2D set as Trigger.");
+    {        
         if (!fadeAnimator) Debug.LogError($"{name}: fadeAnimator not set.");
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag(playerTag)) return;
+        player = other.transform;
+        fadeAnimator?.Play("FadeToWhite");       // play FadeOut
+
         StartCoroutine(LoadRoutine(other.transform));
     }
 
     IEnumerator LoadRoutine(Transform player)
     {
-        col.enabled = false;                            // avoid double-trigger
-        player.GetComponent<P_Movement>()?.SetDisabled(true);
-
-        fadeAnimator?.Play("FadeToWhite", 0, 0f);       // play FadeOut
         yield return new WaitForSeconds(fadeTime);     // wait for fade
-
+        player.position = newPlayerPosition; // move player to new position
         SceneManager.LoadScene(sceneToLoad);           // load the new scene
     }
 }
