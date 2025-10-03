@@ -4,7 +4,7 @@ using UnityEngine;
 public class D_SO : ScriptableObject
 {
     public D_LineSO[] lines;
-    public D_Option[] options;  // NEW
+    public D_Option[] options;
 }
 
 [System.Serializable]
@@ -17,8 +17,8 @@ public class D_LineSO
 }
 
 [System.Serializable]
-public class D_Option   // NEW
+public class D_Option
 {
     public string optionText;
-    public D_SO nextDialogue;   // load this conversation when chosen (can be null to End)
+    public D_SO nextDialogue;
 }

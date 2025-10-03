@@ -14102,7 +14102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -15221,7 +15221,7 @@ Transform:
   m_GameObject: {fileID: 1659741890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.78, y: 0.64, z: 0}
+  m_LocalPosition: {x: 32.8, y: 47.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15250,7 +15250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1671039988
 Transform:
   m_ObjectHideFlags: 0
@@ -18154,14 +18154,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1278042193914028470, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2626450529425778389, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 252
-      objectReference: {fileID: 0}
     - target: {fileID: 2981976374856404738, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -18350,6 +18342,10 @@ PrefabInstance:
     - target: {fileID: 5589123278789176120, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644099288169238067, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
+      propertyPath: currentHP
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19023,14 +19019,14 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 190639848}
-  - {fileID: 442355480}
   - {fileID: 266626640}
   - {fileID: 2005489769}
+  - {fileID: 1671039988}
+  - {fileID: 442355480}
+  - {fileID: 470057693147478487}
   - {fileID: 7562657119262622783}
   - {fileID: 3627686107548866742}
-  - {fileID: 1671039988}
   - {fileID: 1946107480511362754}
-  - {fileID: 470057693147478487}
   - {fileID: 1659741891}
   - {fileID: 1565095737}
   - {fileID: 405199282596945784}
