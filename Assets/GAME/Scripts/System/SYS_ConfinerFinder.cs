@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class ConfinerFinder : MonoBehaviour
+public class SYS_ConfinerFinder : MonoBehaviour
 {
     void OnEnable()
     {

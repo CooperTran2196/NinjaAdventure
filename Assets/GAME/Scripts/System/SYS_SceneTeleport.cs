@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class C_SceneTeleport : MonoBehaviour
+public class SYS_SceneTeleport : MonoBehaviour
 {
     [Header("References")]
     public string sceneToLoad = "The Name of the Scene to Load";
@@ -23,7 +23,7 @@ public class C_SceneTeleport : MonoBehaviour
     {
         if (!other.CompareTag(playerTag)) return;
         player = other.transform;
-        fadeAnimator?.Play("FadeToWhite");       // play FadeOut
+        fadeAnimator?.Play("FadeOut");       // play FadeOut
 
         StartCoroutine(LoadRoutine(other.transform));
     }
@@ -31,6 +31,7 @@ public class C_SceneTeleport : MonoBehaviour
     IEnumerator LoadRoutine(Transform player)
     {
         yield return new WaitForSeconds(fadeTime);     // wait for fade
+        // fadeAnimator?.Play("FadeFromWhite"); // play FadeIn
         player.position = newPlayerPosition; // move player to new position
         SceneManager.LoadScene(sceneToLoad);           // load the new scene
     }

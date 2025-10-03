@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class SYS_GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static SYS_GameManager Instance;
 
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
