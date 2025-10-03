@@ -14,11 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: ahihi
-  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
-    text: lam cai gi nua
+    text: You did well to come here.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: met qua ha`
+    text: It's been too long since the last time we met.
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: I've come here to free you
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "You\u2019re hurt- take this and mend yourself."
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: Do you remember that night at ...?
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: I don't remember it, my lord.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "I see. We\u2019ll speak of it later."
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "We must flee Ashina Castle. There\u2019s a secret passage beneath the
+      moat - find it, then signal me with your reed whistle."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: Understood.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: Go unseen.
   options:
   - optionText: chon cai nay di
     nextDialogue: {fileID: 11400000, guid: fadd4d9261044d3478dcd9abbcc00329, type: 2}

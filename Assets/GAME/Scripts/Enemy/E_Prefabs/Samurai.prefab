@@ -36,7 +36,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9065412401670540135}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 47.96, y: 30.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -262,11 +262,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Wander
   startCenter: {x: 0, y: 0}
-  width: 6
-  height: 4
+  width: 6.73
+  height: 5.13
   pauseDuration: 1
-  idleState: Idle
-  walkState: Wander
+  wanderSpeed: 1
 --- !u!114 &2823324946364578970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,11 +423,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 111398736057291387, guid: f774fb8e7158945ada53e9a4bef04d4d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.724911
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 111398736057291387, guid: f774fb8e7158945ada53e9a4bef04d4d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.772451
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 111398736057291387, guid: f774fb8e7158945ada53e9a4bef04d4d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -519,6 +518,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: E_HealthBarSlider
       objectReference: {fileID: 0}
+    - target: {fileID: 5727306097528135447, guid: 45849bdb051f7482bb3e06a3d0426df8, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5727306097528135447, guid: 45849bdb051f7482bb3e06a3d0426df8, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7469368243371228204, guid: 45849bdb051f7482bb3e06a3d0426df8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -603,6 +610,10 @@ PrefabInstance:
       propertyPath: e_Health
       value: 
       objectReference: {fileID: 8516599805102287338}
+    - target: {fileID: 8307737282302544243, guid: 45849bdb051f7482bb3e06a3d0426df8, type: 3}
+      propertyPath: worldOffset.y
+      value: 0.7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

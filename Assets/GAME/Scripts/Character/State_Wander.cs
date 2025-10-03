@@ -3,14 +3,12 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
 [DisallowMultipleComponent]
 public class State_Wander : MonoBehaviour
 {
     [Header("References")]
     Rigidbody2D rb;
     Animator anim;
-    C_Stats c_Stats;
     I_Controller controller;
 
     [Header("Wander Area")]
@@ -20,6 +18,7 @@ public class State_Wander : MonoBehaviour
 
     [Header("Movement")]
     public float pauseDuration = 1f;
+    public float wanderSpeed = 1f;
 
     // runtime
     Vector2 destination;
@@ -32,14 +31,12 @@ public class State_Wander : MonoBehaviour
     {
         rb         = GetComponent<Rigidbody2D>();
         anim       = GetComponentInChildren<Animator>();
-        c_Stats    = GetComponent<C_Stats>();
         controller = (I_Controller)(GetComponent<E_Controller>() ??
                         (Component)GetComponent<NPC_Controller>() ??
                         (Component)GetComponent<B_Controller>());
 
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in State_Wander");
         if (!anim) Debug.LogError($"{name}: Animator is missing in State_Wander");
         if (controller == null) Debug.LogError($"{name}: I_Controller is missing in State_Wander");
 
@@ -61,7 +58,7 @@ public class State_Wander : MonoBehaviour
         StopAllCoroutines();
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -90,7 +87,7 @@ public class State_Wander : MonoBehaviour
         anim.SetFloat("idleY", lastMove.y);
 
         // Send intent to controller
-        controller?.SetDesiredVelocity(dir * c_Stats.MS);
+        controller?.SetDesiredVelocity(dir * wanderSpeed);
     }
 
     IEnumerator PauseAndPickNewDestination()
