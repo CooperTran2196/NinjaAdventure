@@ -213,6 +213,8 @@ using TMPro;
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
 {
+    public static INV_Manager Instance { get; private set; }
+
     [Header("Central API for the Inventory system, depend on P_StatsManager")]
     [Header("References")]
     public P_StatsManager p_statsManager;
@@ -225,11 +227,15 @@ public class INV_Manager : MonoBehaviour
     public int gold;
     public INV_Slots[] inv_Slots;
 
-    void OnEnable()  => INV_Loot.OnItemLooted += AddItem;
+    void OnEnable() => INV_Loot.OnItemLooted += AddItem;
     void OnDisable() => INV_Loot.OnItemLooted -= AddItem;
 
     void Awake()
     {
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         p_statsManager ??= FindFirstObjectByType<P_StatsManager>();
 
         if (!p_statsManager) Debug.LogError($"{name}: P_StatsManager is missing in INV_Manager");
@@ -322,6 +328,18 @@ public class INV_Manager : MonoBehaviour
         var loot = go.GetComponent<INV_Loot>();
         loot.Initialize(itemSO, quantity); // sets sprite/name & canBePickedUp=false
     }
+    // Do we have at least 1 of this item?
+    public bool HasItem(INV_ItemSO itemSO)
+    {
+        // Adjust the array name if yours differs (e.g., slots, itemSlots, inventorySlots)
+        foreach (var slot in inv_Slots)
+        {
+            if (slot.itemSO == itemSO && slot.quantity > 0)
+                return true;
+        }
+        return false;
+    }
+
 }
 
 // ----- File: INV_Slots.cs -----

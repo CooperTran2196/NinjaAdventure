@@ -96,6 +96,7 @@ public class State_Talk : MonoBehaviour
             {
                 conversations.RemoveAt(i);
                 currentConversation = convo;
+                break;
             }
         }
     }

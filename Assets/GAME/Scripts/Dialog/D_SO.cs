@@ -18,6 +18,9 @@ public class D_SO : ScriptableObject
     [Header("Must have visited these locations to see this dialogue")]
     public D_LocationSO[] requiredLocations;
 
+    [Header("Must have these items to see this dialogue")]
+    public INV_ItemSO[] requiredItems;
+
     // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
     {
@@ -41,6 +44,13 @@ public class D_SO : ScriptableObject
             }
         }
 
+        // 3/ Items
+        if (requiredItems.Length > 0)
+        {
+            foreach (var itemSO in requiredItems)
+                if (!INV_Manager.Instance.HasItem(itemSO))
+                    return false;
+        }
         return true;
     }
 }

@@ -1,4 +1,8 @@
 // ----- File: D_ActorSO.cs -----
+// <summary>
+// Used to define an actor (NPC) in the dialogue system.
+// </summary>
+
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActorSO", menuName = "Dialogue/ActorSO")]
@@ -96,13 +100,15 @@ public class D_LocationHistoryTracker : MonoBehaviour
 // <summary>
 // Used to define a location in the dialogue system.
 // </summary>
+
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LocationSO", menuName = "Dialogue/LocationSO")]
 public class D_LocationSO : ScriptableObject
 {
-    [Header("IDs & Display")]
+    [Header("Unique ID for this location")]
     public string locationID;
+    [Header("The name shown in dialogue/UI")]
     public string displayName = "Auto Filled by OnValidate";
 
     void OnValidate()
@@ -138,6 +144,10 @@ public class D_LocationVisitedTrigger : MonoBehaviour
 }
 
 // ----- File: D_Manager.cs -----
+// <summary>
+// Manages dialogue flow, UI updates, and player choices.
+// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -153,7 +163,7 @@ public class D_Manager : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     [Header("Choices")]
-    public Button[] choiceButtons; // drag your option buttons here (in order)
+    public Button[] choiceButtons;
 
     D_SO currentDialogue;
     int dialogueIndex;
@@ -276,6 +286,10 @@ public class D_Manager : MonoBehaviour
 }
 
 // ----- File: D_SO.cs -----
+// <summary>
+// Used to define a dialogue node in the dialogue system.
+// </summary>
+
 using Unity.AppUI.UI;
 using UnityEngine;
 
@@ -291,6 +305,9 @@ public class D_SO : ScriptableObject
 
     [Header("Must have visited these locations to see this dialogue")]
     public D_LocationSO[] requiredLocations;
+
+    [Header("Must have these items to see this dialogue")]
+    public INV_ItemSO[] requiredItems;
 
     // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
@@ -315,6 +332,13 @@ public class D_SO : ScriptableObject
             }
         }
 
+        // 3/ Items
+        if (requiredItems.Length > 0)
+        {
+            foreach (var itemSO in requiredItems)
+                if (!INV_Manager.Instance.HasItem(itemSO))
+                    return false;
+        }
         return true;
     }
 }
