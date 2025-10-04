@@ -715,6 +715,110 @@ public interface I_Controller
     void SetDesiredVelocity(Vector2 v);
 }
 
+// ----- File: State_Attack.cs -----
+using System.Collections;
+using UnityEngine;
+
+public class State_Attack : MonoBehaviour
+{
+    [Header("Target Layer")]
+    public LayerMask playerLayer;
+
+    [Header("Attack Cooldown")]
+    public float attackCooldown = 0.80f;
+    float attackDuration = 0.45f; // Default: 0.45f
+    float hitDelay = 0.15f; // Default: 0.15f
+    float attackRange;
+
+    [Header("Weapon")]
+    public W_Base activeWeapon;
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    E_Controller controller;
+
+    // Runtime
+    Transform target;
+    Vector2 lastFace = Vector2.down;
+    bool isAttacking;
+    public bool IsAttacking => isAttacking;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        controller = GetComponent<E_Controller>();
+        activeWeapon = GetComponentInChildren<W_Base>();
+
+        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
+        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
+    }
+
+    void OnDisable()
+    {
+        isAttacking = false;
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isAttacking", false);
+    }
+
+    void Update()
+    {
+        // No movement while in attack state; controller still applies knockback globally
+        controller.SetDesiredVelocity(Vector2.zero);
+
+        if (!target) return;
+
+        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+        float d = to.magnitude;
+        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+        UpdateIdleFacing(isAttacking ? lastFace : dir);
+
+        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
+            StartCoroutine(AttackRoutine(dir));
+    }
+
+    // Set target + attack range
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // Attack coroutine
+    IEnumerator AttackRoutine(Vector2 dirAtStart)
+    {
+        isAttacking = true;
+        anim.SetBool("isAttacking", true);
+
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+
+        UpdateIdleFacing(lastFace);
+
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon?.Attack(lastFace);
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        controller.SetAttackCooldown(attackCooldown);
+        isAttacking = false;
+        anim.SetBool("isAttacking", false);
+    }
+
+    // Update facing for idle state
+    void UpdateIdleFacing(Vector2 faceDir)
+    {
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+        // Compute idle facing from last move/attack direction
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
+    }
+}
+
 // ----- File: State_Attack_Boss.cs -----
 using System.Collections;
 using UnityEngine;
@@ -1034,107 +1138,84 @@ public class State_Attack_Boss : MonoBehaviour
     }
 }
 
-// ----- File: State_Attack.cs -----
-using System.Collections;
+// ----- File: State_Chase.cs -----
 using UnityEngine;
 
-public class State_Attack : MonoBehaviour
+public class State_Chase : MonoBehaviour
 {
-    [Header("Target Layer")]
-    public LayerMask playerLayer;
+    [Header("Tuning")]
+    public float stopBuffer = 0.10f;
 
-    [Header("Attack Cooldown")]
-    public float attackCooldown = 0.80f;
-    float attackDuration = 0.45f; // Default: 0.45f
-    float hitDelay = 0.15f; // Default: 0.15f
-    float attackRange;
-
-    [Header("Weapon")]
-    public W_Base activeWeapon;
+    float attackRange = 1.2f;
 
     // Cache
     Rigidbody2D rb;
     Animator anim;
+    C_Stats stats;
     E_Controller controller;
 
     // Runtime
     Transform target;
-    Vector2 lastFace = Vector2.down;
-    bool isAttacking;
-    public bool IsAttacking => isAttacking;
+    Vector2 velocity, lastMove = Vector2.down;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        stats      = GetComponent<C_Stats>();
         controller = GetComponent<E_Controller>();
-        activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
-        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
+        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
     }
+
+    void OnEnable() { anim.SetBool("isMoving", false); }
 
     void OnDisable()
     {
-        isAttacking = false;
-        controller.SetDesiredVelocity(Vector2.zero);
+        velocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
-        anim.SetBool("isAttacking", false);
+        anim.SetBool("isMoving", false);
     }
 
     void Update()
     {
-        // No movement while in attack state; controller still applies knockback globally
-        controller.SetDesiredVelocity(Vector2.zero);
+        // No movement while stunned/dead; controller still applies knockback globaly
+        if (!target)
+        {
+            velocity = Vector2.zero;
+            controller?.SetDesiredVelocity(Vector2.zero);
+            UpdateFloats(Vector2.zero);
+            anim.SetBool("isMoving", false);
+            return;
+        }
 
-        if (!target) return;
+        // Chase target
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float   distance  = toTarget.magnitude;
+        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
 
-        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        // Move if outside attack range + buffer
+        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
 
-        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-        float d = to.magnitude;
-        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
-
-        UpdateIdleFacing(isAttacking ? lastFace : dir);
-
-        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
-            StartCoroutine(AttackRoutine(dir));
+        controller.SetDesiredVelocity(velocity);
+        UpdateFloats(velocity);
     }
 
     // Set target + attack range
     public void SetTarget(Transform t) => target = t;
     public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
-    // Attack coroutine
-    IEnumerator AttackRoutine(Vector2 dirAtStart)
+    // Update animator floats
+    void UpdateFloats(Vector2 move)
     {
-        isAttacking = true;
-        anim.SetBool("isAttacking", true);
-
-        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
-        anim.SetFloat("atkX", lastFace.x);
-        anim.SetFloat("atkY", lastFace.y);
-
-        UpdateIdleFacing(lastFace);
-
-        yield return new WaitForSeconds(hitDelay);
-        activeWeapon?.Attack(lastFace);
-        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
-
-        controller.SetAttackCooldown(attackCooldown);
-        isAttacking = false;
-        anim.SetBool("isAttacking", false);
-    }
-
-    // Update facing for idle state
-    void UpdateIdleFacing(Vector2 faceDir)
-    {
-        anim.SetFloat("moveX", 0f);
-        anim.SetFloat("moveY", 0f);
-        // Compute idle facing from last move/attack direction
-        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
-        anim.SetFloat("idleX", f.x);
-        anim.SetFloat("idleY", f.y);
+        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
     }
 }
 
@@ -1237,87 +1318,6 @@ public class State_Chase_Boss : MonoBehaviour
     }
 }
 
-// ----- File: State_Chase.cs -----
-using UnityEngine;
-
-public class State_Chase : MonoBehaviour
-{
-    [Header("Tuning")]
-    public float stopBuffer = 0.10f;
-
-    float attackRange = 1.2f;
-
-    // Cache
-    Rigidbody2D rb;
-    Animator anim;
-    C_Stats stats;
-    E_Controller controller;
-
-    // Runtime
-    Transform target;
-    Vector2 velocity, lastMove = Vector2.down;
-
-    void Awake()
-    {
-        rb         = GetComponent<Rigidbody2D>();
-        anim       = GetComponent<Animator>();
-        stats      = GetComponent<C_Stats>();
-        controller = GetComponent<E_Controller>();
-
-        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
-    }
-
-    void OnEnable() { anim.SetBool("isMoving", false); }
-
-    void OnDisable()
-    {
-        velocity = Vector2.zero;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
-        anim.SetBool("isMoving", false);
-    }
-
-    void Update()
-    {
-        // No movement while stunned/dead; controller still applies knockback globaly
-        if (!target)
-        {
-            velocity = Vector2.zero;
-            controller?.SetDesiredVelocity(Vector2.zero);
-            UpdateFloats(Vector2.zero);
-            anim.SetBool("isMoving", false);
-            return;
-        }
-
-        // Chase target
-        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
-        float   distance  = toTarget.magnitude;
-        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
-
-        // Move if outside attack range + buffer
-        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
-        bool moving = velocity.sqrMagnitude > 0f;
-        anim.SetBool("isMoving", moving);
-
-        controller.SetDesiredVelocity(velocity);
-        UpdateFloats(velocity);
-    }
-
-    // Set target + attack range
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
-    // Update animator floats
-    void UpdateFloats(Vector2 move)
-    {
-        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
-        anim.SetFloat("moveX", move.x);
-        anim.SetFloat("moveY", move.y);
-        anim.SetFloat("idleX", lastMove.x);
-        anim.SetFloat("idleY", lastMove.y);
-    }
-}
-
 // ----- File: State_Idle.cs -----
 using UnityEngine;
 
@@ -1363,9 +1363,8 @@ public class State_Talk : MonoBehaviour
 {
     [Header("References")]
     public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
-    public D_SO conversation;
-    public List<D_SO> conversations;
     public D_SO currentConversation;
+    public List<D_SO> conversations;
 
     Rigidbody2D rb;
     Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)

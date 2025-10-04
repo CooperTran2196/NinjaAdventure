@@ -5,9 +5,8 @@ public class State_Talk : MonoBehaviour
 {
     [Header("References")]
     public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
-    public D_SO conversation;
-    public List<D_SO> conversations;
     public D_SO currentConversation;
+    public List<D_SO> conversations;
 
     Rigidbody2D rb;
     Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)

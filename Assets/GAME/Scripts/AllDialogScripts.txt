@@ -9,34 +9,131 @@ public class D_ActorSO : ScriptableObject
 }
 
 // ----- File: D_HistoryTracker.cs -----
+// <summary>
+// Tracks NPCs the player has spoken to in the dialogue system.
+// </summary>
+
 using UnityEngine;
 using System.Collections.Generic;
 
 public class D_HistoryTracker : MonoBehaviour
 {
-    public static D_HistoryTracker Instance { get; private set; }
+    public static D_HistoryTracker Instance;
 
-    // Who we've spoken to (unique ActorSOs)
-    public readonly List<D_ActorSO> spokenNPCs = new();
+    // Using HashSet to avoid duplicate entries/ Don't care about order
+    public readonly HashSet<D_ActorSO> spokenNPCs = new();
 
+    // Singleton pattern
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
     }
 
-    public void RecordNPC(D_ActorSO actor)
+    // Add the NPC to spkenNPCs if not already present
+    public void RecordNPC(D_ActorSO actorSO)
     {
-        // spkenNPC.Add(actor);
-        if (actor == null) return;
-        if (!spokenNPCs.Contains(actor)) spokenNPCs.Add(actor);
-        Debug.Log($"Spoken with: {actor.actorName}");
+        if (spokenNPCs.Add(actorSO))
+        {
+            Debug.Log($"Spoken with: {actorSO.actorName}");
+        }
     }
 
-    public bool HasSpokenWith(D_ActorSO actor)
+    // Check if we've spoken to this NPC before
+    public bool HasSpokenWith(D_ActorSO actorSO)
     {
-        // return spkenNPC.Contains(actor);
-        return actor != null && spokenNPCs.Contains(actor);
+        return spokenNPCs.Contains(actorSO);
+    }
+}
+
+// ----- File: D_LocationHistoryTracker.cs -----
+// <summary>
+// Tracks locations visited by the player in the dialogue system.
+// </summary>
+
+using UnityEngine;
+using System.Collections.Generic;
+
+public class D_LocationHistoryTracker : MonoBehaviour
+{
+    public static D_LocationHistoryTracker Instance;
+
+    // Using HashSet to avoid duplicate entries/ Don't care about order
+    public readonly HashSet<D_LocationSO> locationsVisited = new();
+
+    // Singleton pattern
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    // Add the location to locationsVisited if not already present
+    public void RecordLocation(D_LocationSO locationSO)
+    {
+        if (locationsVisited.Add(locationSO))
+        {
+            Debug.Log($"Visited location: {locationSO.displayName}");
+        }
+    }
+
+    // Check if we've visited this location before
+    public bool HasVisited(D_LocationSO locationSO)
+    {
+        return locationsVisited.Contains(locationSO);
+    }
+}
+
+// ----- File: D_LocationSO.cs -----
+// <summary>
+// Used to define a location in the dialogue system.
+// </summary>
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "LocationSO", menuName = "Dialogue/LocationSO")]
+public class D_LocationSO : ScriptableObject
+{
+    [Header("IDs & Display")]
+    public string locationID;
+    public string displayName = "Auto Filled by OnValidate";
+
+    void OnValidate()
+    {
+        displayName = name;
+    }
+}
+
+// ----- File: D_LocationVisitedTrigger.cs -----
+// <summary>
+// Attach this to a trigger collider to mark a location as visited when the player enters it.
+// </summary>
+ 
+using UnityEngine;
+
+[RequireComponent(typeof(Collider2D))]
+
+public class D_LocationVisitedTrigger : MonoBehaviour
+{
+    [SerializeField] D_LocationSO location;
+    [Header("SET FALSE on teleporters")]
+    [SerializeField] bool destroyOnTouch = true;
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        D_LocationHistoryTracker.Instance.RecordLocation(location);
+
+        if (destroyOnTouch)
+            Destroy(gameObject);
     }
 }
 
@@ -192,9 +289,14 @@ public class D_SO : ScriptableObject
     [Header("Must have spoken to these NPCs to see this dialogue")]
     public D_ActorSO[] requiredNPCs;
 
+    [Header("Must have visited these locations to see this dialogue")]
+    public D_LocationSO[] requiredLocations;
+
+    // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
     {
-        if (requiredNPCs != null && requiredNPCs.Length > 0)
+        // 1/ NPC gate
+        if (requiredNPCs.Length > 0)
         {
             foreach (var npc in requiredNPCs)
             {
@@ -202,6 +304,17 @@ public class D_SO : ScriptableObject
                     return false;
             }
         }
+
+        // 2/ LOCATION gate
+        if (requiredLocations.Length > 0)
+        {
+            foreach (var location in requiredLocations)
+            {
+                if (!D_LocationHistoryTracker.Instance.HasVisited(location))
+                    return false;
+            }
+        }
+
         return true;
     }
 }

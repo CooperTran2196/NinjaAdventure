@@ -1,3 +1,7 @@
+// <summary>
+// Manages dialogue flow, UI updates, and player choices.
+// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -13,7 +17,7 @@ public class D_Manager : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     [Header("Choices")]
-    public Button[] choiceButtons; // drag your option buttons here (in order)
+    public Button[] choiceButtons;
 
     D_SO currentDialogue;
     int dialogueIndex;

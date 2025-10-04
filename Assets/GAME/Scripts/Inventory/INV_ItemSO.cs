@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class INV_ItemSO : ScriptableObject
 {
     [Header("Item Data")]
-    public string itemName = "Auto Filled";
+    public string itemName = "Auto Filled by OnValidate";
     [TextArea] public string description;
     public Sprite image;
     public int stackSize = 3;
@@ -20,7 +20,6 @@ public class INV_ItemSO : ScriptableObject
     // Auto-update name in Editor
     private void OnValidate()
     {
-        if (itemName != name)
-            itemName = name;
+        itemName = name;
     }
 }

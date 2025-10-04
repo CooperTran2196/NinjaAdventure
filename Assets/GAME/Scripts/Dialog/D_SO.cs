@@ -1,3 +1,7 @@
+// <summary>
+// Used to define a dialogue node in the dialogue system.
+// </summary>
+
 using Unity.AppUI.UI;
 using UnityEngine;
 
@@ -11,9 +15,14 @@ public class D_SO : ScriptableObject
     [Header("Must have spoken to these NPCs to see this dialogue")]
     public D_ActorSO[] requiredNPCs;
 
+    [Header("Must have visited these locations to see this dialogue")]
+    public D_LocationSO[] requiredLocations;
+
+    // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
     {
-        if (requiredNPCs != null && requiredNPCs.Length > 0)
+        // 1/ NPC gate
+        if (requiredNPCs.Length > 0)
         {
             foreach (var npc in requiredNPCs)
             {
@@ -21,6 +30,17 @@ public class D_SO : ScriptableObject
                     return false;
             }
         }
+
+        // 2/ LOCATION gate
+        if (requiredLocations.Length > 0)
+        {
+            foreach (var location in requiredLocations)
+            {
+                if (!D_LocationHistoryTracker.Instance.HasVisited(location))
+                    return false;
+            }
+        }
+
         return true;
     }
 }
