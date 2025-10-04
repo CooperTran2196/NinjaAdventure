@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
   m_Name: Find Location
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
-  lines: []
+  lines:
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: You found the location great
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: No problem
   options: []
   requiredNPCs: []
-  requiredLocations: []
+  requiredLocations:
+  - {fileID: 11400000, guid: 15853343916d27a449f9a0f11dcda92c, type: 2}

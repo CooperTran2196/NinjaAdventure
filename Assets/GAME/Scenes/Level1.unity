@@ -9357,6 +9357,7 @@ GameObject:
   - component: {fileID: 190639848}
   - component: {fileID: 190639847}
   - component: {fileID: 190639846}
+  - component: {fileID: 190639849}
   m_Layer: 0
   m_Name: Teleport
   m_TagString: Untagged
@@ -9414,7 +9415,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.58291245, y: 0.19169235}
+  m_Offset: {x: 2.5606098, y: 8.160759}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -9424,7 +9425,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.94407654, y: 0.89151}
+  m_Size: {x: 0.8777809, y: 0.94078827}
   m_EdgeRadius: 0
 --- !u!4 &190639848
 Transform:
@@ -9442,6 +9443,20 @@ Transform:
   - {fileID: 2053261934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &190639849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190639845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda7389e644cd184db68f7353d675de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_LocationVisitedTrigger
+  location: {fileID: 11400000, guid: 15853343916d27a449f9a0f11dcda92c, type: 2}
+  destroyOnTouch: 0
 --- !u!1001 &200587381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10612,6 +10627,18 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
   m_PrefabInstance: {fileID: 6358073895188072921}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &648076230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648076222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e71c99221bfc144fa1be6735ace40bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_LocationHistoryTracker
 --- !u!1 &654952071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5325631574801758432, guid: e4c79d5f5bff40d449e9b01fb8f49da7, type: 3}
@@ -12008,10 +12035,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 494059847}
-  conversation: {fileID: 11400000, guid: d7d80b58f5df7423f8a6415047519bb3, type: 2}
+  currentConversation: {fileID: 0}
   conversations:
   - {fileID: 11400000, guid: d7d80b58f5df7423f8a6415047519bb3, type: 2}
-  currentConversation: {fileID: 0}
 --- !u!114 &1019970120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13362,6 +13388,99 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1761293190292735608, guid: 8cc07a55d51915543b590b5e9358906d, type: 3}
   m_PrefabInstance: {fileID: 1353570807}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1373019664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1373019667}
+  - component: {fileID: 1373019666}
+  - component: {fileID: 1373019665}
+  m_Layer: 0
+  m_Name: Testing Location trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1373019665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373019664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda7389e644cd184db68f7353d675de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_LocationVisitedTrigger
+  location: {fileID: 11400000, guid: 15853343916d27a449f9a0f11dcda92c, type: 2}
+  destroyOnTouch: 1
+--- !u!61 &1373019666
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373019664}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 2.221024, y: 0.7002239}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 3.603959, y: 2.4004478}
+  m_EdgeRadius: 0
+--- !u!4 &1373019667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373019664}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.51672, y: 6.79677, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1495701200
 GameObject:
   m_ObjectHideFlags: 0
@@ -13895,7 +14014,7 @@ GameObject:
   - component: {fileID: 1603086748}
   - component: {fileID: 1603086747}
   m_Layer: 10
-  m_Name: Princess 1
+  m_Name: Princess testing
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13914,11 +14033,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 2044849365}
-  conversation: {fileID: 11400000, guid: 84ecba8836fa746938731d8a64eeea37, type: 2}
+  currentConversation: {fileID: 0}
   conversations:
+  - {fileID: 11400000, guid: c0368b23a4da3f243a1ac1348a934f09, type: 2}
   - {fileID: 11400000, guid: 84ecba8836fa746938731d8a64eeea37, type: 2}
   - {fileID: 11400000, guid: fadd4d9261044d3478dcd9abbcc00329, type: 2}
-  currentConversation: {fileID: 0}
 --- !u!114 &1603086748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15921,19 +16040,19 @@ PrefabInstance:
       objectReference: {fileID: 535627140}
     - target: {fileID: 6501170808711918719, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.84188
+      value: -20.541882
       objectReference: {fileID: 0}
     - target: {fileID: 6501170808711918719, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -48.77146
+      value: -48.37146
       objectReference: {fileID: 0}
     - target: {fileID: 6936087775998028762, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.84188
+      value: -20.541882
       objectReference: {fileID: 0}
     - target: {fileID: 6936087775998028762, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -48.77146
+      value: -48.37146
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17597,7 +17716,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 648076230}
   m_SourcePrefab: {fileID: 100100000, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
 --- !u!1001 &6814625241615778658
 PrefabInstance:
@@ -17609,11 +17731,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.9
+      value: 10.2
       objectReference: {fileID: 0}
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18360,3 +18482,4 @@ SceneRoots:
   - {fileID: 3353340758726574241}
   - {fileID: 6358073895188072921}
   - {fileID: 6814625241615778658}
+  - {fileID: 1373019667}
