@@ -1,6 +1,6 @@
 # Cross-platform PowerShell (Windows + macOS/Linux with PowerShell 7+)
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Folders = @('Audio','Character','Enemy','Inventory', 'NPC', 'Player','SkillTree','UI','Weapon', 'Testing')
+$Folders = @('Audio','Character','Enemy','Inventory', 'NPC', 'Player','SkillTree','UI','Weapon', 'Dialog', 'Testing')
 
 foreach ($name in $Folders) {
     $dir = Get-ChildItem -LiteralPath $Root -Directory | Where-Object { $_.Name -ieq $name } | Select-Object -First 1

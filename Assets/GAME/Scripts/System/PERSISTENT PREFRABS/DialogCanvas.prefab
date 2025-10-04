@@ -384,6 +384,7 @@ GameObject:
   - component: {fileID: 8921033900445212144}
   - component: {fileID: 8255391170151820133}
   - component: {fileID: 6204305816924010218}
+  - component: {fileID: 2642791382427067942}
   m_Layer: 5
   m_Name: DialogCanvas
   m_TagString: Untagged
@@ -482,7 +483,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6719458916665729831}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -506,6 +507,18 @@ MonoBehaviour:
   - {fileID: 3909672959276144876}
   - {fileID: 34180912928843088}
   - {fileID: 8099004114792301398}
+--- !u!114 &2642791382427067942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6719458916665729831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cd678701f6f4c34a252be4e86732dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_HistoryTracker
 --- !u!1 &8521647241533806385
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
-  m_Name: Intro Con 1st option
+  m_Name: Greating with SorO
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
-  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: hong co gi het e'
-  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
-    text: met m ghe
+  - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
+    text: Co chien gi hem
+  - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
+    text: ahihi
   options: []
+  requiredNPCs: []

@@ -53,13 +53,13 @@ public class E_Combat : MonoBehaviour
         activeWeapon ??= GetComponentInChildren<W_Melee>();
 
 
-        if (!sr)            Debug.LogError($"{name}: SpriteRenderer in E_Combat missing.");
-        if (!anim)          Debug.LogError($"{name}: Animator in E_Combat missing.");
+        if (!sr)            Debug.LogError($"{name}: SpriteRenderer is missing in E_Combat");
+        if (!anim)          Debug.LogError($"{name}: Animator is missing in E_Combat");
 
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats in E_Combat missing.");
-        if (!e_Movement)    Debug.LogError($"{name}: E_Movement in E_Combat missing.");
-        if (!e_Health)      Debug.LogError($"{name}: C_Health in E_Combat missing.");
-        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee in E_Combat missing.");
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in E_Combat");
+        if (!e_Movement)    Debug.LogError($"{name}: E_Movement is missing in E_Combat");
+        if (!e_Health)      Debug.LogError($"{name}: C_Health is missing in E_Combat");
+        if (!activeWeapon)  Debug.LogError($"{name}: W_Melee is missing in E_Combat");
         // c_Wander optional: only log verbose if enemy expected to wander? (skip error)
     }
 
@@ -163,139 +163,126 @@ public class E_Combat : MonoBehaviour
 }
 
 // ----- File: E_Controller.cs -----
+using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(State_Idle))]
-[RequireComponent(typeof(State_Wander))]
-[RequireComponent(typeof(State_Chase))]
-[RequireComponent(typeof(State_Attack))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
 
-public class E_Controller : MonoBehaviour
+public class E_Controller : MonoBehaviour, I_Controller
 {
     public enum EState { Idle, Wander, Chase, Attack }
 
     [Header("Main controller for enemy AI states")]
-    [Header("Ranges and Layers")]
-    [Min(3f)] public float detectionRange = 3f;
+    [Header("References")]
+    [Min(3f)]   public float detectionRange = 3f;
     [Min(1.2f)] public float attackRange = 1.2f;
-    public LayerMask playerLayer;
+                public LayerMask playerLayer;
+                public EState defaultState = EState.Idle;
 
-    [Header("States")]
-    public EState defaultState = EState.Idle;
-    EState currentState;
-    public State_Idle idle;
-    public State_Wander wander;
-    public State_Chase chase;
-    public State_Attack attack;
-
-    // Runtime variables
-    Transform currentTarget;
-    // Movement blend + FX
-    [Header("Movement / FX")]
-    public string deathTrigger = "Die";
-    public float defaultKR = 30f; // fallback if stats.KR not present
-    public bool autoKill;
+    [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
+    public float attackStartBuffer = 0.2f;
+           float attackInRangeTimer;  
 
     Rigidbody2D rb;
-    Animator animator;
-    C_Stats stats;
-    C_Health health;
-    Collider2D[] cols;
+    Animator anim;
+    EState currentState;
+    State_Idle idle;
+    State_Wander wander;
+    State_Chase chase;
+    State_Attack attack;
+    C_Stats c_Stats;
+    C_Health c_Health;
 
-    // Unified movement intent + knockback
+    // Runtime vars
+    Transform currentTarget;
     Vector2 desiredVelocity;
     Vector2 knockback;
-    int disableLocks;
-
-    // Keep the same API signature
-    public void SetDisabled(bool v)
-    {
-        if (v) disableLocks++;
-        else disableLocks = Mathf.Max(0, disableLocks - 1);
-
-        if (disableLocks > 0 && rb) rb.linearVelocity = Vector2.zero;
-    }
-
+    bool isStunned;
+    bool isDead;
+    float stunUntil;
+    float attackCooldown; // for State_Attack
+    float contactTimer;   // for collision damage
 
     void Awake()
     {
+        rb       ??= GetComponent<Rigidbody2D>();
+        anim ??= GetComponentInChildren<Animator>();
         idle = GetComponent<State_Idle>();
         wander = GetComponent<State_Wander>();
         chase = GetComponent<State_Chase>();
         attack = GetComponent<State_Attack>();
+        c_Stats = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+        c_Stats    ??= GetComponent<C_Stats>();
+        c_Health   ??= GetComponent<C_Health>();
 
-        if (!idle) Debug.LogError($"{name}: Missing State_Idle in E_Controller.");
-        if (!wander) Debug.LogError($"{name}: Missing State_Wander in E_Controller.");
-        if (!chase) Debug.LogError($"{name}: Missing State_Chase in E_Controller.");
-        if (!attack) Debug.LogError($"{name}: Missing State_Attack in E_Controller.");
-
-        rb       ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponentInChildren<Animator>();
-        stats    ??= GetComponent<C_Stats>();
-        health   ??= GetComponent<C_Health>();
-        cols     ??= GetComponentsInChildren<Collider2D>(true);
-
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing.");
-        if (!health) Debug.LogError($"{name}: C_Health missing.");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller");
+        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller");
+        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller");
+        if (!wander) Debug.LogError($"{name}: State_Wander is missing in E_Controller");
+        if (!chase) Debug.LogError($"{name}: State_Chase is missing in E_Controller");
+        if (!attack) Debug.LogError($"{name}: State_Attack is missing in E_Controller");
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Controller");
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Controller");
     }
-
 
     void OnEnable()
     {
-        if (health) health.OnDied += HandleDeath;
-
-        if (autoKill && health)
-        {
-            autoKill = false;
-            health.Kill(); // uses stats.maxHP internally per your style
-        }
-
+        c_Health.OnDied += HandleDeath;
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        if (health) health.OnDied -= HandleDeath;
+        c_Health.OnDied -= HandleDeath;
         idle.enabled   = false;
         wander.enabled = false;
         chase.enabled  = false;
         attack.enabled = false;
     }
-    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
-
-
-    // W_Knockback now calls this first, so all states get shoved uniformly
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
     void Update()
     {
+        // Death override
+        if (isDead) return;
+        if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
+
         // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
         Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
         // If attackCircle not null, reuse it. Otherwise check the detectionCircle
         Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+
         // Check true/false for each circle depending on player location
         bool targetInsideAttackCircle = attackCircle;
         bool targetInsideDetectionCircle = detectionCircle;
 
+        // Set current target to the player if inside either circle
         if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
 
-        // Optional: the current state reacts immediately without forcing a state change
-        // if (chase.enabled) chase.SetRanges(attackRange);
-        // if (attack.enabled) attack.SetRanges(attackRange);
+        // Build/decay the "stay-in-range" buffer timer
+        if (targetInsideAttackCircle) attackInRangeTimer += Time.deltaTime;
+        else attackInRangeTimer = 0f;
 
-        // Decide desired state from ring position
+        // Only ready to attack if: inside attack circle long enough AND off cooldown
+        bool readyToAttack = targetInsideAttackCircle
+                          && attackInRangeTimer >= attackStartBuffer
+                          && attackCooldown <= 0f;
+
+        // Decide desired state
         EState desiredState =
-        targetInsideAttackCircle    ? EState.Attack :
-        targetInsideDetectionCircle ? EState.Chase  :
-                                      defaultState;
+            readyToAttack ? EState.Attack :
+            targetInsideDetectionCircle ? EState.Chase :
+                                          defaultState;
 
         // Never interrupt an active attack clip
         if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
         // If nothing changed just return
         if (desiredState == currentState) return;
 
-        // Apply the change
+        // Apply state change
         switch (desiredState)
         {
             case EState.Attack:
@@ -314,45 +301,74 @@ public class E_Controller : MonoBehaviour
                 break;
         }
     }
+
+
+
     void FixedUpdate()
     {
-        if (!rb) return;
+        // Death override
+        if (isDead) return;
 
-        // 1) Apply this frame’s intent + knockback
-        Vector2 final = (disableLocks > 0) ? Vector2.zero : (desiredVelocity + knockback);
-        rb.linearVelocity = final;
+        // Apply this frame: block state intent when stunned/dead, but still allow knockback
+        Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
+        rb.linearVelocity = baseVel + knockback;
 
-        // 2) Then decay knockback for the NEXT frame
+        // Decay knockback for the NEXT frame
         if (knockback.sqrMagnitude > 0f)
         {
-            float kr = stats ? stats.KR : defaultKR;
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, kr * Time.fixedDeltaTime);
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
         }
     }
 
-
-    void HandleDeath()
+    // Set/Get attack cooldown timer for use by State_Attack
+    public float GetAttackCooldown => attackCooldown;
+    public void SetAttackCooldown(float attackCooldown)
     {
-        SetDisabled(true);
-        // Stop AI scripts immediately so no more actions are scheduled
-        if (idle) idle.enabled = false;
-        if (wander) wander.enabled = false;
-        if (chase) chase.enabled = false;
-        if (attack) attack.enabled = false;
-
-        // Turn off all hit/hurt boxes so this enemy can’t hit or be hit while fading
-        if (cols != null) foreach (var c in cols) c.enabled = false;
-
-        // Freeze motion
-        desiredVelocity = Vector2.zero;
-        knockback = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
-
-        // Play death anim; let C_Health/C_FX handle FadeAndDestroy (do NOT call fade here)
-        animator?.SetTrigger(string.IsNullOrEmpty(deathTrigger) ? "Die" : deathTrigger);
+        this.attackCooldown = attackCooldown;
     }
 
+    // Only E_Controller handle the movement + knockback
+    // Helper for State scripts to read/write movement intent + apply knockback
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    // W_Knockback now calls this first, so all states get shoved uniformly
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
 
+    // Stun coroutine called by W_Base when applying stun effect
+    public IEnumerator StunFor(float duration)
+    {
+        if (duration <= 0f) yield break;
+
+        // Extend the stun end if a longer one arrives
+        float newEnd = Time.time + duration;
+        if (newEnd > stunUntil) stunUntil = newEnd;
+
+        isStunned = true;
+        while (Time.time < stunUntil) yield return null;
+
+        isStunned = false;
+    }
+
+    // Handle death event from C_Health
+    void HandleDeath()
+    {
+        // Mark as dead
+        isDead = true;
+
+        // Freeze motion
+        knockback = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+
+        // Stop AI scripts immediately so no more actions are scheduled
+        idle.enabled = false;
+        wander.enabled = false;
+        chase.enabled = false;
+        attack.enabled = false;
+
+        // Play death anim
+        anim.SetTrigger("Die");
+    }
+
+    // Switch states, enabling the chosen one and disabling others
     public void SwitchState(EState s)
     {
         if (currentState == s) return;
@@ -376,6 +392,26 @@ public class E_Controller : MonoBehaviour
         }
     }
 
+    // Collision damage while touching player
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (isDead) return;
+
+        // Only interact with the player layer (you already have playerLayer on the controller)
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0) return;
+
+        // Throttle ticks using physics timestep
+        if (contactTimer > 0f) { contactTimer -= Time.fixedDeltaTime; return; }
+
+        // Apply damage if player has C_Health
+        var playerHealth = collision.collider.GetComponent<C_Health>();
+        if (!playerHealth.IsAlive) return;
+
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage);   // apply tick damage
+        contactTimer = c_Stats.collisionTick;                  // reset tick window
+    }
+
+    // DEBUG: visualize detection/attack ranges
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.65f, 0f);
@@ -384,7 +420,6 @@ public class E_Controller : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
 }
 
 // ----- File: E_HealthBarSlider.cs -----
@@ -417,8 +452,8 @@ public class E_HealthBarSlider : MonoBehaviour
         cg       ??= GetComponent<CanvasGroup>();
         e_Health ??= GetComponentInParent<C_Health>();
 
-        if (!e_Health) Debug.LogError($"{name}: C_Health in E_HealthBarSlider is missing.", this);
-        if (!slider)   Debug.LogError($"{name}: Slider in E_HealthBarSlider is missing.", this);
+        if (!e_Health) Debug.LogError($"{name}: C_Health is missing in E_HealthBarSlider");
+        if (!slider)   Debug.LogError($"{name}: Slider is missing in E_HealthBarSlider");
     }
 
     void OnEnable()
@@ -531,13 +566,13 @@ public class E_Movement : MonoBehaviour
         e_Combat ??= GetComponent<E_Combat>();
 
 
-        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer in E_Movement is missing.");
-        if (!rb)       Debug.LogError($"{name}: Rigidbody2D in E_Movement is missing.");
-        if (!animator) Debug.LogError($"{name}: Animator in E_Movement is missing.");
+        if (!sprite)   Debug.LogError($"{name}: SpriteRenderer is missing in E_Movement");
+        if (!rb)       Debug.LogError($"{name}: Rigidbody2D is missing in E_Movement");
+        if (!animator) Debug.LogError($"{name}: Animator is missing in E_Movement");
 
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats in E_Movement is missing.");
-        if (!c_State)  Debug.LogError($"{name}: C_State in E_Movement is missing.");
-        if (!e_Combat) Debug.LogError($"{name}: E_Combat in E_Movement is missing.");
+        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Movement");
+        if (!c_State)  Debug.LogError($"{name}: C_State is missing in E_Movement");
+        if (!e_Combat) Debug.LogError($"{name}: E_Combat is missing in E_Movement");
 
     }
 
@@ -654,8 +689,8 @@ public class E_Reward : MonoBehaviour
         c_Health ??= GetComponentInParent<C_Health>();
         if (!p_Exp) p_Exp = FindFirstObjectByType<P_Exp>();
 
-        if (!c_Health) Debug.LogError($"{name}: C_Health in E_Reward missing.", this);
-        if (!p_Exp) Debug.LogError($"{name}: P_Exp not found in scene.", this);
+        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Reward");
+        if (!p_Exp) Debug.LogError($"{name}: P_Exp is missing in E_Reward");
     }
 
     void OnEnable()

@@ -23,12 +23,12 @@ public class INV_ItemInfo : MonoBehaviour
         canvasGroup ??= GetComponent<CanvasGroup>();
         rectTransform ??= GetComponent<RectTransform>();
 
-        if (!canvasGroup) Debug.LogError("INV_ItemInfo: canvasGroup missing.", this);
-        if (!rectTransform) Debug.LogError("INV_ItemInfo: rectTransform missing.", this);
+        if (!canvasGroup) Debug.LogError($"{name}: CanvasGroup is missing in INV_ItemInfo");
+        if (!rectTransform) Debug.LogError($"{name}: RectTransform is missing in INV_ItemInfo");
         // if (!itemNameText) Debug.LogError("INV_ItemInfo: itemNameText missing.", this);
-        if (!itemDescText) Debug.LogError("INV_ItemInfo: itemDescText missing.", this);
-        if (!statLinePrefab) Debug.LogError("INV_ItemInfo: statLinePrefab missing.", this);
-        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer missing.", this);
+        if (!itemDescText) Debug.LogError($"{name}: itemDescText is missing in INV_ItemInfo");
+        if (!statLinePrefab) Debug.LogError($"{name}: statLinePrefab is missing in INV_ItemInfo");
+        if (!statContainer)  Debug.LogError($"{name}: statContainer is missing in INV_ItemInfo");
 
     }
 
@@ -163,9 +163,9 @@ public class INV_Loot : MonoBehaviour
         anim    ??= GetComponent<Animator>();
         trigger ??= GetComponent<CircleCollider2D>();
 
-        if (!sr)      Debug.LogError("INV_Loot: SpriteRenderer (sr) missing.", this);
-        if (!anim)    Debug.LogError("INV_Loot: Animator (anim) missing.", this);
-        if (!trigger) Debug.LogError("INV_Loot: CircleCollider2D (trigger) missing.", this);
+        if (!sr)      Debug.LogError($"{name}: SpriteRenderer is missing in INV_Loot");
+        if (!anim)    Debug.LogError($"{name}: Animator is missing in INV_Loot");
+        if (!trigger) Debug.LogError($"{name}: CircleCollider2D is missing in INV_Loot");
     }
 
     // Run in Edit Mode to update sprite in Inspector
@@ -233,7 +233,7 @@ public class INV_Manager : MonoBehaviour
     {
         p_statsManager ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_statsManager) Debug.LogError("INV_Manager: P_StatsManager missing.", this);
+        if (!p_statsManager) Debug.LogError($"{name}: P_StatsManager is missing in INV_Manager");
     }
 
     // Update all slots & gold text at start
@@ -353,9 +353,9 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
         amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
         inv_Manager ??= GetComponentInParent<INV_Manager>();
 
-        if (!itemImage)     Debug.LogError($"INV_Slots: itemImage missing.", this);
-        if (!amountText)    Debug.LogError($"INV_Slots: amountText missing.", this);
-        if (!inv_Manager)   Debug.LogError($"INV_Slots: INV_Manager missing in parent.", this);
+        if (!itemImage)     Debug.LogError($"{name}: itemImage is missing in INV_Slots");
+        if (!amountText)    Debug.LogError($"{name}: amountText is missing in INV_Slots");
+        if (!inv_Manager)   Debug.LogError($"{name}: INV_Manager is missing in INV_Slots");
     }
 
     void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;
@@ -563,7 +563,7 @@ public class SHOP_Manager : MonoBehaviour
         inv_Manager ??= FindFirstObjectByType<INV_Manager>();
 
         if (!inv_Manager)
-            Debug.LogError("SHOP_Manager: INV_Manager reference missing.", this);
+            Debug.LogError($"{name}: INV_Manager is missing in SHOP_Manager");
         if (shop_Slots == null || shop_Slots.Length == 0)
             Debug.LogWarning("SHOP_Manager: No shopSlots assigned.", this);
     }
@@ -657,11 +657,11 @@ public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         itemImage       ??= transform.Find("itemImage")?.GetComponent<Image>();
         itemPriceText   ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
 
-        if (!shop_Manager) Debug.LogError("SHOP_Slot: SHOP_Manager missing in parent.", this);
-        if (!inv_ItemInfo) Debug.LogError("SHOP_Slot: INV_ItemInfo reference missing.", this);
-        if (!itemImage)    Debug.LogError("SHOP_Slot: itemImage missing.", this);
-        if (!itemNameText) Debug.LogError("SHOP_Slot: itemNameText missing.", this);
-        if (!itemPriceText)Debug.LogError("SHOP_Slot: itemPriceText missing.", this);
+        if (shop_Manager == null) Debug.LogError($"{name}: SHOP_Manager is missing in SHOP_Slot");
+        if (inv_ItemInfo == null) Debug.LogError($"{name}: INV_ItemInfo is missing in SHOP_Slot");
+        if (itemImage == null)    Debug.LogError($"{name}: itemImage is missing in SHOP_Slot");
+        if (itemNameText == null) Debug.LogError($"{name}: itemNameText is missing in SHOP_Slot");
+        if (itemPriceText == null)Debug.LogError($"{name}: itemPriceText is missing in SHOP_Slot");
     }
 
     // called by SHOP_Manager at startup

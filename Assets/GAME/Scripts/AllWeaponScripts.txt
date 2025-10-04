@@ -35,8 +35,8 @@ public abstract class W_Base : MonoBehaviour
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Base");
+        if (!hitbox) Debug.LogError($"{name}: BoxCollider2D is missing in W_Base");
 
         // 2/ Collider mode + default visibility
         hitbox.isTrigger = true;     // trigger-based hit detection
@@ -48,10 +48,10 @@ public abstract class W_Base : MonoBehaviour
         ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
         c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
 
-        if (!owner)         Debug.LogError($"{name}: Owner (root transform) not found for {gameObject.name}", this);
-        if (!ownerAnimator) Debug.LogError($"{name}: Animator missing on owner {owner?.name}", this);
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats missing on owner {owner?.name}", this);
-        if (!weaponData)    Debug.LogError($"{name}: W_SO weaponData is not assigned on {gameObject.name}", this);
+        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base");
+        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base");
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base");
+        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base");
 
         // 4/ Visual + hitbox sizing
         if (weaponData && sprite) sprite.sprite = weaponData.sprite;
@@ -161,25 +161,44 @@ public abstract class W_Base : MonoBehaviour
 
         // Hit effects
         if (weaponData.knockbackForce > 0f)
-            W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+        {
+            // NEW system first: direct call into E_Controller
+            var ec = targetCollider.GetComponentInParent<E_Controller>();
+            if (ec != null)
+            {
+                ec.ReceiveKnockback(dir * weaponData.knockbackForce);
+            }
+            else
+            {
+                // OLD system fallback (player/old enemy/rigidbody)
+                W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+            }
+        }
+
 
         if (weaponData.stunTime > 0f)
         {
-            var pm = targetCollider.GetComponentInParent<P_Movement>();
-            if (pm) { weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime)); }
+            // NEW system first: stun handled inside controller (single coroutine)
+            var ec = targetCollider.GetComponentInParent<E_Controller>();
+            if (ec)
+            {
+                ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
+            }
             else
             {
-                var ec = targetCollider.GetComponentInParent<E_Controller>();
-                if (ec) { weapon.StartCoroutine(W_Stun.Apply(ec, weaponData.stunTime)); }
+                // OLD system fallbacks
+                var pm = targetCollider.GetComponentInParent<P_Movement>();
+                if (pm)
+                {
+                    weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
+                }
                 else
                 {
                     var em = targetCollider.GetComponentInParent<E_Movement>();
-                    if (em) { weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime)); }
+                    if (em) weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime));
                 }
             }
-
         }
-
     }
 
     // Called by owner when attacking
@@ -249,8 +268,6 @@ public static class W_Knockback
     public static void PushTarget(GameObject target, Vector2 direction, float knockbackForce)
     {
         // New system (unified): controller handles knockback for all states
-        var ec = target.GetComponentInParent<E_Controller>();
-        if (ec != null) { ec.ReceiveKnockback(direction * knockbackForce); return; }
 
         // Player
         var pm = target.GetComponentInParent<P_Movement>();
@@ -364,9 +381,9 @@ public class W_Projectile : MonoBehaviour
         col    ??= GetComponent<BoxCollider2D>();
         rb     ??= GetComponent<Rigidbody2D>();
 
-        if (!sprite) Debug.LogError($"{name}: SpriteRenderer missing on {gameObject.name}", this);
-        if (!col)    Debug.LogError($"{name}: BoxCollider2D missing on {gameObject.name}", this);
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D missing on {gameObject.name}", this);
+        if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Projectile");
+        if (!col)    Debug.LogError($"{name}: BoxCollider2D is missing in W_Projectile");
+        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in W_Projectile");
 
         col.isTrigger = true;
         rb.gravityScale = 0f;
@@ -430,7 +447,7 @@ public class W_Projectile : MonoBehaviour
 
         // Pin it: stop physics & collisions, then parent to the collider
         rb.linearVelocity = Vector2.zero;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
         col.enabled = false;
         transform.SetParent(targetCollider.transform, true);
 
@@ -562,15 +579,6 @@ public static class W_Stun
         m.SetDisabled(true);
         yield return new WaitForSeconds(time);
         m.SetDisabled(false);
-    }
-
-    // Stun New-Enemy (preferred)
-    public static IEnumerator Apply(E_Controller ec, float time)
-    {
-        if (!ec) yield break;
-        ec.SetDisabled(true);
-        yield return new WaitForSeconds(time);
-        ec.SetDisabled(false);
     }
 }
 

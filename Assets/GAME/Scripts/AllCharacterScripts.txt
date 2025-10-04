@@ -1,3 +1,137 @@
+// ----- File: B_Controller.cs -----
+using UnityEngine;
+
+[DisallowMultipleComponent]
+[RequireComponent(typeof(Rigidbody2D))]
+public class B_Controller : MonoBehaviour, I_Controller
+{
+    public enum BState { Idle, Wander, Chase, Attack }
+
+    [Header("States")]
+    public BState defaultState = BState.Idle;
+    public State_Idle        idle;
+    public State_Wander      wander;
+    public State_Chase_Boss  chase;
+    public State_Attack_Boss attack;
+
+    [Header("Detection")]
+    [Min(0.1f)] public float detectionRange = 5f;
+    [Min(0.1f)] public float attackRange    = 1.6f;
+    public LayerMask playerLayer;
+    public float attackStartBuffer = 0.20f;
+
+    Rigidbody2D rb;
+    Vector2 desiredVelocity;
+
+    Transform target;
+    float inRangeTimer;
+    BState current;
+
+    void Awake()
+    {
+        idle   ??= GetComponent<State_Idle>();
+        wander ??= GetComponent<State_Wander>();
+        chase  ??= GetComponent<State_Chase_Boss>();
+        attack ??= GetComponent<State_Attack_Boss>();
+        rb     ??= GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()
+    {
+        desiredVelocity = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
+
+        chase?.SetRanges(attackRange);
+        attack?.SetRanges(attackRange);
+        SwitchState(defaultState);
+    }
+
+    void OnDisable()
+    {
+        if (idle)   idle.enabled   = false;
+        if (wander) wander.enabled = false;
+        if (chase)  chase.enabled  = false;
+        if (attack) attack.enabled = false;
+
+        desiredVelocity = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    // -------- I_Controller --------
+    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
+
+    void FixedUpdate()
+    {
+        if (!rb) return;
+        rb.linearVelocity = desiredVelocity;
+    }
+
+    void Update()
+    {
+        Vector2 pos = transform.position;
+
+        var cAtk = Physics2D.OverlapCircle(pos, attackRange,    playerLayer);
+        var cDet = cAtk ?? Physics2D.OverlapCircle(pos, detectionRange, playerLayer);
+
+        bool inAttack = cAtk;
+        bool inDetect = cDet;
+
+        if (inDetect) target = cDet.transform;
+
+        inRangeTimer = inAttack ? inRangeTimer + Time.deltaTime : 0f;
+        bool readyMelee = inAttack && inRangeTimer >= attackStartBuffer;
+
+        // ask the boss state if special is available now (uses timing reach, stop-short, y gate)
+        bool readySpecial = false;
+        if (attack && target)
+            readySpecial = attack.CanSpecialNow(transform.position, target.position);
+
+        bool attackingNow = attack && attack.IsAttacking;
+
+        var desired =
+            attackingNow   ? BState.Attack :
+            readySpecial   ? BState.Attack :
+            readyMelee     ? BState.Attack :
+            inDetect       ? BState.Chase  :
+                             defaultState;
+
+        if (desired != current) SwitchState(desired);
+    }
+
+    public void SwitchState(BState s)
+    {
+        current = s;
+
+        if (idle)   idle.enabled   = (s == BState.Idle);
+        if (wander) wander.enabled = (s == BState.Wander);
+        if (chase)  chase.enabled  = (s == BState.Chase);
+        if (attack) attack.enabled = (s == BState.Attack);
+
+        if (s == BState.Chase)
+        {
+            chase?.SetTarget(target);
+            chase?.SetRanges(attackRange);
+            desiredVelocity = Vector2.zero;
+        }
+        else if (s == BState.Attack)
+        {
+            attack?.SetTarget(target);
+            attack?.SetRanges(attackRange);
+            desiredVelocity = Vector2.zero;
+        }
+        else desiredVelocity = Vector2.zero;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.65f, 0f);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+}
+
 // ----- File: C_AfterimageSpawner.cs -----
 using UnityEngine;
 using System.Collections;
@@ -118,10 +252,10 @@ public class C_Dodge : MonoBehaviour
 
         input ??= new P_InputActions();
 
-        if (!animator)                   Debug.LogError($"{name}: Animator in C_Dodge is missing.");
-        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Dodge is missing.");
-        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement in C_Dodge is missing.");
-        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner in C_Dodge is missing.");
+        if (!animator)                   Debug.LogError($"{name}: Animator is missing in C_Dodge");
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Dodge");
+        if (!p_Movement && !e_Movement)  Debug.LogError($"{name}: *_Movement is missing in C_Dodge");
+        if (!afterimage)                 Debug.LogError($"{name}: C_AfterimageSpawner is missing in C_Dodge");
     }
 
     void OnEnable()
@@ -210,7 +344,7 @@ public class C_FX : MonoBehaviour
     void Awake()
     {
         sr ??= GetComponent<SpriteRenderer>();
-        if (!sr) Debug.LogError($"{name}: SpriteRenderer in C_FX missing.", this);
+        if (!sr) Debug.LogError($"{name}: SpriteRenderer is missing in C_FX");
 
         baseRGB = sr.color;
     }
@@ -282,8 +416,8 @@ public class C_Health : MonoBehaviour
         c_Dodge ??= GetComponent<C_Dodge>();
         fx      ??= GetComponent<C_FX>();
 
-        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats in C_Health missing.", this);
-        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge in C_Health missing.", this);
+        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Health");
+        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge is missing in C_Health");
         if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
@@ -420,10 +554,10 @@ public class C_State : MonoBehaviour
         c_Dodge     ??= GetComponent<C_Dodge>();
         c_Health    ??= GetComponent<C_Health>();
 
-        if (!rb)                                     Debug.LogError($"{name}: Rigidbody2D in C_State missing.");
-        if (!animator)                               Debug.LogError($"{name}: Animator in C_State missing.");
-        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement/C_Wander is missing.");
-        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat/C_Wander is missing.");
+        if (!rb)                        Debug.LogError($"{name}: Rigidbody2D is missing in C_State");
+        if (!animator)                  Debug.LogError($"{name}: Animator is missing in C_State");
+        if (!p_Movement && !e_Movement) Debug.LogError($"{name}: *_Movement is missing in C_State");
+        if (!p_Combat && !e_Combat)     Debug.LogError($"{name}: *_Combat is missing in C_State");
     }
 
     void OnEnable()
@@ -573,24 +707,347 @@ public class C_Stats : MonoBehaviour
     public float stunTime = 0f;
 }
 
+// ----- File: I_Controller.cs -----
+using UnityEngine;
+
+public interface I_Controller
+{
+    void SetDesiredVelocity(Vector2 v);
+}
+
+// ----- File: State_Attack_Boss.cs -----
+using System.Collections;
+using UnityEngine;
+
+public class State_Attack_Boss : MonoBehaviour
+{
+    [Header("Target Layer")]
+    public LayerMask playerLayer;
+
+    [Header("Normal Attack")]
+    public float attackCooldown = 1.10f;
+    float attackDuration = 0.45f;
+    float hitDelay = 0.25f;
+
+    [Header("Special (single clip flow)")]
+    public float specialCooldown   = 8.0f;
+    public float specialClipLength = 1.50f;
+    public float specialHitDelay   = 0.50f;   // charge ends → start dash
+    public float hitTime           = 1.05f;   // first contact; follow-up auto
+
+    [Header("Auto Move Window")]
+    [Tooltip("Dash ends slightly before the hit for fairness.")]
+    public float preHitStopBias = 0.02f;      // 10–30 ms typical
+
+    [Header("Dash")]
+    public float dashSpeed       = 9.0f;
+    public float stopShortOffset = 0.96f;     // distance kept in front of the player (along X) at the end
+
+    [Header("Alignment Gate")]
+    public float yHardCap = 0.55f;            // must be within this to attack
+
+    [Header("Weapon")]
+    public W_Base activeWeapon;               // W_Melee, no sprite
+
+    // Animator params
+    const string kIsAttacking     = "isAttacking";
+    const string kIsSpecialAttack = "isSpecialAttack";
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    I_Controller controller;
+    SpriteRenderer sr;
+    C_AfterimageSpawner afterimage;
+
+    // Runtime
+    Transform target;
+    Vector2 lastFace = Vector2.right;
+    float attackRange = 1.6f;
+
+    // Local cooldowns
+    float nextAttackReadyAt;
+    float nextSpecialReadyAt;
+
+    // Status
+    public bool IsAttacking { get; private set; }
+    bool isDashing;
+
+    // follow-up gap for the continuous second swing
+    const float kFollowupGap = 0.14f;
+
+    // ---- Computed move window (time & reach) ----
+    float ComputedMoveWindow
+    {
+        get
+        {
+            float w = hitTime - specialHitDelay - preHitStopBias;
+            return (w > 0f) ? w : 0f;
+        }
+    }
+    float TimeReach => dashSpeed * ComputedMoveWindow;
+
+    void Awake()
+    {
+        rb         ??= GetComponent<Rigidbody2D>();
+        anim       ??= GetComponentInChildren<Animator>();
+        controller ??= GetComponent<I_Controller>();
+        activeWeapon ??= GetComponentInChildren<W_Base>();
+        sr         ??= GetComponentInChildren<SpriteRenderer>();
+        afterimage ??= sr ? sr.GetComponent<C_AfterimageSpawner>() : null;
+    }
+
+    void OnDisable()
+    {
+        IsAttacking = false;
+        isDashing   = false;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        if (rb) rb.linearVelocity = Vector2.zero;
+        anim.SetBool(kIsAttacking, false);
+        anim.SetBool(kIsSpecialAttack, false);
+    }
+
+    void Update()
+    {
+        if (!isDashing) controller?.SetDesiredVelocity(Vector2.zero);
+        if (!target) return;
+
+        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+        float dx = to.x, dy = to.y;
+        float d  = to.magnitude;
+
+        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+        UpdateIdleFacing(IsAttacking ? lastFace : dir);
+
+        // gates
+        bool inInner       = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        bool specialReady  = Time.time >= nextSpecialReadyAt;
+        // new outer uses timing reach (no magenta cap)
+        float inner = attackRange * 1.2f;
+        float outer = attackRange + TimeReach;
+        bool inSpecialDist = Mathf.Abs(dx) >= inner && Mathf.Abs(dx) <= outer;
+        bool alignedY      = Mathf.Abs(dy) <= yHardCap;
+        bool canAttackNow  = Time.time >= nextAttackReadyAt;
+
+        if (!IsAttacking && canAttackNow)
+        {
+            if (specialReady && alignedY && inSpecialDist)
+            {
+                StartCoroutine(SpecialRoutine(dir));
+                return;
+            }
+            if (alignedY && inInner)
+            {
+                StartCoroutine(NormalRoutine(dir));
+                return;
+            }
+        }
+    }
+
+    // -------- controller hooks ----------
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // Let B_Controller ask if special is valid right now (uses timing reach + Y gate)
+    public bool CanSpecialNow(Vector2 bossPos, Vector2 playerPos)
+    {
+        if (Time.time < nextSpecialReadyAt || Time.time < nextAttackReadyAt) return false;
+        float dx = Mathf.Abs(playerPos.x - bossPos.x);
+        float dy = Mathf.Abs(playerPos.y - bossPos.y);
+        float inner = attackRange * 1.2f;
+        float outer = attackRange + TimeReach;
+        return dy <= yHardCap && dx >= inner && dx <= outer;
+    }
+
+    // -------- normal attack ----------
+    IEnumerator NormalRoutine(Vector2 dirAtStart)
+    {
+        IsAttacking = true;
+        anim.SetBool(kIsSpecialAttack, false);
+        anim.SetBool(kIsAttacking, true);
+
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+        UpdateIdleFacing(lastFace);
+
+        yield return new WaitForSeconds(hitDelay);
+
+        activeWeapon?.Attack(lastFace);
+
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        nextAttackReadyAt = Time.time + attackCooldown;
+        IsAttacking = false;
+        anim.SetBool(kIsAttacking, false);
+    }
+
+    // -------- special (one clip; timers only) ----------
+    IEnumerator SpecialRoutine(Vector2 dirAtStart)
+    {
+        IsAttacking = true;
+        anim.SetBool(kIsAttacking, false);
+        anim.SetBool(kIsSpecialAttack, true);
+
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+        UpdateIdleFacing(lastFace);
+
+        float t = 0f;
+        float endMoveTime = specialHitDelay + ComputedMoveWindow;
+
+        // A) Charge
+        while (t < specialHitDelay) { t += Time.deltaTime; yield return null; }
+
+        // B) Gap-close along vector to the "face spot"
+        BeginDash(); // sets velocity and kicks afterimage
+        while (t < endMoveTime)
+        {
+            t += Time.deltaTime;
+            if (ReachedDashDest()) break;
+            yield return null;
+        }
+        StopDash();
+
+        // C) Hit + quick follow-up
+        while (t < hitTime) { t += Time.deltaTime; yield return null; }
+        activeWeapon?.Attack(lastFace);
+
+        float t2 = 0f;
+        while (t2 < kFollowupGap) { t2 += Time.deltaTime; yield return null; }
+        activeWeapon?.Attack(lastFace);
+
+        // D) Finish clip
+        while (t < specialClipLength) { t += Time.deltaTime; yield return null; }
+
+        nextAttackReadyAt  = Time.time + attackCooldown;   // reuse normal pacing after special
+        nextSpecialReadyAt = Time.time + specialCooldown;
+
+        IsAttacking = false;
+        anim.SetBool(kIsSpecialAttack, false);
+    }
+
+    // -------- dash helpers ----------
+    Vector2 dashDest;
+    Vector2 dashDir;
+
+    void BeginDash()
+    {
+        // “Face spot”: X is right in front of player (stop-short), Y is exactly player’s Y.
+        Vector2 start = transform.position;
+        Vector2 p     = target ? (Vector2)target.position : start;
+
+        int sign = (p.x - start.x) >= 0f ? +1 : -1;
+        Vector2 faceSpot = new Vector2(p.x - sign * stopShortOffset, p.y);
+
+        Vector2 toFace   = faceSpot - start;
+        float distToFace = toFace.magnitude;
+
+        float travel = Mathf.Min(distToFace, TimeReach); // no magenta cap
+        dashDir = (toFace.sqrMagnitude > 0f) ? (toFace / distToFace) : new Vector2(sign, 0f);
+        dashDest = start + dashDir * travel;
+
+        // velocity & afterimage
+        controller?.SetDesiredVelocity(dashDir * dashSpeed);
+        isDashing = true;
+
+        if (afterimage && sr)
+            afterimage.StartBurst(ComputedMoveWindow, sr.sprite, sr.flipX, sr.flipY);
+    }
+
+    void StopDash()
+    {
+        isDashing = false;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    bool ReachedDashDest()
+    {
+        Vector2 pos = transform.position;
+        // stop when we pass the destination along the dash direction
+        Vector2 toDest = dashDest - pos;
+        return Vector2.Dot(toDest, dashDir) <= 0f || (toDest.sqrMagnitude <= 0.0004f);
+    }
+
+    // -------- anim lattice ----------
+    void UpdateIdleFacing(Vector2 faceDir)
+    {
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
+    }
+
+    // -------- gizmos ----------
+    void OnDrawGizmosSelected()
+    {
+        Vector3 p = transform.position;
+
+        // Y hard cap band (cyan)
+        Gizmos.color = Color.cyan;
+        float band = yHardCap;
+        float width = (attackRange + TimeReach + 0.5f) * 2f;
+        Vector3 L  = p + Vector3.left  * width * 0.5f;
+        Vector3 R  = p + Vector3.right * width * 0.5f;
+        Gizmos.DrawLine(L + Vector3.up * band,   R + Vector3.up * band);
+        Gizmos.DrawLine(L + Vector3.down * band, R + Vector3.down * band);
+
+        // Time-limited dash reach (blue) along current face vector (from boss toward face spot)
+        if (target)
+        {
+            int sign = ((target.position.x - p.x) >= 0f) ? +1 : -1;
+            Vector2 faceSpot = new Vector2(target.position.x - sign * stopShortOffset, target.position.y);
+            Vector2 toFace   = faceSpot - (Vector2)p;
+            Vector2 dir      = toFace.sqrMagnitude > 0f ? toFace.normalized : new Vector2(sign, 0f);
+            float reach      = TimeReach;
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(p, p + (Vector3)(dir * reach));
+        }
+
+        // Special distance window (thick “dent dots” on X)
+        float inner = attackRange * 1.2f;
+        float outer = attackRange + TimeReach;
+        float dotR  = 0.18f;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(p + Vector3.right * inner, dotR);
+        Gizmos.DrawSphere(p + Vector3.left  * inner, dotR);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(p + Vector3.right * outer, dotR);
+        Gizmos.DrawSphere(p + Vector3.left  * outer, dotR);
+
+        // Stop-short line relative to the player (yellow)
+        if (target)
+        {
+            int sign = ((target.position.x - p.x) >= 0f) ? +1 : -1;
+            float stopX = target.position.x - sign * stopShortOffset;
+            Vector3 a = new Vector3(stopX, p.y - 0.6f, p.z);
+            Vector3 b = new Vector3(stopX, p.y + 0.6f, p.z);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(a, b);
+        }
+    }
+}
+
 // ----- File: State_Attack.cs -----
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-[DisallowMultipleComponent]
 public class State_Attack : MonoBehaviour
 {
-    [Header("Animation States")]
+    [Header("Target Layer")]
     public LayerMask playerLayer;
 
-    [Header("Timing")]
+    [Header("Attack Cooldown")]
     public float attackCooldown = 0.80f;
-    public float attackDuration = 0.45f;
-    public float hitDelay       = 0.15f;
-
-    float attackRange = 1.2f;
+    float attackDuration = 0.45f; // Default: 0.45f
+    float hitDelay = 0.15f; // Default: 0.15f
+    float attackRange;
 
     [Header("Weapon")]
     public W_Base activeWeapon;
@@ -603,36 +1060,32 @@ public class State_Attack : MonoBehaviour
     // Runtime
     Transform target;
     Vector2 lastFace = Vector2.down;
-    float cooldownTimer;
     bool isAttacking;
-
     public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        rb           = GetComponent<Rigidbody2D>();
-        anim         = GetComponent<Animator>();
-        controller   = GetComponent<E_Controller>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        controller = GetComponent<E_Controller>();
         activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing on State_Attack.");
-        if (!anim) Debug.LogError($"{name}: Animator missing on State_Attack.");
+        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
+        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
     }
 
     void OnDisable()
     {
         isAttacking = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
+        controller.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
         anim.SetBool("isAttacking", false);
     }
 
     void Update()
     {
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
-
         // No movement while in attack state; controller still applies knockback globally
-        controller?.SetDesiredVelocity(Vector2.zero);
+        controller.SetDesiredVelocity(Vector2.zero);
 
         if (!target) return;
 
@@ -644,13 +1097,15 @@ public class State_Attack : MonoBehaviour
 
         UpdateIdleFacing(isAttacking ? lastFace : dir);
 
-        if (!isAttacking && inInner && cooldownTimer <= 0f)
+        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
             StartCoroutine(AttackRoutine(dir));
     }
 
+    // Set target + attack range
     public void SetTarget(Transform t) => target = t;
     public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
+    // Attack coroutine
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;
@@ -666,28 +1121,125 @@ public class State_Attack : MonoBehaviour
         activeWeapon?.Attack(lastFace);
         yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
 
-        cooldownTimer = attackCooldown;
+        controller.SetAttackCooldown(attackCooldown);
         isAttacking = false;
         anim.SetBool("isAttacking", false);
     }
 
+    // Update facing for idle state
     void UpdateIdleFacing(Vector2 faceDir)
     {
         anim.SetFloat("moveX", 0f);
         anim.SetFloat("moveY", 0f);
+        // Compute idle facing from last move/attack direction
         Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
         anim.SetFloat("idleX", f.x);
         anim.SetFloat("idleY", f.y);
     }
 }
 
+// ----- File: State_Chase_Boss.cs -----
+using UnityEngine;
+
+public class State_Chase_Boss : MonoBehaviour
+{
+    [Header("Tuning")]
+    public float stopBuffer = 0.10f;
+    public float yAlignBand = 0.35f;   // shrink |dy| toward this during chase
+
+    float attackRange = 1.6f;
+    float specialReach;                // ≈ attackRange + dashMaxDistance
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    C_Stats stats;
+    I_Controller controller;           // <- use interface so it works with B_Controller / NPC / Enemy
+
+    // Runtime
+    Transform target;
+    Vector2 velocity, lastMove = Vector2.down;
+
+    void Awake()
+    {
+        rb         ??= GetComponent<Rigidbody2D>();
+        anim       ??= GetComponentInChildren<Animator>();
+        stats      ??= GetComponent<C_Stats>();
+        controller ??= GetComponent<I_Controller>();
+
+        if (!stats) Debug.LogError($"{name}: C_Stats missing in State_Chase_Boss");
+        if (!anim)  Debug.LogError($"{name}: Animator missing in State_Chase_Boss");
+        if (controller == null) Debug.LogError($"{name}: I_Controller missing on parent for State_Chase_Boss");
+    }
+
+    void OnEnable()  { anim.SetBool("isMoving", false); }
+    void OnDisable()
+    {
+        velocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        if (rb) rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isMoving", false);
+    }
+
+    void Update()
+    {
+        if (!target)
+        {
+            velocity = Vector2.zero;
+            controller?.SetDesiredVelocity(Vector2.zero);
+            UpdateFloats(Vector2.zero);
+            anim.SetBool("isMoving", false);
+            return;
+        }
+
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float dx = toTarget.x;
+        float dy = toTarget.y;
+        float distance = toTarget.magnitude;
+
+        // Horizontal-first chase with vertical alignment bias
+        Vector2 desired = Vector2.zero;
+        if (Mathf.Abs(dy) > yAlignBand)
+        {
+            desired.y = Mathf.Sign(dy);
+            desired.x = Mathf.Sign(dx) * 0.6f;
+        }
+        else
+        {
+            desired.x = Mathf.Sign(dx);
+            desired.y = Mathf.Sign(dy) * 0.35f;
+        }
+        desired = desired.sqrMagnitude > 0f ? desired.normalized : lastMove;
+
+        // Move if outside attack range + buffer
+        velocity = (distance > (attackRange + stopBuffer)) ? desired * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
+
+        controller?.SetDesiredVelocity(velocity);
+        UpdateFloats(velocity);
+    }
+
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange)
+    {
+        this.attackRange = attackRange;
+        specialReach = attackRange + 2.9f; // default dashMaxDistance (boss attack state clamps exactly)
+    }
+
+    void UpdateFloats(Vector2 move)
+    {
+        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
+    }
+}
+
 // ----- File: State_Chase.cs -----
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
-[DisallowMultipleComponent]
 public class State_Chase : MonoBehaviour
 {
     [Header("Tuning")]
@@ -707,11 +1259,12 @@ public class State_Chase : MonoBehaviour
 
     void Awake()
     {
-        rb         ??= GetComponent<Rigidbody2D>();
-        anim       ??= GetComponent<Animator>();
-        stats      ??= GetComponent<C_Stats>();
-        controller ??= GetComponent<E_Controller>();
-        if (!stats) Debug.LogError($"{name}: C_Stats missing on State_Chase.");
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        stats      = GetComponent<C_Stats>();
+        controller = GetComponent<E_Controller>();
+
+        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
     }
 
     void OnEnable() { anim.SetBool("isMoving", false); }
@@ -724,11 +1277,9 @@ public class State_Chase : MonoBehaviour
         anim.SetBool("isMoving", false);
     }
 
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
     void Update()
     {
+        // No movement while stunned/dead; controller still applies knockback globaly
         if (!target)
         {
             velocity = Vector2.zero;
@@ -738,18 +1289,25 @@ public class State_Chase : MonoBehaviour
             return;
         }
 
+        // Chase target
         Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
         float   distance  = toTarget.magnitude;
         Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
 
+        // Move if outside attack range + buffer
         velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
         bool moving = velocity.sqrMagnitude > 0f;
         anim.SetBool("isMoving", moving);
 
-        controller?.SetDesiredVelocity(velocity);
+        controller.SetDesiredVelocity(velocity);
         UpdateFloats(velocity);
     }
 
+    // Set target + attack range
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // Update animator floats
     void UpdateFloats(Vector2 move)
     {
         if (move.sqrMagnitude > 0f) lastMove = move.normalized;
@@ -769,7 +1327,7 @@ public class State_Idle : MonoBehaviour
     public Rigidbody2D rb;
     public Animator characterAnimator;
 
-    E_Controller controller;
+    I_Controller controller;
     C_Stats stats;
 
     void Awake()
@@ -777,8 +1335,9 @@ public class State_Idle : MonoBehaviour
         rb                ??= GetComponent<Rigidbody2D>();
         characterAnimator ??= GetComponentInChildren<Animator>();
         stats             ??= GetComponent<C_Stats>();
-        controller        ??= GetComponent<E_Controller>();
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Idle.");
+        controller = (I_Controller)(GetComponent<E_Controller>() ??
+                        (Component)GetComponent<NPC_Controller>());
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Idle");
     }
 
     void OnEnable()
@@ -797,28 +1356,42 @@ public class State_Idle : MonoBehaviour
 }
 
 // ----- File: State_Talk.cs -----
+using System.Collections.Generic;
 using UnityEngine;
 
 public class State_Talk : MonoBehaviour
 {
     [Header("References")]
-    public Rigidbody2D rb;
-    public Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
     public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
+    public D_SO conversation;
+    public List<D_SO> conversations;
+    public D_SO currentConversation;
 
-    // Facing direction set by the controller
+    Rigidbody2D rb;
+    Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    I_Controller controller;
+    P_InputActions input;
+
+    // runtime
     Vector2 facingDir; 
+    Transform target;
 
     void Awake()
     {
-        rb                ??= GetComponent<Rigidbody2D>();
-        characterAnim      ??= GetComponentInChildren<Animator>();
+        rb            ??= GetComponent<Rigidbody2D>();
+        characterAnim ??= GetComponentInChildren<Animator>();
+        input         ??= new P_InputActions();
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in NPC_State_Talk.");
+        controller      = (I_Controller)(GetComponent<E_Controller>() ??
+                            (Component)GetComponent<NPC_Controller>());
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Talk");
     }
 
+    // When enabled, stop physics and movement, face the player, show talk icon
     void OnEnable()
     {
+        input.Enable();
         // Stop movement and swallow any external forces
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
@@ -832,17 +1405,67 @@ public class State_Talk : MonoBehaviour
         interactAnim?.Play("WantToTalk");  // open talk icon
     }
 
+    // When disabled, restore physics and movement, hide talk icon
     void OnDisable()
     {
+        input.Disable();
+        target = null;
         rb.bodyType = RigidbodyType2D.Dynamic;  // restore normal physics
         interactAnim?.Play("Idle");        // close talk icon
         facingDir = Vector2.zero;           // clear after use
     }
 
-    // API for controller
-    public void FaceTarget(Transform target)
+    void Update()
     {
-        facingDir = ((Vector2)target.position - (Vector2)transform.position).normalized;
+        // NPCs don’t move while talking; keep intent at zero if you’re using controllers for NPCs too.
+        controller?.SetDesiredVelocity(Vector2.zero);
+
+        if (!target) return;
+
+        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+
+        if (to.sqrMagnitude > 0.0001f)
+        {
+            facingDir = to.normalized;
+            characterAnim?.SetFloat("idleX", facingDir.x);
+            characterAnim?.SetFloat("idleY", facingDir.y);
+        }
+
+        // Interact with F key
+        if (input.Player.Interact.WasPressedThisFrame())
+        {
+            if (D_Manager.Instance.isDialogueActive)
+                D_Manager.Instance.AdvanceDialogue();
+            else
+            {
+                CheckForNewConversation();
+                D_Manager.Instance.StartDialogue(currentConversation);
+            }
+        }
+    }
+
+    void CheckForNewConversation()
+    {   
+
+        // for (int i = conversations.Count - 1; i >= 0; i--) -> start from the end of the list
+        for (int i = 0; i < conversations.Count; i++) // start from the beginning of the list
+        {
+            var convo = conversations[i];
+            if (convo != null && convo.IsConditionMet())
+            {
+                conversations.RemoveAt(i);
+                currentConversation = convo;
+            }
+        }
+    }
+
+    // API for controller
+    public void SetTarget(Transform t)
+    {
+        target = t;
+        if (!target) return;
+        var to = (Vector2)target.position - (Vector2)transform.position;
+        if (to.sqrMagnitude > 0.0001f) facingDir = to.normalized;
     }
 }
 
@@ -852,15 +1475,13 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(C_Stats))]
 [DisallowMultipleComponent]
 public class State_Wander : MonoBehaviour
 {
     [Header("References")]
     Rigidbody2D rb;
     Animator anim;
-    C_Stats c_Stats;
-    E_Controller controller;
+    I_Controller controller;
 
     [Header("Wander Area")]
     public Vector2 startCenter;
@@ -869,10 +1490,7 @@ public class State_Wander : MonoBehaviour
 
     [Header("Movement")]
     public float pauseDuration = 1f;
-
-    [Header("Animation")]
-    public string idleState = "Idle";
-    public string walkState = "Walk";
+    public float wanderSpeed = 1f;
 
     // runtime
     Vector2 destination;
@@ -885,12 +1503,14 @@ public class State_Wander : MonoBehaviour
     {
         rb         = GetComponent<Rigidbody2D>();
         anim       = GetComponentInChildren<Animator>();
-        c_Stats    = GetComponent<C_Stats>();
-        controller = GetComponent<E_Controller>();
+        controller = (I_Controller)(GetComponent<E_Controller>() ??
+                        (Component)GetComponent<NPC_Controller>() ??
+                        (Component)GetComponent<B_Controller>());
 
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D missing in State_Wander.");
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats missing in State_Wander.");
-        if (!anim) Debug.LogError($"{name}: Animator (in children) missing in State_Wander.");
+
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");
+        if (!anim) Debug.LogError($"{name}: Animator is missing in State_Wander");
+        if (controller == null) Debug.LogError($"{name}: I_Controller is missing in State_Wander");
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }
@@ -910,7 +1530,7 @@ public class State_Wander : MonoBehaviour
         StopAllCoroutines();
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -939,7 +1559,7 @@ public class State_Wander : MonoBehaviour
         anim.SetFloat("idleY", lastMove.y);
 
         // Send intent to controller
-        controller?.SetDesiredVelocity(dir * c_Stats.MS);
+        controller?.SetDesiredVelocity(dir * wanderSpeed);
     }
 
     IEnumerator PauseAndPickNewDestination()
@@ -947,13 +1567,13 @@ public class State_Wander : MonoBehaviour
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
-        anim?.Play(idleState);
+        anim.Play("Idle");
 
         yield return new WaitForSeconds(pauseDuration);
 
         destination = GetRandomEdgePoint();
         isWandering = true;
-        anim?.Play(walkState);
+        anim.Play("Wander");
     }
 
     Vector2 GetRandomEdgePoint()

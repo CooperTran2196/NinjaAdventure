@@ -1,3 +1,46 @@
+// ----- File: D_ActorSO.cs -----
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ActorSO", menuName = "Dialogue/ActorSO")]
+public class D_ActorSO : ScriptableObject
+{
+    public string actorName;
+    public Sprite portrait;
+}
+
+// ----- File: D_HistoryTracker.cs -----
+using UnityEngine;
+using System.Collections.Generic;
+
+public class D_HistoryTracker : MonoBehaviour
+{
+    public static D_HistoryTracker Instance { get; private set; }
+
+    // Who we've spoken to (unique ActorSOs)
+    public readonly List<D_ActorSO> spokenNPCs = new();
+
+    void Awake()
+    {
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+    }
+
+    public void RecordNPC(D_ActorSO actor)
+    {
+        // spkenNPC.Add(actor);
+        if (actor == null) return;
+        if (!spokenNPCs.Contains(actor)) spokenNPCs.Add(actor);
+        Debug.Log($"Spoken with: {actor.actorName}");
+    }
+
+    public bool HasSpokenWith(D_ActorSO actor)
+    {
+        // return spkenNPC.Contains(actor);
+        return actor != null && spokenNPCs.Contains(actor);
+    }
+}
+
+// ----- File: D_Manager.cs -----
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -134,3 +177,48 @@ public class D_Manager : MonoBehaviour
         }
     }
 }
+
+// ----- File: D_SO.cs -----
+using Unity.AppUI.UI;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "DialogueSO", menuName = "Dialogue/DialogueNode")]
+public class D_SO : ScriptableObject
+{
+    public D_LineSO[] lines;
+    public D_Option[] options;
+
+    [Header("Conditional Requirements (OPTIONAL)")]
+    [Header("Must have spoken to these NPCs to see this dialogue")]
+    public D_ActorSO[] requiredNPCs;
+
+    public bool IsConditionMet()
+    {
+        if (requiredNPCs != null && requiredNPCs.Length > 0)
+        {
+            foreach (var npc in requiredNPCs)
+            {
+                if (!D_HistoryTracker.Instance.HasSpokenWith(npc))
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+
+[System.Serializable]
+public class D_LineSO
+{
+    public D_ActorSO speaker;
+
+    [TextArea(3, 5)]
+    public string text;
+}
+
+[System.Serializable]
+public class D_Option
+{
+    public string optionText;
+    public D_SO nextDialogue;
+}
+
