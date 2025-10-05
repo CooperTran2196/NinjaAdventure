@@ -2285,6 +2285,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
   m_PrefabInstance: {fileID: 550441880}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &550441882 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2954278703874851257, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 550441880}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550441881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e71c99221bfc144fa1be6735ace40bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_LocationHistoryTracker
+--- !u!114 &550441883 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2642791382427067942, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 550441880}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550441881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cd678701f6f4c34a252be4e86732dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_HistoryTracker
+--- !u!114 &550441884 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6204305816924010218, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 550441880}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550441881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b35e6c29c13dc418ce4eca5a99029d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_Manager
 --- !u!1001 &663265243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3655,6 +3688,18 @@ PrefabInstance:
       value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_Manager
+      value: 
+      objectReference: {fileID: 550441884}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_HistoryTracker
+      value: 
+      objectReference: {fileID: 550441883}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_LocationHistoryTracker
+      value: 
+      objectReference: {fileID: 550441882}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: persistentObjects.Array.size
       value: 11
       objectReference: {fileID: 0}
@@ -3998,7 +4043,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 373828666}
-  conversation: {fileID: 11400000, guid: 0fc68c95b3fc64948b90fd4005b60557, type: 2}
+  currentDialog: {fileID: 0}
+  dialogs:
+  - {fileID: 11400000, guid: 0fc68c95b3fc64948b90fd4005b60557, type: 2}
 --- !u!114 &1263878806
 MonoBehaviour:
   m_ObjectHideFlags: 0

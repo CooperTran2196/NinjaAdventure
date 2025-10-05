@@ -28,7 +28,7 @@ public class D_SO : ScriptableObject
     public D_AutoReward[] autoRewards;
 
     [Header("Control Flags")]
-    [Header("If TRUE, remove THIS DIALOG from the NPCs list")]
+    [Header("If TRUE, remove THIS DIALOG from the NPCs list after play")]
     [Header("ex: Quest dialogs, one-time use")]
     public bool removeAfterPlay;
     [Header("Also remove THESE DIALOGS from the NPCs list")]
@@ -66,6 +66,15 @@ public class D_SO : ScriptableObject
                     return false;
         }
         return true;
+    }
+
+    // Auto set removeAfterPlay if autoRewards assigned
+    void OnValidate()
+    {
+        if (autoRewards != null)
+            removeAfterPlay = true;
+        else
+            removeAfterPlay = false;
     }
 }
 

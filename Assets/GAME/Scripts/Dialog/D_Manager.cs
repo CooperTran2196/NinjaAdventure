@@ -17,7 +17,6 @@ public class D_Manager : MonoBehaviour
     [Header("Option Buttons (max 3)")]
     public Button[] optionButtons;
 
-    NPC_Controller currentNPC;
     D_SO currentDialog;
     int dialogIndex;
     public bool isDialogActive;

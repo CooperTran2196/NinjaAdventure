@@ -20,18 +20,20 @@ MonoBehaviour:
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: I've come here to free you
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: "You\u2019re hurt- take this and mend yourself."
-  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: Do you remember that night at ...?
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: I don't remember it, my lord.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: "I see. We\u2019ll speak of it later."
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: "We must flee Ashina Castle. There\u2019s a secret passage beneath the
-      moat - find it, then signal me with your reed whistle."
+    text: "We must flee the Castle. There\u2019s a secret passage beneath the moat
+      - find it, then signal me with your reed whistle."
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: Understood.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "Also, you\u2019re hurt- take this and mend yourself."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: My honor.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: Go unseen.
   optionList: []
@@ -40,6 +42,6 @@ MonoBehaviour:
   requiredItems: []
   autoRewards:
   - itemSO: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
-    quantity: 2
-  removeAfterPlay: 0
+    quantity: 1
+  removeAfterPlay: 1
   removeTheseOnPlay: []
