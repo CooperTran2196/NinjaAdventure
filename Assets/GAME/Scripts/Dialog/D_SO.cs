@@ -12,7 +12,7 @@ public class D_SO : ScriptableObject
     [Header("Lines of dialog in this dialog")]
     public D_LineSO[] lines;
     [Header("An option button at the end of a dialog")]
-    public D_Option[] options;
+    public D_Option[] optionList;
 
     [Header("Conditional Requirements (OPTIONAL)")]
     [Header("Must have spoken to these NPCS to see this dialog")]

@@ -91,6 +91,11 @@ public class NPC_Controller : MonoBehaviour, I_Controller
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player") || !talk) return;
+        // If dialog is active, end it
+        if (SYS_GameManager.Instance.d_Manager.isDialogActive)
+        {
+            SYS_GameManager.Instance.d_Manager.EndDialog();
+        }
         SwitchState(defaultState);
     }
 }

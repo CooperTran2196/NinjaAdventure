@@ -15,7 +15,7 @@ public class D_HistoryTracker : MonoBehaviour
     {
         if (spokenNPCs.Add(actorSO))
         {
-            Debug.Log($"Spoken with: {actorSO.actorName}");
+            Debug.Log($"Spoken with: {actorSO.characterName}");
         }
     }
 

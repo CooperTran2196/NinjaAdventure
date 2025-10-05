@@ -14,12 +14,12 @@ public class D_Manager : MonoBehaviour
     public TMP_Text dialogText;
     public CanvasGroup canvasGroup;
 
-    [Header("Choices")]
-    public Button[] choiceButtons;
+    [Header("Option Buttons (max 3)")]
+    public Button[] optionButtons;
 
     D_SO currentDialog;
     int dialogIndex;
-    public bool isDialogActive { get; private set; }
+    public bool isDialogActive;
 
     void Awake()
     {
@@ -28,25 +28,8 @@ public class D_Manager : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
 
         // hide all option buttons at boot
-        foreach (var b in choiceButtons)
+        foreach (var b in optionButtons)
             b.gameObject.SetActive(false);
-    }
-    
-    void ShowDialog()
-    {
-        // Clear previous choices
-        ClearChoices();
-        // advancing a line hides old choices, if any
-        var line = currentDialog.lines[dialogIndex++]; 
-
-        SYS_GameManager.Instance.d_HistoryTracker?.RecordNPC(line.speaker);
-        avatar.sprite      = line.speaker.avatar;
-        characterNameText.text = line.speaker.actorName;
-        dialogText.text  = line.text;
-
-        canvasGroup.alpha = 1f;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
     }
 
     public void StartDialog(D_SO dialog)
@@ -54,10 +37,29 @@ public class D_Manager : MonoBehaviour
         currentDialog = dialog;
         dialogIndex = 0;
         isDialogActive = true;
-        ClearChoices();
+        ClearOptions();
         ShowDialog();
     }
 
+    void ShowDialog()
+    {
+        // Clear previous optionList
+        ClearOptions();
+        // advancing a line hides old choices, if any
+        var line = currentDialog.lines[dialogIndex++]; 
+        // Record NPC spoken to
+        SYS_GameManager.Instance.d_HistoryTracker.RecordNPC(line.speaker);
+        // Update UI
+        avatar.sprite           = line.speaker.avatar;
+        characterNameText.text  = line.speaker.characterName;
+        dialogText.text         = line.text;
+        // Show UI
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    // Called to advance dialog or show choices
     public void AdvanceDialog()
     {
         if (dialogIndex < currentDialog.lines.Length)
@@ -72,64 +74,67 @@ public class D_Manager : MonoBehaviour
 
     void ShowChoices()
     {
-        ClearChoices();
-        var opts = currentDialog.options;
+        // Clear previous optionList
+        ClearOptions();
+        var optionList = currentDialog.optionList;
 
-        if (opts != null && opts.Length > 0)
-        {
-            int count = Mathf.Min(opts.Length, choiceButtons.Length);
+        // Show available option buttons, or a simple End button if none
+        if (optionList != null && optionList.Length > 0)
+        {   
+            // Show as many optionList as we have, up to the max buttons available (3)
+            int count = Mathf.Min(optionList.Length, optionButtons.Length);
             for (int i = 0; i < count; i++)
             {
-                var btn = choiceButtons[i];
-                var opt = opts[i]; // capture for lambda
+                var button = optionButtons[i];
+                var option = optionList[i]; // capture for lambda
 
-                btn.GetComponentInChildren<TMP_Text>(true).text = opt.optionButtonText;
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => ChooseOption(opt.nextDialog));
-                btn.gameObject.SetActive(true);
+                button.GetComponentInChildren<TMP_Text>().text = option.optionButtonText;
+                button.onClick.AddListener(() => ChooseOption(option.nextDialog));
+                button.gameObject.SetActive(true);
             }
         }
         else
         {
-            // no options → show a simple End button on slot 0
-            var endBtn = choiceButtons[0];
-            endBtn.GetComponentInChildren<TMP_Text>(true).text = "End";
-            endBtn.onClick.RemoveAllListeners();
-            endBtn.onClick.AddListener(EndDialog);
-            endBtn.gameObject.SetActive(true);
+            // No optionList -> show a simple End button on slot 0
+            var endButton = optionButtons[0];
+            endButton.GetComponentInChildren<TMP_Text>().text = "End";
+            endButton.onClick.AddListener(EndDialog);
+            endButton.gameObject.SetActive(true);
         }
     }
 
+    // Called when player selects an option button
     void ChooseOption(D_SO nextDialog)
     {
-        ClearChoices();
-
         if (nextDialog == null)
         {
             EndDialog();
             return;
         }
-
+        
+        // Start next dialog
         StartDialog(nextDialog);
     }
 
+    // Called to forcibly end dialog
     public void EndDialog()
     {
         dialogIndex = 0;
         isDialogActive = false;
-        ClearChoices();
+        ClearOptions();
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
 
-    void ClearChoices()
+    // Clear all option buttons and their listeners
+    void ClearOptions()
     {
-        foreach (var b in choiceButtons)
+        foreach (var button in optionButtons)
         {
-            b.onClick.RemoveAllListeners();
-            b.gameObject.SetActive(false);
+            button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
         }
     }
 }

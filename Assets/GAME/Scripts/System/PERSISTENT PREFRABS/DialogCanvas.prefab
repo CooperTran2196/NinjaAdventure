@@ -500,14 +500,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b35e6c29c13dc418ce4eca5a99029d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::D_Manager
-  avatar: {fileID: 0}
-  actorNameText: {fileID: 9009524155643520670}
-  dialogueText: {fileID: 3877704299055024303}
+  avatar: {fileID: 6445922027440945050}
+  characterNameText: {fileID: 9009524155643520670}
+  dialogText: {fileID: 3877704299055024303}
   canvasGroup: {fileID: 8255391170151820133}
-  choiceButtons:
+  optionButtons:
   - {fileID: 3909672959276144876}
   - {fileID: 34180912928843088}
   - {fileID: 8099004114792301398}
+  isDialogActive: 0
 --- !u!114 &2642791382427067942
 MonoBehaviour:
   m_ObjectHideFlags: 0
