@@ -4,12 +4,13 @@ using UnityEngine;
 public class State_Talk : MonoBehaviour
 {
     [Header("References")]
-    public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
+    public Animator interactAnim; // Talk icon animator
     public D_SO currentDialog;
+    [Header("All possible dialogs for this NPC, order matters")]
     public List<D_SO> dialogs;
 
     Rigidbody2D rb;
-    Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    Animator characterAnim;   // NPC sprite animator
     I_Controller controller;
     P_InputActions input;
 
