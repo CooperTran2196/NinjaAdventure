@@ -17,6 +17,7 @@ public class D_Manager : MonoBehaviour
     [Header("Option Buttons (max 3)")]
     public Button[] optionButtons;
 
+    NPC_Controller currentNPC;
     D_SO currentDialog;
     int dialogIndex;
     public bool isDialogActive;
@@ -98,7 +99,7 @@ public class D_Manager : MonoBehaviour
             // No optionList -> show a simple End button on slot 0
             var endButton = optionButtons[0];
             endButton.GetComponentInChildren<TMP_Text>().text = "End";
-            endButton.onClick.AddListener(EndDialog);
+            endButton.onClick.AddListener(EndDialog_WithRewards);
             endButton.gameObject.SetActive(true);
         }
     }
@@ -108,7 +109,7 @@ public class D_Manager : MonoBehaviour
     {
         if (nextDialog == null)
         {
-            EndDialog();
+            EndDialog_WithRewards();
             return;
         }
         
@@ -116,7 +117,31 @@ public class D_Manager : MonoBehaviour
         StartDialog(nextDialog);
     }
 
-    // Called to forcibly end dialog
+    // Grant auto rewards if any
+    void GrantAutoRewards(D_SO dialog)
+    {
+        var rewards = dialog.autoRewards;
+        if (rewards == null || rewards.Length == 0) return;
+
+        // Grant each reward
+        for (int i = 0; i < rewards.Length; i++)
+        {
+            var reward = rewards[i];
+            INV_Manager.Instance.AddItem(reward.itemSO, reward.quantity);
+        }
+    }
+
+    // Call this when the dialog ends with rewards
+    public void EndDialog_WithRewards()
+    {
+        // first grant rewards if any
+        GrantAutoRewards(currentDialog);
+
+        // then end dialog
+        EndDialog();
+    }
+
+    // Call this for a simple end, no rewards
     public void EndDialog()
     {
         dialogIndex = 0;

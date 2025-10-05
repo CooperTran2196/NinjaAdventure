@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1b3ec9e236c4a65aa950754a8aeb4d, type: 3}
   m_Name: Pri_ActorSO
   m_EditorClassIdentifier: Assembly-CSharp::D_ActorSO
-  actorName: Princess
-  portrait: {fileID: 21300000, guid: 1c178a5ad6f4d4a458725375aa76ebca, type: 3}
+  characterName: Princess
+  avatar: {fileID: 21300000, guid: 1c178a5ad6f4d4a458725375aa76ebca, type: 3}

@@ -19,7 +19,10 @@ MonoBehaviour:
     text: get me some food
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: Okay
-  options: []
+  optionList: []
   requiredNPCs: []
   requiredLocations: []
   requiredItems: []
+  autoRewards: []
+  removeAfterPlay: 0
+  removeTheseOnPlay: []

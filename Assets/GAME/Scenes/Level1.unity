@@ -10627,6 +10627,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
   m_PrefabInstance: {fileID: 6358073895188072921}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &648076223 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2954278703874851257, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 6358073895188072921}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648076222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e71c99221bfc144fa1be6735ace40bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_LocationHistoryTracker
+--- !u!114 &648076224 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2642791382427067942, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 6358073895188072921}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648076222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cd678701f6f4c34a252be4e86732dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_HistoryTracker
+--- !u!114 &648076225 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6204305816924010218, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
+  m_PrefabInstance: {fileID: 6358073895188072921}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648076222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b35e6c29c13dc418ce4eca5a99029d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::D_Manager
 --- !u!1 &654952071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5325631574801758432, guid: e4c79d5f5bff40d449e9b01fb8f49da7, type: 3}
@@ -14016,7 +14049,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 2044849365}
   currentDialog: {fileID: 0}
-  dialogs: []
+  dialogs:
+  - {fileID: 11400000, guid: 0fc68c95b3fc64948b90fd4005b60557, type: 2}
+  - {fileID: 11400000, guid: fadd4d9261044d3478dcd9abbcc00329, type: 2}
+  - {fileID: 11400000, guid: c0368b23a4da3f243a1ac1348a934f09, type: 2}
+  - {fileID: 11400000, guid: 84ecba8836fa746938731d8a64eeea37, type: 2}
 --- !u!114 &1603086748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15835,6 +15872,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_Manager
+      value: 
+      objectReference: {fileID: 648076225}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_HistoryTracker
+      value: 
+      objectReference: {fileID: 648076224}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: d_LocationHistoryTracker
+      value: 
+      objectReference: {fileID: 648076223}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[0]'
       value: 

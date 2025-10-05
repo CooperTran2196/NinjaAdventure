@@ -24,6 +24,9 @@ public class D_SO : ScriptableObject
     [Header("Must have these ITEMS to see this dialog")]
     public INV_ItemSO[] requiredItems;
 
+    [Header("Auto Rewards after this dialog end (OPTIONAL)")]
+    public D_AutoReward[] autoRewards;
+
     [Header("Control Flags")]
     [Header("If TRUE, remove THIS DIALOG from the NPCs list")]
     [Header("ex: Quest dialogs, one-time use")]
@@ -88,4 +91,14 @@ public class D_Option
 {
     public string optionButtonText;
     public D_SO nextDialog;
+}
+
+// <summary>
+// Automatically grants specified items when a particular dialog node ends.
+// </summary>
+[System.Serializable]
+public class D_AutoReward
+{
+    public INV_ItemSO itemSO;
+    public int quantity = 1;
 }

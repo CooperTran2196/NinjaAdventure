@@ -8,8 +8,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActorSO", menuName = "Dialogue/ActorSO")]
 public class D_ActorSO : ScriptableObject
 {
-    public string actorName;
-    public Sprite portrait;
+    public string characterName;
+    public Sprite avatar;
 }
 
 // ----- File: D_HistoryTracker.cs -----
@@ -22,28 +22,15 @@ using System.Collections.Generic;
 
 public class D_HistoryTracker : MonoBehaviour
 {
-    public static D_HistoryTracker Instance;
-
     // Using HashSet to avoid duplicate entries/ Don't care about order
     public readonly HashSet<D_ActorSO> spokenNPCs = new();
-
-    // Singleton pattern
-    void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     // Add the NPC to spkenNPCs if not already present
     public void RecordNPC(D_ActorSO actorSO)
     {
         if (spokenNPCs.Add(actorSO))
         {
-            Debug.Log($"Spoken with: {actorSO.actorName}");
+            Debug.Log($"Spoken with: {actorSO.characterName}");
         }
     }
 
@@ -64,21 +51,10 @@ using System.Collections.Generic;
 
 public class D_LocationHistoryTracker : MonoBehaviour
 {
-    public static D_LocationHistoryTracker Instance;
 
     // Using HashSet to avoid duplicate entries/ Don't care about order
     public readonly HashSet<D_LocationSO> locationsVisited = new();
 
-    // Singleton pattern
-    void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     // Add the location to locationsVisited if not already present
     public void RecordLocation(D_LocationSO locationSO)
@@ -136,8 +112,7 @@ public class D_LocationVisitedTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        D_LocationHistoryTracker.Instance.RecordLocation(location);
-
+        SYS_GameManager.Instance.d_LocationHistoryTracker.RecordLocation(location);
         if (destroyOnTouch)
             Destroy(gameObject);
     }
@@ -145,7 +120,7 @@ public class D_LocationVisitedTrigger : MonoBehaviour
 
 // ----- File: D_Manager.cs -----
 // <summary>
-// Manages dialogue flow, UI updates, and player choices.
+// Manages dialog flow, UI updates, and player choices.
 // </summary>
 
 using UnityEngine;
@@ -154,66 +129,63 @@ using TMPro;
 
 public class D_Manager : MonoBehaviour
 {
-    public static D_Manager Instance { get; private set; }
-
     [Header("UI")]
-    public Image portrait;
-    public TMP_Text actorNameText;
-    public TMP_Text dialogueText;
+    public Image avatar;
+    public TMP_Text characterNameText;
+    public TMP_Text dialogText;
     public CanvasGroup canvasGroup;
 
-    [Header("Choices")]
-    public Button[] choiceButtons;
+    [Header("Option Buttons (max 3)")]
+    public Button[] optionButtons;
 
-    D_SO currentDialogue;
-    int dialogueIndex;
-    public bool isDialogueActive { get; private set; }
+    D_SO currentDialog;
+    int dialogIndex;
+    public bool isDialogActive;
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else { Destroy(gameObject); return; }
-
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
 
         // hide all option buttons at boot
-        foreach (var b in choiceButtons)
+        foreach (var b in optionButtons)
             b.gameObject.SetActive(false);
     }
 
-    void ShowDialogue()
+    public void StartDialog(D_SO dialog)
     {
+        currentDialog = dialog;
+        dialogIndex = 0;
+        isDialogActive = true;
+        ClearOptions();
+        ShowDialog();
+    }
+
+    void ShowDialog()
+    {
+        // Clear previous optionList
+        ClearOptions();
         // advancing a line hides old choices, if any
-        ClearChoices();
-
-        var line = currentDialogue.lines[dialogueIndex++]; 
-
-        D_HistoryTracker.Instance.RecordNPC(line.speaker);
-        portrait.sprite    = line.speaker.portrait;
-        actorNameText.text = line.speaker.actorName;
-        dialogueText.text  = line.text;
-
+        var line = currentDialog.lines[dialogIndex++]; 
+        // Record NPC spoken to
+        SYS_GameManager.Instance.d_HistoryTracker.RecordNPC(line.speaker);
+        // Update UI
+        avatar.sprite           = line.speaker.avatar;
+        characterNameText.text  = line.speaker.characterName;
+        dialogText.text         = line.text;
+        // Show UI
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
-    public void StartDialogue(D_SO dialogue)
+    // Called to advance dialog or show choices
+    public void AdvanceDialog()
     {
-        currentDialogue = dialogue;
-        dialogueIndex = 0;
-        isDialogueActive = true;
-        ClearChoices();
-        ShowDialogue();
-    }
-
-    public void AdvanceDialogue()
-    {
-        if (dialogueIndex < currentDialogue.lines.Length)
+        if (dialogIndex < currentDialog.lines.Length)
         {
-            ShowDialogue();
+            ShowDialog();
         }
         else
         {
@@ -223,91 +195,105 @@ public class D_Manager : MonoBehaviour
 
     void ShowChoices()
     {
-        ClearChoices();
-        var opts = currentDialogue.options;
+        // Clear previous optionList
+        ClearOptions();
+        var optionList = currentDialog.optionList;
 
-        if (opts != null && opts.Length > 0)
-        {
-            int count = Mathf.Min(opts.Length, choiceButtons.Length);
+        // Show available option buttons, or a simple End button if none
+        if (optionList != null && optionList.Length > 0)
+        {   
+            // Show as many optionList as we have, up to the max buttons available (3)
+            int count = Mathf.Min(optionList.Length, optionButtons.Length);
             for (int i = 0; i < count; i++)
             {
-                var btn = choiceButtons[i];
-                var opt = opts[i]; // capture for lambda
+                var button = optionButtons[i];
+                var option = optionList[i]; // capture for lambda
 
-                btn.GetComponentInChildren<TMP_Text>(true).text = opt.optionText;
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => ChooseOption(opt.nextDialogue));
-                btn.gameObject.SetActive(true);
+                button.GetComponentInChildren<TMP_Text>().text = option.optionButtonText;
+                button.onClick.AddListener(() => ChooseOption(option.nextDialog));
+                button.gameObject.SetActive(true);
             }
         }
         else
         {
-            // no options → show a simple End button on slot 0
-            var endBtn = choiceButtons[0];
-            endBtn.GetComponentInChildren<TMP_Text>(true).text = "End";
-            endBtn.onClick.RemoveAllListeners();
-            endBtn.onClick.AddListener(EndDialogue);
-            endBtn.gameObject.SetActive(true);
+            // No optionList -> show a simple End button on slot 0
+            var endButton = optionButtons[0];
+            endButton.GetComponentInChildren<TMP_Text>().text = "End";
+            endButton.onClick.AddListener(EndDialog);
+            endButton.gameObject.SetActive(true);
         }
     }
 
-    void ChooseOption(D_SO nextDialogue)
+    // Called when player selects an option button
+    void ChooseOption(D_SO nextDialog)
     {
-        ClearChoices();
-
-        if (nextDialogue == null)
+        if (nextDialog == null)
         {
-            EndDialogue();
+            EndDialog();
             return;
         }
-
-        StartDialogue(nextDialogue);
+        
+        // Start next dialog
+        StartDialog(nextDialog);
     }
 
-    public void EndDialogue()
+    // Called to forcibly end dialog
+    public void EndDialog()
     {
-        dialogueIndex = 0;
-        isDialogueActive = false;
-        ClearChoices();
+        dialogIndex = 0;
+        isDialogActive = false;
+        ClearOptions();
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
 
-    void ClearChoices()
+    // Clear all option buttons and their listeners
+    void ClearOptions()
     {
-        foreach (var b in choiceButtons)
+        foreach (var button in optionButtons)
         {
-            b.onClick.RemoveAllListeners();
-            b.gameObject.SetActive(false);
+            button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
         }
     }
 }
 
 // ----- File: D_SO.cs -----
 // <summary>
-// Used to define a dialogue node in the dialogue system.
+// Used to define a dialog node in the dialog system.
 // </summary>
 
+using System.Collections.Generic;
 using Unity.AppUI.UI;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialogueSO", menuName = "Dialogue/DialogueNode")]
+[CreateAssetMenu(fileName = "DialogSO", menuName = "Dialog/DialogNode")]
 public class D_SO : ScriptableObject
 {
+    [Header("Lines of dialog in this dialog")]
     public D_LineSO[] lines;
-    public D_Option[] options;
+    [Header("An option button at the end of a dialog")]
+    public D_Option[] optionList;
 
     [Header("Conditional Requirements (OPTIONAL)")]
-    [Header("Must have spoken to these NPCs to see this dialogue")]
+    [Header("Must have spoken to these NPCS to see this dialog")]
     public D_ActorSO[] requiredNPCs;
 
-    [Header("Must have visited these locations to see this dialogue")]
+    [Header("Must have visited these LOCATIONS to see this dialog")]
     public D_LocationSO[] requiredLocations;
 
-    [Header("Must have these items to see this dialogue")]
+    [Header("Must have these ITEMS to see this dialog")]
     public INV_ItemSO[] requiredItems;
+
+    [Header("Control Flags")]
+    [Header("If TRUE, remove THIS DIALOG from the NPCs list")]
+    [Header("ex: Quest dialogs, one-time use")]
+    public bool removeAfterPlay;
+    [Header("Also remove THESE DIALOGS from the NPCs list")]
+    [Header("ex: Dialogs before quest")]
+    public List<D_SO> removeTheseOnPlay = new();
 
     // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
@@ -317,7 +303,7 @@ public class D_SO : ScriptableObject
         {
             foreach (var npc in requiredNPCs)
             {
-                if (!D_HistoryTracker.Instance.HasSpokenWith(npc))
+                if (!SYS_GameManager.Instance.d_HistoryTracker.HasSpokenWith(npc))
                     return false;
             }
         }
@@ -327,7 +313,7 @@ public class D_SO : ScriptableObject
         {
             foreach (var location in requiredLocations)
             {
-                if (!D_LocationHistoryTracker.Instance.HasVisited(location))
+                if (!SYS_GameManager.Instance.d_LocationHistoryTracker.HasVisited(location))
                     return false;
             }
         }
@@ -343,6 +329,10 @@ public class D_SO : ScriptableObject
     }
 }
 
+// <summary>
+// A single line of dialog spoken by an actor.
+// Contains a D_ActorSO and the text they speak.
+// </summary>
 [System.Serializable]
 public class D_LineSO
 {
@@ -352,10 +342,14 @@ public class D_LineSO
     public string text;
 }
 
+// <summary>
+// An option presented to the player at the end of a dialog.
+// Selecting this option leads to another dialog node (nextDialog).
+// </summary>
 [System.Serializable]
 public class D_Option
 {
-    public string optionText;
-    public D_SO nextDialogue;
+    public string optionButtonText;
+    public D_SO nextDialog;
 }
 

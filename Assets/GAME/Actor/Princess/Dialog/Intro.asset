@@ -34,6 +34,12 @@ MonoBehaviour:
     text: Understood.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
     text: Go unseen.
-  options:
-  - optionText: chon cai nay di
-    nextDialogue: {fileID: 11400000, guid: fadd4d9261044d3478dcd9abbcc00329, type: 2}
+  optionList: []
+  requiredNPCs: []
+  requiredLocations: []
+  requiredItems: []
+  autoRewards:
+  - itemSO: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    quantity: 2
+  removeAfterPlay: 0
+  removeTheseOnPlay: []

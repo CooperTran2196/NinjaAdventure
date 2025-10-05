@@ -715,107 +715,106 @@ public interface I_Controller
     void SetDesiredVelocity(Vector2 v);
 }
 
-// ----- File: State_Attack.cs -----
-using System.Collections;
+// ----- File: NPC_Controller.cs -----
 using UnityEngine;
 
-public class State_Attack : MonoBehaviour
+[DisallowMultipleComponent]
+public class NPC_Controller : MonoBehaviour, I_Controller
 {
-    [Header("Target Layer")]
-    public LayerMask playerLayer;
+    public enum NPCState { Idle, Wander, Talk }
 
-    [Header("Attack Cooldown")]
-    public float attackCooldown = 0.80f;
-    float attackDuration = 0.45f; // Default: 0.45f
-    float hitDelay = 0.15f; // Default: 0.15f
-    float attackRange;
-
-    [Header("Weapon")]
-    public W_Base activeWeapon;
-
-    // Cache
+    [Header("References")]
+    public NPCState defaultState = NPCState.Wander;
+    public State_Wander wander;
+    public State_Talk talk;
+    public State_Idle idle;
     Rigidbody2D rb;
-    Animator anim;
-    E_Controller controller;
+    C_Stats stats;
 
-    // Runtime
-    Transform target;
-    Vector2 lastFace = Vector2.down;
-    bool isAttacking;
-    public bool IsAttacking => isAttacking;
+    NPCState current;
+    Vector2 desiredVelocity;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        controller = GetComponent<E_Controller>();
-        activeWeapon = GetComponentInChildren<W_Base>();
+        wander ??= GetComponent<State_Wander>();
+        talk ??= GetComponent<State_Talk>();
+        idle ??= GetComponent<State_Idle>();
 
-        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
-        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
+        rb ??= GetComponent<Rigidbody2D>();
+        stats ??= GetComponent<C_Stats>();
+
+        if (!wander) Debug.LogError($"{name}: State_Wander is missing in NPC_Controller");
+        if (!talk) Debug.LogError($"{name}: State_Talk is missing in NPC_Controller");
+        if (!idle) Debug.LogError($"{name}: State_Idle is missing in NPC_Controller");
+        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in NPC_Controller");
+        if (!stats) Debug.LogError($"{name}: C_Stats is missing in NPC_Controller");
+    }
+
+    void OnEnable()
+    {
+        desiredVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        isAttacking = false;
-        controller.SetDesiredVelocity(Vector2.zero);
+        if (wander) wander.enabled = false;
+        if (talk)   talk.enabled   = false;
+        if (idle)   idle.enabled   = false;
+
+        desiredVelocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
-        anim.SetBool("isAttacking", false);
     }
 
-    void Update()
+    // States publish intent, controller applies in FixedUpdate
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+
+    // Apply movement in FixedUpdate for consistent physics
+    void FixedUpdate()
     {
-        // No movement while in attack state; controller still applies knockback globally
-        controller.SetDesiredVelocity(Vector2.zero);
-
-        if (!target) return;
-
-        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-
-        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-        float d = to.magnitude;
-        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
-
-        UpdateIdleFacing(isAttacking ? lastFace : dir);
-
-        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
-            StartCoroutine(AttackRoutine(dir));
+        rb.linearVelocity = desiredVelocity;
     }
 
-    // Set target + attack range
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
-    // Attack coroutine
-    IEnumerator AttackRoutine(Vector2 dirAtStart)
+    // Switch state and enable/disable relevant components
+    public void SwitchState(NPCState newState)
     {
-        isAttacking = true;
-        anim.SetBool("isAttacking", true);
+        if (current == newState) return;
+        current = newState;
 
-        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
-        anim.SetFloat("atkX", lastFace.x);
-        anim.SetFloat("atkY", lastFace.y);
+        // Enable exactly one state
+        if (idle)   idle.enabled   = newState == NPCState.Idle;
+        if (wander) wander.enabled = newState == NPCState.Wander;
+        if (talk)   talk.enabled   = newState == NPCState.Talk;
 
-        UpdateIdleFacing(lastFace);
-
-        yield return new WaitForSeconds(hitDelay);
-        activeWeapon?.Attack(lastFace);
-        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
-
-        controller.SetAttackCooldown(attackCooldown);
-        isAttacking = false;
-        anim.SetBool("isAttacking", false);
+        // Reset movement intent on enter
+        desiredVelocity = Vector2.zero;
     }
 
-    // Update facing for idle state
-    void UpdateIdleFacing(Vector2 faceDir)
+    // Triggered Talk state when player enters trigger collider (ONLY if NPC has Talk state)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        anim.SetFloat("moveX", 0f);
-        anim.SetFloat("moveY", 0f);
-        // Compute idle facing from last move/attack direction
-        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
-        anim.SetFloat("idleX", f.x);
-        anim.SetFloat("idleY", f.y);
+        if (!other.CompareTag("Player")) return;
+
+        // Make Talk face the player before switching
+        if (talk)
+        {
+            talk.SetTarget(other.transform);
+            SwitchState(NPCState.Talk);
+        }
+        else return;
+    }
+
+    // Revert to default state when player exits trigger collider
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player") || !talk) return;
+        // If dialog is active, end it
+        if (SYS_GameManager.Instance.d_Manager.isDialogActive)
+        {
+            SYS_GameManager.Instance.d_Manager.EndDialog();
+        }
+        SwitchState(defaultState);
     }
 }
 
@@ -1138,84 +1137,107 @@ public class State_Attack_Boss : MonoBehaviour
     }
 }
 
-// ----- File: State_Chase.cs -----
+// ----- File: State_Attack.cs -----
+using System.Collections;
 using UnityEngine;
 
-public class State_Chase : MonoBehaviour
+public class State_Attack : MonoBehaviour
 {
-    [Header("Tuning")]
-    public float stopBuffer = 0.10f;
+    [Header("Target Layer")]
+    public LayerMask playerLayer;
 
-    float attackRange = 1.2f;
+    [Header("Attack Cooldown")]
+    public float attackCooldown = 0.80f;
+    float attackDuration = 0.45f; // Default: 0.45f
+    float hitDelay = 0.15f; // Default: 0.15f
+    float attackRange;
+
+    [Header("Weapon")]
+    public W_Base activeWeapon;
 
     // Cache
     Rigidbody2D rb;
     Animator anim;
-    C_Stats stats;
     E_Controller controller;
 
     // Runtime
     Transform target;
-    Vector2 velocity, lastMove = Vector2.down;
+    Vector2 lastFace = Vector2.down;
+    bool isAttacking;
+    public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        rb         = GetComponent<Rigidbody2D>();
-        anim       = GetComponent<Animator>();
-        stats      = GetComponent<C_Stats>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         controller = GetComponent<E_Controller>();
+        activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
+        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
+        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
     }
-
-    void OnEnable() { anim.SetBool("isMoving", false); }
 
     void OnDisable()
     {
-        velocity = Vector2.zero;
-        controller?.SetDesiredVelocity(Vector2.zero);
+        isAttacking = false;
+        controller.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
-        anim.SetBool("isMoving", false);
+        anim.SetBool("isAttacking", false);
     }
 
     void Update()
     {
-        // No movement while stunned/dead; controller still applies knockback globaly
-        if (!target)
-        {
-            velocity = Vector2.zero;
-            controller?.SetDesiredVelocity(Vector2.zero);
-            UpdateFloats(Vector2.zero);
-            anim.SetBool("isMoving", false);
-            return;
-        }
+        // No movement while in attack state; controller still applies knockback globally
+        controller.SetDesiredVelocity(Vector2.zero);
 
-        // Chase target
-        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
-        float   distance  = toTarget.magnitude;
-        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
+        if (!target) return;
 
-        // Move if outside attack range + buffer
-        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
-        bool moving = velocity.sqrMagnitude > 0f;
-        anim.SetBool("isMoving", moving);
+        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
 
-        controller.SetDesiredVelocity(velocity);
-        UpdateFloats(velocity);
+        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
+        float d = to.magnitude;
+        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
+
+        UpdateIdleFacing(isAttacking ? lastFace : dir);
+
+        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
+            StartCoroutine(AttackRoutine(dir));
     }
 
     // Set target + attack range
     public void SetTarget(Transform t) => target = t;
     public void SetRanges(float attackRange) => this.attackRange = attackRange;
 
-    // Update animator floats
-    void UpdateFloats(Vector2 move)
+    // Attack coroutine
+    IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
-        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
-        anim.SetFloat("moveX", move.x);
-        anim.SetFloat("moveY", move.y);
-        anim.SetFloat("idleX", lastMove.x);
-        anim.SetFloat("idleY", lastMove.y);
+        isAttacking = true;
+        anim.SetBool("isAttacking", true);
+
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
+        anim.SetFloat("atkX", lastFace.x);
+        anim.SetFloat("atkY", lastFace.y);
+
+        UpdateIdleFacing(lastFace);
+
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon?.Attack(lastFace);
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        controller.SetAttackCooldown(attackCooldown);
+        isAttacking = false;
+        anim.SetBool("isAttacking", false);
+    }
+
+    // Update facing for idle state
+    void UpdateIdleFacing(Vector2 faceDir)
+    {
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+        // Compute idle facing from last move/attack direction
+        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
+        anim.SetFloat("idleX", f.x);
+        anim.SetFloat("idleY", f.y);
     }
 }
 
@@ -1318,6 +1340,87 @@ public class State_Chase_Boss : MonoBehaviour
     }
 }
 
+// ----- File: State_Chase.cs -----
+using UnityEngine;
+
+public class State_Chase : MonoBehaviour
+{
+    [Header("Tuning")]
+    public float stopBuffer = 0.10f;
+
+    float attackRange = 1.2f;
+
+    // Cache
+    Rigidbody2D rb;
+    Animator anim;
+    C_Stats stats;
+    E_Controller controller;
+
+    // Runtime
+    Transform target;
+    Vector2 velocity, lastMove = Vector2.down;
+
+    void Awake()
+    {
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        stats      = GetComponent<C_Stats>();
+        controller = GetComponent<E_Controller>();
+
+        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
+    }
+
+    void OnEnable() { anim.SetBool("isMoving", false); }
+
+    void OnDisable()
+    {
+        velocity = Vector2.zero;
+        controller?.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isMoving", false);
+    }
+
+    void Update()
+    {
+        // No movement while stunned/dead; controller still applies knockback globaly
+        if (!target)
+        {
+            velocity = Vector2.zero;
+            controller?.SetDesiredVelocity(Vector2.zero);
+            UpdateFloats(Vector2.zero);
+            anim.SetBool("isMoving", false);
+            return;
+        }
+
+        // Chase target
+        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
+        float   distance  = toTarget.magnitude;
+        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
+
+        // Move if outside attack range + buffer
+        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
+        bool moving = velocity.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
+
+        controller.SetDesiredVelocity(velocity);
+        UpdateFloats(velocity);
+    }
+
+    // Set target + attack range
+    public void SetTarget(Transform t) => target = t;
+    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+
+    // Update animator floats
+    void UpdateFloats(Vector2 move)
+    {
+        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
+    }
+}
+
 // ----- File: State_Idle.cs -----
 using UnityEngine;
 
@@ -1362,12 +1465,13 @@ using UnityEngine;
 public class State_Talk : MonoBehaviour
 {
     [Header("References")]
-    public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
-    public D_SO currentConversation;
-    public List<D_SO> conversations;
+    public Animator interactAnim; // Talk icon animator
+    public D_SO currentDialog;
+    [Header("All possible dialogs for this NPC, order matters")]
+    public List<D_SO> dialogs;
 
     Rigidbody2D rb;
-    Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
+    Animator characterAnim;   // NPC sprite animator
     I_Controller controller;
     P_InputActions input;
 
@@ -1416,8 +1520,8 @@ public class State_Talk : MonoBehaviour
 
     void Update()
     {
-        // NPCs don’t move while talking; keep intent at zero if you’re using controllers for NPCs too.
-        controller?.SetDesiredVelocity(Vector2.zero);
+        // NPCs don’t move while talking
+        controller.SetDesiredVelocity(Vector2.zero);
 
         if (!target) return;
 
@@ -1426,35 +1530,64 @@ public class State_Talk : MonoBehaviour
         if (to.sqrMagnitude > 0.0001f)
         {
             facingDir = to.normalized;
-            characterAnim?.SetFloat("idleX", facingDir.x);
-            characterAnim?.SetFloat("idleY", facingDir.y);
+            characterAnim.SetFloat("idleX", facingDir.x);
+            characterAnim.SetFloat("idleY", facingDir.y);
         }
 
-        // Interact with F key
+        var dm = SYS_GameManager.Instance.d_Manager; // after D below
+        if (input.UI.EndConvo.WasPressedThisFrame())
+        {
+            if (dm.isDialogActive)
+                dm.EndDialog();
+            return;
+        }
+
+        // Interact (F) to advance / start
         if (input.Player.Interact.WasPressedThisFrame())
         {
-            if (D_Manager.Instance.isDialogueActive)
-                D_Manager.Instance.AdvanceDialogue();
+            if (dm.isDialogActive)
+            {
+                dm.AdvanceDialog();
+            }
             else
             {
-                CheckForNewConversation();
-                D_Manager.Instance.StartDialogue(currentConversation);
+                CheckForNewDialog();
+                dm.StartDialog(currentDialog);
             }
         }
+
     }
 
-    void CheckForNewConversation()
-    {   
-
-        // for (int i = conversations.Count - 1; i >= 0; i--) -> start from the end of the list
-        for (int i = 0; i < conversations.Count; i++) // start from the beginning of the list
+    void CheckForNewDialog()
+    {
+        // scanning from start (your current priority order)
+        for (int i = 0; i < dialogs.Count; i++)
         {
-            var convo = conversations[i];
-            if (convo != null && convo.IsConditionMet())
+            var dialog = dialogs[i];
+            if (dialog != null && dialog.IsConditionMet())
             {
-                conversations.RemoveAt(i);
-                currentConversation = convo;
-                break;
+                // Promote to current
+                currentDialog = dialog;
+
+                // Remove stale dialogs this one obsoletes
+                if (dialog.removeTheseOnPlay != null && dialog.removeTheseOnPlay.Count > 0)
+                {
+                    for (int r = dialogs.Count - 1; r >= 0; r--)
+                    {
+                        if (dialogs[r] != null && dialog.removeTheseOnPlay.Contains(dialogs[r]))
+                            dialogs.RemoveAt(r);
+                    }
+                }
+
+                // Remove this dialog only if one-time
+                if (dialog.removeAfterPlay)
+                {
+                    // find current index again safely (list may have shifted)
+                    int idx = dialogs.IndexOf(dialog);
+                    if (idx >= 0) dialogs.RemoveAt(idx);
+                }
+
+                break; // stop at first valid
             }
         }
     }

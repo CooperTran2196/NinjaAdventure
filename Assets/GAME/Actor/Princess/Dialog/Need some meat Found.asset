@@ -17,8 +17,11 @@ MonoBehaviour:
     text: Thank you so much
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: Np!
-  options: []
+  optionList: []
   requiredNPCs: []
   requiredLocations: []
   requiredItems:
   - {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+  autoRewards: []
+  removeAfterPlay: 1
+  removeTheseOnPlay: []
