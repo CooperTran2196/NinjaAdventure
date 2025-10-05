@@ -1,25 +1,36 @@
 // <summary>
-// Used to define a dialogue node in the dialogue system.
+// Used to define a dialog node in the dialog system.
 // </summary>
 
+using System.Collections.Generic;
 using Unity.AppUI.UI;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialogueSO", menuName = "Dialogue/DialogueNode")]
+[CreateAssetMenu(fileName = "DialogSO", menuName = "Dialog/DialogNode")]
 public class D_SO : ScriptableObject
 {
+    [Header("Lines of dialog in this dialog")]
     public D_LineSO[] lines;
+    [Header("An option button at the end of a dialog")]
     public D_Option[] options;
 
     [Header("Conditional Requirements (OPTIONAL)")]
-    [Header("Must have spoken to these NPCs to see this dialogue")]
+    [Header("Must have spoken to these NPCS to see this dialog")]
     public D_ActorSO[] requiredNPCs;
 
-    [Header("Must have visited these locations to see this dialogue")]
+    [Header("Must have visited these LOCATIONS to see this dialog")]
     public D_LocationSO[] requiredLocations;
 
-    [Header("Must have these items to see this dialogue")]
+    [Header("Must have these ITEMS to see this dialog")]
     public INV_ItemSO[] requiredItems;
+
+    [Header("Control Flags")]
+    [Header("If TRUE, remove THIS DIALOG from the NPCs list")]
+    [Header("ex: Quest dialogs, one-time use")]
+    public bool removeAfterPlay;
+    [Header("Also remove THESE DIALOGS from the NPCs list")]
+    [Header("ex: Dialogs before quest")]
+    public List<D_SO> removeTheseOnPlay = new();
 
     // Try to prove FALSE by condition checks, else return true
     public bool IsConditionMet()
@@ -29,7 +40,7 @@ public class D_SO : ScriptableObject
         {
             foreach (var npc in requiredNPCs)
             {
-                if (!D_HistoryTracker.Instance.HasSpokenWith(npc))
+                if (!SYS_GameManager.Instance.d_HistoryTracker.HasSpokenWith(npc))
                     return false;
             }
         }
@@ -39,7 +50,7 @@ public class D_SO : ScriptableObject
         {
             foreach (var location in requiredLocations)
             {
-                if (!D_LocationHistoryTracker.Instance.HasVisited(location))
+                if (!SYS_GameManager.Instance.d_LocationHistoryTracker.HasVisited(location))
                     return false;
             }
         }
@@ -55,6 +66,10 @@ public class D_SO : ScriptableObject
     }
 }
 
+// <summary>
+// A single line of dialog spoken by an actor.
+// Contains a D_ActorSO and the text they speak.
+// </summary>
 [System.Serializable]
 public class D_LineSO
 {
@@ -64,9 +79,13 @@ public class D_LineSO
     public string text;
 }
 
+// <summary>
+// An option presented to the player at the end of a dialog.
+// Selecting this option leads to another dialog node (nextDialog).
+// </summary>
 [System.Serializable]
 public class D_Option
 {
-    public string optionText;
-    public D_SO nextDialogue;
+    public string optionButtonText;
+    public D_SO nextDialog;
 }

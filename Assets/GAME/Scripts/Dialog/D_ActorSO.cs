@@ -8,5 +8,5 @@ using UnityEngine;
 public class D_ActorSO : ScriptableObject
 {
     public string actorName;
-    public Sprite portrait;
+    public Sprite avatar;
 }

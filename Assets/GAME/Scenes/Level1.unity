@@ -10627,18 +10627,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
   m_PrefabInstance: {fileID: 6358073895188072921}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &648076230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 648076222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e71c99221bfc144fa1be6735ace40bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::D_LocationHistoryTracker
 --- !u!1 &654952071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5325631574801758432, guid: e4c79d5f5bff40d449e9b01fb8f49da7, type: 3}
@@ -12035,9 +12023,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 494059847}
-  currentConversation: {fileID: 0}
-  conversations:
-  - {fileID: 11400000, guid: d7d80b58f5df7423f8a6415047519bb3, type: 2}
+  currentDialog: {fileID: 0}
+  dialogs: []
 --- !u!114 &1019970120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14028,13 +14015,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Talk
   interactAnim: {fileID: 2044849365}
-  currentConversation: {fileID: 0}
-  conversations:
-  - {fileID: 11400000, guid: 043082945b74b6b4dad2ca8601417c32, type: 2}
-  - {fileID: 11400000, guid: 2600d8d493bcabf4b8ddf70c4f5d3a83, type: 2}
-  - {fileID: 11400000, guid: c0368b23a4da3f243a1ac1348a934f09, type: 2}
-  - {fileID: 11400000, guid: 84ecba8836fa746938731d8a64eeea37, type: 2}
-  - {fileID: 11400000, guid: fadd4d9261044d3478dcd9abbcc00329, type: 2}
+  currentDialog: {fileID: 0}
+  dialogs: []
 --- !u!114 &1603086748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17712,10 +17694,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 648076230}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
 --- !u!1001 &6814625241615778658
 PrefabInstance:

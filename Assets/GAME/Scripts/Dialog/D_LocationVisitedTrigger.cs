@@ -16,8 +16,7 @@ public class D_LocationVisitedTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        D_LocationHistoryTracker.Instance.RecordLocation(location);
-
+        SYS_GameManager.Instance.d_LocationHistoryTracker.RecordLocation(location);
         if (destroyOnTouch)
             Destroy(gameObject);
     }

@@ -4,6 +4,11 @@ public class SYS_GameManager : MonoBehaviour
 {
     public static SYS_GameManager Instance;
 
+    [Header("References")]
+    public D_Manager d_Manager;
+    public D_HistoryTracker d_HistoryTracker;
+    public D_LocationHistoryTracker d_LocationHistoryTracker;
+
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
 

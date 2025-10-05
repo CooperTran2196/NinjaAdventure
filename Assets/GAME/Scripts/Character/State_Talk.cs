@@ -5,8 +5,8 @@ public class State_Talk : MonoBehaviour
 {
     [Header("References")]
     public Animator interactAnim;    // icon animator with states: Idle (default), WantToTalk
-    public D_SO currentConversation;
-    public List<D_SO> conversations;
+    public D_SO currentDialog;
+    public List<D_SO> dialogs;
 
     Rigidbody2D rb;
     Animator characterAnim;   // NPC sprite animator (Idle/Walk graph)
@@ -58,8 +58,8 @@ public class State_Talk : MonoBehaviour
 
     void Update()
     {
-        // NPCs don’t move while talking; keep intent at zero if you’re using controllers for NPCs too.
-        controller?.SetDesiredVelocity(Vector2.zero);
+        // NPCs don’t move while talking
+        controller.SetDesiredVelocity(Vector2.zero);
 
         if (!target) return;
 
@@ -68,35 +68,64 @@ public class State_Talk : MonoBehaviour
         if (to.sqrMagnitude > 0.0001f)
         {
             facingDir = to.normalized;
-            characterAnim?.SetFloat("idleX", facingDir.x);
-            characterAnim?.SetFloat("idleY", facingDir.y);
+            characterAnim.SetFloat("idleX", facingDir.x);
+            characterAnim.SetFloat("idleY", facingDir.y);
         }
 
-        // Interact with F key
+        var dm = SYS_GameManager.Instance.d_Manager; // after D below
+        if (input.UI.EndConvo.WasPressedThisFrame())
+        {
+            if (dm.isDialogActive)
+                dm.EndDialog();
+            return;
+        }
+
+        // Interact (F) to advance / start
         if (input.Player.Interact.WasPressedThisFrame())
         {
-            if (D_Manager.Instance.isDialogueActive)
-                D_Manager.Instance.AdvanceDialogue();
+            if (dm.isDialogActive)
+            {
+                dm.AdvanceDialog();
+            }
             else
             {
-                CheckForNewConversation();
-                D_Manager.Instance.StartDialogue(currentConversation);
+                CheckForNewDialog();
+                dm.StartDialog(currentDialog);
             }
         }
+
     }
 
-    void CheckForNewConversation()
-    {   
-
-        // for (int i = conversations.Count - 1; i >= 0; i--) -> start from the end of the list
-        for (int i = 0; i < conversations.Count; i++) // start from the beginning of the list
+    void CheckForNewDialog()
+    {
+        // scanning from start (your current priority order)
+        for (int i = 0; i < dialogs.Count; i++)
         {
-            var convo = conversations[i];
-            if (convo != null && convo.IsConditionMet())
+            var dialog = dialogs[i];
+            if (dialog != null && dialog.IsConditionMet())
             {
-                conversations.RemoveAt(i);
-                currentConversation = convo;
-                break;
+                // Promote to current
+                currentDialog = dialog;
+
+                // Remove stale dialogs this one obsoletes
+                if (dialog.removeTheseOnPlay != null && dialog.removeTheseOnPlay.Count > 0)
+                {
+                    for (int r = dialogs.Count - 1; r >= 0; r--)
+                    {
+                        if (dialogs[r] != null && dialog.removeTheseOnPlay.Contains(dialogs[r]))
+                            dialogs.RemoveAt(r);
+                    }
+                }
+
+                // Remove this dialog only if one-time
+                if (dialog.removeAfterPlay)
+                {
+                    // find current index again safely (list may have shifted)
+                    int idx = dialogs.IndexOf(dialog);
+                    if (idx >= 0) dialogs.RemoveAt(idx);
+                }
+
+                break; // stop at first valid
             }
         }
     }

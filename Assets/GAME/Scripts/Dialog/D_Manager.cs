@@ -1,5 +1,5 @@
 // <summary>
-// Manages dialogue flow, UI updates, and player choices.
+// Manages dialog flow, UI updates, and player choices.
 // </summary>
 
 using UnityEngine;
@@ -8,26 +8,21 @@ using TMPro;
 
 public class D_Manager : MonoBehaviour
 {
-    public static D_Manager Instance { get; private set; }
-
     [Header("UI")]
-    public Image portrait;
-    public TMP_Text actorNameText;
-    public TMP_Text dialogueText;
+    public Image avatar;
+    public TMP_Text characterNameText;
+    public TMP_Text dialogText;
     public CanvasGroup canvasGroup;
 
     [Header("Choices")]
     public Button[] choiceButtons;
 
-    D_SO currentDialogue;
-    int dialogueIndex;
-    public bool isDialogueActive { get; private set; }
+    D_SO currentDialog;
+    int dialogIndex;
+    public bool isDialogActive { get; private set; }
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else { Destroy(gameObject); return; }
-
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
@@ -36,38 +31,38 @@ public class D_Manager : MonoBehaviour
         foreach (var b in choiceButtons)
             b.gameObject.SetActive(false);
     }
-
-    void ShowDialogue()
+    
+    void ShowDialog()
     {
-        // advancing a line hides old choices, if any
+        // Clear previous choices
         ClearChoices();
+        // advancing a line hides old choices, if any
+        var line = currentDialog.lines[dialogIndex++]; 
 
-        var line = currentDialogue.lines[dialogueIndex++]; 
-
-        D_HistoryTracker.Instance.RecordNPC(line.speaker);
-        portrait.sprite    = line.speaker.portrait;
-        actorNameText.text = line.speaker.actorName;
-        dialogueText.text  = line.text;
+        SYS_GameManager.Instance.d_HistoryTracker?.RecordNPC(line.speaker);
+        avatar.sprite      = line.speaker.avatar;
+        characterNameText.text = line.speaker.actorName;
+        dialogText.text  = line.text;
 
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
-    public void StartDialogue(D_SO dialogue)
+    public void StartDialog(D_SO dialog)
     {
-        currentDialogue = dialogue;
-        dialogueIndex = 0;
-        isDialogueActive = true;
+        currentDialog = dialog;
+        dialogIndex = 0;
+        isDialogActive = true;
         ClearChoices();
-        ShowDialogue();
+        ShowDialog();
     }
 
-    public void AdvanceDialogue()
+    public void AdvanceDialog()
     {
-        if (dialogueIndex < currentDialogue.lines.Length)
+        if (dialogIndex < currentDialog.lines.Length)
         {
-            ShowDialogue();
+            ShowDialog();
         }
         else
         {
@@ -78,7 +73,7 @@ public class D_Manager : MonoBehaviour
     void ShowChoices()
     {
         ClearChoices();
-        var opts = currentDialogue.options;
+        var opts = currentDialog.options;
 
         if (opts != null && opts.Length > 0)
         {
@@ -88,9 +83,9 @@ public class D_Manager : MonoBehaviour
                 var btn = choiceButtons[i];
                 var opt = opts[i]; // capture for lambda
 
-                btn.GetComponentInChildren<TMP_Text>(true).text = opt.optionText;
+                btn.GetComponentInChildren<TMP_Text>(true).text = opt.optionButtonText;
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => ChooseOption(opt.nextDialogue));
+                btn.onClick.AddListener(() => ChooseOption(opt.nextDialog));
                 btn.gameObject.SetActive(true);
             }
         }
@@ -100,28 +95,28 @@ public class D_Manager : MonoBehaviour
             var endBtn = choiceButtons[0];
             endBtn.GetComponentInChildren<TMP_Text>(true).text = "End";
             endBtn.onClick.RemoveAllListeners();
-            endBtn.onClick.AddListener(EndDialogue);
+            endBtn.onClick.AddListener(EndDialog);
             endBtn.gameObject.SetActive(true);
         }
     }
 
-    void ChooseOption(D_SO nextDialogue)
+    void ChooseOption(D_SO nextDialog)
     {
         ClearChoices();
 
-        if (nextDialogue == null)
+        if (nextDialog == null)
         {
-            EndDialogue();
+            EndDialog();
             return;
         }
 
-        StartDialogue(nextDialogue);
+        StartDialog(nextDialog);
     }
 
-    public void EndDialogue()
+    public void EndDialog()
     {
-        dialogueIndex = 0;
-        isDialogueActive = false;
+        dialogIndex = 0;
+        isDialogActive = false;
         ClearChoices();
 
         canvasGroup.alpha = 0f;

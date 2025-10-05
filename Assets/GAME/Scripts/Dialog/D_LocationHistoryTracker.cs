@@ -7,21 +7,10 @@ using System.Collections.Generic;
 
 public class D_LocationHistoryTracker : MonoBehaviour
 {
-    public static D_LocationHistoryTracker Instance;
 
     // Using HashSet to avoid duplicate entries/ Don't care about order
     public readonly HashSet<D_LocationSO> locationsVisited = new();
 
-    // Singleton pattern
-    void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     // Add the location to locationsVisited if not already present
     public void RecordLocation(D_LocationSO locationSO)

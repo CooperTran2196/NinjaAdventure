@@ -21,3 +21,6 @@ MonoBehaviour:
   requiredNPCs: []
   requiredLocations:
   - {fileID: 11400000, guid: 15853343916d27a449f9a0f11dcda92c, type: 2}
+  requiredItems: []
+  removeAfterPlay: 0
+  removeTheseOnPlay: []
