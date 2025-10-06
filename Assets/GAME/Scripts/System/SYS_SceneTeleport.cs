@@ -13,6 +13,6 @@ public class SYS_SceneTeleport : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         nextSpawnId = destinationSpawnId;
-        SYS_Fader.I.FadeToScene(sceneToLoad);   // <- one call, no stale refs
+        SYS_GameManager.Instance.sys_Fader.FadeToScene(sceneToLoad);
     }
 }

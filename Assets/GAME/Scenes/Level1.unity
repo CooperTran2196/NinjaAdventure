@@ -15612,6 +15612,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 648076225}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
+      propertyPath: sys_Fader
+      value: 
+      objectReference: {fileID: 3927220846568068311}
+    - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: d_HistoryTracker
       value: 
       objectReference: {fileID: 648076224}
@@ -17487,6 +17491,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2970133924887967985, guid: 76c64ceb85ef65e4fa199b2dd3ac0763, type: 3}
   m_PrefabInstance: {fileID: 1501841826277859191}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3927220846568068311 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1538531612901439808, guid: 76c64ceb85ef65e4fa199b2dd3ac0763, type: 3}
+  m_PrefabInstance: {fileID: 1501841826277859191}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3927220846568068310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c454cf545f5d74aa6fecedc59eb3b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SYS_Fader
 --- !u!114 &6243585145636388103
 MonoBehaviour:
   m_ObjectHideFlags: 0

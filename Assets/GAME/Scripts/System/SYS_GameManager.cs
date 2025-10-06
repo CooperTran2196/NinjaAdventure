@@ -8,6 +8,7 @@ public class SYS_GameManager : MonoBehaviour
     public D_Manager d_Manager;
     public D_HistoryTracker d_HistoryTracker;
     public D_LocationHistoryTracker d_LocationHistoryTracker;
+    public SYS_Fader sys_Fader; // Centralized reference to Fader
 
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
@@ -27,6 +28,11 @@ public class SYS_GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             MarkPersistentObjects();
+            
+            // Fallback auto-wire if not assigned in inspector
+            sys_Fader ??= FindFirstObjectByType<SYS_Fader>(FindObjectsInactive.Include);
+            if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader reference not set. Scene transitions will be immediate.");
+
         }
     }
 
