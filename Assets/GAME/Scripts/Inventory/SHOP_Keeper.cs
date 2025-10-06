@@ -28,11 +28,19 @@ public class SHOP_Keeper : MonoBehaviour
         trigger ??= GetComponent<CircleCollider2D>();
 
         input = new P_InputActions();
-        input.UI.ToggleShop.Enable();
     }
 
-    void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    void OnEnable()
+    {
+        input.UI.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.UI.Disable();
+        // Dispose of the input object to prevent memory leaks
+        input.Dispose();
+    }
 
     void Update()
     {

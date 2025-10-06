@@ -32,6 +32,9 @@ public class StatsUI : MonoBehaviour
 
     void OnDisable()
     {
+        input?.UI.Disable();
+        input?.Dispose();
+
         if (p_StatsManager != null)
             p_StatsManager.OnStatsChanged -= UpdateAllStats;
     }

@@ -199,7 +199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &40205430
 RectTransform:
   m_ObjectHideFlags: 0
@@ -213,7 +213,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1048263631}
-  m_Father: {fileID: 1703189843}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3275,6 +3275,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430cf94f6d40903468f2a0ebe10a9408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &887158436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 887158438}
+  - component: {fileID: 887158439}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &887158438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887158436}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 36.03, y: 81.97, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1703189843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &887158439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887158436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d35c0ff1a1300464c9ba2e5499da4f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SYS_SpawnPoint
+  spawnId: Level1_Young Lord Room
+  arrivalArea: {fileID: 0}
 --- !u!1 &889766237
 GameObject:
   m_ObjectHideFlags: 0
@@ -4890,7 +4936,7 @@ GameObject:
   - component: {fileID: 1703189842}
   - component: {fileID: 1703189841}
   m_Layer: 0
-  m_Name: Teleport
+  m_Name: Teleporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4909,9 +4955,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_SceneTeleport
   sceneToLoad: Level1
+  destinationSpawnId: Level1
   fadeAnimator: {fileID: 1048263628}
   fadeTime: 1
-  newPlayerPosition: {x: 37, y: 55}
 --- !u!61 &1703189842
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4946,7 +4992,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.18502426, y: 23.599586}
+  m_Offset: {x: 36.322052, y: 80.00676}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4956,7 +5002,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.47995, y: 0.6536484}
+  m_Size: {x: 2.1916504, y: 0.6524582}
   m_EdgeRadius: 0
 --- !u!4 &1703189843
 Transform:
@@ -4967,11 +5013,11 @@ Transform:
   m_GameObject: {fileID: 1703189840}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 36.52765, y: 56.43951, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 40205430}
+  - {fileID: 887158438}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!19719996 &1755215111 stripped
@@ -5071,43 +5117,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: -9.069811
+      value: -9.02594
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 7.506012
+      value: 7.4729996
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: -9.134705
+      value: -9.02594
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: -7.507347
+      value: -7.5270004
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: 9.109512
+      value: 8.974056
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: -7.54895
+      value: -7.527008
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: 9.033169
+      value: 8.97406
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: 7.5174904
+      value: 7.4730034
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
-      value: 8.917179
+      value: 8.974068
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
-      value: 7.2275124
+      value: 7.4727592
       objectReference: {fileID: 0}
     - target: {fileID: 8683158862202569935, guid: c4ba84bd685104980a89ba8773f98a3b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].x
@@ -5625,6 +5671,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 682037730}
+  - {fileID: 40205430}
   - {fileID: 1703189843}
   - {fileID: 2005489769}
   - {fileID: 1878242111}
