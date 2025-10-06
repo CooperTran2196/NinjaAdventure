@@ -2059,11 +2059,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1883494772032844466, guid: 09172c2e71207be459d083118fbd3f72, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1883494772032844466, guid: 09172c2e71207be459d083118fbd3f72, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1883494772032844466, guid: 09172c2e71207be459d083118fbd3f72, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3747,52 +3747,52 @@ PrefabInstance:
       objectReference: {fileID: 550441882}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: persistentObjects.Array.size
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 531956845}
+      objectReference: {fileID: 152967368}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[1]'
       value: 
-      objectReference: {fileID: 152967368}
+      objectReference: {fileID: 1354982998}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[2]'
       value: 
-      objectReference: {fileID: 1354982998}
+      objectReference: {fileID: 741773951}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[3]'
       value: 
-      objectReference: {fileID: 741773951}
+      objectReference: {fileID: 112603286}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[4]'
       value: 
-      objectReference: {fileID: 112603286}
+      objectReference: {fileID: 663265244}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[5]'
       value: 
-      objectReference: {fileID: 663265244}
+      objectReference: {fileID: 947057583}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[6]'
       value: 
-      objectReference: {fileID: 947057583}
+      objectReference: {fileID: 399162765}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[7]'
       value: 
-      objectReference: {fileID: 399162765}
+      objectReference: {fileID: 312973085}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[8]'
       value: 
-      objectReference: {fileID: 312973085}
+      objectReference: {fileID: 147384072}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[9]'
       value: 
-      objectReference: {fileID: 147384072}
+      objectReference: {fileID: 550441881}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[10]'
       value: 
-      objectReference: {fileID: 550441881}
+      objectReference: {fileID: 531956845}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4956,8 +4956,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::C_SceneTeleport
   sceneToLoad: Level1
   destinationSpawnId: Level1
-  fadeAnimator: {fileID: 1048263628}
-  fadeTime: 1
 --- !u!61 &1703189842
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5671,6 +5669,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 682037730}
+  - {fileID: 531956844}
   - {fileID: 40205430}
   - {fileID: 1703189843}
   - {fileID: 2005489769}
@@ -5680,7 +5679,6 @@ SceneRoots:
   - {fileID: 1659741891}
   - {fileID: 1049466155}
   - {fileID: 962671228}
-  - {fileID: 531956844}
   - {fileID: 152967367}
   - {fileID: 312973084}
   - {fileID: 1354982997}
