@@ -53,7 +53,7 @@ public class D_SO : ScriptableObject
         {
             foreach (var location in requiredLocations)
             {
-                if (!SYS_GameManager.Instance.d_LocationHistoryTracker.HasVisited(location))
+                if (!SYS_GameManager.Instance.d_HistoryTracker.HasVisited(location))
                     return false;
             }
         }
