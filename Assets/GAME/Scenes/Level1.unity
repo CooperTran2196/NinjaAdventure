@@ -15948,6 +15948,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1538531612901439808, guid: 76c64ceb85ef65e4fa199b2dd3ac0763, type: 3}
+      propertyPath: fadeTime
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2970133924887967985, guid: 76c64ceb85ef65e4fa199b2dd3ac0763, type: 3}
       propertyPath: m_Name
       value: Fade Canvas

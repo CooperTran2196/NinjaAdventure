@@ -28,7 +28,7 @@ public class SYS_GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             MarkPersistentObjects();
 
-            // Fallback auto-wire if not assigned in inspector
+            // Fallback
             sys_Fader ??= FindFirstObjectByType<SYS_Fader>(FindObjectsInactive.Include);
             if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader reference not set. Scene transitions will be immediate.");
 

@@ -21,7 +21,7 @@ public class SYS_Fader : MonoBehaviour
     {
         animator.Play("FadeOut");
         yield return new WaitForSeconds(fadeTime);
-        // Simple synchronous load as requested
+        // Load the scene
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         yield return new WaitForSeconds(fadeTime);
         animator.Play("FadeIn");      // reveal
