@@ -35,7 +35,7 @@ public class P_Controller : MonoBehaviour, I_Controller
 
     // Runtime vars - grouped by type
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
-    bool isStunned, isDead, isAttacking, isDodging;
+    bool isStunned, isDead, isAttacking;
     float stunUntil, attackCooldown;
     W_Base currentWeapon;
 
@@ -119,7 +119,6 @@ public class P_Controller : MonoBehaviour, I_Controller
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
     // State setters for external components
     public void SetAttacking(bool value) => isAttacking = value;
-    public void SetDodging(bool value) => isDodging = value;
 
     // Convert mouse position to world direction
     Vector2 ReadMouseAim()
@@ -134,92 +133,102 @@ public class P_Controller : MonoBehaviour, I_Controller
 
     void ProcessInputs()
     {
-        // Movement input
-        moveAxis = input.Player.Move.ReadValue<Vector2>();
-        if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
-        if (moveAxis.sqrMagnitude > MIN_DISTANCE) lastMove = moveAxis;
-
-        // Aim input
-        Vector2 mouseAim = ReadMouseAim();
-        if (mouseAim != Vector2.zero) attackDir = mouseAim;
-
-        // Attack inputs
-        if (attackCooldown <= 0f)
+        // Handle death first (highest priority)
+        if (c_Stats.currentHP <= 0)
         {
-            if (input.Player.MeleeAttack.triggered)
-            {
-                isAttacking = true;
-                currentWeapon = meleeWeapon;
-            }
-            if (input.Player.RangedAttack.triggered)
-            {
-                isAttacking = true;
-                currentWeapon = rangedWeapon;
-            }
-        }
-
-        // Dodge input
-        if (input.Player.Dodge.triggered)
-        {
-            isDodging = true;
-        }
-
-        // Determine and switch to desired state
-        PState desiredState = c_Stats.currentHP <= 0 ? PState.Dead :
-                             isDodging ? PState.Dodge :
-                             isAttacking ? PState.Attack :
-                             (moveAxis.sqrMagnitude > MIN_DISTANCE) ? PState.Move :
-                             PState.Idle;
-
-        // Don't interrupt ongoing attack unless it's death
-        if (currentState == PState.Attack && isAttacking && desiredState != PState.Dead)
-        {
+            SwitchState(PState.Dead);
             return;
         }
 
-        if (desiredState != currentState)
+        // Don't interrupt ongoing attacks
+        if (currentState == PState.Attack && isAttacking) return;
+
+        // Handle dodge input (high priority)
+        if (input.Player.Dodge.triggered)
         {
-            SwitchState(desiredState);
+            SwitchState(PState.Dodge);
+            return;
         }
+
+        // Handle attack inputs (medium priority)
+        if (attackCooldown <= 0f)
+        {
+            Vector2 mouseAim = ReadMouseAim();
+            if (mouseAim != Vector2.zero) attackDir = mouseAim;
+
+            if (input.Player.MeleeAttack.triggered)
+            {
+                currentWeapon = meleeWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+            if (input.Player.RangedAttack.triggered)
+            {
+                currentWeapon = rangedWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+        }
+
+        // Handle movement input (low priority)
+        moveAxis = input.Player.Move.ReadValue<Vector2>();
+        if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
+        if (moveAxis.sqrMagnitude > MIN_DISTANCE) 
+        {
+            lastMove = moveAxis;
+            SwitchState(PState.Move);
+            return;
+        }
+
+        // Default to idle (lowest priority)
+        SwitchState(PState.Idle);
     }
 
-
-
     // Switch states with integrated death handling and attack logic
-    public void SwitchState(PState s)
+    public void SwitchState(PState state)
     {
-        if (currentState == s) return;
-        currentState = s;
+        if (currentState == state) return;
+        currentState = state;
 
-        idle.enabled = (s == PState.Idle);
-        move.SetDisabled(s != PState.Move);
-        attack.enabled = (s == PState.Attack);
-        dodge.enabled = (s == PState.Dodge);
+        // Disable all states first
+        idle.enabled = false;
+        move.SetDisabled(true);
+        attack.enabled = false;
+        dodge.enabled = false;
 
-        // Handle Dead state (integrated C_Dead functionality)
-        if (s == PState.Dead)
+        switch (state)
         {
-            isDead = true;
-            knockback = Vector2.zero;
-            rb.linearVelocity = Vector2.zero;
-            anim.SetTrigger("Die");
-        }
+            case PState.Dead: // Highest priority
+                isDead = true;
+                knockback = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
+                anim.SetTrigger("Die");
+                break;
 
-        // On enter, provide context to newly enabled state
-        if (s == PState.Move) move.SetMoveAxis(moveAxis);
+            case PState.Dodge:
+                dodge.enabled = true;
+                dodge.RequestDodge(lastMove);
+                break;
 
-        // Handle attack state entry (integrated RequestAttack logic)
-        if (s == PState.Attack && currentWeapon != null)
-        {
-            attackCooldown = c_Stats.attackCooldown;
-            attack.RequestAttack(attackDir, currentWeapon);
-            currentWeapon = null; // Clear after use
-        }
+            case PState.Attack:
+                attack.enabled = true;
+                if (currentWeapon != null)
+                {
+                    attackCooldown = c_Stats.attackCooldown;
+                    isAttacking = true;
+                    attack.Attack(currentWeapon, attackDir);
+                    currentWeapon = null;
+                }
+                break;
 
-        // Handle dodge state entry (integrated RequestDodge logic)
-        if (s == PState.Dodge)
-        {
-            dodge.RequestDodge(lastMove);
+            case PState.Move:
+                move.SetDisabled(false);
+                move.SetMoveAxis(moveAxis);
+                break;
+
+            case PState.Idle: // Lowest priority
+                idle.enabled = true;
+                break;
         }
     }
     

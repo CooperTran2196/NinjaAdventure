@@ -4,80 +4,73 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class P_State_Attack : MonoBehaviour
 {
-    [Header("References")]
-    public Animator animator;
-    public C_Stats c_Stats;
-
-    [Header("Weapons")]
-    public W_Melee  meleeWeapon;
-    public W_Ranged rangedWeapon;
-    public W_Base   magicWeapon;
-
-    [Header("Timings")]
+    [Header("Attack Timings")]
     [Min(0f)] public float attackDuration = 0.45f;
     [Min(0f)] public float hitDelay = 0.15f;
 
-    public bool IsAttacking { get; private set; }
+    // Cache
+    Animator anim;
+    P_Controller controller;
 
-    float cooldownTimer;
-    Vector2 attackDir = Vector2.down;
+    // Runtime
+    W_Base weaponToUse;
+    Vector2 attackDir;
 
     void Awake()
     {
-        animator ??= GetComponent<Animator>();
-        c_Stats  ??= GetComponent<C_Stats>();
+        anim = GetComponent<Animator>();
+        controller = GetComponent<P_Controller>();
 
-        if (!animator) Debug.LogWarning($"{name}: Animator missing on State_Attack_Player");
-        if (!c_Stats) Debug.LogWarning($"{name}: C_Stats missing on State_Attack_Player");
+        if (!anim) Debug.LogError("P_State_Attack: missing Animator");
+        if (!controller) Debug.LogError("P_State_Attack: missing P_Controller");
     }
 
-    public void SetDisabled(bool v)
+    void OnDisable()
     {
-        enabled = !v;
-        if (v)
-        {
-            IsAttacking = false;
-            animator?.SetBool("isAttacking", false);
-        }
-    }
-
-    public void ForceStop()
-    {
-        StopAllCoroutines();
-        IsAttacking = false;
-        animator?.SetBool("isAttacking", false);
-    }
-
-    public void RequestAttack(Vector2 dir, W_Base weapon)
-    {
-        if (weapon == null) return;
-        if (IsAttacking) return;
-        if (cooldownTimer > 0f) return;
-
-        attackDir = dir.sqrMagnitude > 0f ? dir.normalized : Vector2.down;
-        StartCoroutine(AttackRoutine(weapon));
-    }
-
-    IEnumerator AttackRoutine(W_Base weapon)
-    {
-        IsAttacking = true;
-        animator?.SetBool("isAttacking", true);
-        animator?.SetFloat("atkX", attackDir.x);
-        animator?.SetFloat("atkY", attackDir.y);
-
-        yield return new WaitForSeconds(hitDelay);
-        weapon.Attack(attackDir);
-
-        float rest = Mathf.Max(0f, attackDuration - hitDelay);
-        if (rest > 0f) yield return new WaitForSeconds(rest);
-
-        IsAttacking = false;
-        animator?.SetBool("isAttacking", false);
-        cooldownTimer = c_Stats.attackCooldown;
+        controller.SetAttacking(false); // Attack state only turns OFF
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetBool("isAttacking", false);
     }
 
     void Update()
     {
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        // No movement while in attack state; controller still applies knockback globally
+        controller.SetDesiredVelocity(Vector2.zero);
+
+        // Update facing for idle state (always use last attack direction)
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+        anim.SetFloat("idleX", attackDir.x);
+        anim.SetFloat("idleY", attackDir.y);
     }
+
+    // Attack with weapon and direction (called by controller)
+    public void Attack(W_Base weapon, Vector2 attackDir)
+    {
+        weaponToUse = weapon;
+        this.attackDir = attackDir; // Controller already normalized this
+        
+        if (weaponToUse != null) // Only check null since controller might pass null
+        {
+            StartCoroutine(AttackRoutine());
+        }
+    }
+
+    // Attack coroutine (simplified - just handles animation timing)
+    IEnumerator AttackRoutine()
+    {
+        anim.SetBool("isAttacking", true);
+
+        // Set attack direction for animation
+        anim.SetFloat("atkX", attackDir.x);
+        anim.SetFloat("atkY", attackDir.y);
+
+        yield return new WaitForSeconds(hitDelay);
+        weaponToUse.Attack(attackDir);
+        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        // OnDisable will handle controller.SetAttacking(false) when state switches
+        anim.SetBool("isAttacking", false);
+    }
+
 }
