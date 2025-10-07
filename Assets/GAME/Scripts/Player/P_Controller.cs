@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class P_Controller : MonoBehaviour, I_Controller
+public class P_Controller : MonoBehaviour
 {
     public enum PState { Idle, Move, Attack, Dodge, Dead }
 
@@ -26,7 +26,7 @@ public class P_Controller : MonoBehaviour, I_Controller
     P_InputActions input;
 
     PState currentState;
-    State_Idle idle;
+    P_State_Idle idle;  // Changed from State_Idle to P_State_Idle
     P_State_Movement move;
     P_State_Attack attack;
     State_Dodge dodge;
@@ -48,7 +48,7 @@ public class P_Controller : MonoBehaviour, I_Controller
         c_Stats = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
 
-        idle = GetComponent<State_Idle>();
+        idle = GetComponent<P_State_Idle>();  // Changed from State_Idle to P_State_Idle
         move = GetComponent<P_State_Movement>();
         attack = GetComponent<P_State_Attack>();
         dodge = GetComponent<State_Dodge>();
@@ -68,7 +68,7 @@ public class P_Controller : MonoBehaviour, I_Controller
         if (!anim) missing.Add("Animator");
         if (!c_Stats) missing.Add("C_Stats");
         if (!c_Health) missing.Add("C_Health");
-        if (!idle) missing.Add("State_Idle");
+        if (!idle) missing.Add("P_State_Idle");  // Changed from State_Idle to P_State_Idle
         if (!move) missing.Add("P_State_Movement");
         if (!attack) missing.Add("P_State_Attack");
         if (!dodge) missing.Add("State_Dodge");
@@ -230,6 +230,7 @@ public class P_Controller : MonoBehaviour, I_Controller
 
             case PState.Idle: // Lowest priority
                 idle.enabled = true;
+                idle.SetIdleFacing(lastMove); // Pass the last movement direction for proper facing
                 break;
         }
     }

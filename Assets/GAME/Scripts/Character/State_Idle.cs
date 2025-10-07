@@ -3,8 +3,8 @@ using UnityEngine;
 public class State_Idle : MonoBehaviour
 {
     [Header("References")]
-    public Rigidbody2D rb;
-    public Animator characterAnimator;
+    Rigidbody2D rb;
+    Animator characterAnimator;
 
     I_Controller controller;
     C_Stats stats;
@@ -16,9 +16,8 @@ public class State_Idle : MonoBehaviour
         stats             ??= GetComponent<C_Stats>();
 
         // Make this work for Player, Enemy, or NPC
-        controller = GetComponent<P_Controller>();
-        if (controller == null)
-            controller = (I_Controller)(GetComponent<E_Controller>() ?? (Component)GetComponent<NPC_Controller>());
+
+        controller = (I_Controller)(GetComponent<E_Controller>() ?? (Component)GetComponent<NPC_Controller>());
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Idle");
     }
