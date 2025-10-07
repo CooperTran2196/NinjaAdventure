@@ -36,7 +36,7 @@ public class P_Controller : MonoBehaviour, I_Controller
     // Runtime vars - grouped by type
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
     bool isStunned, isDead, isAttacking;
-    float stunUntil, attackCooldown;
+    float stunUntil, attackCooldown, dodgeCooldown;
     W_Base currentWeapon;
 
     const float MIN_DISTANCE = 0.000001f;
@@ -94,6 +94,7 @@ public class P_Controller : MonoBehaviour, I_Controller
     {
         if (isDead || isStunned) return;
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
+        if (dodgeCooldown > 0f) dodgeCooldown -= Time.deltaTime;
 
         // Debug kill
         if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
@@ -144,7 +145,7 @@ public class P_Controller : MonoBehaviour, I_Controller
         if (currentState == PState.Attack && isAttacking) return;
 
         // Handle dodge input (high priority)
-        if (input.Player.Dodge.triggered)
+        if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
         {
             SwitchState(PState.Dodge);
             return;
@@ -192,7 +193,7 @@ public class P_Controller : MonoBehaviour, I_Controller
 
         // Disable all states first
         idle.enabled = false;
-        move.SetDisabled(true);
+        move.enabled = false;
         attack.enabled = false;
         dodge.enabled = false;
 
@@ -207,7 +208,8 @@ public class P_Controller : MonoBehaviour, I_Controller
 
             case PState.Dodge:
                 dodge.enabled = true;
-                dodge.RequestDodge(lastMove);
+                dodgeCooldown = c_Stats.dodgeCooldown;
+                dodge.Dodge(lastMove);
                 break;
 
             case PState.Attack:
@@ -222,8 +224,8 @@ public class P_Controller : MonoBehaviour, I_Controller
                 break;
 
             case PState.Move:
-                move.SetDisabled(false);
-                move.SetMoveAxis(moveAxis);
+                move.enabled = true;
+                move.Move(moveAxis);
                 break;
 
             case PState.Idle: // Lowest priority

@@ -4,44 +4,38 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class State_Dodge : MonoBehaviour
 {
-    [Header("References")]
-    public C_Stats c_Stats;
-    public C_State c_State;
-    public Animator animator;
-    public C_AfterimageSpawner afterimage;
+    // Cache
+    Animator anim;
+    C_Stats c_Stats;
+    P_Controller controller;
+    C_AfterimageSpawner afterimage;
 
-    [Header("State (read-only)")]
-    public bool IsDodging { get; private set; }
-    public Vector2 ForcedVelocity => IsDodging ? forcedVelocity : Vector2.zero;
-
-    float cooldownTimer;
-    Vector2 forcedVelocity;
+    // Runtime
+    Vector2 dodgeDir;
 
     void Awake()
     {
-        c_Stats    ??= GetComponent<C_Stats>();
-        c_State    ??= GetComponent<C_State>();
-        animator   ??= GetComponent<Animator>();
-        afterimage ??= GetComponent<C_AfterimageSpawner>();
+        anim = GetComponent<Animator>();
+        c_Stats = GetComponent<C_Stats>();
+        controller = GetComponent<P_Controller>();
+        afterimage = GetComponent<C_AfterimageSpawner>();
 
-        if (!c_Stats) Debug.LogWarning($"{name}: C_Stats missing on State_Dodge");
-        if (!c_State) Debug.LogWarning($"{name}: C_State missing on State_Dodge");
-        if (!animator) Debug.LogWarning($"{name}: Animator missing on State_Dodge");
+        if (!anim) Debug.LogError("State_Dodge: missing Animator");
+        if (!c_Stats) Debug.LogError("State_Dodge: missing C_Stats");
+        if (!controller) Debug.LogError("State_Dodge: missing P_Controller");
     }
 
-    void Update()
+    void OnDisable()
     {
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetBool("isDodging", false);
     }
 
-    public void RequestDodge(Vector2 dir)
+    // Dodge with given direction (called by controller)
+    public void Dodge(Vector2 dir)
     {
-        if (c_State != null && c_State.lockDodge && c_State.Is(C_State.ActorState.Attack)) return;
-        if (IsDodging) return;
-        if (cooldownTimer > 0f) return;
-
-        Vector2 ndir = (dir.sqrMagnitude > 0f) ? dir.normalized : Vector2.down;
-
+        dodgeDir = dir; // Controller already normalized this
+        
         var sr = GetComponent<SpriteRenderer>();
         var lockedSprite = sr ? sr.sprite : null;
         bool flipX = sr ? sr.flipX : false;
@@ -51,13 +45,13 @@ public class State_Dodge : MonoBehaviour
         float distance = c_Stats.dodgeDistance;
         float duration = (speed > 0f) ? (distance / speed) : 0f;
 
-        IsDodging = true;
-        forcedVelocity = ndir * speed;
+        Vector2 dodgeVelocity = dodgeDir * speed;
+        controller.SetDesiredVelocity(dodgeVelocity);
 
         if (duration > 0f)
             afterimage?.StartBurst(duration, lockedSprite, flipX, flipY);
 
-        animator?.SetBool("isDodging", true);
+        anim.SetBool("isDodging", true);
         StartCoroutine(DodgeRoutine(duration));
     }
 
@@ -65,10 +59,8 @@ public class State_Dodge : MonoBehaviour
     {
         if (duration > 0f) yield return new WaitForSeconds(duration);
 
-        IsDodging = false;
-        forcedVelocity = Vector2.zero;
-        animator?.SetBool("isDodging", false);
-
-        cooldownTimer = c_Stats.dodgeCooldown;
+        // OnDisable will handle cleanup when controller switches states
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetBool("isDodging", false);
     }
 }

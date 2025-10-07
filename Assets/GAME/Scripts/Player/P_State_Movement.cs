@@ -3,59 +3,46 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class P_State_Movement : MonoBehaviour
 {
-    [Header("References")]
-    public Animator animator;
-    public C_Stats c_Stats;
+    // Cache
+    Animator anim;
+    C_Stats c_Stats;
+    P_Controller controller;
 
-    I_Controller controller;
-
-    public bool HasMoveInput { get; private set; }
-    public Vector2 lastMove = Vector2.down;
-
+    // Runtime
     Vector2 moveAxis;
 
     void Awake()
     {
-        animator   ??= GetComponent<Animator>();
-        c_Stats    ??= GetComponent<C_Stats>();
-        controller ??= GetComponent<I_Controller>();
+        anim = GetComponent<Animator>();
+        c_Stats = GetComponent<C_Stats>();
+        controller = GetComponent<P_Controller>();
 
-        if (!animator) Debug.LogWarning($"{name}: Animator missing on State_Move_Player");
-        if (!c_Stats) Debug.LogWarning($"{name}: C_Stats missing on State_Move_Player");
-        if (controller == null) Debug.LogWarning($"{name}: I_Controller missing on State_Move_Player");
+        if (!anim) Debug.LogError("P_State_Movement: missing Animator");
+        if (!c_Stats) Debug.LogError("P_State_Movement: missing C_Stats");
+        if (!controller) Debug.LogError("P_State_Movement: missing P_Controller");
     }
 
-    public void SetDisabled(bool v)
+    void OnDisable()
     {
-        enabled = !v;
-        if (v)
-        {
-            HasMoveInput = false;
-            moveAxis = Vector2.zero;
-            controller?.SetDesiredVelocity(Vector2.zero);
-        }
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
     }
 
-    public void SetMoveAxis(Vector2 axis)
+    // Move with given axis (called by controller)
+    public void Move(Vector2 axis)
     {
-        moveAxis = axis;
-        HasMoveInput = axis.sqrMagnitude > 0f;
-        if (HasMoveInput) lastMove = axis.normalized;
+        moveAxis = axis; // Controller already normalized this
     }
 
     void Update()
     {
+        // Calculate and apply movement velocity
         Vector2 vel = moveAxis * c_Stats.MS;
-        controller?.SetDesiredVelocity(vel);
+        controller.SetDesiredVelocity(vel);
 
-        if (HasMoveInput)
-        {
-            animator?.SetFloat("moveX", moveAxis.x);
-            animator?.SetFloat("moveY", moveAxis.y);
-        }
-
-        var dir = HasMoveInput ? moveAxis : lastMove;
-        animator?.SetFloat("idleX", dir.x);
-        animator?.SetFloat("idleY", dir.y);
+        // Set movement animation
+        anim.SetFloat("moveX", moveAxis.x);
+        anim.SetFloat("moveY", moveAxis.y);
     }
 }
