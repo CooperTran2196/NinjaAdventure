@@ -21,38 +21,39 @@ public class E_Controller : MonoBehaviour, I_Controller
     public float attackStartBuffer = 0.2f;
            float attackInRangeTimer;  
 
-    Rigidbody2D rb;
-    Animator anim;
-    EState currentState;
-    State_Idle idle;
-    State_Wander wander;
-    State_Chase chase;
-    State_Attack attack;
-    C_Stats c_Stats;
-    C_Health c_Health;
+    Rigidbody2D     rb;
+    Animator        anim;
+
+    EState          currentState;
+    State_Idle      idle;
+    State_Wander    wander;
+    State_Chase     chase;
+    State_Attack    attack;
+    C_Stats         c_Stats;
+    C_Health        c_Health;
 
     // Runtime vars
-    Transform currentTarget;
-    Vector2 desiredVelocity;
-    Vector2 knockback;
-    bool isStunned;
-    bool isDead;
-    float stunUntil;
-    float attackCooldown; // for State_Attack
-    float contactTimer;   // for collision damage
+    Transform       currentTarget;
+    Vector2         desiredVelocity;
+    Vector2         knockback;
+    bool            isStunned;
+    bool            isDead;
+    float           stunUntil;
+    float           attackCooldown; // for State_Attack
+    float           contactTimer;   // for collision damage
 
     void Awake()
     {
-        rb       ??= GetComponent<Rigidbody2D>();
-        anim ??= GetComponentInChildren<Animator>();
-        idle = GetComponent<State_Idle>();
-        wander = GetComponent<State_Wander>();
-        chase = GetComponent<State_Chase>();
-        attack = GetComponent<State_Attack>();
-        c_Stats = GetComponent<C_Stats>();
-        c_Health = GetComponent<C_Health>();
-        c_Stats    ??= GetComponent<C_Stats>();
-        c_Health   ??= GetComponent<C_Health>();
+        rb          = GetComponent<Rigidbody2D>();
+        anim        = GetComponentInChildren<Animator>();
+
+        idle        = GetComponent<State_Idle>();
+        wander      = GetComponent<State_Wander>();
+        chase       = GetComponent<State_Chase>();
+        attack      = GetComponent<State_Attack>();
+        c_Stats     = GetComponent<C_Stats>();
+        c_Health    = GetComponent<C_Health>();
+
 
         if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller");
         if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller");
@@ -73,10 +74,10 @@ public class E_Controller : MonoBehaviour, I_Controller
     void OnDisable()
     {
         c_Health.OnDied -= HandleDeath;
-        idle.enabled   = false;
-        wander.enabled = false;
-        chase.enabled  = false;
-        attack.enabled = false;
+        idle.enabled    = false;
+        wander.enabled  = false;
+        chase.enabled   = false;
+        attack.enabled  = false;
     }
 
     void Update()
@@ -136,8 +137,6 @@ public class E_Controller : MonoBehaviour, I_Controller
                 break;
         }
     }
-
-
 
     void FixedUpdate()
     {
