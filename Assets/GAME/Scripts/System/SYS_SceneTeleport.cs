@@ -1,6 +1,8 @@
-using System.Collections;
+// <summary>
+// Teleports the player to a different scene and spawn point when they enter the trigger.
+// </summary>
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SYS_SceneTeleport : MonoBehaviour
 {

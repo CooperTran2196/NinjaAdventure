@@ -1,3 +1,7 @@
+// </summary>
+// Automatically finds and assigns the confiner collider for CinemachineConfiner2D on scene load.
+// </summary>
+
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;

@@ -1,3 +1,7 @@
+// <summary>
+// Spawns the player at the correct spawn point based on the last teleporter used.
+// </summary>
+
 using UnityEngine;
 
 public class SYS_SpawnPoint : MonoBehaviour
@@ -5,17 +9,13 @@ public class SYS_SpawnPoint : MonoBehaviour
     [Header("Must match the teleporter's Destination Spawn Id")]
     public string spawnId = "DoorA";
 
-    [Header("Optional: use this area's center as the arrival point")]
-    public BoxCollider2D arrivalArea; // leave null to use transform.position
-
     void Start()
     {
+        // Only move the player if this has the correct spawn ID
         if (SYS_SceneTeleport.nextSpawnId != spawnId) return;
 
+        // Find the player and move them here
         var player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        if (!player) return; // assume Player is present; no other guards
-
-        var pos = arrivalArea ? (Vector3)arrivalArea.bounds.center : transform.position;
-        player.position = pos;
+        player.position = transform.position;
     }
 }

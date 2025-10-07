@@ -9,6 +9,9 @@ public class SYS_GameManager : MonoBehaviour
     public D_HistoryTracker d_HistoryTracker;
     public SYS_Fader sys_Fader; // Centralized reference to Fader
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
 
@@ -29,9 +32,27 @@ public class SYS_GameManager : MonoBehaviour
             MarkPersistentObjects();
 
             // Fallback
-            sys_Fader ??= FindFirstObjectByType<SYS_Fader>(FindObjectsInactive.Include);
-            if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader reference not set. Scene transitions will be immediate.");
+            d_Manager ??= FindFirstObjectByType<D_Manager>();
+            sys_Fader ??= FindFirstObjectByType<SYS_Fader>();
+            audioSource ??= GetComponent<AudioSource>();
 
+            if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader is missing.");
+            if (!audioSource) Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
+
+            // Setup AudioSource
+            audioSource.loop = true;
+            audioSource.playOnAwake = false;
+        }
+    }
+
+    // Play music clip centrally
+    public void PlayMusic(AudioClip clip)
+    {
+        if (audioSource.clip != clip)
+        {
+            audioSource.Stop();
+            audioSource.clip = clip;
+            audioSource.Play();
         }
     }
 

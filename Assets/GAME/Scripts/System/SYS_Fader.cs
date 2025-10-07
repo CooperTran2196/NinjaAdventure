@@ -1,3 +1,7 @@
+// <summary>
+// Manages screen fade in/out transitions using an Animator.
+// </summary>
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +13,7 @@ public class SYS_Fader : MonoBehaviour
     void Awake()
     {
         animator ??= GetComponentInChildren<Animator>(true);
-        if (!animator) Debug.LogError("SYS_Fader: Animator missing.");
+        if (!animator) Debug.LogError("SYS_Fader: Animator is missing.");
     }
 
     public void FadeToScene(string sceneName)
