@@ -3,105 +3,65 @@ using UnityEngine;
 
 public class State_Attack : MonoBehaviour
 {
-    [Header("Target Layer")]
-    public LayerMask playerLayer;
+    [Header("References")]
+    public W_Base activeWeapon;          // controller passes this; assume Inspector is correct
+    public Vector2 attackDir;            // controller passes a normalized dir
 
-    [Header("Attack Cooldown")]
-    public float attackCooldown = 0.80f;
-    float attackDuration = 0.45f; // Default: 0.45f
-    float hitDelay = 0.15f; // Default: 0.15f
-    float attackRange;
+    [Header("Attack Timings")]
+    float attackDuration = 0.45f;
+    float hitDelay       = 0.15f;
 
-    [Header("Weapon")]
-    public W_Base activeWeapon;
-
-    // Cache
-    //Rigidbody2D rb;
-    Animator anim;
+    // cache
+    Animator     anim;
     E_Controller controller;
-
-    // Runtime
-    Transform target;
-    Vector2 lastFace = Vector2.down;
-    bool isAttacking;
-    public bool IsAttacking => isAttacking;
 
     void Awake()
     {
-        //rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        controller = GetComponent<E_Controller>();
-        activeWeapon = GetComponentInChildren<W_Base>();
-
-        //if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
-        if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
+        anim            = GetComponentInChildren<Animator>();
+        controller      = GetComponent<E_Controller>();
     }
-    
+
     void OnEnable()
     {
-        anim.SetBool("isAttacking", true);   // animator enter
+        anim.SetBool("isAttacking", true); // animator enter
     }
 
     void OnDisable()
     {
-        isAttacking = false;
-        // controller.SetDesiredVelocity(Vector2.zero);
-        //rb.linearVelocity = Vector2.zero;
-        anim.SetBool("isAttacking", false);
+        StopAllCoroutines(); // If enemy dies -> stop attack immediately
+        anim.SetBool("isAttacking", false); // Exit Attack animation by bool
+        controller?.SetAttacking(false); // Normal finish
     }
 
     void Update()
     {
-        // No movement while in attack state; controller still applies knockback globally
-        //controller.SetDesiredVelocity(Vector2.zero);
-
-        if (!target) return;
-
-        bool inInner = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-
-        Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-        float d = to.magnitude;
-        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
-
-        UpdateIdleFacing(isAttacking ? lastFace : dir);
-
-        if (!isAttacking && inInner && controller.GetAttackCooldown <= 0f)
-            StartCoroutine(AttackRoutine(dir));
-    }
-
-    // Set target + attack range
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
-    // Attack coroutine
-    IEnumerator AttackRoutine(Vector2 dirAtStart)
-    {
-        isAttacking = true;
-        //anim.SetBool("isAttacking", true);
-
-        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
-        anim.SetFloat("atkX", lastFace.x);
-        anim.SetFloat("atkY", lastFace.y);
-
-        UpdateIdleFacing(lastFace);
-
-        yield return new WaitForSeconds(hitDelay);
-        activeWeapon?.Attack(lastFace);
-        yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
-
-        controller.SetAttackCooldown(attackCooldown);
-        isAttacking = false;
-        //anim.SetBool("isAttacking", false);
-    }
-
-    // Update facing for idle state
-    void UpdateIdleFacing(Vector2 faceDir)
-    {
+        // Keep idle facing towards attack direction 
         anim.SetFloat("moveX", 0f);
         anim.SetFloat("moveY", 0f);
-        // Compute idle facing from last move/attack direction
-        Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
-        anim.SetFloat("idleX", f.x);
-        anim.SetFloat("idleY", f.y);
+        anim.SetFloat("idleX", attackDir.x);
+        anim.SetFloat("idleY", attackDir.y);
     }
+    
+    // Attack with weapon and direction (called by controller)
+    public void StartAttack(W_Base activeWeapon, Vector2 attackDir)
+    {
+        this.activeWeapon = activeWeapon;
+        this.attackDir = attackDir; // controller already normalized
+
+        anim.SetFloat("atkX", attackDir.x);
+        anim.SetFloat("atkY", attackDir.y);
+
+        StartCoroutine(AttackRoutine());
+    }
+
+    IEnumerator AttackRoutine()
+    {
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon.Attack(attackDir);
+        yield return new WaitForSeconds(attackDuration - hitDelay);
+
+        controller.SetAttacking(false); // Interrupted by Dead
+    }
+
+
 }

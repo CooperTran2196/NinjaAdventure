@@ -4,22 +4,18 @@ using UnityEngine;
 public class P_State_Movement : MonoBehaviour
 {
     // Cache
-    Animator anim;
-    C_Stats c_Stats;
+    Animator     anim;
+    C_Stats      c_Stats;
     P_Controller controller;
 
     // Runtime
-    Vector2 moveAxis;
+    Vector2      moveAxis;
 
     void Awake()
     {
         anim        = GetComponent<Animator>();
         c_Stats     = GetComponent<C_Stats>();
         controller  = GetComponent<P_Controller>();
-
-        if (!anim)          Debug.LogError("P_State_Movement: missing Animator");
-        if (!c_Stats)       Debug.LogError("P_State_Movement: missing C_Stats");
-        if (!controller)    Debug.LogError("P_State_Movement: missing P_Controller");
     }
 
     void OnEnable()
@@ -45,9 +41,6 @@ public class P_State_Movement : MonoBehaviour
         anim.SetFloat("moveY", moveAxis.y);
     }
 
-    // Move with given axis
-    public void SetMoveAxis(Vector2 moveAxis)
-    {
-        this.moveAxis = moveAxis; // Controller already normalized this
-    }
+    // Move with given axis, ontroller already normalized this
+    public void SetMoveAxis(Vector2 moveAxis) => this.moveAxis = moveAxis;
 }

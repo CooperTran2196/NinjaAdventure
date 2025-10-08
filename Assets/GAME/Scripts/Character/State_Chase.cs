@@ -1,79 +1,59 @@
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class State_Chase : MonoBehaviour
 {
     [Header("Tuning")]
-    public float stopBuffer = 0.10f;
+    [Min(0f)] public float stopBuffer = 0.10f; // used by controller’s axis calc
 
-    float attackRange = 1.2f;
-
-    // Cache
-    Rigidbody2D rb;
-    Animator anim;
-    C_Stats stats;
+    // cache
+    Animator     anim;
+    C_Stats      c_Stats;
     E_Controller controller;
 
-    // Runtime
-    Transform target;
-    Vector2 velocity, lastMove = Vector2.down;
+    // runtime
+    Vector2 moveAxis;
+    Vector2 lastMove = Vector2.down;
 
     void Awake()
     {
-        rb         = GetComponent<Rigidbody2D>();
-        anim       = GetComponent<Animator>();
-        stats      = GetComponent<C_Stats>();
-        controller = GetComponent<E_Controller>();
-
-        if (!stats) Debug.LogError($"{name}: C_Stats is missing in State_Chase");
+        anim        = GetComponent<Animator>();
+        c_Stats     = GetComponent<C_Stats>();
+        controller  = GetComponent<E_Controller>();
     }
 
-    void OnEnable() { anim.SetBool("isMoving", false); }
+    void OnEnable()
+    {
+        // Style-mirror P_State_Movement: state just publishes intent
+        // (We won’t force isMoving here; floats + axis drive anims cleanly.)
+    }
 
     void OnDisable()
     {
-        velocity = Vector2.zero;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        //rb.linearVelocity = Vector2.zero;
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
         anim.SetBool("isMoving", false);
     }
 
     void Update()
     {
-        // No movement while stunned/dead; controller still applies knockback globaly
-        if (!target)
-        {
-            velocity = Vector2.zero;
-            controller?.SetDesiredVelocity(Vector2.zero);
-            UpdateFloats(Vector2.zero);
-            anim.SetBool("isMoving", false);
-            return;
-        }
+        // Calculate and apply movement velocity
+        controller.SetDesiredVelocity(moveAxis * c_Stats.MS);
 
-        // Chase target
-        Vector2 toTarget  = (Vector2)target.position - (Vector2)transform.position;
-        float   distance  = toTarget.magnitude;
-        Vector2 direction = distance > 0.0001f ? toTarget.normalized : lastMove;
+        // Set movement animation
+        anim.SetFloat("moveX", moveAxis.x);
+        anim.SetFloat("moveY", moveAxis.y);
 
-        // Move if outside attack range + buffer
-        velocity = (distance > (attackRange + stopBuffer)) ? direction * stats.MS : Vector2.zero;
-        bool moving = velocity.sqrMagnitude > 0f;
-        anim.SetBool("isMoving", moving);
-
-        controller.SetDesiredVelocity(velocity);
-        UpdateFloats(velocity);
-    }
-
-    // Set target + attack range
-    public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
-
-    // Update animator floats
-    void UpdateFloats(Vector2 move)
-    {
-        if (move.sqrMagnitude > 0f) lastMove = move.normalized;
-        anim.SetFloat("moveX", move.x);
-        anim.SetFloat("moveY", move.y);
+        if (moveAxis.sqrMagnitude > 0f) lastMove = moveAxis;
         anim.SetFloat("idleX", lastMove.x);
         anim.SetFloat("idleY", lastMove.y);
+
+        // Optional: derive isMoving from axis (keeps old visuals)
+        bool moving = moveAxis.sqrMagnitude > 0f;
+        anim.SetBool("isMoving", moving);
     }
+
+    // Move with given axis, ontroller already normalized this
+    public void SetMoveAxis(Vector2 moveAxis) => this.moveAxis = moveAxis;
 }

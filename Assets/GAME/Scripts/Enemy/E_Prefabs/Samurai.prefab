@@ -248,6 +248,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   defaultState: 1
+  currentState: 0
+  activeWeapon: {fileID: 7533112647901652387}
   attackStartBuffer: 0.2
 --- !u!114 &101274308307014770
 MonoBehaviour:
@@ -278,8 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91086e46dce9d4f428f369972b0b371d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Idle
-  rb: {fileID: 7036650363267522476}
-  characterAnimator: {fileID: 7238414380048687834}
 --- !u!114 &4518364444093155301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,11 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1823d566930c3c449c377de26288752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::State_Attack
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  attackCooldown: 0.8
   activeWeapon: {fileID: 7533112647901652387}
+  attackDir: {x: 0, y: 0}
 --- !u!114 &8516599805102287338
 MonoBehaviour:
   m_ObjectHideFlags: 0

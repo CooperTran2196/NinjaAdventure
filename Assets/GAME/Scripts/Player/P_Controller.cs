@@ -9,8 +9,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(P_State_Attack))]
 [RequireComponent(typeof(P_State_Dodge))]
 [RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_Health))
-]
+[RequireComponent(typeof(C_Health))]
+
 public class P_Controller : MonoBehaviour
 {
     public enum PState { Idle, Move, Attack, Dodge, Dead }
@@ -48,37 +48,39 @@ public class P_Controller : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        c_Stats = GetComponent<C_Stats>();
+        rb       = GetComponent<Rigidbody2D>();
+        anim     = GetComponent<Animator>();
+        c_Stats  = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
 
-        idle = GetComponent<P_State_Idle>();
-        move = GetComponent<P_State_Movement>();
-        attack = GetComponent<P_State_Attack>();
-        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
+        idle     = GetComponent<P_State_Idle>();
+        move     = GetComponent<P_State_Movement>();
+        attack   = GetComponent<P_State_Attack>();
+        dodge    = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
 
         input ??= new P_InputActions();
 
-        anim?.SetFloat("moveX", 0f);
-        anim?.SetFloat("moveY", -1f);
-        anim?.SetFloat("idleX", 0f);
-        anim?.SetFloat("idleY", -1f);
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", -1f);
+        anim.SetFloat("idleX", 0f);
+        anim.SetFloat("idleY", -1f);
     }
 
     void OnEnable()
     {
         input.Enable();
-        c_Health.OnDied += () => SwitchState(PState.Dead);
+        c_Health.OnDied += OnDiedHandler;
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
         input.Disable();
-        c_Health.OnDied -= () => SwitchState(PState.Dead);
+        c_Health.OnDied -= OnDiedHandler;
         idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
     }
+
+    void OnDiedHandler() => SwitchState(PState.Dead);
 
     void Update()
     {
@@ -198,48 +200,52 @@ public class P_Controller : MonoBehaviour
         // Disable all states first
         idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
 
-
         switch (state)
         {
             case PState.Dead: // Highest priority
-                isDead = true;
-                // Ensure player not locked in a state after death
-                SetAttacking(false);
-                SetDodging(false);
-                knockback = Vector2.zero;
-                rb.linearVelocity = Vector2.zero;
-                SetDesiredVelocity(Vector2.zero);
+                desiredVelocity     = Vector2.zero;
+                knockback           = Vector2.zero;
+                rb.linearVelocity   = Vector2.zero;
+                isDead              = true;
+                isAttacking         = false;
+                isStunned           = false;
+                isDodging           = false;
+
                 anim.SetTrigger("Die");
                 break;
 
             case PState.Dodge:
-                dodge.enabled = true;
-                dodgeCooldown = c_Stats.dodgeCooldown;
-                SetDodging(true);
+                dodge.enabled       = true;
+                isDodging           = true;
+                dodgeCooldown       = c_Stats.dodgeCooldown;
+
                 dodge.Dodge(lastMove);
                 break;
 
             case PState.Attack:
-                SetDesiredVelocity(Vector2.zero);
-                attack.enabled = true;
+                desiredVelocity     = Vector2.zero;
+                attack.enabled      = true;
+
                 if (currentWeapon != null)
                 {
-                    attackCooldown = c_Stats.attackCooldown;
-                    isAttacking = true;
+                    attackCooldown  = c_Stats.attackCooldown;
+                    isAttacking     = true;
                     attack.Attack(currentWeapon, attackDir);
-                    currentWeapon = null;
+                    currentWeapon   = null;
                 }
                 break;
 
             case PState.Move:
                 move.enabled = true;
+
                 move.SetMoveAxis(moveAxis);
                 break;
 
             case PState.Idle: // Lowest priority
-                SetDesiredVelocity(Vector2.zero);
-                idle.enabled = true;
-                idle.SetIdleFacing(lastMove); // Pass the last movement direction for proper facing
+                desiredVelocity     = Vector2.zero;
+                idle.enabled        = true;
+
+                idle.SetIdleFacing(lastMove);
                 break;
         }
     }

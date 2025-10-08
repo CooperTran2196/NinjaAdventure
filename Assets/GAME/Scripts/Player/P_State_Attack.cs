@@ -1,16 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class P_State_Attack : MonoBehaviour
 {
     [Header("References")]
-    public W_Base weaponToUse;
+    public W_Base  activeWeapon;
     public Vector2 attackDir;
 
     [Header("Attack Timings")]
     float attackDuration = 0.45f;
-    float hitDelay = 0.15f;
+    float hitDelay       = 0.15f;
 
     // Cache
     Animator anim;
@@ -20,14 +19,11 @@ public class P_State_Attack : MonoBehaviour
     {
         anim        = GetComponent<Animator>();
         controller  = GetComponent<P_Controller>();
-
-        if (!anim) Debug.LogError("P_State_Attack: missing Animator");
-        if (!controller) Debug.LogError("P_State_Attack: missing P_Controller");
     }
 
     void OnEnable()
     {
-        anim.SetBool("isAttacking", true); // drives animator transitions
+        anim.SetBool("isAttacking", true); // animator enter
     }
 
     void OnDisable()
@@ -47,10 +43,10 @@ public class P_State_Attack : MonoBehaviour
     }
 
     // Attack with weapon and direction (called by controller)
-    public void Attack(W_Base weapon, Vector2 attackDir)
+    public void Attack(W_Base activeWeapon, Vector2 attackDir)
     {
-        weaponToUse = weapon;
-        this.attackDir = attackDir; // Controller already normalized this
+        this.activeWeapon = activeWeapon;
+        this.attackDir = attackDir; // Controller already normalized
 
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
@@ -62,7 +58,7 @@ public class P_State_Attack : MonoBehaviour
     IEnumerator AttackRoutine()
     {
         yield return new WaitForSeconds(hitDelay);
-        weaponToUse.Attack(attackDir);
+        activeWeapon.Attack(attackDir);
         yield return new WaitForSeconds(attackDuration - hitDelay);
 
         controller.SetAttacking(false); // Interrupted by Dead
