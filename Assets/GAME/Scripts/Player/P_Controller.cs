@@ -100,7 +100,7 @@ public class P_Controller : MonoBehaviour
         if (isDead) return;
 
         // Apply this frame: block state intent when stunned/dead, but still allow knockback
-        Vector2 baseVel = desiredVelocity;
+        Vector2 baseVel = isStunned ? Vector2.zero : desiredVelocity;
         rb.linearVelocity = baseVel + knockback;
 
         // Decay knockback for the NEXT frame (always decay - MoveTowards handles zero gracefully)
