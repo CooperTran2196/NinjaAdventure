@@ -34,5 +34,8 @@ public class State_Idle : MonoBehaviour
     }
 
     // Idle: no movement intent; controller handles knockback for all states
-    void Update() => controller?.SetDesiredVelocity(Vector2.zero);
+    void Update()
+    {
+        // controller?.SetDesiredVelocity(Vector2.zero);
+    }
 }

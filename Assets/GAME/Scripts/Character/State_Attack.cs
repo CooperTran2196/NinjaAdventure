@@ -16,7 +16,7 @@ public class State_Attack : MonoBehaviour
     public W_Base activeWeapon;
 
     // Cache
-    Rigidbody2D rb;
+    //Rigidbody2D rb;
     Animator anim;
     E_Controller controller;
 
@@ -28,27 +28,32 @@ public class State_Attack : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         controller = GetComponent<E_Controller>();
         activeWeapon = GetComponentInChildren<W_Base>();
 
-        if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
+        //if (!rb)    Debug.LogError($"{name}: Rigidbody2D is missing in State_Attack");
         if (!anim)  Debug.LogError($"{name}: Animator is missing in State_Attack");
+    }
+    
+    void OnEnable()
+    {
+        anim.SetBool("isAttacking", true);   // animator enter
     }
 
     void OnDisable()
     {
         isAttacking = false;
-        controller.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        // controller.SetDesiredVelocity(Vector2.zero);
+        //rb.linearVelocity = Vector2.zero;
         anim.SetBool("isAttacking", false);
     }
 
     void Update()
     {
         // No movement while in attack state; controller still applies knockback globally
-        controller.SetDesiredVelocity(Vector2.zero);
+        //controller.SetDesiredVelocity(Vector2.zero);
 
         if (!target) return;
 
@@ -72,7 +77,7 @@ public class State_Attack : MonoBehaviour
     IEnumerator AttackRoutine(Vector2 dirAtStart)
     {
         isAttacking = true;
-        anim.SetBool("isAttacking", true);
+        //anim.SetBool("isAttacking", true);
 
         if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         anim.SetFloat("atkX", lastFace.x);
@@ -86,7 +91,7 @@ public class State_Attack : MonoBehaviour
 
         controller.SetAttackCooldown(attackCooldown);
         isAttacking = false;
-        anim.SetBool("isAttacking", false);
+        //anim.SetBool("isAttacking", false);
     }
 
     // Update facing for idle state

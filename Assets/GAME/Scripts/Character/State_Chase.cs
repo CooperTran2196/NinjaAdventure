@@ -33,7 +33,7 @@ public class State_Chase : MonoBehaviour
     {
         velocity = Vector2.zero;
         controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        //rb.linearVelocity = Vector2.zero;
         anim.SetBool("isMoving", false);
     }
 

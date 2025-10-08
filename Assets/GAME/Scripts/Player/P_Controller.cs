@@ -9,7 +9,8 @@ public class P_Controller : MonoBehaviour
     [Header("Main controller for player input states")]
     [Header("References")]
     public PState defaultState = PState.Idle;
-
+    public PState currentState;
+    
     [Header("Weapons")]
     public W_Base meleeWeapon;
     public W_Base rangedWeapon;
@@ -21,7 +22,6 @@ public class P_Controller : MonoBehaviour
     Animator anim;
     P_InputActions input;
 
-    PState currentState;
     P_State_Idle idle;
     P_State_Movement move;
     P_State_Attack attack;

@@ -57,8 +57,8 @@ public class State_Wander : MonoBehaviour
         anim.SetBool("isWandering", false);
         StopAllCoroutines();
         isWandering = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        // controller?.SetDesiredVelocity(Vector2.zero);
+        // rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -94,7 +94,7 @@ public class State_Wander : MonoBehaviour
     {
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        //rb.linearVelocity = Vector2.zero;
         anim.Play("Idle");
 
         yield return new WaitForSeconds(pauseDuration);

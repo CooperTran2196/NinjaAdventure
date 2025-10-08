@@ -16,7 +16,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     [Min(1.2f)] public float attackRange = 1.2f;
                 public LayerMask playerLayer;
                 public EState defaultState = EState.Idle;
-
+                public EState          currentState;
     [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
     public float attackStartBuffer = 0.2f;
            float attackInRangeTimer;  
@@ -24,7 +24,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     Rigidbody2D     rb;
     Animator        anim;
 
-    EState          currentState;
+
     State_Idle      idle;
     State_Wander    wander;
     State_Chase     chase;
@@ -208,9 +208,9 @@ public class E_Controller : MonoBehaviour, I_Controller
         if (currentState == s) return;
         currentState = s;
 
-        idle.enabled = (s == EState.Idle);
+        idle.enabled   = (s == EState.Idle);
         wander.enabled = (s == EState.Wander);
-        chase.enabled = (s == EState.Chase);
+        chase.enabled  = (s == EState.Chase);
         attack.enabled = (s == EState.Attack);
 
         // On enter, provide context to newly enabled state
@@ -221,6 +221,7 @@ public class E_Controller : MonoBehaviour, I_Controller
         }
         else if (s == EState.Attack)
         {
+            SetDesiredVelocity(Vector2.zero);
             attack.SetTarget(currentTarget);
             attack.SetRanges(attackRange);
         }
