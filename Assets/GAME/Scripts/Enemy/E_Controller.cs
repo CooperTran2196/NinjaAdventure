@@ -2,13 +2,18 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(State_Idle))]
+[RequireComponent(typeof(State_Wander))]
+[RequireComponent(typeof(State_Chase))]
+[RequireComponent(typeof(State_Attack))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
 
 public class E_Controller : MonoBehaviour, I_Controller
 {
-    public enum EState { Idle, Wander, Chase, Attack }
+    public enum EState { Idle, Wander, Chase, Attack, Dead }
 
     [Header("Main controller for enemy AI states")]
     [Header("References")]
@@ -16,14 +21,14 @@ public class E_Controller : MonoBehaviour, I_Controller
     [Min(1.2f)] public float attackRange = 1.2f;
                 public LayerMask playerLayer;
                 public EState defaultState = EState.Idle;
-                public EState          currentState;
+                public EState currentState;
+                
     [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
     public float attackStartBuffer = 0.2f;
            float attackInRangeTimer;  
 
     Rigidbody2D     rb;
     Animator        anim;
-
 
     State_Idle      idle;
     State_Wander    wander;
@@ -34,13 +39,10 @@ public class E_Controller : MonoBehaviour, I_Controller
 
     // Runtime vars
     Transform       currentTarget;
-    Vector2         desiredVelocity;
-    Vector2         knockback;
-    bool            isStunned;
-    bool            isDead;
-    float           stunUntil;
-    float           attackCooldown; // for State_Attack
-    float           contactTimer;   // for collision damage
+    Vector2         knockback, desiredVelocity;
+    bool            isStunned, isDead;    
+    float           stunUntil, attackCooldown, contactTimer;
+
 
     void Awake()
     {
@@ -53,16 +55,6 @@ public class E_Controller : MonoBehaviour, I_Controller
         attack      = GetComponent<State_Attack>();
         c_Stats     = GetComponent<C_Stats>();
         c_Health    = GetComponent<C_Health>();
-
-
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller");
-        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller");
-        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller");
-        if (!wander) Debug.LogError($"{name}: State_Wander is missing in E_Controller");
-        if (!chase) Debug.LogError($"{name}: State_Chase is missing in E_Controller");
-        if (!attack) Debug.LogError($"{name}: State_Attack is missing in E_Controller");
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Controller");
-        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Controller");
     }
 
     void OnEnable()

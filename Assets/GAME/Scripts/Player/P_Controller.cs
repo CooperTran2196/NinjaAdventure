@@ -2,6 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animation))]
+[RequireComponent(typeof(P_State_Idle))]
+[RequireComponent(typeof(P_State_Movement))]
+[RequireComponent(typeof(P_State_Attack))]
+[RequireComponent(typeof(P_State_Dodge))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))
+]
 public class P_Controller : MonoBehaviour
 {
     public enum PState { Idle, Move, Attack, Dodge, Dead }
@@ -10,7 +19,7 @@ public class P_Controller : MonoBehaviour
     [Header("References")]
     public PState defaultState = PState.Idle;
     public PState currentState;
-    
+
     [Header("Weapons")]
     public W_Base meleeWeapon;
     public W_Base rangedWeapon;
@@ -18,21 +27,21 @@ public class P_Controller : MonoBehaviour
     [Header("Debug")]
     public bool autoKill;
 
-    Rigidbody2D rb;
-    Animator anim;
-    P_InputActions input;
+    Rigidbody2D     rb;
+    Animator        anim;
+    P_InputActions  input;
 
-    P_State_Idle idle;
-    P_State_Movement move;
-    P_State_Attack attack;
-    P_State_Dodge dodge;  // Changed from State_Dodge to P_State_Dodge
-    C_Stats c_Stats;
-    C_Health c_Health;
+    P_State_Idle        idle;
+    P_State_Movement    move;
+    P_State_Attack      attack;
+    P_State_Dodge       dodge;
+    C_Stats             c_Stats;
+    C_Health            c_Health;
 
     // Runtime vars - grouped by type
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
-    bool isDead, isStunned, isAttacking, isDodging;
-    float stunUntil, attackCooldown, dodgeCooldown;
+    bool    isDead, isStunned, isAttacking, isDodging;
+    float   stunUntil, attackCooldown, dodgeCooldown;
     W_Base currentWeapon;
 
     const float MIN_DISTANCE = 0.000001f;
@@ -50,26 +59,11 @@ public class P_Controller : MonoBehaviour
         dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
 
         input ??= new P_InputActions();
-        ValidateComponents();
+
         anim?.SetFloat("moveX", 0f);
         anim?.SetFloat("moveY", -1f);
         anim?.SetFloat("idleX", 0f);
         anim?.SetFloat("idleY", -1f);
-    }
-
-    void ValidateComponents()
-    {
-        var missing = new System.Collections.Generic.List<string>();
-        if (!rb) missing.Add("Rigidbody2D");
-        if (!anim) missing.Add("Animator");
-        if (!c_Stats) missing.Add("C_Stats");
-        if (!c_Health) missing.Add("C_Health");
-        if (!idle) missing.Add("P_State_Idle");
-        if (!move) missing.Add("P_State_Movement");
-        if (!attack) missing.Add("P_State_Attack");
-        if (!dodge) missing.Add("P_State_Dodge");  // Changed from State_Dodge to P_State_Dodge
-        if (missing.Count > 0)
-            Debug.LogError($"P_Controller: Missing components: {string.Join(", ", missing)}");
     }
 
     void OnEnable()
@@ -113,10 +107,10 @@ public class P_Controller : MonoBehaviour
 
     // I_Controller
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    public void ReceiveKnockback(Vector2 knockback)         => this.knockback += knockback;
+    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
     // State setters for external components
-    public void SetAttacking(bool value)                    => isAttacking = value;
-    public void SetDodging(bool value)                      => isDodging = value;
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void SetDodging(bool value) => isDodging = value;
 
     // Convert mouse position to world direction
     Vector2 ReadMouseAim()
@@ -140,7 +134,7 @@ public class P_Controller : MonoBehaviour
 
         // Don't interrupt while atacking or dodging
         if (currentState == PState.Attack && isAttacking) return;
-        if (currentState == PState.Dodge  && isDodging)   return;
+        if (currentState == PState.Dodge && isDodging) return;
 
         // Handle dodge input (high)
         if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
@@ -249,7 +243,7 @@ public class P_Controller : MonoBehaviour
                 break;
         }
     }
-    
+
     // STUN FEATURE (same as enemy)
     public IEnumerator StunFor(float duration)
     {
