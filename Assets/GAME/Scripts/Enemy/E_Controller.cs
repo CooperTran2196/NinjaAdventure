@@ -191,15 +191,15 @@ public class E_Controller : MonoBehaviour, I_Controller
     }
 
     // Switch states, enabling the chosen one and disabling others
-    public void SwitchState(EState s)
+    public void SwitchState(EState state)
     {
-        if (currentState == s) return;
-        currentState = s;
+        if (currentState == state) return;
+        currentState = state;
 
         // disable all states first
         idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
 
-        switch (s)
+        switch (state)
         {
             case EState.Dead: // Highest priority
                 desiredVelocity     = Vector2.zero;
