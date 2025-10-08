@@ -21,10 +21,10 @@ public class P_State_Dodge : MonoBehaviour
         controller  ??= GetComponent<P_Controller>();
         afterimage  ??= GetComponent<C_AfterimageSpawner>();
 
-        if (!anim)       Debug.LogError("State_Dodge: Missing Animator");
-        if (!stats)      Debug.LogError("State_Dodge: Missing C_Stats");
-        if (!controller) Debug.LogError("State_Dodge: Missing P_Controller");
-        if (!afterimage) Debug.LogError("State_Dodge: Missing C_AfterimageSpawner");
+        if (!anim)       Debug.LogError("P_State_Dodge: Missing Animator");
+        if (!stats)      Debug.LogError("P_State_Dodge: Missing C_Stats");
+        if (!controller) Debug.LogError("P_State_Dodge: Missing P_Controller");
+        if (!afterimage) Debug.LogError("P_State_Dodge: Missing C_AfterimageSpawner");
     }
 
     void OnEnable()
@@ -34,8 +34,8 @@ public class P_State_Dodge : MonoBehaviour
 
     void OnDisable()
     {
-        StopAllCoroutines(); // If player dies -> stop attack immediately
-        anim.SetBool("isDodging", false); // Exit Attack animation by bool
+        StopAllCoroutines(); // If player dies -> stop dodge immediately
+        anim.SetBool("isDodging", false); // Exit dodge animation by bool
         controller.SetDodging(false); // Normal finish
     }
 

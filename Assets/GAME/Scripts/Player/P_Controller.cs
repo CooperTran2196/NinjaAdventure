@@ -14,10 +14,6 @@ public class P_Controller : MonoBehaviour
     public W_Base meleeWeapon;
     public W_Base rangedWeapon;
 
-    [Header("Attack Settings")]
-    public float attackDuration = 0.45f;
-    public float hitDelay = 0.15f;
-
     [Header("Debug")]
     public bool autoKill;
 
@@ -26,16 +22,16 @@ public class P_Controller : MonoBehaviour
     P_InputActions input;
 
     PState currentState;
-    P_State_Idle idle;  // Changed from State_Idle to P_State_Idle
+    P_State_Idle idle;
     P_State_Movement move;
     P_State_Attack attack;
-    State_Dodge dodge;
+    P_State_Dodge dodge;  // Changed from State_Dodge to P_State_Dodge
     C_Stats c_Stats;
     C_Health c_Health;
 
     // Runtime vars - grouped by type
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
-    bool isStunned, isDead, isAttacking;
+    bool isDead, isStunned, isAttacking, isDodging;
     float stunUntil, attackCooldown, dodgeCooldown;
     W_Base currentWeapon;
 
@@ -48,10 +44,10 @@ public class P_Controller : MonoBehaviour
         c_Stats = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
 
-        idle = GetComponent<P_State_Idle>();  // Changed from State_Idle to P_State_Idle
+        idle = GetComponent<P_State_Idle>();
         move = GetComponent<P_State_Movement>();
         attack = GetComponent<P_State_Attack>();
-        dodge = GetComponent<State_Dodge>();
+        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
 
         input ??= new P_InputActions();
         ValidateComponents();
@@ -68,10 +64,10 @@ public class P_Controller : MonoBehaviour
         if (!anim) missing.Add("Animator");
         if (!c_Stats) missing.Add("C_Stats");
         if (!c_Health) missing.Add("C_Health");
-        if (!idle) missing.Add("P_State_Idle");  // Changed from State_Idle to P_State_Idle
+        if (!idle) missing.Add("P_State_Idle");
         if (!move) missing.Add("P_State_Movement");
         if (!attack) missing.Add("P_State_Attack");
-        if (!dodge) missing.Add("State_Dodge");
+        if (!dodge) missing.Add("P_State_Dodge");  // Changed from State_Dodge to P_State_Dodge
         if (missing.Count > 0)
             Debug.LogError($"P_Controller: Missing components: {string.Join(", ", missing)}");
     }
@@ -116,10 +112,11 @@ public class P_Controller : MonoBehaviour
     }
 
     // I_Controller
-    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void ReceiveKnockback(Vector2 knockback)         => this.knockback += knockback;
     // State setters for external components
-    public void SetAttacking(bool value) => isAttacking = value;
+    public void SetAttacking(bool value)                    => isAttacking = value;
+    public void SetDodging(bool value)                      => isDodging = value;
 
     // Convert mouse position to world direction
     Vector2 ReadMouseAim()
@@ -134,24 +131,25 @@ public class P_Controller : MonoBehaviour
 
     void ProcessInputs()
     {
-        // Handle death first (highest priority)
+        // Handle death first (highest)
         if (c_Stats.currentHP <= 0)
         {
             SwitchState(PState.Dead);
             return;
         }
 
-        // Don't interrupt ongoing attacks
+        // Don't interrupt while atacking or dodging
         if (currentState == PState.Attack && isAttacking) return;
+        if (currentState == PState.Dodge  && isDodging)   return;
 
-        // Handle dodge input (high priority)
+        // Handle dodge input (high)
         if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
         {
             SwitchState(PState.Dodge);
             return;
         }
 
-        // Handle attack inputs (medium priority)
+        // Handle attack inputs (mid)
         if (attackCooldown <= 0f)
         {
             Vector2 mouseAim = ReadMouseAim();
@@ -174,10 +172,22 @@ public class P_Controller : MonoBehaviour
         // Handle movement input (low priority)
         moveAxis = input.Player.Move.ReadValue<Vector2>();
         if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
-        if (moveAxis.sqrMagnitude > MIN_DISTANCE) 
+
+        if (moveAxis.sqrMagnitude > MIN_DISTANCE)
         {
             lastMove = moveAxis;
-            SwitchState(PState.Move);
+
+            // Continue moving if already in Move state
+            if (currentState == PState.Move)
+            {
+                // refresh axis without flipping states
+                move.SetMoveAxis(moveAxis);
+            }
+            else // Switch to Move state if not already
+            {
+                SwitchState(PState.Move);
+                move.SetMoveAxis(moveAxis);
+            }
             return;
         }
 
@@ -192,27 +202,31 @@ public class P_Controller : MonoBehaviour
         currentState = state;
 
         // Disable all states first
-        idle.enabled = false;
-        move.enabled = false;
-        attack.enabled = false;
-        dodge.enabled = false;
+        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
+
 
         switch (state)
         {
             case PState.Dead: // Highest priority
                 isDead = true;
+                // Ensure player not locked in a state after death
+                SetAttacking(false);
+                SetDodging(false);
                 knockback = Vector2.zero;
                 rb.linearVelocity = Vector2.zero;
+                SetDesiredVelocity(Vector2.zero);
                 anim.SetTrigger("Die");
                 break;
 
             case PState.Dodge:
                 dodge.enabled = true;
                 dodgeCooldown = c_Stats.dodgeCooldown;
+                SetDodging(true);
                 dodge.Dodge(lastMove);
                 break;
 
             case PState.Attack:
+                SetDesiredVelocity(Vector2.zero);
                 attack.enabled = true;
                 if (currentWeapon != null)
                 {
@@ -225,10 +239,11 @@ public class P_Controller : MonoBehaviour
 
             case PState.Move:
                 move.enabled = true;
-                move.Move(moveAxis);
+                move.SetMoveAxis(moveAxis);
                 break;
 
             case PState.Idle: // Lowest priority
+                SetDesiredVelocity(Vector2.zero);
                 idle.enabled = true;
                 idle.SetIdleFacing(lastMove); // Pass the last movement direction for proper facing
                 break;

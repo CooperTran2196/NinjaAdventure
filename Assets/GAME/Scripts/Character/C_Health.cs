@@ -35,7 +35,7 @@ public class C_Health : MonoBehaviour
     void Awake()
     {
         c_Stats ??= GetComponent<C_Stats>();
-        c_Dodge ??= GetComponent<C_Dodge>();
+        c_Dodge ??= GetComponent<C_Dodge>() ;
         fx      ??= GetComponent<C_FX>();
 
         if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Health");
