@@ -101,7 +101,7 @@ public class P_Controller : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead || isStunned) return;
+        if (isDead) return;
 
         // Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = desiredVelocity;
