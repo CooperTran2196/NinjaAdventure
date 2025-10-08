@@ -27,36 +27,36 @@ public class P_Controller : MonoBehaviour
     [Header("Debug")]
     public bool autoKill;
 
-    Rigidbody2D     rb;
-    Animator        anim;
-    P_InputActions  input;
+    Rigidbody2D rb;
+    Animator anim;
+    P_InputActions input;
 
-    P_State_Idle        idle;
-    P_State_Movement    move;
-    P_State_Attack      attack;
-    P_State_Dodge       dodge;
-    C_Stats             c_Stats;
-    C_Health            c_Health;
+    P_State_Idle idle;
+    P_State_Movement move;
+    P_State_Attack attack;
+    P_State_Dodge dodge;
+    C_Stats c_Stats;
+    C_Health c_Health;
 
     // Runtime vars - grouped by type
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
-    bool    isDead, isStunned, isAttacking, isDodging;
-    float   stunUntil, attackCooldown, dodgeCooldown;
+    bool isDead, isStunned, isAttacking, isDodging;
+    float stunUntil, attackCooldown, dodgeCooldown;
     W_Base currentWeapon;
 
     const float MIN_DISTANCE = 0.000001f;
 
     void Awake()
     {
-        rb       = GetComponent<Rigidbody2D>();
-        anim     = GetComponent<Animator>();
-        c_Stats  = GetComponent<C_Stats>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        c_Stats = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
 
-        idle     = GetComponent<P_State_Idle>();
-        move     = GetComponent<P_State_Movement>();
-        attack   = GetComponent<P_State_Attack>();
-        dodge    = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
+        idle = GetComponent<P_State_Idle>();
+        move = GetComponent<P_State_Movement>();
+        attack = GetComponent<P_State_Attack>();
+        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
 
         input ??= new P_InputActions();
 
@@ -106,13 +106,6 @@ public class P_Controller : MonoBehaviour
         // Decay knockback for the NEXT frame (always decay - MoveTowards handles zero gracefully)
         knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
     }
-
-    // I_Controller
-    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
-    // State setters for external components
-    public void SetAttacking(bool value) => isAttacking = value;
-    public void SetDodging(bool value) => isDodging = value;
 
     // Convert mouse position to world direction
     Vector2 ReadMouseAim()
@@ -203,35 +196,35 @@ public class P_Controller : MonoBehaviour
         switch (state)
         {
             case PState.Dead: // Highest priority
-                desiredVelocity     = Vector2.zero;
-                knockback           = Vector2.zero;
-                rb.linearVelocity   = Vector2.zero;
-                isDead              = true;
-                isAttacking         = false;
-                isStunned           = false;
-                isDodging           = false;
+                desiredVelocity = Vector2.zero;
+                knockback = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
+                isDead = true;
+                isAttacking = false;
+                isStunned = false;
+                isDodging = false;
 
                 anim.SetTrigger("Die");
                 break;
 
             case PState.Dodge:
-                dodge.enabled       = true;
-                isDodging           = true;
-                dodgeCooldown       = c_Stats.dodgeCooldown;
+                dodge.enabled = true;
+                isDodging = true;
+                dodgeCooldown = c_Stats.dodgeCooldown;
 
                 dodge.Dodge(lastMove);
                 break;
 
             case PState.Attack:
-                desiredVelocity     = Vector2.zero;
-                attack.enabled      = true;
+                desiredVelocity = Vector2.zero;
+                attack.enabled = true;
 
                 if (currentWeapon != null)
                 {
-                    attackCooldown  = c_Stats.attackCooldown;
-                    isAttacking     = true;
+                    attackCooldown = c_Stats.attackCooldown;
+                    isAttacking = true;
                     attack.Attack(currentWeapon, attackDir);
-                    currentWeapon   = null;
+                    currentWeapon = null;
                 }
                 break;
 
@@ -242,8 +235,8 @@ public class P_Controller : MonoBehaviour
                 break;
 
             case PState.Idle: // Lowest priority
-                desiredVelocity     = Vector2.zero;
-                idle.enabled        = true;
+                desiredVelocity = Vector2.zero;
+                idle.enabled = true;
 
                 idle.SetIdleFacing(lastMove);
                 break;
@@ -264,4 +257,10 @@ public class P_Controller : MonoBehaviour
 
         isStunned = false;
     }
+
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
+    // State setters for external components
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void SetDodging(bool value) => isDodging = value;
 }

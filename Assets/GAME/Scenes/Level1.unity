@@ -10572,17 +10572,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6719458916665729831, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
   m_PrefabInstance: {fileID: 6358073895188072921}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &648076223 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2954278703874851257, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
-  m_PrefabInstance: {fileID: 6358073895188072921}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 648076222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e71c99221bfc144fa1be6735ace40bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::D_LocationHistoryTracker
 --- !u!114 &648076224 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2642791382427067942, guid: 510deaad2a4094788b78f00b7baf4439, type: 3}
@@ -10723,7 +10712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e66147358f2443ab9de1121ffdeae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Attack
-  weaponToUse: {fileID: 0}
+  activeWeapon: {fileID: 0}
   attackDir: {x: 0, y: 0}
 --- !u!114 &714147544
 MonoBehaviour:
@@ -10737,6 +10726,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d90b1b90635464f33b3e584111ce61b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Dodge
+--- !u!111 &714147545
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714147508}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &720760827 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5792589715836186760, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
@@ -12414,28 +12419,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1081767116 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8725053703916178526, guid: 8108473549d9446eda31f13ca404be9b, type: 3}
-  m_PrefabInstance: {fileID: 1946107480511362754}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3642536698534455747}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f1f3e66fdfab4d81a6caf832cb27420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::State_Attack_Boss
---- !u!114 &1081767117 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8334891282649567, guid: 8108473549d9446eda31f13ca404be9b, type: 3}
-  m_PrefabInstance: {fileID: 1946107480511362754}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3642536698534455747}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61b522976e17f4301aec70bc8c09d0ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::State_Chase_Boss
 --- !u!1 &1089250877
 GameObject:
   m_ObjectHideFlags: 0
@@ -15930,7 +15913,7 @@ PrefabInstance:
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: d_LocationHistoryTracker
       value: 
-      objectReference: {fileID: 648076223}
+      objectReference: {fileID: 0}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: persistentObjects.Array.size
       value: 11
@@ -16141,17 +16124,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.7356529, y: 0.6907654}
   m_EdgeRadius: 0
---- !u!114 &931543977160454281 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3473422860038880936, guid: 8108473549d9446eda31f13ca404be9b, type: 3}
-  m_PrefabInstance: {fileID: 1946107480511362754}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3642536698534455747}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff49db1c29d709045a82e623391fbb51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Wander
 --- !u!1001 &1302750343735015863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18630,6 +18602,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5589123278789176120, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       insertIndex: -1
       addedObject: {fileID: 714147541}
+    - targetCorrespondingSourceObject: {fileID: 5589123278789176120, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 714147545}
   m_SourcePrefab: {fileID: 100100000, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
 --- !u!1 &7068938082304882295
 GameObject:
@@ -18650,17 +18625,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7341859782236925436 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8152181732937082029, guid: 8108473549d9446eda31f13ca404be9b, type: 3}
-  m_PrefabInstance: {fileID: 1946107480511362754}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3642536698534455747}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91086e46dce9d4f428f369972b0b371d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Idle
 --- !u!114 &7493859613101852543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18769,6 +18733,7 @@ GameObject:
   - component: {fileID: 8850173786437098345}
   - component: {fileID: 8850173786437098344}
   - component: {fileID: 8850173786437098348}
+  - component: {fileID: 8850173786437098349}
   m_Layer: 6
   m_Name: Testing Player
   m_TagString: Player
@@ -19440,7 +19405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e66147358f2443ab9de1121ffdeae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Attack
-  weaponToUse: {fileID: 0}
+  activeWeapon: {fileID: 0}
   attackDir: {x: 0, y: 0}
 --- !u!114 &8850173786437098345
 MonoBehaviour:
@@ -19496,6 +19461,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Idle
   lastFaceDirection: {x: 0, y: -1}
+--- !u!111 &8850173786437098349
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743439490061319788}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!114 &8981228775121585865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19509,10 +19490,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::B_Controller
   defaultState: 1
-  idle: {fileID: 7341859782236925436}
-  wander: {fileID: 931543977160454281}
-  chase: {fileID: 1081767117}
-  attack: {fileID: 1081767116}
+  idle: {fileID: 0}
+  wander: {fileID: 0}
+  chase: {fileID: 0}
+  attack: {fileID: 0}
   detectionRange: 8
   attackRange: 2
   playerLayer:

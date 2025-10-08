@@ -24,7 +24,7 @@ public class E_Controller : MonoBehaviour, I_Controller
                 public EState currentState;
                 
     [Header("Weapons")]
-    public W_Base activeWeapon;
+    // public W_Base activeWeapon; // No longer needed, State_Attack will handle it
 
     [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
     public float attackStartBuffer = 0.2f;  
@@ -41,11 +41,9 @@ public class E_Controller : MonoBehaviour, I_Controller
 
     // Runtime vars
     Transform       currentTarget;
-    Vector2         knockback, desiredVelocity, attackDir, lastAimDir;
+    Vector2         knockback, desiredVelocity; //, attackDir, lastAimDir;
     bool            isStunned, isDead, isAttacking;    
     float           stunUntil, attackCooldown, attackInRangeTimer, contactTimer;
-
-    const float MIN_DISTANCE = 0.000001f;
 
     void Awake()
     {
@@ -58,7 +56,6 @@ public class E_Controller : MonoBehaviour, I_Controller
         attack       = GetComponent<State_Attack>();
         c_Stats      = GetComponent<C_Stats>();
         c_Health     = GetComponent<C_Health>();
-        activeWeapon = GetComponentInChildren<W_Base>();
 
         anim.SetFloat("moveX", 0f);
         anim.SetFloat("moveY", -1f);
@@ -69,8 +66,6 @@ public class E_Controller : MonoBehaviour, I_Controller
     void OnEnable()
     {
         c_Health.OnDied += OnDiedHandler;
-        // desiredVelocity  = Vector2.zero;
-        // rb.linearVelocity = Vector2.zero;
         SwitchState(defaultState);
     }
 
@@ -78,9 +73,6 @@ public class E_Controller : MonoBehaviour, I_Controller
     {
         c_Health.OnDied -= OnDiedHandler;
         idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
-        
-        // desiredVelocity  = Vector2.zero;
-        // rb.linearVelocity = Vector2.zero;
     }
 
     void OnDiedHandler() => SwitchState(EState.Dead);
@@ -96,98 +88,59 @@ public class E_Controller : MonoBehaviour, I_Controller
 
     void FixedUpdate()
     {
-        if (isDead) return;
-
         // Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
         rb.linearVelocity = baseVel + knockback;
 
         // Decay knockback for the NEXT frame
-        knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
-    }
-
-    // Set/Get attack cooldown timer for use by State_Attack
-    public float GetAttackCooldown => attackCooldown;
-    public void SetAttackCooldown(float attackCooldown) => this.attackCooldown = attackCooldown;
-    // Only E_Controller handle the movement + knockback
-    // Helper for State scripts to read/write movement intent + apply knockback
-    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    // W_Knockback now calls this first, so all states get shoved uniformly
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
-    public void SetAttacking(bool value) => isAttacking = value;
-
-    Vector2 ComputeAimDir() // for attacks
-    {
-        Vector2 dirToTarget = (Vector2)currentTarget.position - (Vector2)transform.position;
-        if (dirToTarget.sqrMagnitude > MIN_DISTANCE)
-            return dirToTarget.normalized;
-        else
-            return Vector2.zero;
-    }
-
-    Vector2 ComputeChaseDir() // for chase axis
-    {
-        if (!currentTarget) return Vector2.zero;
-        Vector2 to = (Vector2)currentTarget.position - (Vector2)transform.position;
-        float dist = to.magnitude;
-        if (dist <= MIN_DISTANCE) return Vector2.zero;
-
-        float stop = attackRange + (chase ? chase.stopBuffer : 0f);
-        return (dist > stop) ? (to / dist) : Vector2.zero; // normalized or zero if within stop band
+        if (!isDead)
+        {
+            knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
+        }
     }
 
     void ProcessAI()
     {
-        // 1/ Check if dead
+        // 1/ Early exit conditions
         if (c_Stats.currentHP <= 0)
         {
             SwitchState(EState.Dead);
             return;
         }
 
-        // 2/ Sense player
-        // Always check attackCircle first. If this hits the target -> the target also inside the detectionCircle
-        Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-        // No target in attackCircle -> check the detectionCircle
-        Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
+        // Never interrupt an active attack animation
+        if (isAttacking) return;
 
-        // Check true/false for each circle depending on target location
-        bool targetInsideAttackCircle    = attackCircle;
-        bool targetInsideDetectionCircle = detectionCircle;
+        // 2/ Sense for the player and update target
+        Collider2D targetInAttackRange = Physics2D.OverlapCircle(transform.position, attackRange, playerLayer);
+        Collider2D targetInDetectRange = targetInAttackRange ?? Physics2D.OverlapCircle(transform.position, detectionRange, playerLayer);
 
-        // Set current target transform if inside either circle
-        Vector2 chaseAxis = Vector2.zero;
-        if (targetInsideDetectionCircle)
+        currentTarget = targetInDetectRange ? targetInDetectRange.transform : null;
+
+        // 3/ Decide on the next state based on target's position
+        if (currentTarget == null)
         {
-            currentTarget = detectionCircle.transform;
-            attackDir = ComputeAimDir();          // safe: currentTarget just set
-            chaseAxis = ComputeChaseDir();        // normalized or zero if within stop band
-        }
-
-        // Target need to be inside attack circle for a short time before attacking
-        if (targetInsideAttackCircle) attackInRangeTimer += Time.deltaTime;
-        else attackInRangeTimer = 0f;
-
-        // Only ready to attack if: inside attack circle long enough AND off cooldown
-        bool readyToAttack = targetInsideAttackCircle
-                          && attackInRangeTimer >= attackStartBuffer
-                          && attackCooldown <= 0f;
-
-        // 3/ NEVER interrupt an active clip
-        if (currentState == EState.Attack && isAttacking) return;
-
-        // 4/ Decide to chase/attack
-        if (readyToAttack) { SwitchState(EState.Attack); return; }
-        if (targetInsideDetectionCircle)
-        {
-            chase.SetMoveAxis(chaseAxis);
-            SwitchState(EState.Chase);
+            SwitchState(defaultState);
+            attackInRangeTimer = 0f; // Reset timer when no target
             return;
         }
 
-        // 5/ Fallback
-        chase.SetMoveAxis(Vector2.zero);
-        SwitchState(defaultState);
+        // Update timer only when a target is in attack range
+        if (targetInAttackRange)
+            attackInRangeTimer += Time.deltaTime;
+
+        else // Reset if target steps out of range
+            attackInRangeTimer = 0f;
+
+        // Check if conditions are met to perform an attack
+        bool canAttack = targetInAttackRange 
+                      && attackInRangeTimer >= attackStartBuffer 
+                      && attackCooldown <= 0f;
+
+        if (canAttack)
+            SwitchState(EState.Attack);
+        else // If not attacking, but target is detected, chase it
+            SwitchState(EState.Chase);
     }
 
     // Switch states, enabling the chosen one and disabling others
@@ -217,17 +170,10 @@ public class E_Controller : MonoBehaviour, I_Controller
                 attack.enabled      = true;
                 isAttacking         = true;
                 attackCooldown      = c_Stats.attackCooldown;
-                attack.StartAttack(activeWeapon, attackDir);
-                // attack.SetTarget(currentTarget);
-                // attack.SetRanges(attackRange);
-                // cooldown & “attacking” are still driven by State_Attack (no logic change)
                 break;
 
             case EState.Chase:
                 chase.enabled       = true;
-
-                // chase.SetTarget(currentTarget);
-                // chase.SetRanges(attackRange);
                 break;
 
             case EState.Wander:
@@ -275,6 +221,13 @@ public class E_Controller : MonoBehaviour, I_Controller
         contactTimer = c_Stats.collisionTick;                  // reset tick window
     }
 
+    // Get/Set methods
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    public Transform GetTarget() => currentTarget;
+    public float GetAttackRange() => attackRange;
+    
     // DEBUG: visualize detection/attack ranges
     void OnDrawGizmosSelected()
     {
