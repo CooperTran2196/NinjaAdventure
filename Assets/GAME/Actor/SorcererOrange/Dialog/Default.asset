@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
-  m_Name: Greating with SorO
+  m_Name: Default
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
-    text: Co chien gi hem
-  - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
-    text: ahihi
-  options: []
+    text: I hope you find something usefull.
+  optionList: []
   requiredNPCs: []
+  requiredLocations: []
+  requiredItems: []
+  autoRewards: []
+  removeAfterPlay: 0
+  removeTheseOnPlay: []

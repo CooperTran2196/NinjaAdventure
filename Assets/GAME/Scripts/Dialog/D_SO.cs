@@ -71,10 +71,10 @@ public class D_SO : ScriptableObject
     // Auto set removeAfterPlay if autoRewards assigned
     void OnValidate()
     {
-        if (autoRewards != null)
+        if (autoRewards != null && autoRewards.Length > 0)
             removeAfterPlay = true;
         else
-            removeAfterPlay = false;
+            return;
     }
 }
 

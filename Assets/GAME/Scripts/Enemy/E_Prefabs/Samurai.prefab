@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 7238414380048687834}
   - component: {fileID: 3873097929547288114}
   - component: {fileID: 1899329715647430835}
+  - component: {fileID: 8516599805102287338}
   - component: {fileID: 101274308307014770}
   - component: {fileID: 2823324946364578970}
   - component: {fileID: 4518364444093155301}
   - component: {fileID: 1418597443770801112}
-  - component: {fileID: 8516599805102287338}
   - component: {fileID: 3493735160713003730}
   - component: {fileID: 3075314403594617676}
   m_Layer: 7
@@ -251,6 +251,23 @@ MonoBehaviour:
   defaultState: 1
   currentState: 0
   attackStartBuffer: 0.2
+--- !u!114 &8516599805102287338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065412401670540135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_Health
+  c_Stats: {fileID: 3873097929547288114}
+  c_Dodge: {fileID: 0}
+  useDodgeIFrames: 0
+  takingDamageAmount: 1
+  healingAmount: 1
 --- !u!114 &101274308307014770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,23 +324,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::State_Attack
   activeWeapon: {fileID: 7533112647901652387}
   attackDir: {x: 0, y: 0}
---- !u!114 &8516599805102287338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9065412401670540135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  c_Stats: {fileID: 3873097929547288114}
-  c_Dodge: {fileID: 0}
-  useDodgeIFrames: 0
-  takingDamageAmount: 1
-  healingAmount: 1
 --- !u!114 &3493735160713003730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,10 +353,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
   expReward: 10
-  lootPrefab: {fileID: 0}
-  dropChance: 50
-  numberOfDrops: 1
-  lootTable: []
+  lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  dropSpread: 0.75
+  dropChance: 80
+  numberOfDrops: 2
+  lootTable:
+  - item: {fileID: 11400000, guid: 3997a4bf7ee277748b1de2ec7ca67924, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: 2444f233efa7f1e4f9df9a8c2e2df6a6, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
+    quantity: 3
+  - item: {fileID: 11400000, guid: 19887ed582f364c48b88a72c7bbe3748, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: 8b71e3850953b974b9c8d78d51257d3c, type: 2}
+    quantity: 1
 --- !u!1001 &515435526234327495
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1b3ec9e236c4a65aa950754a8aeb4d, type: 3}
   m_Name: SorO_ActorSO
   m_EditorClassIdentifier: Assembly-CSharp::D_ActorSO
-  actorName: Sorcerer Orange
-  portrait: {fileID: 21300000, guid: 62ce46c96d1c846069fa0628b310b229, type: 3}
+  characterName: Sorcerer Orange
+  avatar: {fileID: 21300000, guid: 62ce46c96d1c846069fa0628b310b229, type: 3}

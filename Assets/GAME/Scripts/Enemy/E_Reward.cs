@@ -2,6 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+[System.Serializable]
+public class LootDrop
+{
+    public INV_ItemSO item;
+    [Header("How many of this item to drop.")]
+    public int quantity = 1;
+}
+
 public class E_Reward : MonoBehaviour
 {
     [Header("Rewards")]
@@ -17,7 +25,7 @@ public class E_Reward : MonoBehaviour
     [Tooltip("How many different items to drop from the loot table.")]
     public int numberOfDrops = 1;
     [Tooltip("A list of all possible items this enemy can drop.")]
-    public List<INV_ItemSO> lootTable;
+    public List<LootDrop> lootTable;
 
     C_Health c_Health;
     static P_Exp p_Exp;
@@ -53,7 +61,7 @@ public class E_Reward : MonoBehaviour
         if (Random.Range(0f, 100f) > dropChance) return;
 
         // 2. Determine which items to drop
-        List<INV_ItemSO> itemsToDrop = new List<INV_ItemSO>();
+        List<LootDrop> itemsToDrop = new List<LootDrop>();
         if (numberOfDrops >= lootTable.Count)
         {
             // Drop all items if requested number is greater or equal
@@ -66,15 +74,15 @@ public class E_Reward : MonoBehaviour
         }
 
         // 3. Spawn the loot items
-        foreach (var itemSO in itemsToDrop)
+        foreach (var lootDrop in itemsToDrop)
         {
-            SpawnLoot(itemSO);
+            SpawnLoot(lootDrop);
         }
     }
 
-    void SpawnLoot(INV_ItemSO itemSO)
+    void SpawnLoot(LootDrop lootDrop)
     {
-        if (itemSO == null) return;
+        if (lootDrop == null || lootDrop.item == null || lootDrop.quantity <= 0) return;
 
         // Calculate a random spawn position with a horizontal offset
         float randomX = Random.Range(-dropSpread, dropSpread);
@@ -88,7 +96,7 @@ public class E_Reward : MonoBehaviour
         if (loot != null)
         {
             // Initialize will now handle the animation trigger and pickup delay
-            loot.Initialize(itemSO, 1);
+            loot.Initialize(lootDrop.item, lootDrop.quantity);
         }
     }
 }
