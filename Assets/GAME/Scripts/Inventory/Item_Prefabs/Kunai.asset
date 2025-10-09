@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Kunai
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Kunai
-  description: 
+  description: Light throwing blade
   image: {fileID: 21300000, guid: 4a456b81b8a9a24489f915ea2519f45c, type: 3}
   stackSize: 3
   price: 1

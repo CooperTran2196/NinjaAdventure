@@ -1,144 +1,268 @@
-// ----- File: P_Combat.cs -----
-using System;
+// ----- File: P_Controller.cs -----
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class P_Combat : MonoBehaviour
-{
-    [Header("References")]
-    SpriteRenderer sprite;
-    Animator animator;
-    P_InputActions input;
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(P_State_Idle))]
+[RequireComponent(typeof(P_State_Movement))]
+[RequireComponent(typeof(P_State_Attack))]
+[RequireComponent(typeof(P_State_Dodge))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
 
-    C_Stats     c_Stats;
-    C_State     c_State;
-    P_Movement  p_Movement;
-    C_Health    c_Health;
-    
-    [Header("Weapons (Player can hold 3)")]
-    public W_Melee  meleeWeapon;
-    public W_Ranged rangedWeapon;
-    public W_Base   magicWeapon;
-    
-    [Header("Attack")]
-    [Header("ALWAYS matched full clip length (0.45)")]
-    public float attackDuration = 0.45f;
-    [Header("ALWAYS set when the hit happens (0.15)")]
-    public float hitDelay = 0.15f;
+public class P_Controller : MonoBehaviour
+{
+    public enum PState { Idle, Move, Attack, Dodge, Dead }
+
+    [Header("Main controller for player input states")]
+    [Header("References")]
+    public PState defaultState = PState.Idle;
+    public PState currentState;
+
+    [Header("Weapons")]
+    public W_Base meleeWeapon;
+    public W_Base rangedWeapon;
 
     [Header("Debug")]
-    [SerializeField] bool autoKill;
+    public bool autoKill;
 
-    Vector2 attackDir = Vector2.down; // default when starting the game
-    const float MIN_DISTANCE = 0.0001f;
-    float cooldownTimer;
-    public bool isAttacking { get; private set; }
+    Rigidbody2D rb;
+    Animator anim;
+    P_InputActions input;
 
-    // Quick state check
-    public bool IsAlive => c_Stats.currentHP > 0;
+    P_State_Idle idle;
+    P_State_Movement move;
+    P_State_Attack attack;
+    P_State_Dodge dodge;
+    C_Stats c_Stats;
+    C_Health c_Health;
+
+    // Runtime vars - grouped by type
+    Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
+    bool isDead, isStunned, isAttacking, isDodging;
+    float stunUntil, attackCooldown, dodgeCooldown;
+    W_Base currentWeapon;
+
+    const float MIN_DISTANCE = 0.000001f;
 
     void Awake()
     {
-        sprite ??= GetComponent<SpriteRenderer>();
-        animator ??= GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        c_Stats = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+
+        idle = GetComponent<P_State_Idle>();
+        move = GetComponent<P_State_Movement>();
+        attack = GetComponent<P_State_Attack>();
+        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
+
         input ??= new P_InputActions();
-        
-        c_Stats ??= GetComponent<C_Stats>();
-        c_State ??= GetComponent<C_State>();
-        p_Movement ??= GetComponent<P_Movement>();
-        c_Health ??= GetComponent<C_Health>();
 
-        meleeWeapon  ??= GetComponentInChildren<W_Melee>();
-        rangedWeapon ??= GetComponentInChildren<W_Ranged>();
-        magicWeapon  ??= null; // placeholder only
-
-        
-        if (!sprite) Debug.LogWarning($"{name}: SpriteRenderer is missing in P_Combat");
-        if (!animator) Debug.LogError($"{name}: Animator is missing in P_Combat");
-
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in P_Combat");
-        
-        if (!p_Movement) Debug.LogError($"{name}: P_Movement is missing in P_Combat");
-        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in P_Combat");
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", -1f);
+        anim.SetFloat("idleX", 0f);
+        anim.SetFloat("idleY", -1f);
     }
 
     void OnEnable()
     {
-        input?.Enable();
+        input.Enable();
+        c_Health.OnDied += OnDiedHandler;
+        SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        input?.Disable();
+        input.Disable();
+        c_Health.OnDied -= OnDiedHandler;
+        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
     }
+
+    void OnDiedHandler() => SwitchState(PState.Dead);
 
     void Update()
     {
-        // Read aim from MOUSE
-        Vector2 mouseAim = ReadMouseAim();
-        if (mouseAim.sqrMagnitude > MIN_DISTANCE) attackDir = mouseAim;
+        if (isDead || isStunned) return;
+        if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
+        if (dodgeCooldown > 0f) dodgeCooldown -= Time.deltaTime;
 
-        // Inputs: Left Mouse  -> Melee, Right Mouse -> Ranged
-        if (input.Player.MeleeAttack.triggered)  RequestAttack(meleeWeapon);
-        if (input.Player.RangedAttack.triggered) RequestAttack(rangedWeapon);
-
+        // Debug kill
         if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
 
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        // PROCESS INPUTS
+        ProcessInputs();
     }
 
-    public void RequestAttack(W_Base weapon)
+    void FixedUpdate()
     {
-        if (!IsAlive || cooldownTimer > 0f) return;
+        if (isDead) return;
 
-        cooldownTimer = c_Stats.attackCooldown;
+        // Apply this frame: block state intent when stunned/dead, but still allow knockback
+        Vector2 baseVel = isStunned ? Vector2.zero : desiredVelocity;
+        rb.linearVelocity = baseVel + knockback;
 
-        // Face once at attack start
-        c_State.SetAttackDirection(attackDir);
-
-        
-        StartCoroutine(AttackRoutine(weapon));
+        // Decay knockback for the NEXT frame (always decay - MoveTowards handles zero gracefully)
+        knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
     }
 
-    IEnumerator AttackRoutine(W_Base weapon)
-    {
-        // STATE: Attack START
-        isAttacking = true;
-
-        // Delay -> Attack -> Recover
-        yield return new WaitForSeconds(hitDelay);
-        weapon.Attack(attackDir);
-        yield return new WaitForSeconds(attackDuration - hitDelay);
-
-        // STATE: Attack END
-        isAttacking = false;
-    }
-
+    // Convert mouse position to world direction
     Vector2 ReadMouseAim()
     {
-        // return previous aim if no camera/mouse
-        if (!Camera.main || Mouse.current == null)
+        Vector2 m = Mouse.current.position.ReadValue();
+        var cam = Camera.main;
+        if (!cam) return Vector2.zero;
+        Vector3 world = cam.ScreenToWorldPoint(new Vector3(m.x, m.y, -cam.transform.position.z));
+        Vector2 dir = (Vector2)world - (Vector2)transform.position;
+        return dir.sqrMagnitude > MIN_DISTANCE ? dir.normalized : Vector2.zero;
+    }
+
+    void ProcessInputs()
+    {
+        // Handle death first (highest)
+        if (c_Stats.currentHP <= 0)
         {
-            Debug.LogError($"{name}: Camera or Mouse is missing in P_Combat");
-            return attackDir;
+            SwitchState(PState.Dead);
+            return;
         }
 
-        // screen-space mouse position
-            Vector2 m = Mouse.current.position.ReadValue();
+        // Don't interrupt while atacking or dodging
+        if (currentState == PState.Attack && isAttacking) return;
+        if (currentState == PState.Dodge && isDodging) return;
 
-        // z distance from camera to actor for ScreenToWorldPoint
-        float z = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
+        // Handle dodge input (high)
+        if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
+        {
+            SwitchState(PState.Dodge);
+            return;
+        }
 
-        // mouse position in world space at actor depth
-        Vector3 mw = Camera.main.ScreenToWorldPoint(new Vector3(m.x, m.y, z));
+        // Handle attack inputs (mid)
+        if (attackCooldown <= 0f)
+        {
+            Vector2 mouseAim = ReadMouseAim();
+            if (mouseAim != Vector2.zero) attackDir = mouseAim;
 
-        // vector from actor to mouse
-        Vector2 d = (Vector2)(mw - transform.position);
+            if (input.Player.MeleeAttack.triggered)
+            {
+                currentWeapon = meleeWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+            if (input.Player.RangedAttack.triggered)
+            {
+                currentWeapon = rangedWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+        }
 
-        // return normalized direction if significant, else preserve aim
-        return (d.sqrMagnitude > MIN_DISTANCE) ? d.normalized : attackDir;
+        // Handle movement input (low priority)
+        moveAxis = input.Player.Move.ReadValue<Vector2>();
+        if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
+
+        if (moveAxis.sqrMagnitude > MIN_DISTANCE)
+        {
+            lastMove = moveAxis;
+
+            // Continue moving if already in Move state
+            if (currentState == PState.Move)
+            {
+                // refresh axis without flipping states
+                move.SetMoveAxis(moveAxis);
+            }
+            else // Switch to Move state if not already
+            {
+                SwitchState(PState.Move);
+                move.SetMoveAxis(moveAxis);
+            }
+            return;
+        }
+
+        // Default to idle (lowest priority)
+        SwitchState(PState.Idle);
     }
+
+    // Switch states with integrated death handling and attack logic
+    public void SwitchState(PState state)
+    {
+        if (currentState == state) return;
+        currentState = state;
+
+        // Disable all states first
+        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
+
+        switch (state)
+        {
+            case PState.Dead: // Highest priority
+                desiredVelocity = Vector2.zero;
+                knockback = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
+                isDead = true;
+                isAttacking = false;
+                isStunned = false;
+                isDodging = false;
+
+                anim.SetTrigger("Die");
+                break;
+
+            case PState.Dodge:
+                dodge.enabled = true;
+                isDodging = true;
+                dodgeCooldown = c_Stats.dodgeCooldown;
+
+                dodge.Dodge(lastMove);
+                break;
+
+            case PState.Attack:
+                desiredVelocity = Vector2.zero;
+                attack.enabled = true;
+
+                if (currentWeapon != null)
+                {
+                    attackCooldown = c_Stats.attackCooldown;
+                    isAttacking = true;
+                    attack.Attack(currentWeapon, attackDir);
+                    currentWeapon = null;
+                }
+                break;
+
+            case PState.Move:
+                move.enabled = true;
+
+                move.SetMoveAxis(moveAxis);
+                break;
+
+            case PState.Idle: // Lowest priority
+                desiredVelocity = Vector2.zero;
+                idle.enabled = true;
+
+                idle.SetIdleFacing(lastMove);
+                break;
+        }
+    }
+
+    // STUN FEATURE (same as enemy)
+    public IEnumerator StunFor(float duration)
+    {
+        if (duration <= 0f) yield break;
+
+        // Extend the stun end if a longer one arrives
+        float newEnd = Time.time + duration;
+        if (newEnd > stunUntil) stunUntil = newEnd;
+
+        isStunned = true;
+        while (Time.time < stunUntil) yield return null;
+
+        isStunned = false;
+    }
+
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
+    // State setters for external components
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void SetDodging(bool value) => isDodging = value;
 }
 
 // ----- File: P_Exp.cs -----
@@ -220,128 +344,225 @@ public class P_Exp : MonoBehaviour
     }
 }
 
-// ----- File: P_Movement.cs -----
-using System;
+// ----- File: P_State_Attack.cs -----
+using System.Collections;
 using UnityEngine;
 
-public class P_Movement : MonoBehaviour
+public class P_State_Attack : MonoBehaviour
 {
-    [Header("Independent component to manage Player's movement and animation")]
     [Header("References")]
-    Rigidbody2D rb;
-    Animator animator;
-    P_InputActions input;
+    public W_Base  activeWeapon;
+    public Vector2 attackDir;
 
-    C_Stats c_Stats;
-    C_State c_State;
-    P_Combat p_Combat;
-    C_Dodge c_Dodge;
+    [Header("Attack Timings")]
+    float attackDuration = 0.45f;
+    float hitDelay       = 0.15f;
 
-    [Header("Facing / Animator")]
-    public Vector2 lastMove = Vector2.down; // Default facing down
-
-    // Runtime state
-    bool disabled;      // When true, movement/animation stops
-    Vector2 moveAxis;   // Desired direction of travel
-    Vector2 velocity;   // Final velocity applied to Rigidbody2D.linearVelocity
-    Vector2 knockback;
-
-    const float MIN_DISTANCE = 0.0001f;
+    // Cache
+    Animator anim;
+    P_Controller controller;
 
     void Awake()
     {
-        rb ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponent<Animator>();
-        input ??= new P_InputActions();
-
-        c_Stats ??= GetComponent<C_Stats>();
-        p_Combat ??= GetComponent<P_Combat>();
-        c_Dodge ??= GetComponent<C_Dodge>();
-        c_State ??= GetComponent<C_State>();
-
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in P_Movement");
-        if (!animator) Debug.LogError($"{name}: Animator is missing in P_Movement");
-
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in P_Movement");
-        if (!p_Combat) Debug.LogError($"{name}: P_Combat is missing in P_Movement");
-        if (!c_Dodge) Debug.LogError($"{name}: C_Dodge is missing in P_Movement");
-        if (!c_State) Debug.LogError($"{name}: C_State is missing in P_Movement");
-
-        animator?.SetFloat("moveX", 0f);
-        animator?.SetFloat("moveY", -1f);
+        anim        = GetComponent<Animator>();
+        controller  = GetComponent<P_Controller>();
     }
 
-    void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    void OnEnable()
+    {
+        anim.SetBool("isAttacking", true); // animator enter
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines(); // If player dies -> stop attack immediately
+        anim.SetBool("isAttacking", false); // Exit Attack animation by bool
+        controller.SetAttacking(false); // Normal finish
+    }
 
     void Update()
     {
-        // Normalize to avoid diagonal speed advantage
-        // If raw is near zero, x,y = 0
-        Vector2 raw = input.Player.Move.ReadValue<Vector2>();
-        Vector2 desired = raw.sqrMagnitude > MIN_DISTANCE ? raw.normalized : Vector2.zero;
-
-        SetMoveAxis(desired);
-        
-        // Do not override lastMove when attacking
-        // Attack facing is stored separately in animator atkX/atkY so movement (WASD) still controls idle facing
-        c_State.UpdateAnimDirections(moveAxis, lastMove);
+        // OPTIONAL: Keep idle facing towards attack direction - else use last movement direction
+        // anim.SetFloat("moveX", 0f);
+        // anim.SetFloat("moveY", 0f);
+        // anim.SetFloat("idleX", attackDir.x);
+        // anim.SetFloat("idleY", attackDir.y);
     }
 
-
-    void FixedUpdate()
+    // Attack with weapon and direction (called by controller)
+    public void Attack(W_Base activeWeapon, Vector2 attackDir)
     {
-        Vector2 forced  = c_Dodge.ForcedVelocity;
-        Vector2 baseVel = (forced != Vector2.zero) ? forced : velocity;
-        Vector2 final   = baseVel + knockback;
-        rb.linearVelocity = final;
+        this.activeWeapon = activeWeapon;
+        this.attackDir = attackDir; // Controller already normalized
 
+        anim.SetFloat("atkX", attackDir.x);
+        anim.SetFloat("atkY", attackDir.y);
 
-        if (knockback.sqrMagnitude > 0f)
-        {
-            float step = c_Stats.KR * Time.fixedDeltaTime;
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
-        }
+        StartCoroutine(AttackRoutine());
     }
 
-
-    void SetMoveAxis(Vector2 v)
+    // Just handles animation timing
+    IEnumerator AttackRoutine()
     {
-        if (disabled)
-        {
-            moveAxis = Vector2.zero;
-            velocity = Vector2.zero;
-            return;
-        }
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon.Attack(attackDir);
+        yield return new WaitForSeconds(attackDuration - hitDelay);
 
-        // Only fire direction event if direction actually changed.
-        if (moveAxis != v && v.sqrMagnitude > MIN_DISTANCE)
-        {
-            lastMove = v; // Idle facing uses latest non-zero direction
-        }
-
-        moveAxis = v;
-
-        // Valve is closed when disabled OR lockDuringAttack
-        bool valveClosed = disabled || c_State.CheckIsBusy();
-        // If valve is closed, stop; otherwise apply intended velocity
-        Vector2 intendedVelocity = moveAxis * c_Stats.MS;
-        velocity = valveClosed ? Vector2.zero : intendedVelocity;
+        controller.SetAttacking(false); // Interrupted by Dead
     }
+}
 
-    public void SetDisabled(bool isDisabled)
+// ----- File: P_State_Dodge.cs -----
+using System.Collections;
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class P_State_Dodge : MonoBehaviour
+{
+    // Cache
+    Animator anim;
+    C_Stats stats;
+    P_Controller controller;
+    C_AfterimageSpawner afterimage;
+
+    // Runtime
+    Vector2 dodgeDir;
+    float dodgeDuration;
+
+    void Awake()
     {
-        disabled = isDisabled;
-        if (isDisabled)
-        {
-            moveAxis = Vector2.zero;
-            velocity = Vector2.zero;
-            rb.linearVelocity = Vector2.zero; // immediate stop
-        }
+        anim        ??= GetComponent<Animator>();
+        stats       ??= GetComponent<C_Stats>();
+        controller  ??= GetComponent<P_Controller>();
+        afterimage  ??= GetComponent<C_AfterimageSpawner>();
+
+        if (!anim)       Debug.LogError("State_Dodge: Missing Animator");
+        if (!stats)      Debug.LogError("State_Dodge: Missing C_Stats");
+        if (!controller) Debug.LogError("State_Dodge: Missing P_Controller");
+        if (!afterimage) Debug.LogError("State_Dodge: Missing C_AfterimageSpawner");
     }
 
-    public void ReceiveKnockback(Vector2 force) => knockback += force;
+    void OnEnable()
+    {
+        anim.SetBool("isDodging", true);
+    }
 
+    void OnDisable()
+    {
+        StopAllCoroutines(); // If player dies -> stop attack immediately
+        anim.SetBool("isDodging", false); // Exit Attack animation by bool
+        controller.SetDodging(false); // Normal finish
+    }
+
+    public void Dodge(Vector2 dir)
+    {
+        dodgeDir = dir;
+
+        // Compute duration from distance & speed
+        float speed    = stats.dodgeSpeed;
+        float distance = stats.dodgeDistance;
+        dodgeDuration  = distance / speed; // assume valid per your inspector preconditions
+
+        // One-time velocity set; controller keeps applying desiredVelocity each FixedUpdate
+        controller.SetDesiredVelocity(dodgeDir * speed);
+
+        // Lock current sprite for the whole trail burst
+        var sr          = GetComponent<SpriteRenderer>();
+        var lockedSprite= sr ? sr.sprite : null;
+        bool flipX      = sr && sr.flipX;
+        bool flipY      = sr && sr.flipY;
+
+        afterimage?.StartBurst(dodgeDuration, lockedSprite, flipX, flipY);
+
+        StartCoroutine(DodgeRoutine());
+    }
+
+    IEnumerator DodgeRoutine()
+    {
+        yield return new WaitForSeconds(dodgeDuration);
+
+        controller.SetDodging(false); // Interrupted by Dead
+    }
+}
+
+// ----- File: P_State_Idle.cs -----
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class P_State_Idle : MonoBehaviour
+{
+    // Cache
+    Animator anim;
+    P_Controller controller;
+
+    // Runtime
+    public Vector2 lastFaceDirection = Vector2.down;
+
+    void Awake()
+    {
+        anim = GetComponent<Animator>();
+        controller = GetComponent<P_Controller>();
+
+        if (!anim) Debug.LogError("P_State_Idle: missing Animator");
+        if (!controller) Debug.LogError("P_State_Idle: missing P_Controller");
+    }
+
+    // Set the idle facing direction
+    public void SetIdleFacing(Vector2 direction)
+    {
+        // Controller guarantees normalized input per your rule.
+        lastFaceDirection = direction;
+        anim.SetFloat("idleX", lastFaceDirection.x);
+        anim.SetFloat("idleY", lastFaceDirection.y);
+    }
+}
+
+// ----- File: P_State_Movement.cs -----
+using UnityEngine;
+
+[DisallowMultipleComponent]
+public class P_State_Movement : MonoBehaviour
+{
+    // Cache
+    Animator     anim;
+    C_Stats      c_Stats;
+    P_Controller controller;
+
+    // Runtime
+    Vector2      moveAxis;
+
+    void Awake()
+    {
+        anim        = GetComponent<Animator>();
+        c_Stats     = GetComponent<C_Stats>();
+        controller  = GetComponent<P_Controller>();
+    }
+
+    void OnEnable()
+    {
+        anim.SetBool("isMoving", true);
+    }
+
+    void OnDisable()
+    {
+        controller.SetDesiredVelocity(Vector2.zero);
+        anim.SetBool("isMoving", false);
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", 0f);
+    }
+
+    void Update()
+    {
+        // Calculate and apply movement velocity
+        controller.SetDesiredVelocity(moveAxis * c_Stats.MS);
+
+        // Set movement animation
+        anim.SetFloat("moveX", moveAxis.x);
+        anim.SetFloat("moveY", moveAxis.y);
+    }
+
+    // Move with given axis, ontroller already normalized this
+    public void SetMoveAxis(Vector2 moveAxis) => this.moveAxis = moveAxis;
 }
 
 // ----- File: P_StatEffect.cs -----

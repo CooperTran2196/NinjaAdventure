@@ -754,22 +754,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7239408413501863310, guid: f763499cab35f4b5dba4afd431d81d98, type: 3}
   m_PrefabInstance: {fileID: 147384071}
   m_PrefabAsset: {fileID: 0}
---- !u!225 &147384073 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 8190290860667898540, guid: f763499cab35f4b5dba4afd431d81d98, type: 3}
-  m_PrefabInstance: {fileID: 147384071}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &147384074 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7741881934591343673, guid: f763499cab35f4b5dba4afd431d81d98, type: 3}
-  m_PrefabInstance: {fileID: 147384071}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 147384072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abe6ee9672b644518a56d4538e3a2ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SHOP_Manager
 --- !u!1001 &152967367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -999,8 +983,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SHOP_Keeper
   Anim: {fileID: 1115567158}
   trigger: {fileID: 1115567159}
-  shop_Manager: {fileID: 147384074}
-  shopCanvasGroup: {fileID: 147384073}
+  shop_Manager: {fileID: 0}
+  shopCanvasGroup: {fileID: 0}
   shopItems:
   - {fileID: 11400000, guid: 3997a4bf7ee277748b1de2ec7ca67924, type: 2}
   - {fileID: 11400000, guid: 2444f233efa7f1e4f9df9a8c2e2df6a6, type: 2}

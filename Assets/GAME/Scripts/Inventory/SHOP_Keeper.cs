@@ -26,8 +26,23 @@ public class SHOP_Keeper : MonoBehaviour
     {
         Anim ??= GetComponentInChildren<Animator>(true);
         trigger ??= GetComponent<CircleCollider2D>();
-
         input = new P_InputActions();
+    }
+
+    void Start()
+    {
+        // Assign references in Start to ensure SYS_GameManager.Instance is ready.
+        if (SYS_GameManager.Instance != null)
+        {
+            shop_Manager = SYS_GameManager.Instance.shop_Manager;
+            if (shop_Manager != null)
+            {
+                shopCanvasGroup = shop_Manager.GetComponent<CanvasGroup>();
+            }
+        }
+
+        if (!shop_Manager) Debug.LogError($"{name}: Could not find SHOP_Manager from SYS_GameManager.");
+        if (!shopCanvasGroup) Debug.LogError($"{name}: Could not find CanvasGroup on SHOP_Manager.");
     }
 
     void OnEnable()

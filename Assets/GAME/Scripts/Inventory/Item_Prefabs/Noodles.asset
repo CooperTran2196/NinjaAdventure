@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Noodles
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Noodles
-  description: 
+  description: Steaming bowl of comfort; mends some HP.
   image: {fileID: 21300000, guid: 132729c9fadf54e4f9fc9c49bd2faeab, type: 3}
   stackSize: 3
   price: 1

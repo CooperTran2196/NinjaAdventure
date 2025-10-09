@@ -138,6 +138,7 @@ public class INV_ItemSO : ScriptableObject
 
 // ----- File: INV_Loot.cs -----
 using System;
+using System.Collections;
 using UnityEngine;
 
 [ExecuteAlways] // lets OnEnable run in Edit Mode so the icon updates in Inspector
@@ -175,8 +176,11 @@ public class INV_Loot : MonoBehaviour
     {
         this.itemSO = itemSO;
         quantity = qty;
-        canBePickedUp = false; // avoid instant repick
         RefreshAppearance();
+
+        // Play drop animation and start pickup delay
+        anim.SetTrigger("Drop");
+        StartCoroutine(EnablePickupAfterDelay(1f));
     }
 
     // Update sprite and name
@@ -202,6 +206,17 @@ public class INV_Loot : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        // Only re-enable if it was disabled due to player collision
+        if (canBePickedUp)
+        {
+            canBePickedUp = true;
+        }
+    }
+
+    IEnumerator EnablePickupAfterDelay(float delay)
+    {
+        canBePickedUp = false;
+        yield return new WaitForSeconds(delay);
         canBePickedUp = true;
     }
 }
@@ -213,7 +228,7 @@ using TMPro;
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
 {
-    public static INV_Manager Instance { get; private set; }
+    public static INV_Manager Instance;
 
     [Header("Central API for the Inventory system, depend on P_StatsManager")]
     [Header("References")]
@@ -473,7 +488,7 @@ public class SHOP_Keeper : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Animator Anim;
-    [SerializeField] CircleCollider2D trigger;
+    [SerializeField] Collider2D trigger;
     public SHOP_Manager shop_Manager;
     public CanvasGroup shopCanvasGroup;
     public static SHOP_Keeper currentShopKeeper;
@@ -494,11 +509,19 @@ public class SHOP_Keeper : MonoBehaviour
         trigger ??= GetComponent<CircleCollider2D>();
 
         input = new P_InputActions();
-        input.UI.ToggleShop.Enable();
     }
 
-    void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    void OnEnable()
+    {
+        input.UI.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.UI.Disable();
+        // Dispose of the input object to prevent memory leaks
+        input.Dispose();
+    }
 
     void Update()
     {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Medipack
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: Medipack
-  description: 
+  description: "Emergency kit\u2014patch up fast, back to the fight."
   image: {fileID: 21300000, guid: 6d9248d3f4b4e484cbbfcf156bed6df8, type: 3}
   stackSize: 3
   price: 1

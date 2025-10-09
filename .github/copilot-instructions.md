@@ -1,4 +1,83 @@
-## Copilot Instructions — NinjaAdventure (concise)
+# Copilot Instructions for NinjaAdventure
+
+Concise guidance for AI agents working in this Unity 2D action-RPG codebase (C#). Focus on existing patterns; do not invent new architectures unless asked.
+
+## 1. High-Level Architecture
+- Feature‐first folder layout under `Assets/GAME/Scripts/` (Character, Enemy, Weapon, Inventory, Dialog, SkillTree, UI, System, Player, Legacy).
+- Modern systems (Controllers + State_* components) coexist with legacy movement/combat scripts (kept under `Legacy/` or referenced as "OLD system" fallbacks). Prefer NEW controller/state approach when extending.
+- Core gameplay loop pieces:
+  - Character stats + health: `C_Stats`, `C_Health` (events drive FX + death handling).
+  - AI & player control use modular state components (`State_Idle`, `State_Wander`, `State_Chase`, `State_Attack`, etc.) enabled/disabled by a central controller (e.g. `E_Controller`, `P_Controller`).
+  - Weapons derive from `W_Base` and implement `Attack(Vector2)`. Concrete weapon behaviors (melee, ranged, projectile) live in `Weapon/` and share common hit / effect application via static helpers in `W_Base`.
+  - Dialog system: `D_Manager` orchestrates dialog ScriptableObjects (`D_SO` + related actor/location SOs) and hands out rewards via `INV_Manager`.
+  - Inventory items defined as ScriptableObjects (`INV_ItemSO`) containing stat effect lists.
+  - SkillTree system: `ST_Manager` manages skills (`ST_SkillSO`) unlocked via XP/leveling (`P_Exp`), applying permanent stat effects via `P_StatsManager`.
+  - Central game control via `SYS_GameManager` singleton that maintains references to key subsystems (dialog, scene transitions, audio, persistent objects).
+
+## 2. Key Patterns & Conventions
+- Naming prefixes: `C_` (Character), `E_` (Enemy), `P_` (Player), `W_` (Weapon), `D_` (Dialog), `INV_` (Inventory), `SYS_` (System-wide singletons), `State_` (enable/disable state components), `P_State_*` (player-specific states), `ST_` (SkillTree), `*_SO` (ScriptableObject data).
+- Controllers implement thin interfaces (e.g. `I_Controller`) for state components to send intent (e.g. `SetDesiredVelocity`). Keep states passive: they compute desired velocity / actions, controller applies them in `FixedUpdate`.
+- State switching: disable all state MonoBehaviours then enable exactly one (plus possible concurrent ones like attack if design changes). Follow `E_Controller.SwitchState` and `P_Controller.SwitchState` patterns.
+- Health & damage: Always route damage through `C_Health.ApplyDamage` (for stat + penetration calc) or `ChangeHealth` (for direct heals/kills). Avoid editing `currentHP` directly elsewhere.
+- Weapon attack flow: State (e.g. `State_Attack`) determines `attackDir`, calls `activeWeapon.Attack(dir)` after a timing delay; weapon handles visuals + collider enabling and invokes `W_Base.ApplyHitEffects` when collisions occur.
+- Effects ordering: Damage -> lifesteal heal -> knockback -> stun. Preserve this sequence.
+- ScriptableObject data drives visual + numeric setup; OnValidate hooks (e.g. `INV_ItemSO`, `ST_SkillSO`) auto-sync names.
+- Event usage: `C_Health` exposes `OnDamaged`, `OnHealed`, `OnDied`; `P_Exp` exposes `OnLevelUp`, `OnXPChanged`, `OnSPChanged`; `ST_Slots` exposes `OnSkillUpgraded`, `OnSkillMaxed`. Listeners cached to allow clean unsubscribe in `OnDisable`.
+- Singleton pattern: `SYS_GameManager.Instance` provides centralized access to dialog, history, fader, and audio systems. Access via `SYS_GameManager.Instance.[component]`.
+- Stat effects apply through `P_StatsManager.ApplyModifier()` with support for permanent, instant, and timed effects via the `P_StatEffect` class.
+- Fallback strategy: New systems attempt controller-based knockback/stun first; legacy systems (`W_Knockback`, `W_Stun`, `P_Movement`, `E_Movement`) used only if modern controller absent.
+
+## 3. Physics & Animation Integration
+- Rigidbody2D linear velocity set centrally in controller (`rb.linearVelocity = desired + knockback`). States should never set `rb.linearVelocity` directly (only call controller APIs).
+- Animator parameters standardization: movement (`moveX`, `moveY`), facing idle (`idleX`, `idleY`), attacking direction (`atkX`, `atkY`), activity booleans (`isWandering`, `isAttacking`). Maintain consistency when adding states/animations.
+
+## 4. Input & Player Specifics
+- Player systems mirror enemy AI but with `P_` prefixed states/components (e.g. `P_State_Dodge`, `P_State_Movement`, `P_State_Attack`, `P_State_Idle`) and generated input actions (`P_InputActions`).
+- Input hierarchy: Death check → Dodge → Attack → Movement → Idle (priorities cascade downward).
+- Dodge grants i-frames checked via `C_Health.IsDodging` (requires enabled `P_State_Dodge`). When adding invulnerable windows re-use this boolean gate.
+- Player controller tracks two weapons (`meleeWeapon` and `rangedWeapon`) and manages their state via `P_State_Attack`.
+- `P_Exp` handles player progression with linear XP curve, awarding skill points on level up (customizable via `skillPointsPerLevel`).
+- `P_StatsManager` applies all stat effects, handling permanent, instant, over-time, and temporary buffs/debuffs. It acts as a bridge between the `StatEffect` system and base `C_Stats`.
+
+## 5. Dialog & Quest-Like Flow
+- Dialog progression increments `dialogIndex`; when exhausted, options are displayed (up to 3). Reward granting occurs via `EndDialog_WithRewards` before closing UI. Add new reward types by extending the auto reward loop in `D_Manager.GrantAutoRewards`.
+- History tracking: `SYS_GameManager.Instance.d_HistoryTracker.RecordNPC(line.speaker)` indicates a central gameplay log—call this for new dialog-driven triggers.
+
+## 6. Inventory & Stat Effects
+- Item SO: `INV_ItemSO` holds `List<P_StatEffect>`; any runtime application pipeline should iterate that list—maintain OnValidate naming pattern. Stack size & price are authoritative here.
+- `P_StatEffect` system: Unified system for all stat modifications using `StatName` enum (AttackDamage, AbilityPower, MoveSpeed, etc.).
+- Effect types: Duration=0 (permanent), Duration=1 (instant), Duration>1 (timed); with optional `IsOverTime` flag for healing over time (HoT).
+- Stat effects flow: Items → Skills → Buffs/Debuffs all use the same `P_StatEffect` system, applied through `P_StatsManager.ApplyModifier()`.
+
+## 7. Extending Combat
+When adding a weapon:
+1. Create `W_SO` asset with sprite + numeric fields (AD, AP, knockbackForce, stunTime, offsetRadius, etc.).
+2. Derive from `W_Base`; implement `Attack(dir)` using provided helpers (`GetPolarPosition`, `GetPolarAngle`, `BeginVisual`, `ThrustOverTime`).
+3. Trigger `ApplyHitEffects` on collision, not manually re-implementing damage logic.
+
+Adding a new status effect (e.g. slow):
+- Prefer extending controller (e.g. temporary modifier on desired velocity) rather than embedding in weapons; follow stun pattern (time-window, coroutine, flag).
+
+## 8. Error / Edge Case Handling
+- Always null-check optional components (e.g. player-only dodge) as shown in `C_Health.Awake`.
+- Use layer masks for target filtering (`W_Base.TryGetTarget`) to avoid friendly fire & self-hits.
+- Health changes: ignore attempts if entity dead or dodging (consistent with i-frame semantics).
+
+## 9. Build & Workflow
+- Unity project; compile by opening in Unity Editor. A `build` shell task calls `msbuild` but typical iteration uses Unity's import pipeline. Use the task only if invoking an automated CI compile of generated `.csproj` files.
+- Place new ScriptableObjects via `[CreateAssetMenu]` patterns consistent with `INV_ItemSO`.
+- Keep new gameplay scripts under correct feature folder; maintain prefix conventions for quick grep-based discovery.
+
+## 10. Practical Examples
+- Switching an enemy to attack: `eController.SwitchState(E_Controller.EState.Attack);` (never enable `State_Attack` directly).
+- Dealing raw damage: `targetHealth.ApplyDamage(ad, ap, weaponAD, weaponAP, armorPen, magicPen);` (returns final dealt).
+- Healing: `someHealth.ChangeHealth(+amount);` Kill: `someHealth.Kill();`
+
+## 11. When Unsure
+- Prefer reusing existing helpers (`ApplyHitEffects`, lifesteal logic) over duplicating calculations.
+- If both NEW and OLD (legacy) options exist, choose NEW unless integration requires legacy compatibility.
+
+(End)  — Please review; specify any missing subsystems (e.g., player-specific scripts, SkillTree) that need inclusion or further detail.## Copilot Instructions — NinjaAdventure (concise)
 
 Quick overview
 - Unity 2D action RPG. Code lives in `Assets/GAME/Scripts/` and is organized by feature (Player, Enemy, Character, Weapon, UI, SkillTree).

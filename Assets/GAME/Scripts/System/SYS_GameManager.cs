@@ -8,6 +8,7 @@ public class SYS_GameManager : MonoBehaviour
     public D_Manager d_Manager;
     public D_HistoryTracker d_HistoryTracker;
     public SYS_Fader sys_Fader; // Centralized reference to Fader
+    public SHOP_Manager shop_Manager;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -34,6 +35,7 @@ public class SYS_GameManager : MonoBehaviour
             // Fallback
             d_Manager ??= FindFirstObjectByType<D_Manager>();
             sys_Fader ??= FindFirstObjectByType<SYS_Fader>();
+            shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
             audioSource ??= GetComponent<AudioSource>();
 
             if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader is missing.");
