@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 1418597443770801112}
   - component: {fileID: 8516599805102287338}
   - component: {fileID: 3493735160713003730}
+  - component: {fileID: 3075314403594617676}
   m_Layer: 7
   m_Name: Samurai
   m_TagString: Enemy
@@ -249,7 +250,6 @@ MonoBehaviour:
     m_Bits: 64
   defaultState: 1
   currentState: 0
-  activeWeapon: {fileID: 7533112647901652387}
   attackStartBuffer: 0.2
 --- !u!114 &101274308307014770
 MonoBehaviour:
@@ -340,6 +340,23 @@ MonoBehaviour:
   healTint: {r: 0.3, g: 1, b: 0.3, a: 1}
   damageTint: {r: 1, g: 0.3, b: 0.3, a: 1}
   deathFadeTime: 1.5
+--- !u!114 &3075314403594617676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065412401670540135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::E_Reward
+  expReward: 10
+  lootPrefab: {fileID: 0}
+  dropChance: 50
+  numberOfDrops: 1
+  lootTable: []
 --- !u!1001 &515435526234327495
 PrefabInstance:
   m_ObjectHideFlags: 0

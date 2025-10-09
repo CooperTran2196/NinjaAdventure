@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [ExecuteAlways] // lets OnEnable run in Edit Mode so the icon updates in Inspector
@@ -36,8 +37,11 @@ public class INV_Loot : MonoBehaviour
     {
         this.itemSO = itemSO;
         quantity = qty;
-        canBePickedUp = false; // avoid instant repick
         RefreshAppearance();
+
+        // Play drop animation and start pickup delay
+        anim.SetTrigger("Drop");
+        StartCoroutine(EnablePickupAfterDelay(1f));
     }
 
     // Update sprite and name
@@ -63,6 +67,17 @@ public class INV_Loot : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        // Only re-enable if it was disabled due to player collision
+        if (canBePickedUp)
+        {
+            canBePickedUp = true;
+        }
+    }
+
+    IEnumerator EnablePickupAfterDelay(float delay)
+    {
+        canBePickedUp = false;
+        yield return new WaitForSeconds(delay);
         canBePickedUp = true;
     }
 }

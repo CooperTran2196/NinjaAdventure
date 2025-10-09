@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animation))]
 [RequireComponent(typeof(P_State_Idle))]
 [RequireComponent(typeof(P_State_Movement))]
 [RequireComponent(typeof(P_State_Attack))]
