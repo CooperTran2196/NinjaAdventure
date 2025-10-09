@@ -4,16 +4,16 @@ public class State_Idle : MonoBehaviour
 {
     [Header("References")]
     Rigidbody2D rb;
-    Animator characterAnimator;
+    Animator anim;
 
     I_Controller controller;
     C_Stats stats;
 
     void Awake()
     {
-        rb                ??= GetComponent<Rigidbody2D>();
-        characterAnimator ??= GetComponentInChildren<Animator>();
-        stats             ??= GetComponent<C_Stats>();
+        rb     = GetComponent<Rigidbody2D>();
+        anim   = GetComponent<Animator>();
+        stats  = GetComponent<C_Stats>();
 
         // Make this work for Player, Enemy, or NPC
 
@@ -26,11 +26,9 @@ public class State_Idle : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         controller?.SetDesiredVelocity(Vector2.zero);
-        var a = characterAnimator;
-        if (!a) return;
-        a.SetBool("isMoving", false);
-        a.SetBool("isWandering", false);
-        a.SetBool("isAttacking", false);
+        anim.SetBool("isMoving", false);
+        anim.SetBool("isWandering", false);
+        anim.SetBool("isAttacking", false);
     }
 
     // Idle: no movement intent; controller handles knockback for all states

@@ -16924,6 +16924,75 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
+--- !u!1001 &7354174887755374931
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 34.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 18.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3741995338201764921, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: lootPrefab
+      value: 
+      objectReference: {fileID: 1988482888}
+    - target: {fileID: 5303632570427575276, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303632570427575276, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6585411490575730648, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: m_Name
+      value: Samurai
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
 --- !u!114 &7493859613101852543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16938,79 +17007,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::C_SceneTeleport
   sceneToLoad: Level1_Young Lord Room
   destinationSpawnId: Level1_Young Lord Room
---- !u!1001 &7562657119262622783
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 34.28
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 18.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 62564789093163456, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1777961666469111929, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: worldOffset.y
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3075314403594617676, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: lootPrefab
-      value: 
-      objectReference: {fileID: 1988482888}
-    - target: {fileID: 5554323499758050138, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5554323499758050138, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9065412401670540135, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
-      propertyPath: m_Name
-      value: Samurai
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: cd4fc84e983404ff4bd53986d6ee4a60, type: 3}
 --- !u!1001 &7970337241856419717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17591,7 +17587,7 @@ SceneRoots:
   - {fileID: 3454454834683810107}
   - {fileID: 15152470}
   - {fileID: 470057693147478487}
-  - {fileID: 7562657119262622783}
+  - {fileID: 7354174887755374931}
   - {fileID: 738241317}
   - {fileID: 368138264}
   - {fileID: 200587381}

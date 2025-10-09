@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class C_Health : MonoBehaviour
         fx            ??= GetComponent<C_FX>();
 
         if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in C_Health");
-        // P_State_Dodge is optional (only for player), so we don't log an error if it's missing.
+        // P_State_Dodge is optional (only for player)
         if (!fx)      Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 

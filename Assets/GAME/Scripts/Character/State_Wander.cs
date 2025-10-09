@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[DisallowMultipleComponent]
+
 public class State_Wander : MonoBehaviour
 {
     [Header("References")]
@@ -34,11 +34,6 @@ public class State_Wander : MonoBehaviour
         controller = (I_Controller)(GetComponent<E_Controller>() ??
                         (Component)GetComponent<NPC_Controller>() ??
                         (Component)GetComponent<B_Controller>());
-
-
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");
-        if (!anim) Debug.LogError($"{name}: Animator is missing in State_Wander");
-        if (controller == null) Debug.LogError($"{name}: I_Controller is missing in State_Wander");
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }

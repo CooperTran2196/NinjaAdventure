@@ -44,8 +44,8 @@ public class State_Talk : MonoBehaviour
         characterAnim?.SetFloat("idleY", facingDir.y);
 
         // Play animations
-        characterAnim?.Play("Idle");       // idle while talking
-        interactAnim?.Play("WantToTalk");  // open talk icon
+        characterAnim.Play("Idle");       // idle while talking
+        interactAnim.Play("WantToTalk");  // open talk icon
     }
 
     // When disabled, restore physics and movement, hide talk icon
