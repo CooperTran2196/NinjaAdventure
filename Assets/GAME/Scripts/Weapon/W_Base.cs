@@ -161,27 +161,38 @@ public abstract class W_Base : MonoBehaviour
         // Hit effects
         if (weaponData.knockbackForce > 0f)
         {
-            // NEW system first: direct call into E_Controller
+            // NEW system first: direct call into controllers
             var ec = targetCollider.GetComponentInParent<E_Controller>();
+            var pc = targetCollider.GetComponentInParent<P_Controller>();
+            
             if (ec != null)
             {
                 ec.ReceiveKnockback(dir * weaponData.knockbackForce);
             }
+            else if (pc != null)
+            {
+                pc.ReceiveKnockback(dir * weaponData.knockbackForce);
+            }
             else
             {
-                // OLD system fallback (player/old enemy/rigidbody)
+                // OLD system fallback (old enemy/rigidbody)
                 W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
             }
         }
-
 
         if (weaponData.stunTime > 0f)
         {
             // NEW system first: stun handled inside controller (single coroutine)
             var ec = targetCollider.GetComponentInParent<E_Controller>();
+            var pc = targetCollider.GetComponentInParent<P_Controller>();
+            
             if (ec)
             {
                 ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
+            }
+            else if (pc)
+            {
+                pc.StartCoroutine(pc.StunFor(weaponData.stunTime));
             }
             else
             {

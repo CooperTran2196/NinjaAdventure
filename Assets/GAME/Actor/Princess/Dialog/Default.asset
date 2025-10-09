@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
-  m_Name: Need some meat Found
+  m_Name: Default
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: Thank you so much
+    text: "We must flee the Castle. There\u2019s a secret passage beneath the moat
+      - find it, then signal me with your reed whistle."
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
-    text: Np!
+    text: Understood.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: Go unseen.
   optionList: []
   requiredNPCs: []
   requiredLocations: []
-  requiredItems:
-  - {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+  requiredItems: []
   autoRewards: []
-  removeAfterPlay: 1
+  removeAfterPlay: 0
   removeTheseOnPlay: []

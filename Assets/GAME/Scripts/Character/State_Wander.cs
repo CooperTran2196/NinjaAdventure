@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[DisallowMultipleComponent]
+
 public class State_Wander : MonoBehaviour
 {
     [Header("References")]
@@ -35,11 +35,6 @@ public class State_Wander : MonoBehaviour
                         (Component)GetComponent<NPC_Controller>() ??
                         (Component)GetComponent<B_Controller>());
 
-
-        if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Wander");
-        if (!anim) Debug.LogError($"{name}: Animator is missing in State_Wander");
-        if (controller == null) Debug.LogError($"{name}: I_Controller is missing in State_Wander");
-
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }
 
@@ -57,8 +52,8 @@ public class State_Wander : MonoBehaviour
         anim.SetBool("isWandering", false);
         StopAllCoroutines();
         isWandering = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        // controller?.SetDesiredVelocity(Vector2.zero);
+        // rb.linearVelocity = Vector2.zero;
     }
 
     void Update()
@@ -94,7 +89,7 @@ public class State_Wander : MonoBehaviour
     {
         isWandering = false;
         controller?.SetDesiredVelocity(Vector2.zero);
-        rb.linearVelocity = Vector2.zero;
+        //rb.linearVelocity = Vector2.zero;
         anim.Play("Idle");
 
         yield return new WaitForSeconds(pauseDuration);

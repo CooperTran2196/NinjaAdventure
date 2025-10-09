@@ -162,7 +162,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.02956599, y: -0.1478455}
+  m_Offset: {x: -0.002001524, y: 0.32290155}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -172,7 +172,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.8928108, y: 1.9842012}
+  m_Size: {x: 3.0069604, y: 2.9256954}
   m_EdgeRadius: 0
 --- !u!114 &6172014958064133286
 MonoBehaviour:
@@ -372,12 +372,14 @@ GameObject:
   - component: {fileID: 6382722631269958430}
   - component: {fileID: 3496863204005333077}
   - component: {fileID: 5289624307768202952}
+  - component: {fileID: 873385030854864351}
   - component: {fileID: 8334891282649567}
   - component: {fileID: 8725053703916178526}
   - component: {fileID: 3473422860038880936}
   - component: {fileID: 8152181732937082029}
   - component: {fileID: 2356614730772313980}
   - component: {fileID: 5301431184865595715}
+  - component: {fileID: 5665445880748741833}
   m_Layer: 7
   m_Name: GiantRedSamurai
   m_TagString: Enemy
@@ -393,7 +395,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4686669667602087861}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 73.9, y: 10.1, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -522,7 +524,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.00048017502, y: -0.06219864}
+  m_Offset: {x: 0.019236743, y: -0.26918268}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -532,7 +534,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7486391, y: 0.750473}
+  m_Size: {x: 2.443943, y: 1.479845}
   m_EdgeRadius: 0
 --- !u!95 &3496863204005333077
 Animator:
@@ -587,7 +589,7 @@ MonoBehaviour:
   dodgeCooldown: 0.45
   knockbackForce: 0
   stunTime: 0
---- !u!114 &8334891282649567
+--- !u!114 &873385030854864351
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -596,11 +598,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 4686669667602087861}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93b9508cd1974b718913826facfcd60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::B_Controller
+  defaultState: 0
+  idle: {fileID: 8152181732937082029}
+  wander: {fileID: 3473422860038880936}
+  chase: {fileID: 8334891282649567}
+  attack: {fileID: 8725053703916178526}
+  detectionRange: 8
+  attackRange: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  attackStartBuffer: 0.2
+--- !u!114 &8334891282649567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4686669667602087861}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61b522976e17f4301aec70bc8c09d0ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::State_Chase_Boss
   stopBuffer: 0.1
-  yAlignBand: 0.35
+  yAlignBand: 0.001
 --- !u!114 &8725053703916178526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -608,7 +633,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4686669667602087861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f1f3e66fdfab4d81a6caf832cb27420, type: 3}
   m_Name: 
@@ -617,15 +642,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackCooldown: 1.1
-  specialCooldown: 8
-  specialClipLength: 1.5
-  specialHitDelay: 0.5
-  specialMoveWindow: 0.35
-  hitTime: 1.05
-  dashMaxDistance: 4.5
-  dashSpeed: 9
-  stopShortOffset: 0.96
-  yHardCap: 0.55
+  specialCooldown: 5
+  specialClipLength: 2.25
+  specialHitDelay: 1.3
+  hitTime: 1.45
+  preHitStopBias: 0.02
+  dashSpeed: 50
+  stopShortOffset: 0.5
+  yHardCap: 5.42
   activeWeapon: {fileID: 6172014958064133286}
 --- !u!114 &3473422860038880936
 MonoBehaviour:
@@ -643,6 +667,7 @@ MonoBehaviour:
   width: 6
   height: 4
   pauseDuration: 1
+  wanderSpeed: 1
 --- !u!114 &8152181732937082029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,8 +680,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91086e46dce9d4f428f369972b0b371d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Idle
-  rb: {fileID: 5097730669819673145}
-  characterAnimator: {fileID: 3496863204005333077}
 --- !u!114 &2356614730772313980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,6 +713,22 @@ MonoBehaviour:
   healTint: {r: 0.3, g: 1, b: 0.3, a: 1}
   damageTint: {r: 1, g: 0.3, b: 0.3, a: 1}
   deathFadeTime: 1.5
+--- !u!114 &5665445880748741833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4686669667602087861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f53f5b765a6544abaa98fda7e48972f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_AfterimageSpawner
+  spawnInterval: 0.01
+  ghostLifetime: 0.2
+  ghostTint: {r: 0.7, g: 0.7, b: 0.7, a: 0.7}
+  sortingOrderOffset: -1
 --- !u!1 &7239201570375037738
 GameObject:
   m_ObjectHideFlags: 0

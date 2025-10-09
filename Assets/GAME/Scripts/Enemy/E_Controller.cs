@@ -2,13 +2,18 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(State_Idle))]
+[RequireComponent(typeof(State_Wander))]
+[RequireComponent(typeof(State_Chase))]
+[RequireComponent(typeof(State_Attack))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
 
 public class E_Controller : MonoBehaviour, I_Controller
 {
-    public enum EState { Idle, Wander, Chase, Attack }
+    public enum EState { Idle, Wander, Chase, Attack, Dead }
 
     [Header("Main controller for enemy AI states")]
     [Header("References")]
@@ -16,68 +21,61 @@ public class E_Controller : MonoBehaviour, I_Controller
     [Min(1.2f)] public float attackRange = 1.2f;
                 public LayerMask playerLayer;
                 public EState defaultState = EState.Idle;
+                public EState currentState;
+                
+    [Header("Weapons")]
+    // public W_Base activeWeapon; // No longer needed, State_Attack will handle it
 
     [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
-    public float attackStartBuffer = 0.2f;
-           float attackInRangeTimer;  
+    public float attackStartBuffer = 0.2f;  
 
-    Rigidbody2D rb;
-    Animator anim;
-    EState currentState;
-    State_Idle idle;
-    State_Wander wander;
-    State_Chase chase;
-    State_Attack attack;
-    C_Stats c_Stats;
-    C_Health c_Health;
+    Rigidbody2D     rb;
+    Animator        anim;
+
+    State_Idle      idle;
+    State_Wander    wander;
+    State_Chase     chase;
+    State_Attack    attack;
+    C_Stats         c_Stats;
+    C_Health        c_Health;
 
     // Runtime vars
-    Transform currentTarget;
-    Vector2 desiredVelocity;
-    Vector2 knockback;
-    bool isStunned;
-    bool isDead;
-    float stunUntil;
-    float attackCooldown; // for State_Attack
-    float contactTimer;   // for collision damage
+    Transform       currentTarget;
+    Vector2         knockback, desiredVelocity; //, attackDir, lastAimDir;
+    bool            isStunned, isDead, isAttacking;    
+    float           stunUntil, attackCooldown, attackInRangeTimer, contactTimer;
 
     void Awake()
     {
-        rb       ??= GetComponent<Rigidbody2D>();
-        anim ??= GetComponentInChildren<Animator>();
-        idle = GetComponent<State_Idle>();
-        wander = GetComponent<State_Wander>();
-        chase = GetComponent<State_Chase>();
-        attack = GetComponent<State_Attack>();
-        c_Stats = GetComponent<C_Stats>();
-        c_Health = GetComponent<C_Health>();
-        c_Stats    ??= GetComponent<C_Stats>();
-        c_Health   ??= GetComponent<C_Health>();
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponentInChildren<Animator>();
 
-        if (!rb)     Debug.LogError($"{name}: Rigidbody2D is missing in E_Controller");
-        if (!anim)   Debug.LogError($"{name}: Animator is missing in E_Controller");
-        if (!idle) Debug.LogError($"{name}: State_Idle is missing in E_Controller");
-        if (!wander) Debug.LogError($"{name}: State_Wander is missing in E_Controller");
-        if (!chase) Debug.LogError($"{name}: State_Chase is missing in E_Controller");
-        if (!attack) Debug.LogError($"{name}: State_Attack is missing in E_Controller");
-        if (!c_Stats)  Debug.LogError($"{name}: C_Stats is missing in E_Controller");
-        if (!c_Health) Debug.LogError($"{name}: C_Health is missing in E_Controller");
+        idle         = GetComponent<State_Idle>();
+        wander       = GetComponent<State_Wander>();
+        chase        = GetComponent<State_Chase>();
+        attack       = GetComponent<State_Attack>();
+        c_Stats      = GetComponent<C_Stats>();
+        c_Health     = GetComponent<C_Health>();
+
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", -1f);
+        anim.SetFloat("idleX", 0f);
+        anim.SetFloat("idleY", -1f);
     }
 
     void OnEnable()
     {
-        c_Health.OnDied += HandleDeath;
+        c_Health.OnDied += OnDiedHandler;
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        c_Health.OnDied -= HandleDeath;
-        idle.enabled   = false;
-        wander.enabled = false;
-        chase.enabled  = false;
-        attack.enabled = false;
+        c_Health.OnDied -= OnDiedHandler;
+        idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
     }
+
+    void OnDiedHandler() => SwitchState(EState.Dead);
 
     void Update()
     {
@@ -85,88 +83,109 @@ public class E_Controller : MonoBehaviour, I_Controller
         if (isDead) return;
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
 
-        // Always check attackCircle first. If this hits the player -> the player also inside the detectionCircle
-        Collider2D attackCircle = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-        // If attackCircle not null, reuse it. Otherwise check the detectionCircle
-        Collider2D detectionCircle = attackCircle ?? Physics2D.OverlapCircle((Vector2)transform.position, detectionRange, playerLayer);
-
-        // Check true/false for each circle depending on player location
-        bool targetInsideAttackCircle = attackCircle;
-        bool targetInsideDetectionCircle = detectionCircle;
-
-        // Set current target to the player if inside either circle
-        if (targetInsideDetectionCircle) currentTarget = detectionCircle.transform;
-
-        // Build/decay the "stay-in-range" buffer timer
-        if (targetInsideAttackCircle) attackInRangeTimer += Time.deltaTime;
-        else attackInRangeTimer = 0f;
-
-        // Only ready to attack if: inside attack circle long enough AND off cooldown
-        bool readyToAttack = targetInsideAttackCircle
-                          && attackInRangeTimer >= attackStartBuffer
-                          && attackCooldown <= 0f;
-
-        // Decide desired state
-        EState desiredState =
-            readyToAttack ? EState.Attack :
-            targetInsideDetectionCircle ? EState.Chase :
-                                          defaultState;
-
-        // Never interrupt an active attack clip
-        if (currentState == EState.Attack && attack.IsAttacking && desiredState != EState.Attack) return;
-        // If nothing changed just return
-        if (desiredState == currentState) return;
-
-        // Apply state change
-        switch (desiredState)
-        {
-            case EState.Attack:
-                attack.SetTarget(currentTarget);
-                SwitchState(EState.Attack);
-                break;
-
-            case EState.Chase:
-                chase.SetTarget(currentTarget);
-                SwitchState(EState.Chase);
-                break;
-
-            default:
-                currentTarget = null;
-                SwitchState(defaultState);
-                break;
-        }
+        ProcessAI();
     }
-
-
 
     void FixedUpdate()
     {
-        // Death override
-        if (isDead) return;
-
         // Apply this frame: block state intent when stunned/dead, but still allow knockback
         Vector2 baseVel = (isDead || isStunned) ? Vector2.zero : desiredVelocity;
         rb.linearVelocity = baseVel + knockback;
 
         // Decay knockback for the NEXT frame
-        if (knockback.sqrMagnitude > 0f)
+        if (!isDead)
         {
             knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
         }
     }
 
-    // Set/Get attack cooldown timer for use by State_Attack
-    public float GetAttackCooldown => attackCooldown;
-    public void SetAttackCooldown(float attackCooldown)
+    void ProcessAI()
     {
-        this.attackCooldown = attackCooldown;
+        // 1/ Early exit conditions
+        if (c_Stats.currentHP <= 0)
+        {
+            SwitchState(EState.Dead);
+            return;
+        }
+
+        // Never interrupt an active attack animation
+        if (isAttacking) return;
+
+        // 2/ Sense for the player and update target
+        Collider2D targetInAttackRange = Physics2D.OverlapCircle(transform.position, attackRange, playerLayer);
+        Collider2D targetInDetectRange = targetInAttackRange ?? Physics2D.OverlapCircle(transform.position, detectionRange, playerLayer);
+
+        currentTarget = targetInDetectRange ? targetInDetectRange.transform : null;
+
+        // 3/ Decide on the next state based on target's position
+        if (currentTarget == null)
+        {
+            SwitchState(defaultState);
+            attackInRangeTimer = 0f; // Reset timer when no target
+            return;
+        }
+
+        // Update timer only when a target is in attack range
+        if (targetInAttackRange)
+            attackInRangeTimer += Time.deltaTime;
+
+        else // Reset if target steps out of range
+            attackInRangeTimer = 0f;
+
+        // Check if conditions are met to perform an attack
+        bool canAttack = targetInAttackRange 
+                      && attackInRangeTimer >= attackStartBuffer 
+                      && attackCooldown <= 0f;
+
+        if (canAttack)
+            SwitchState(EState.Attack);
+        else // If not attacking, but target is detected, chase it
+            SwitchState(EState.Chase);
     }
 
-    // Only E_Controller handle the movement + knockback
-    // Helper for State scripts to read/write movement intent + apply knockback
-    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    // W_Knockback now calls this first, so all states get shoved uniformly
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    // Switch states, enabling the chosen one and disabling others
+    public void SwitchState(EState state)
+    {
+        if (currentState == state) return;
+        currentState = state;
+
+        // disable all states first
+        idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
+
+        switch (state)
+        {
+            case EState.Dead: // Highest priority
+                desiredVelocity     = Vector2.zero;
+                knockback           = Vector2.zero;
+                rb.linearVelocity   = Vector2.zero;
+                isDead              = true;
+                isAttacking         = false;
+                isStunned           = false;
+
+                anim.SetTrigger("Die");
+                break;
+
+            case EState.Attack:
+                desiredVelocity     = Vector2.zero;
+                attack.enabled      = true;
+                isAttacking         = true;
+                attackCooldown      = c_Stats.attackCooldown;
+                break;
+
+            case EState.Chase:
+                chase.enabled       = true;
+                break;
+
+            case EState.Wander:
+                wander.enabled      = true;
+                break;
+
+            case EState.Idle: // Lowest priority
+                desiredVelocity     = Vector2.zero;
+                idle.enabled        = true;
+                break;
+        }
+    }
 
     // Stun coroutine called by W_Base when applying stun effect
     public IEnumerator StunFor(float duration)
@@ -181,50 +200,6 @@ public class E_Controller : MonoBehaviour, I_Controller
         while (Time.time < stunUntil) yield return null;
 
         isStunned = false;
-    }
-
-    // Handle death event from C_Health
-    void HandleDeath()
-    {
-        // Mark as dead
-        isDead = true;
-
-        // Freeze motion
-        knockback = Vector2.zero;
-        rb.linearVelocity = Vector2.zero;
-
-        // Stop AI scripts immediately so no more actions are scheduled
-        idle.enabled = false;
-        wander.enabled = false;
-        chase.enabled = false;
-        attack.enabled = false;
-
-        // Play death anim
-        anim.SetTrigger("Die");
-    }
-
-    // Switch states, enabling the chosen one and disabling others
-    public void SwitchState(EState s)
-    {
-        if (currentState == s) return;
-        currentState = s;
-
-        idle.enabled = (s == EState.Idle);
-        wander.enabled = (s == EState.Wander);
-        chase.enabled = (s == EState.Chase);
-        attack.enabled = (s == EState.Attack);
-
-        // On enter, provide context to newly enabled state
-        if (s == EState.Chase)
-        {
-            chase.SetTarget(currentTarget);
-            chase.SetRanges(attackRange);
-        }
-        else if (s == EState.Attack)
-        {
-            attack.SetTarget(currentTarget);
-            attack.SetRanges(attackRange);
-        }
     }
 
     // Collision damage while touching player
@@ -246,6 +221,13 @@ public class E_Controller : MonoBehaviour, I_Controller
         contactTimer = c_Stats.collisionTick;                  // reset tick window
     }
 
+    // Get/Set methods
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    public Transform GetTarget() => currentTarget;
+    public float GetAttackRange() => attackRange;
+    
     // DEBUG: visualize detection/attack ranges
     void OnDrawGizmosSelected()
     {

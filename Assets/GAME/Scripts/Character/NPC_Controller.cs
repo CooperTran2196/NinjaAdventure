@@ -41,9 +41,9 @@ public class NPC_Controller : MonoBehaviour, I_Controller
 
     void OnDisable()
     {
-        if (wander) wander.enabled = false;
-        if (talk)   talk.enabled   = false;
-        if (idle)   idle.enabled   = false;
+        wander.enabled = false;
+        talk.enabled   = false;
+        idle.enabled   = false;
 
         desiredVelocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
@@ -65,9 +65,9 @@ public class NPC_Controller : MonoBehaviour, I_Controller
         current = newState;
 
         // Enable exactly one state
-        if (idle)   idle.enabled   = newState == NPCState.Idle;
-        if (wander) wander.enabled = newState == NPCState.Wander;
-        if (talk)   talk.enabled   = newState == NPCState.Talk;
+        idle.enabled   = newState == NPCState.Idle;
+        wander.enabled = newState == NPCState.Wander;
+        talk.enabled   = newState == NPCState.Talk;
 
         // Reset movement intent on enter
         desiredVelocity = Vector2.zero;

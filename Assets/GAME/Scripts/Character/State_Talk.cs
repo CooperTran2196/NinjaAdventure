@@ -7,6 +7,7 @@ public class State_Talk : MonoBehaviour
     public Animator interactAnim; // Talk icon animator
     public D_SO currentDialog;
     [Header("All possible dialogs for this NPC, order matters")]
+    [Header("1 time > Completion > Repeatable > Default")]
     public List<D_SO> dialogs;
 
     Rigidbody2D rb;
@@ -43,8 +44,8 @@ public class State_Talk : MonoBehaviour
         characterAnim?.SetFloat("idleY", facingDir.y);
 
         // Play animations
-        characterAnim?.Play("Idle");       // idle while talking
-        interactAnim?.Play("WantToTalk");  // open talk icon
+        characterAnim.Play("Idle");       // idle while talking
+        interactAnim.Play("WantToTalk");  // open talk icon
     }
 
     // When disabled, restore physics and movement, hide talk icon

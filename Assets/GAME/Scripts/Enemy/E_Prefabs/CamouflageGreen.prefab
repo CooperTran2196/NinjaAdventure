@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 6119810545394067286}
   - component: {fileID: 5491900863659854905}
   - component: {fileID: 4879381578934999302}
+  - component: {fileID: 7676702251269401054}
   m_Layer: 7
   m_Name: CamouflageGreen
   m_TagString: Enemy
@@ -186,7 +187,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3642536699578532478}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 63.42, y: 30.1, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -398,6 +399,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   defaultState: 1
+  currentState: 0
   attackStartBuffer: 0.2
 --- !u!114 &931543976123964212
 MonoBehaviour:
@@ -412,11 +414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Wander
   startCenter: {x: 0, y: 0}
-  width: 6
-  height: 4
+  width: 12
+  height: 7
   pauseDuration: 1
-  idleState: Idle
-  walkState: Wander
+  wanderSpeed: 1
 --- !u!114 &7341859783198033473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,8 +430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91086e46dce9d4f428f369972b0b371d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Idle
-  rb: {fileID: 8981228776224992629}
-  characterAnimator: {fileID: 6768325851007840717}
 --- !u!114 &1198483012363430760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,11 +455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1823d566930c3c449c377de26288752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::State_Attack
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  attackCooldown: 0.8
   activeWeapon: {fileID: 3766875748033445254}
+  attackDir: {x: 0, y: 0}
 --- !u!114 &5491900863659854905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,6 +490,28 @@ MonoBehaviour:
   healTint: {r: 0.3, g: 1, b: 0.3, a: 1}
   damageTint: {r: 1, g: 0.3, b: 0.3, a: 1}
   deathFadeTime: 1.5
+--- !u!114 &7676702251269401054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3642536699578532478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::E_Reward
+  expReward: 10
+  lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  dropSpread: 0.75
+  dropChance: 100
+  numberOfDrops: 2
+  lootTable:
+  - item: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
+    quantity: 10
 --- !u!1 &4445550925293447624
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +542,7 @@ RectTransform:
   m_GameObject: {fileID: 4445550925293447624}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 1}
+  m_LocalScale: {x: 0.0005, y: 0.0005, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5785867152952223822}
@@ -607,8 +625,8 @@ CanvasGroup:
   m_GameObject: {fileID: 4445550925293447624}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &6354364802360282796
 MonoBehaviour:
@@ -624,7 +642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::E_HealthBarSlider
   e_Health: {fileID: 5491900863659854905}
   slider: {fileID: 490248868515416974}
-  worldOffset: {x: 0, y: 0.82, z: 0}
+  worldOffset: {x: 0, y: 0.8, z: 0}
   visibleTime: 10
   startHidden: 1
 --- !u!1 &4456689651249748573
@@ -813,7 +831,7 @@ Transform:
   m_GameObject: {fileID: 6734720363217710447}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.724911, y: 9.772451, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1005,7 +1023,7 @@ RectTransform:
   m_GameObject: {fileID: 9094245137645409123}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 19, y: 15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2758426416622514955}

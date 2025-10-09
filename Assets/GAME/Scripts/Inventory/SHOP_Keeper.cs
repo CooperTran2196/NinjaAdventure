@@ -7,7 +7,7 @@ public class SHOP_Keeper : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Animator Anim;
-    [SerializeField] CircleCollider2D trigger;
+    [SerializeField] Collider2D trigger;
     public SHOP_Manager shop_Manager;
     public CanvasGroup shopCanvasGroup;
     public static SHOP_Keeper currentShopKeeper;

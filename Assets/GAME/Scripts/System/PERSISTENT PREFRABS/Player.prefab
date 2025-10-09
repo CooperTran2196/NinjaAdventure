@@ -334,12 +334,13 @@ GameObject:
   - component: {fileID: 8164142730254441224}
   - component: {fileID: 4324443832536490533}
   - component: {fileID: 7982763556792287459}
-  - component: {fileID: 3511776025767346120}
-  - component: {fileID: 6860180165467835486}
-  - component: {fileID: 5991995357623520148}
-  - component: {fileID: 2285002935590100804}
   - component: {fileID: 5987711013172155053}
   - component: {fileID: 425422427777249334}
+  - component: {fileID: 5113754712853142253}
+  - component: {fileID: 1993199309945380321}
+  - component: {fileID: 4103756141362777526}
+  - component: {fileID: 1952565714420619451}
+  - component: {fileID: 3690183229213289973}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -355,7 +356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5589123278789176120}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 37.7, y: 53.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -563,7 +564,7 @@ MonoBehaviour:
   AP: 0
   MS: 5
   maxHP: 100
-  currentHP: 100
+  currentHP: 30
   AR: 0
   MR: 0
   KR: 10
@@ -591,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
   c_Stats: {fileID: 6644099288169238067}
-  c_Dodge: {fileID: 2285002935590100804}
+  c_Dodge: {fileID: 0}
   useDodgeIFrames: 1
   takingDamageAmount: 1
   healingAmount: 1
@@ -626,73 +627,6 @@ MonoBehaviour:
   xpStep: 30
   skillPointsPerLevel: 2
   debugXPAmount: 20
---- !u!114 &3511776025767346120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5589123278789176120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 731f646acfdeae84aa38a07bc811f82c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meleeWeapon: {fileID: 788822334993277513}
-  rangedWeapon: {fileID: 9165694127855322997}
-  magicWeapon: {fileID: 0}
-  attackDuration: 0.45
-  hitDelay: 0.15
-  autoKill: 0
---- !u!114 &6860180165467835486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5589123278789176120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a248c84468cc14fb5b00475330115b90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::C_State
-  p_Movement: {fileID: 5991995357623520148}
-  p_Combat: {fileID: 3511776025767346120}
-  e_Movement: {fileID: 0}
-  e_Combat: {fileID: 0}
-  c_Dodge: {fileID: 2285002935590100804}
-  lockMoveWhileAttacking: 1
-  lockDodge: 1
-  canWander: 0
-  CurrentState: 0
---- !u!114 &5991995357623520148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5589123278789176120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350ee43e4c433c94d8a194ac656b543d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lastMove: {x: 0, y: -1}
---- !u!114 &2285002935590100804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5589123278789176120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b698604a56cac4e3e81da6b060ac7463, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::C_Dodge
-  p_Movement: {fileID: 5991995357623520148}
-  e_Movement: {fileID: 0}
-  usePlayerInput: 1
 --- !u!114 &5987711013172155053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,3 +659,71 @@ MonoBehaviour:
   ghostLifetime: 0.2
   ghostTint: {r: 0.7, g: 0.7, b: 0.7, a: 0.7}
   sortingOrderOffset: -1
+--- !u!114 &5113754712853142253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44d24add380d4293bba1735723f01e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::P_Controller
+  defaultState: 0
+  currentState: 0
+  meleeWeapon: {fileID: 788822334993277513}
+  rangedWeapon: {fileID: 9165694127855322997}
+  autoKill: 0
+--- !u!114 &1993199309945380321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d90b1b90635464f33b3e584111ce61b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::P_State_Dodge
+--- !u!114 &4103756141362777526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e66147358f2443ab9de1121ffdeae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::P_State_Attack
+  activeWeapon: {fileID: 0}
+  attackDir: {x: 0, y: 0}
+--- !u!114 &1952565714420619451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bcf386aaab2f6d4f93e30ca5a400763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::P_State_Idle
+  lastFaceDirection: {x: 0, y: -1}
+--- !u!114 &3690183229213289973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c19c8e4729d448c78f6d8f965dbae23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::P_State_Movement

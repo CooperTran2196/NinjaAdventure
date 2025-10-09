@@ -1,13 +1,12 @@
 using System;
 using UnityEngine;
 
-
 [DisallowMultipleComponent]
 public class C_Health : MonoBehaviour
 {
     [Header("References")]
     public C_Stats c_Stats;
-    public C_Dodge c_Dodge;
+    P_State_Dodge p_State_Dodge; // Use the new state-based dodge
     C_FX fx;
 
     P_InputActions input;
@@ -26,6 +25,7 @@ public class C_Health : MonoBehaviour
     // Accessors
     int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
     public bool IsAlive => CurrentHP > 0;
+    bool IsDodging => useDodgeIFrames && p_State_Dodge != null && p_State_Dodge.enabled;
 
     // cached delegates so we can unsubscribe
     Action<int> fxDamagedHandler;
@@ -34,13 +34,13 @@ public class C_Health : MonoBehaviour
 
     void Awake()
     {
-        c_Stats ??= GetComponent<C_Stats>();
-        c_Dodge ??= GetComponent<C_Dodge>();
-        fx      ??= GetComponent<C_FX>();
+        c_Stats       ??= GetComponent<C_Stats>();
+        p_State_Dodge ??= GetComponent<P_State_Dodge>();
+        fx            ??= GetComponent<C_FX>();
 
-        if (!c_Stats)                    Debug.LogError($"{name}: C_Stats is missing in C_Health");
-        if (!c_Dodge && useDodgeIFrames) Debug.LogError($"{name}: C_Dodge is missing in C_Health");
-        if (!fx)                         Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in C_Health");
+        // P_State_Dodge is optional (only for player)
+        if (!fx)      Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
     }
 
     void OnEnable()
@@ -81,8 +81,7 @@ public class C_Health : MonoBehaviour
     public int ApplyDamage(int attackerAD, int attackerAP, int weaponAD, int weaponAP, float attackerArmorPen, float attackerMagicPen)
     {
         // Ignore if dead or dodging with IFrames
-        if (!IsAlive) return 0;
-        if (useDodgeIFrames && c_Dodge.IsDodging) return 0;
+        if (!IsAlive || IsDodging) return 0;
 
         // Calculate effective armor and magic resist after penetration
         float effectiveAR = c_Stats.AR * (1f - Mathf.Clamp01(attackerArmorPen / 100f));
@@ -108,7 +107,7 @@ public class C_Health : MonoBehaviour
     public void ChangeHealth(int amount)
     {
         // Ignore if dead, healing 0, or dodging with IFrames
-        if (!IsAlive || (amount < 0 && useDodgeIFrames && c_Dodge.IsDodging)) return;
+        if (!IsAlive || (amount < 0 && IsDodging)) return;
 
         // Clamp to valid range and apply
         int before    = CurrentHP;

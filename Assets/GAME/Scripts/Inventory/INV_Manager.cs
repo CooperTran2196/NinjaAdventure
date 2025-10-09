@@ -4,7 +4,7 @@ using TMPro;
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
 {
-    public static INV_Manager Instance { get; private set; }
+    public static INV_Manager Instance;
 
     [Header("Central API for the Inventory system, depend on P_StatsManager")]
     [Header("References")]

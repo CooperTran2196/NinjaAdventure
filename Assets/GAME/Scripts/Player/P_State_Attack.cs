@@ -1,83 +1,66 @@
 using System.Collections;
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class P_State_Attack : MonoBehaviour
 {
     [Header("References")]
-    public Animator animator;
-    public C_Stats c_Stats;
+    public W_Base  activeWeapon;
+    public Vector2 attackDir;
 
-    [Header("Weapons")]
-    public W_Melee  meleeWeapon;
-    public W_Ranged rangedWeapon;
-    public W_Base   magicWeapon;
+    [Header("Attack Timings")]
+    float attackDuration = 0.45f;
+    float hitDelay       = 0.15f;
 
-    [Header("Timings")]
-    [Min(0f)] public float attackDuration = 0.45f;
-    [Min(0f)] public float hitDelay = 0.15f;
-
-    public bool IsAttacking { get; private set; }
-
-    float cooldownTimer;
-    Vector2 attackDir = Vector2.down;
+    // Cache
+    Animator anim;
+    P_Controller controller;
 
     void Awake()
     {
-        animator ??= GetComponent<Animator>();
-        c_Stats  ??= GetComponent<C_Stats>();
-
-        if (!animator) Debug.LogWarning($"{name}: Animator missing on State_Attack_Player");
-        if (!c_Stats) Debug.LogWarning($"{name}: C_Stats missing on State_Attack_Player");
+        anim        = GetComponent<Animator>();
+        controller  = GetComponent<P_Controller>();
     }
 
-    public void SetDisabled(bool v)
+    void OnEnable()
     {
-        enabled = !v;
-        if (v)
-        {
-            IsAttacking = false;
-            animator?.SetBool("isAttacking", false);
-        }
+        anim.SetBool("isAttacking", true); // animator enter
     }
 
-    public void ForceStop()
+    void OnDisable()
     {
-        StopAllCoroutines();
-        IsAttacking = false;
-        animator?.SetBool("isAttacking", false);
-    }
-
-    public void RequestAttack(Vector2 dir, W_Base weapon)
-    {
-        if (weapon == null) return;
-        if (IsAttacking) return;
-        if (cooldownTimer > 0f) return;
-
-        attackDir = dir.sqrMagnitude > 0f ? dir.normalized : Vector2.down;
-        StartCoroutine(AttackRoutine(weapon));
-    }
-
-    IEnumerator AttackRoutine(W_Base weapon)
-    {
-        IsAttacking = true;
-        animator?.SetBool("isAttacking", true);
-        animator?.SetFloat("atkX", attackDir.x);
-        animator?.SetFloat("atkY", attackDir.y);
-
-        yield return new WaitForSeconds(hitDelay);
-        weapon.Attack(attackDir);
-
-        float rest = Mathf.Max(0f, attackDuration - hitDelay);
-        if (rest > 0f) yield return new WaitForSeconds(rest);
-
-        IsAttacking = false;
-        animator?.SetBool("isAttacking", false);
-        cooldownTimer = c_Stats.attackCooldown;
+        StopAllCoroutines(); // If player dies -> stop attack immediately
+        anim.SetBool("isAttacking", false); // Exit Attack animation by bool
+        controller.SetAttacking(false); // Normal finish
     }
 
     void Update()
     {
-        if (cooldownTimer > 0f) cooldownTimer -= Time.deltaTime;
+        // OPTIONAL: Keep idle facing towards attack direction - else use last movement direction
+        // anim.SetFloat("moveX", 0f);
+        // anim.SetFloat("moveY", 0f);
+        // anim.SetFloat("idleX", attackDir.x);
+        // anim.SetFloat("idleY", attackDir.y);
+    }
+
+    // Attack with weapon and direction (called by controller)
+    public void Attack(W_Base activeWeapon, Vector2 attackDir)
+    {
+        this.activeWeapon = activeWeapon;
+        this.attackDir = attackDir; // Controller already normalized
+
+        anim.SetFloat("atkX", attackDir.x);
+        anim.SetFloat("atkY", attackDir.y);
+
+        StartCoroutine(AttackRoutine());
+    }
+
+    // Just handles animation timing
+    IEnumerator AttackRoutine()
+    {
+        yield return new WaitForSeconds(hitDelay);
+        activeWeapon.Attack(attackDir);
+        yield return new WaitForSeconds(attackDuration - hitDelay);
+
+        controller.SetAttacking(false); // Interrupted by Dead
     }
 }

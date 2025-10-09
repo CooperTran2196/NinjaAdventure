@@ -1,145 +1,265 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
-public class P_Controller : MonoBehaviour, I_Controller
+[RequireComponent(typeof(P_State_Idle))]
+[RequireComponent(typeof(P_State_Movement))]
+[RequireComponent(typeof(P_State_Attack))]
+[RequireComponent(typeof(P_State_Dodge))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
+
+public class P_Controller : MonoBehaviour
 {
-    public enum PState { Idle, Move, Attack, Dodge }
+    public enum PState { Idle, Move, Attack, Dodge, Dead }
 
-    [Header("States")]
-    public PState defaultState = PState.Idle;
-    public State_Idle           idle;
-    public P_State_Movement    move;
-    public P_State_Attack  attack;
-    public State_Dodge          dodge;
-
+    [Header("Main controller for player input states")]
     [Header("References")]
-    public Rigidbody2D rb;
-    public Animator animator;
-    public C_Stats c_Stats;
-    public C_Health c_Health;
+    public PState defaultState = PState.Idle;
+    public PState currentState;
+
+    [Header("Weapons")]
+    public W_Base meleeWeapon;
+    public W_Base rangedWeapon;
 
     [Header("Debug")]
     public bool autoKill;
 
-    // runtime
+    Rigidbody2D rb;
+    Animator anim;
     P_InputActions input;
-    Vector2 desiredVelocity;
-    Vector2 knockback;
-    Vector2 moveAxis;
-    Vector2 aimDir = Vector2.down;
-    Vector2 lastMove = Vector2.down;
-    PState current;
 
-    const float MIN = 0.000001f;
+    P_State_Idle idle;
+    P_State_Movement move;
+    P_State_Attack attack;
+    P_State_Dodge dodge;
+    C_Stats c_Stats;
+    C_Health c_Health;
+
+    // Runtime vars - grouped by type
+    Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
+    bool isDead, isStunned, isAttacking, isDodging;
+    float stunUntil, attackCooldown, dodgeCooldown;
+    W_Base currentWeapon;
+
+    const float MIN_DISTANCE = 0.000001f;
 
     void Awake()
     {
-        rb       ??= GetComponent<Rigidbody2D>();
-        animator ??= GetComponent<Animator>();
-        c_Stats  ??= GetComponent<C_Stats>();
-        c_Health ??= GetComponent<C_Health>();
-        idle     ??= GetComponent<State_Idle>();
-        move     ??= GetComponent<P_State_Movement>();
-        attack   ??= GetComponent<P_State_Attack>();
-        dodge    ??= GetComponent<State_Dodge>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        c_Stats = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+
+        idle = GetComponent<P_State_Idle>();
+        move = GetComponent<P_State_Movement>();
+        attack = GetComponent<P_State_Attack>();
+        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
 
         input ??= new P_InputActions();
 
-        if (!rb) Debug.LogWarning($"{name}: Rigidbody2D missing on P_Controller");
-        if (!animator) Debug.LogWarning($"{name}: Animator missing on P_Controller");
-        if (!c_Stats) Debug.LogWarning($"{name}: C_Stats missing on P_Controller");
-        if (!c_Health) Debug.LogWarning($"{name}: C_Health missing on P_Controller");
-
-        animator?.SetFloat("moveX", 0f);
-        animator?.SetFloat("moveY", -1f);
-        animator?.SetFloat("idleX", 0f);
-        animator?.SetFloat("idleY", -1f);
+        anim.SetFloat("moveX", 0f);
+        anim.SetFloat("moveY", -1f);
+        anim.SetFloat("idleX", 0f);
+        anim.SetFloat("idleY", -1f);
     }
 
     void OnEnable()
     {
         input.Enable();
-        c_Health.OnDied += HandleDied;
+        c_Health.OnDied += OnDiedHandler;
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        c_Health.OnDied -= HandleDied;
         input.Disable();
+        c_Health.OnDied -= OnDiedHandler;
+        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
     }
 
-    void HandleDied()
-    {
-        animator?.SetTrigger("Die");
-        move?.SetDisabled(true);
-        attack?.ForceStop();
-        desiredVelocity = Vector2.zero;
-    }
+    void OnDiedHandler() => SwitchState(PState.Dead);
 
     void Update()
     {
+        if (isDead || isStunned) return;
+        if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
+        if (dodgeCooldown > 0f) dodgeCooldown -= Time.deltaTime;
+
+        // Debug kill
         if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
 
-        // input
-        moveAxis = input.Player.Move.ReadValue<Vector2>();
-        if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
-        move?.SetMoveAxis(moveAxis);
-        if (moveAxis.sqrMagnitude > MIN) lastMove = moveAxis;
-
-        aimDir = ReadMouseAim();
-        if (aimDir.sqrMagnitude <= MIN) aimDir = lastMove == Vector2.zero ? Vector2.down : lastMove;
-
-        if (input.Player.MeleeAttack.triggered)  attack?.RequestAttack(aimDir, attack.meleeWeapon);
-        if (input.Player.RangedAttack.triggered) attack?.RequestAttack(aimDir, attack.rangedWeapon);
-        if (input.Player.Dodge.triggered)        dodge?.RequestDodge(lastMove);
-
-        // precedence
-        if (c_Stats.currentHP <= 0) { SwitchState(PState.Idle); return; } // death anim via event
-        else if (dodge && dodge.IsDodging) SwitchState(PState.Dodge);
-        else if (attack && attack.IsAttacking) SwitchState(PState.Attack);
-        else if (move && move.HasMoveInput) SwitchState(PState.Move);
-        else SwitchState(PState.Idle);
+        // PROCESS INPUTS
+        ProcessInputs();
     }
 
+    void FixedUpdate()
+    {
+        if (isDead) return;
+
+        // Apply this frame: block state intent when stunned/dead, but still allow knockback
+        Vector2 baseVel = isStunned ? Vector2.zero : desiredVelocity;
+        rb.linearVelocity = baseVel + knockback;
+
+        // Decay knockback for the NEXT frame (always decay - MoveTowards handles zero gracefully)
+        knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
+    }
+
+    // Convert mouse position to world direction
     Vector2 ReadMouseAim()
     {
         Vector2 m = Mouse.current.position.ReadValue();
         var cam = Camera.main;
         if (!cam) return Vector2.zero;
         Vector3 world = cam.ScreenToWorldPoint(new Vector3(m.x, m.y, -cam.transform.position.z));
-        Vector2 dir = ((Vector2)world - (Vector2)transform.position);
-        return dir.sqrMagnitude > MIN ? dir.normalized : Vector2.zero;
+        Vector2 dir = (Vector2)world - (Vector2)transform.position;
+        return dir.sqrMagnitude > MIN_DISTANCE ? dir.normalized : Vector2.zero;
     }
 
-    void FixedUpdate()
+    void ProcessInputs()
     {
-        Vector2 forced = (dodge != null) ? dodge.ForcedVelocity : Vector2.zero;
-        Vector2 baseVel = forced != Vector2.zero ? forced : desiredVelocity;
-        rb.linearVelocity = baseVel + knockback;
-
-        if (knockback.sqrMagnitude > 0f)
+        // Handle death first (highest)
+        if (c_Stats.currentHP <= 0)
         {
-            float step = c_Stats.KR * Time.fixedDeltaTime;
-            knockback = Vector2.MoveTowards(knockback, Vector2.zero, step);
+            SwitchState(PState.Dead);
+            return;
+        }
+
+        // Don't interrupt while atacking or dodging
+        if (currentState == PState.Attack && isAttacking) return;
+        if (currentState == PState.Dodge && isDodging) return;
+
+        // Handle dodge input (high)
+        if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
+        {
+            SwitchState(PState.Dodge);
+            return;
+        }
+
+        // Handle attack inputs (mid)
+        if (attackCooldown <= 0f)
+        {
+            Vector2 mouseAim = ReadMouseAim();
+            if (mouseAim != Vector2.zero) attackDir = mouseAim;
+
+            if (input.Player.MeleeAttack.triggered)
+            {
+                currentWeapon = meleeWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+            if (input.Player.RangedAttack.triggered)
+            {
+                currentWeapon = rangedWeapon;
+                SwitchState(PState.Attack);
+                return;
+            }
+        }
+
+        // Handle movement input (low priority)
+        moveAxis = input.Player.Move.ReadValue<Vector2>();
+        if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
+
+        if (moveAxis.sqrMagnitude > MIN_DISTANCE)
+        {
+            lastMove = moveAxis;
+
+            // Continue moving if already in Move state
+            if (currentState == PState.Move)
+            {
+                // refresh axis without flipping states
+                move.SetMoveAxis(moveAxis);
+            }
+            else // Switch to Move state if not already
+            {
+                SwitchState(PState.Move);
+                move.SetMoveAxis(moveAxis);
+            }
+            return;
+        }
+
+        // Default to idle (lowest priority)
+        SwitchState(PState.Idle);
+    }
+
+    // Switch states with integrated death handling and attack logic
+    public void SwitchState(PState state)
+    {
+        if (currentState == state) return;
+        currentState = state;
+
+        // Disable all states first
+        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
+
+        switch (state)
+        {
+            case PState.Dead: // Highest priority
+                desiredVelocity = Vector2.zero;
+                knockback = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
+                isDead = true;
+                isAttacking = false;
+                isStunned = false;
+                isDodging = false;
+
+                anim.SetTrigger("Die");
+                break;
+
+            case PState.Dodge:
+                dodge.enabled = true;
+                isDodging = true;
+                dodgeCooldown = c_Stats.dodgeCooldown;
+
+                dodge.Dodge(lastMove);
+                break;
+
+            case PState.Attack:
+                desiredVelocity = Vector2.zero;
+                attack.enabled = true;
+
+                if (currentWeapon != null)
+                {
+                    attackCooldown = c_Stats.attackCooldown;
+                    isAttacking = true;
+                    attack.Attack(currentWeapon, attackDir);
+                    currentWeapon = null;
+                }
+                break;
+
+            case PState.Move:
+                move.enabled = true;
+
+                move.SetMoveAxis(moveAxis);
+                break;
+
+            case PState.Idle: // Lowest priority
+                desiredVelocity = Vector2.zero;
+                idle.enabled = true;
+
+                idle.SetIdleFacing(lastMove);
+                break;
         }
     }
 
-    void SwitchState(PState s)
+    // STUN FEATURE (same as enemy)
+    public IEnumerator StunFor(float duration)
     {
-        if (current == s) return;
-        current = s;
+        if (duration <= 0f) yield break;
 
-        if (idle)   idle.enabled = (s == PState.Idle);
-        if (move)   move.SetDisabled(s != PState.Move);
-        if (attack) attack.SetDisabled(s != PState.Attack);
-        // dodge runs autonomously during its window
+        // Extend the stun end if a longer one arrives
+        float newEnd = Time.time + duration;
+        if (newEnd > stunUntil) stunUntil = newEnd;
+
+        isStunned = true;
+        while (Time.time < stunUntil) yield return null;
+
+        isStunned = false;
     }
 
-    // I_Controller
-    public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
+    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
+    // State setters for external components
+    public void SetAttacking(bool value) => isAttacking = value;
+    public void SetDodging(bool value) => isDodging = value;
 }
