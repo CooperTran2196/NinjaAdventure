@@ -16,7 +16,7 @@ public class ExpUI : MonoBehaviour
     void Awake()
     {
         input = new P_InputActions();
-        p_Exp ??= FindFirstObjectByType<P_Exp>();
+        // p_Exp ??= FindFirstObjectByType<P_Exp>();
         expSlider ??= GetComponentInChildren<Slider>();
         currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
@@ -56,7 +56,7 @@ public class ExpUI : MonoBehaviour
     // Update the XP bar and level text
     void UpdateUI()
     {
-        int cur = p_Exp.currentXP;
+        int cur = p_Exp.currentExp;
         int req = p_Exp.GetXPRequiredForNext();
         expSlider.maxValue = req;
         expSlider.value = cur;

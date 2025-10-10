@@ -51,8 +51,12 @@ public class E_Reward : MonoBehaviour
 
     void HandleDied()
     {
-        // Grant EXP
-        p_Exp?.AddXP(expReward);
+        // Grant EXP and Kill
+        if (p_Exp != null)
+        {
+            p_Exp.AddXP(expReward);
+            p_Exp.AddKill();
+        }
 
         // --- Handle Loot Drops ---
         if (lootPrefab == null || lootTable.Count == 0) return;
