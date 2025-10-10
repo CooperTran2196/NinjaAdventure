@@ -3,22 +3,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[DisallowMultipleComponent]
 public class IntroUI : MonoBehaviour
 {
     [Header("Wiring")]
     [SerializeField] private CanvasGroup cg;
     [SerializeField] private Button startButton;
 
-    [Header("Timing")]
-    [SerializeField] private float showDelay = 2f;   // realtime seconds
-
-    private Coroutine showRoutine;
+    [Header("Timing (realtime seconds)")]
+    [SerializeField] private float showDelay = 2f;
 
     void Awake()
     {
         cg ??= GetComponent<CanvasGroup>();
-        startButton ??= GetComponentInChildren<Button>(true);
+        startButton ??= GetComponentInChildren<Button>();
     }
 
     void OnEnable()
@@ -28,47 +25,26 @@ public class IntroUI : MonoBehaviour
         cg.interactable = false;
         cg.blocksRaycasts = false;
 
-        showRoutine = StartCoroutine(ShowAfterDelay());
-    }
-
-    void OnDisable()
-    {
-        if (showRoutine != null)
-        {
-            StopCoroutine(showRoutine);
-            showRoutine = null;
-        }
+        StartCoroutine(ShowAfterDelay());
     }
 
     private IEnumerator ShowAfterDelay()
     {
-        // wait using unscaled time (immune to pauses/fade)
-        float t = showDelay;
-        while (t > 0f)
-        {
-            yield return null;
-            t -= Time.unscaledDeltaTime;
-        }
-
-        // pause world while intro is visible
-        Time.timeScale = 0f;
-
-        // show + take input
+        // Wait for showDelay seconds in real time
+        yield return new WaitForSecondsRealtime(showDelay);
+        // pause world + show + take input
+        Time.timeScale = 0f; 
         cg.alpha = 1f;
         cg.interactable = true;
         cg.blocksRaycasts = true;
-
-        // focus button for keyboard/controller submit
-        yield return null;
-        EventSystem.current?.SetSelectedGameObject(startButton.gameObject);
     }
 
     // Hook to Start Button OnClick
     public void StartClicked()
     {
-        Time.timeScale = 1f;                 // resume
+        Time.timeScale = 1f; // unpause world
         cg.interactable = false;
         cg.blocksRaycasts = false;
-        Destroy(gameObject);                  // one-time use
+        Destroy(gameObject); // one time use
     }
 }
