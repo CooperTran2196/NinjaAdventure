@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using UnityEngine;
 
 public class SYS_GameManager : MonoBehaviour
@@ -9,6 +10,10 @@ public class SYS_GameManager : MonoBehaviour
     public D_HistoryTracker d_HistoryTracker;
     public SYS_Fader sys_Fader; // Centralized reference to Fader
     public SHOP_Manager shop_Manager;
+
+    [Header("Restart")]
+    [SerializeField] private string initialSceneName = "Level1";
+    [SerializeField] private string initialSpawnId = "Start";
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -46,6 +51,22 @@ public class SYS_GameManager : MonoBehaviour
             audioSource.playOnAwake = false;
         }
     }
+
+public void FreshBoot()
+{
+    Time.timeScale = 1f;
+
+    // Destroy EVERY object in DontDestroyOnLoad scene
+    var temp = new GameObject("DDOL_Cleaner");
+    DontDestroyOnLoad(temp);
+    var ddol = temp.scene;
+    Object.Destroy(temp);
+    foreach (var root in ddol.GetRootGameObjects())
+        Object.Destroy(root);
+
+    // Now load the initial scene cleanly (must contain new managers/player)
+    UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
+}
 
     // Play music clip centrally
     public void PlayMusic(AudioClip clip)

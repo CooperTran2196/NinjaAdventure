@@ -90,39 +90,4 @@ public class P_Exp : MonoBehaviour
         int n = Mathf.Max(1, level);
         return xpBase + xpStep * (n - 1);
     }
-
-    public SYS_SaveSystem.ProgressSave SavingProgress()
-{
-    // gold is canonical in inventory; we mirror it here only if you want it in Progress too
-    int goldMirror = INV_Manager.Instance ? INV_Manager.Instance.gold : 0; // :contentReference[oaicite:2]{index=2}
-
-    return new SYS_SaveSystem.ProgressSave
-    {
-        level       = level,
-        currentExp  = currentExp,
-        skillPoints = skillPoints,
-        totalKills  = totalKills,
-        playTime    = playTime,
-        goldMirror  = goldMirror
-    };
-}
-
-public void LoadingProgress(SYS_SaveSystem.ProgressSave save)
-{
-    if (save == null) return;
-
-    // restore core progression
-    level       = save.level;
-    currentExp  = save.currentExp;
-    skillPoints = save.skillPoints;
-    totalKills  = save.totalKills;
-    playTime    = save.playTime;
-
-    // tell any listeners (UI) to refresh
-    OnXPChanged?.Invoke(currentExp, GetXPRequiredForNext()); // refresh bars
-    OnSPChanged?.Invoke(skillPoints);                        // refresh SP text
-
-    // NOTE: We don't invoke OnLevelUp on load (that’s for *earning* a level, not restoring one)
-}
-
 }

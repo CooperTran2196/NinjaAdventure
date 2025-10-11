@@ -18,7 +18,5 @@ public class SYS_SpawnPoint : MonoBehaviour
         // Find the player and move them here
         var player = GameObject.FindGameObjectWithTag("Player")?.transform;
         player.position = transform.position;
-        SYS_SaveSystem.Instance.NotifySpawnCommitted(spawnId, transform.position);
-
     }
 }

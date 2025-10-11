@@ -49,5 +49,12 @@ public class C_FX : MonoBehaviour
             yield return null;
         }
         if (destroySelfOnDeath) Destroy(go);
+        else
+        {
+            // Player path: restore full alpha so it's ready when re-enabled on restart
+            sr.color = new Color(c.r, c.g, c.b, 1f);
+            go.SetActive(false);         // keep GO for Ending UI → RestartGame to re-enable
+        }
+    
     }
 }
