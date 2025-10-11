@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SHOP_Manager : MonoBehaviour
 {
-    [Header("Shopping List")]
-
     [Header("Slots")]
     [SerializeField] SHOP_Slot[] shop_Slots;
 
@@ -16,8 +13,7 @@ public class SHOP_Manager : MonoBehaviour
     {
         inv_Manager ??= FindFirstObjectByType<INV_Manager>();
 
-        if (!inv_Manager)
-            Debug.LogError($"{name}: INV_Manager is missing in SHOP_Manager");
+        if (!inv_Manager) Debug.LogError("SHOP_Manager: INV_Manager is missing.");
         if (shop_Slots == null || shop_Slots.Length == 0)
             Debug.LogWarning("SHOP_Manager: No shopSlots assigned.", this);
     }

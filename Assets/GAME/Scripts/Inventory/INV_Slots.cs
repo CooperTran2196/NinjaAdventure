@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class INV_Slots : MonoBehaviour, IPointerClickHandler
 {
@@ -11,23 +11,23 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler
     [Header("MUST have for each slot")]
     [Header("Data")]
     public INV_ItemSO itemSO;
-    public int quantity;
+    public int        quantity;
 
     [Header("UI")]
-    public Image itemImage;
+    public Image    itemImage;
     public TMP_Text amountText;
 
     static SHOP_Manager shop_Manager;
 
     void Awake()
     {
-        itemImage ??= transform.Find("Icon")?.GetComponent<Image>();
-        amountText ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
+        itemImage   ??= transform.Find("Icon")?.GetComponent<Image>();
+        amountText  ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
         inv_Manager ??= GetComponentInParent<INV_Manager>();
 
-        if (!itemImage)     Debug.LogError($"{name}: itemImage is missing in INV_Slots");
-        if (!amountText)    Debug.LogError($"{name}: amountText is missing in INV_Slots");
-        if (!inv_Manager)   Debug.LogError($"{name}: INV_Manager is missing in INV_Slots");
+        if (!itemImage)   Debug.LogError("INV_Slots: itemImage is missing.");
+        if (!amountText)  Debug.LogError("INV_Slots: amountText is missing.");
+        if (!inv_Manager) Debug.LogError("INV_Slots: INV_Manager is missing.");
     }
 
     void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;

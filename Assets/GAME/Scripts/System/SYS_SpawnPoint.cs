@@ -1,7 +1,3 @@
-// <summary>
-// Spawns the player at the correct spawn point based on the last teleporter used.
-// </summary>
-
 using UnityEngine;
 
 public class SYS_SpawnPoint : MonoBehaviour

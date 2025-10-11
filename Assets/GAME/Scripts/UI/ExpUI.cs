@@ -1,6 +1,6 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ExpUI : MonoBehaviour
 {
@@ -8,7 +8,7 @@ public class ExpUI : MonoBehaviour
     public P_Exp p_Exp;
 
     [Header("UI")]
-    public Slider expSlider;
+    public Slider   expSlider;
     public TMP_Text currentLevelText;
 
     P_InputActions input;
@@ -16,20 +16,20 @@ public class ExpUI : MonoBehaviour
     void Awake()
     {
         input = new P_InputActions();
-        // p_Exp ??= FindFirstObjectByType<P_Exp>();
-        expSlider ??= GetComponentInChildren<Slider>();
+
+        expSlider        ??= GetComponentInChildren<Slider>();
         currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
-        if (!p_Exp) Debug.LogError($"{name}: P_Exp is missing in ExpUI");
-        if (!expSlider) Debug.LogError($"{name}: expSlider is missing in ExpUI");
-        if (!currentLevelText) Debug.LogError($"{name}: currentLevelText is missing in ExpUI");
+        if (!p_Exp)            Debug.LogError("ExpUI: P_Exp is missing.");
+        if (!expSlider)        Debug.LogError("ExpUI: expSlider is missing.");
+        if (!currentLevelText) Debug.LogError("ExpUI: currentLevelText is missing.");
     }
 
     void OnEnable()
     {
         input.Debug.Enable();
 
-        p_Exp.OnLevelUp += HandleLevelUp;
+        p_Exp.OnLevelUp   += HandleLevelUp;
         p_Exp.OnXPChanged += HandleXPChanged;
 
         UpdateUI();
@@ -39,7 +39,7 @@ public class ExpUI : MonoBehaviour
     {
         input.Debug.Disable();
 
-        p_Exp.OnLevelUp -= HandleLevelUp;
+        p_Exp.OnLevelUp   -= HandleLevelUp;
         p_Exp.OnXPChanged -= HandleXPChanged;
     }
 
@@ -53,7 +53,6 @@ public class ExpUI : MonoBehaviour
     void HandleLevelUp(int newLevel) => UpdateUI();
     void HandleXPChanged(int cur, int req) => UpdateUI();
 
-    // Update the XP bar and level text
     void UpdateUI()
     {
         int cur = p_Exp.currentExp;

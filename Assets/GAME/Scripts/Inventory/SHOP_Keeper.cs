@@ -1,37 +1,37 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class SHOP_Keeper : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] Animator Anim;
+    [SerializeField] Animator   Anim;
     [SerializeField] Collider2D trigger;
-    public SHOP_Manager shop_Manager;
-    public CanvasGroup shopCanvasGroup;
+    public SHOP_Manager   shop_Manager;
+    public CanvasGroup    shopCanvasGroup;
     public static SHOP_Keeper currentShopKeeper;
 
-    bool playerInRange;
-    bool isShopOpen = false;
-    P_InputActions input;
-
+    [Header("Shop Inventory")]
     [SerializeField] private List<INV_ItemSO> shopItems;
     [SerializeField] private List<INV_ItemSO> shopWeapons;
     [SerializeField] private List<INV_ItemSO> shopArmors;
+
+    bool           playerInRange;
+    bool           isShopOpen = false;
+    P_InputActions input;
 
     public static event Action<SHOP_Manager, bool> OnShopStateChanged;
 
     void Awake()
     {
-        Anim ??= GetComponentInChildren<Animator>(true);
+        Anim    ??= GetComponentInChildren<Animator>(true);
         trigger ??= GetComponent<CircleCollider2D>();
         input = new P_InputActions();
     }
 
+    // Assign references in Start to ensure SYS_GameManager.Instance is ready
     void Start()
     {
-        // Assign references in Start to ensure SYS_GameManager.Instance is ready.
         if (SYS_GameManager.Instance != null)
         {
             shop_Manager = SYS_GameManager.Instance.shop_Manager;
@@ -41,8 +41,8 @@ public class SHOP_Keeper : MonoBehaviour
             }
         }
 
-        if (!shop_Manager) Debug.LogError($"{name}: Could not find SHOP_Manager from SYS_GameManager.");
-        if (!shopCanvasGroup) Debug.LogError($"{name}: Could not find CanvasGroup on SHOP_Manager.");
+        if (!shop_Manager)    Debug.LogError("SHOP_Keeper: Could not find SHOP_Manager from SYS_GameManager.");
+        if (!shopCanvasGroup) Debug.LogError("SHOP_Keeper: Could not find CanvasGroup on SHOP_Manager.");
     }
 
     void OnEnable()
@@ -53,7 +53,6 @@ public class SHOP_Keeper : MonoBehaviour
     void OnDisable()
     {
         input.UI.Disable();
-        // Dispose of the input object to prevent memory leaks
         input.Dispose();
     }
 
@@ -63,25 +62,24 @@ public class SHOP_Keeper : MonoBehaviour
         {
             if (!isShopOpen)
             {
-                Time.timeScale = 0; // Pause the game
-                currentShopKeeper = this;
-                isShopOpen = true;
+                Time.timeScale                  = 0;
+                currentShopKeeper               = this;
+                isShopOpen                      = true;
                 OnShopStateChanged?.Invoke(shop_Manager, true);
-                shopCanvasGroup.alpha = 1; // Show the shop UI
-                shopCanvasGroup.interactable = true;
-                shopCanvasGroup.blocksRaycasts = true;
+                shopCanvasGroup.alpha           = 1;
+                shopCanvasGroup.interactable    = true;
+                shopCanvasGroup.blocksRaycasts  = true;
                 OpenItemShop();
-
             }
             else
             {
-                Time.timeScale = 1; // Resume the game
-                currentShopKeeper = null;
-                isShopOpen = false;
+                Time.timeScale                  = 1;
+                currentShopKeeper               = null;
+                isShopOpen                      = false;
                 OnShopStateChanged?.Invoke(shop_Manager, false);
-                shopCanvasGroup.alpha = 0; // Hide the shop UI
-                shopCanvasGroup.interactable = false;
-                shopCanvasGroup.blocksRaycasts = false;
+                shopCanvasGroup.alpha           = 0;
+                shopCanvasGroup.interactable    = false;
+                shopCanvasGroup.blocksRaycasts  = false;
             }
         }
     }
@@ -95,6 +93,7 @@ public class SHOP_Keeper : MonoBehaviour
     {
         shop_Manager.PopulateShopItems(shopWeapons);
     }
+
     public void OpenArmourShop()
     {
         shop_Manager.PopulateShopItems(shopArmors);

@@ -1,39 +1,36 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class HealthUI : MonoBehaviour
 {
     [Header("References")]
-    public C_Stats p_Stats;
-    public C_Health p_Health;
+    public C_Stats        p_Stats;
+    public C_Health       p_Health;
     public P_StatsManager p_StatsManager;
-    public Slider healthSlider;
-    public TMP_Text healthText;
+    public Slider         healthSlider;
+    public TMP_Text       healthText;
 
     void Awake()
     {
-        // Find references if not assigned
-        p_Stats ??= FindFirstObjectByType<C_Stats>();
-        p_Health ??= FindFirstObjectByType<C_Health>();
+        p_Stats        ??= FindFirstObjectByType<C_Stats>();
+        p_Health       ??= FindFirstObjectByType<C_Health>();
         p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_Stats) Debug.LogError($"{name}: C_Stats is missing in HealthUI");
-        if (!p_Health) Debug.LogError($"{name}: C_Health is missing in HealthUI");
-        if (!p_StatsManager) Debug.LogError($"{name}: P_StatsManager is missing in HealthUI");
-        if (!healthSlider) Debug.LogError($"{name}: healthSlider is missing in HealthUI");
+        if (!p_Stats)        Debug.LogError("HealthUI: C_Stats is missing.");
+        if (!p_Health)       Debug.LogError("HealthUI: C_Health is missing.");
+        if (!p_StatsManager) Debug.LogError("HealthUI: P_StatsManager is missing.");
+        if (!healthSlider)   Debug.LogError("HealthUI: healthSlider is missing.");
 
-        // Initialize slider
         healthSlider.maxValue = p_Stats.maxHP;
-        healthSlider.value = p_Stats.currentHP;
+        healthSlider.value    = p_Stats.currentHP;
     }
 
     void OnEnable()
     {
-        // Subscribe to health and stat change events
         p_Health.OnDamaged += HandleHealthChanged;
-        p_Health.OnHealed += HandleHealthChanged;
-        p_Health.OnDied += UpdateUI;
+        p_Health.OnHealed  += HandleHealthChanged;
+        p_Health.OnDied    += UpdateUI;
 
         p_StatsManager.OnStatsChanged += UpdateUI;
 
@@ -43,11 +40,10 @@ public class HealthUI : MonoBehaviour
     void OnDisable()
     {
         p_Health.OnDamaged -= HandleHealthChanged;
-        p_Health.OnHealed -= HandleHealthChanged;
-        p_Health.OnDied -= UpdateUI;
+        p_Health.OnHealed  -= HandleHealthChanged;
+        p_Health.OnDied    -= UpdateUI;
 
         p_StatsManager.OnStatsChanged -= UpdateUI;
-
     }
 
     // A helper method to match the signature of OnDamaged and OnHealed events
@@ -61,7 +57,7 @@ public class HealthUI : MonoBehaviour
     {
         // Update the slider's max value and current value
         healthSlider.maxValue = p_Stats.maxHP;
-        healthSlider.value = p_Stats.currentHP;
+        healthSlider.value    = p_Stats.currentHP;
 
         healthText.text = $"{p_Stats.currentHP} / {p_Stats.maxHP}";
     }

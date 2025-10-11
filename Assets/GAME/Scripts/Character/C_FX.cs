@@ -15,7 +15,7 @@ public class C_FX : MonoBehaviour
 
     [Header("Death")]
     public float deathFadeTime = 1.5f;
-
+    public bool destroySelfOnDeath = true;
     Color baseRGB;
 
     void Awake()
@@ -48,6 +48,13 @@ public class C_FX : MonoBehaviour
             sr.color = new Color(c.r, c.g, c.b, k);
             yield return null;
         }
-        Destroy(go);
+        if (destroySelfOnDeath) Destroy(go);
+        else
+        {
+            // Player path: restore full alpha so it's ready when re-enabled on restart
+            sr.color = new Color(c.r, c.g, c.b, 1f);
+            go.SetActive(false);         // keep GO for Ending UI → RestartGame to re-enable
+        }
+    
     }
 }

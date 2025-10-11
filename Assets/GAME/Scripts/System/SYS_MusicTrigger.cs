@@ -4,11 +4,10 @@ public class SYS_MusicTrigger : MonoBehaviour
 {
     [SerializeField] private AudioClip audioClip;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    // When the player enters the trigger, play the specified music
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            SYS_GameManager.Instance.PlayMusic(audioClip);
-        }
+        if (!other.CompareTag("Player")) return;
+        SYS_GameManager.Instance.PlayMusic(audioClip);
     }
 }

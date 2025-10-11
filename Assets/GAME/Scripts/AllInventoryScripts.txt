@@ -118,6 +118,7 @@ public class INV_ItemSO : ScriptableObject
 {
     [Header("Item Data")]
     public string itemName = "Auto Filled by OnValidate";
+    public string id;
     [TextArea] public string description;
     public Sprite image;
     public int stackSize = 3;
@@ -134,6 +135,8 @@ public class INV_ItemSO : ScriptableObject
     {
         itemName = name;
     }
+
+    
 }
 
 // ----- File: INV_Loot.cs -----
@@ -224,6 +227,7 @@ public class INV_Loot : MonoBehaviour
 // ----- File: INV_Manager.cs -----
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
@@ -354,7 +358,6 @@ public class INV_Manager : MonoBehaviour
         }
         return false;
     }
-
 }
 
 // ----- File: INV_Slots.cs -----

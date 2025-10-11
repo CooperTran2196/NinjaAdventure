@@ -738,7 +738,7 @@ public class P_StatsManager : MonoBehaviour
     }
 
     /// Recalculates final stats based on: Base Stats + Flat Buffs
-    private void RecalculateAllStats()
+    public void RecalculateAllStats()
     {
         // 1/ Reset stats to their current base values
         c_Stats.AD      = baseAD;

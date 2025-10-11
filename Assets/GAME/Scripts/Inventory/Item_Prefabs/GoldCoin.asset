@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GoldCoin
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   itemName: GoldCoin
+  id: gold_coin
   description: "Shiny currency of the realm\u2014merchants love it."
   image: {fileID: 1906689804, guid: 03c7a0876c1d4f349bc8f590d2b674d1, type: 3}
   stackSize: 3

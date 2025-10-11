@@ -279,13 +279,22 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleSetting"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7d38e11-db8a-4657-9093-ad4d3649d500"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""297a4245-1580-4839-a3ad-75057190f2d3"",
-                    ""path"": ""<Keyboard>/l"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -323,6 +332,17 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EndConvo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e6c5672-c196-4152-ab6d-31dec1c60c73"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleSetting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -412,6 +432,7 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         m_UI_ToggleSkillTree = m_UI.FindAction("ToggleSkillTree", throwIfNotFound: true);
         m_UI_ToggleShop = m_UI.FindAction("ToggleShop", throwIfNotFound: true);
         m_UI_EndConvo = m_UI.FindAction("EndConvo", throwIfNotFound: true);
+        m_UI_ToggleSetting = m_UI.FindAction("ToggleSetting", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_GainExp = m_Debug.FindAction("GainExp", throwIfNotFound: true);
@@ -643,6 +664,7 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ToggleSkillTree;
     private readonly InputAction m_UI_ToggleShop;
     private readonly InputAction m_UI_EndConvo;
+    private readonly InputAction m_UI_ToggleSetting;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -670,6 +692,10 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/EndConvo".
         /// </summary>
         public InputAction @EndConvo => m_Wrapper.m_UI_EndConvo;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ToggleSetting".
+        /// </summary>
+        public InputAction @ToggleSetting => m_Wrapper.m_UI_ToggleSetting;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -708,6 +734,9 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @EndConvo.started += instance.OnEndConvo;
             @EndConvo.performed += instance.OnEndConvo;
             @EndConvo.canceled += instance.OnEndConvo;
+            @ToggleSetting.started += instance.OnToggleSetting;
+            @ToggleSetting.performed += instance.OnToggleSetting;
+            @ToggleSetting.canceled += instance.OnToggleSetting;
         }
 
         /// <summary>
@@ -731,6 +760,9 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @EndConvo.started -= instance.OnEndConvo;
             @EndConvo.performed -= instance.OnEndConvo;
             @EndConvo.canceled -= instance.OnEndConvo;
+            @ToggleSetting.started -= instance.OnToggleSetting;
+            @ToggleSetting.performed -= instance.OnToggleSetting;
+            @ToggleSetting.canceled -= instance.OnToggleSetting;
         }
 
         /// <summary>
@@ -960,6 +992,13 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnEndConvo(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleSetting" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleSetting(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.
