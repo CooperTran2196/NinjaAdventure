@@ -12,6 +12,7 @@ public class C_Stats : MonoBehaviour
     public int currentHP = 10;
     public int AR = 0; // Armor
     public int MR = 0; // Magic Resist
+    public int MP = 0; // Mana
     public float KR = 10f; // knockback Resist
 
     [Header("Special Stats")]

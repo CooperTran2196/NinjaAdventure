@@ -76,6 +76,12 @@ public class ST_Manager : MonoBehaviour
             SetOpen(!panelToggle);
     }
 
+    // Public method for UI button onClick events
+    public void OnClickToggle()
+    {
+        SetOpen(!panelToggle);
+    }
+
     // Open/close the skill tree UI
     void SetOpen(bool open)
     {

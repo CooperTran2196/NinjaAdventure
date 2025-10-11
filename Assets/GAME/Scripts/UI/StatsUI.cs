@@ -10,7 +10,7 @@ public class StatsUI : MonoBehaviour
     public GameObject[]   statsSlots;
 
     P_InputActions input;
-    bool           statsOpen = false;
+    bool           panelToggle = false;
 
     void Awake()
     {
@@ -47,12 +47,18 @@ public class StatsUI : MonoBehaviour
     void Update()
     {
         if (input.UI.ToggleStats.WasPressedThisFrame())
-            SetOpen(!statsOpen);
+            SetOpen(!panelToggle);
+    }
+
+    // Public method for UI button onClick events
+    public void OnClickToggle()
+    {
+        SetOpen(!panelToggle);
     }
 
     void SetOpen(bool open)
     {
-        statsOpen = open;
+        panelToggle = open;
 
         Time.timeScale    = open ? 0f : 1f;
         statsCanvas.alpha = open ? 1f : 0f;
@@ -93,6 +99,16 @@ public class StatsUI : MonoBehaviour
         statsSlots[6].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
     }
 
+    public void UpdateMP()
+    {
+        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.MP;
+    }
+    
+    public void UpdateLS()
+    {
+        statsSlots[8].GetComponentInChildren<TMP_Text>().text = "Lifesteal: " + p_Stats.lifesteal + "%";
+    }
+
     public void UpdateAllStats()
     {
         UpdateAD();
@@ -103,5 +119,7 @@ public class StatsUI : MonoBehaviour
         UpdateAR();
         UpdateMR();
         UpdateKR();
+        UpdateMP();
+        UpdateLS();
     }
 }
