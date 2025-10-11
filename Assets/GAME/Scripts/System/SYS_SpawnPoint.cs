@@ -8,6 +8,7 @@ public class SYS_SpawnPoint : MonoBehaviour
 {
     [Header("Must match the teleporter's Destination Spawn Id")]
     public string spawnId = "DoorA";
+    
 
     void Start()
     {
@@ -17,5 +18,7 @@ public class SYS_SpawnPoint : MonoBehaviour
         // Find the player and move them here
         var player = GameObject.FindGameObjectWithTag("Player")?.transform;
         player.position = transform.position;
+        SYS_SaveSystem.Instance.NotifySpawnCommitted(spawnId, transform.position);
+
     }
 }

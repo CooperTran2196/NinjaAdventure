@@ -11705,6 +11705,7 @@ GameObject:
   - component: {fileID: 959521880}
   - component: {fileID: 959521879}
   - component: {fileID: 959521878}
+  - component: {fileID: 959521883}
   - component: {fileID: 959521882}
   m_Layer: 5
   m_Name: EndingCanvas
@@ -11712,7 +11713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &959521878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11789,7 +11790,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 395813280}
-  m_Father: {fileID: 1671039988}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11808,15 +11809,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e398b04a1af74876ae01aacf3123669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endingCanvas: {fileID: 0}
-  statsPanel: {fileID: 0}
-  endingPanelText: {fileID: 0}
-  levelText: {fileID: 0}
-  expText: {fileID: 0}
-  totalKillsText: {fileID: 0}
-  totalTimeText: {fileID: 0}
-  replayButton: {fileID: 0}
+  cg: {fileID: 959521883}
+  replayButton: {fileID: 2047428809}
+  titleText: {fileID: 1495701202}
+  statsPanel: {fileID: 795699312}
+  levelText: {fileID: 1764566185}
+  expText: {fileID: 1498546220}
+  killsText: {fileID: 1185232656}
+  timeText: {fileID: 1267329631}
+  playerHealth: {fileID: 714147520}
   finalBossHealth: {fileID: 0}
+  nextSceneName: 
+  gameOverDelay: 2
+  playerExp: {fileID: 714147527}
+--- !u!225 &959521883
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959521877}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1003489534 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 35553617304630305, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
@@ -12127,10 +12144,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795699313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -350}
-  m_SizeDelta: {x: 300, y: 70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1185232655
 CanvasRenderer:
@@ -12268,10 +12285,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795699313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -420}
-  m_SizeDelta: {x: 300, y: 70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1267329630
 CanvasRenderer:
@@ -13108,10 +13125,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795699313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -280}
-  m_SizeDelta: {x: 300, y: 70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1498546219
 CanvasRenderer:
@@ -13596,7 +13613,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 959521881}
   - {fileID: 888351438}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13802,10 +13818,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795699313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -210}
-  m_SizeDelta: {x: 300, y: 70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1764566184
 CanvasRenderer:
@@ -13926,7 +13942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1764680111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14702,10 +14718,10 @@ RectTransform:
   - {fileID: 815136696}
   m_Father: {fileID: 795699313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -490}
-  m_SizeDelta: {x: 300, y: 70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2047428807
 MonoBehaviour:
@@ -14788,7 +14804,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2047428807}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 959521882}
+        m_TargetAssemblyTypeName: EndingUI, Assembly-CSharp
+        m_MethodName: OnClickReplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &2090233502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16978,6 +17006,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5113754712853142253, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
+      propertyPath: autoKill
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5589123278789176120, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_Name
       value: Player
@@ -16988,7 +17020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6644099288169238067, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: currentHP
-      value: 300
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8164142730254441224, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: c_Dodge
@@ -17657,6 +17689,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1712702978384426427}
   - {fileID: 1764680115}
+  - {fileID: 959521881}
   - {fileID: 266626640}
   - {fileID: 2005489769}
   - {fileID: 1373019667}

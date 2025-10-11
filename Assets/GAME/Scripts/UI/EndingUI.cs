@@ -3,131 +3,158 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+[DisallowMultipleComponent]
 public class EndingUI : MonoBehaviour
 {
-    [Header("UI References")]
-    [Tooltip("Canvas for the ending screen")]
-    [SerializeField] Canvas endingCanvas;
+    [Header("Wiring")]
+    [SerializeField] private CanvasGroup cg;
+    [SerializeField] private Button replayButton;
+    [SerializeField] private TMP_Text titleText;     // "Victory!" / "Game Over"
+    [SerializeField] private GameObject statsPanel;  // now shown on BOTH win/lose
+    [SerializeField] private TMP_Text levelText;
+    [SerializeField] private TMP_Text expText;
+    [SerializeField] private TMP_Text killsText;
+    [SerializeField] private TMP_Text timeText;
 
-    [Tooltip("Panel for stats (hidden on game over)")]
-    [SerializeField] GameObject statsPanel;
-    [SerializeField] TMP_Text endingPanelText; // "Victory!" or "Game Over"
-    [SerializeField] TMP_Text levelText;
-    [SerializeField] TMP_Text expText;
-    [SerializeField] TMP_Text totalKillsText;
-    [SerializeField] TMP_Text totalTimeText;
-    [SerializeField] Button replayButton;
+    [Header("End Triggers (optional)")]
+    [SerializeField] private C_Health playerHealth;     // show Game Over on player death (with delay)
+    [SerializeField] private C_Health finalBossHealth;  // show Victory on boss death (no delay)
 
-    [Header("System References")]
-    [Tooltip("Drag the Final Boss GameObject here")]
-    [SerializeField] C_Health finalBossHealth;
+    [Header("Next Scene (optional)")]
+    [Tooltip("If empty, reloads current scene; otherwise loads this scene (e.g., \"Level2\").")]
+    [SerializeField] private string nextSceneName = "";
 
-    private P_Exp p_Exp;
-    private C_Health playerHealth;
-    private bool isGameOver = false;
+    [Header("Timing")]
+    [Tooltip("Delay after player death before the Ending UI appears (realtime seconds).")]
+    [SerializeField] private float gameOverDelay = 2f;  // realtime seconds
 
-    private void Awake()
+    [Header("Data")]
+    [SerializeField] private P_Exp playerExp;   // provides level/currentExp/totalKills/playTime
+private bool isWin;
+
+    private bool shown;
+
+    void Awake()
     {
-        // Auto-wire components
-        p_Exp = FindFirstObjectByType<P_Exp>();
-        
-        // Find player health component
-        P_Controller player = FindFirstObjectByType<P_Controller>();
-        if (player != null)
+        cg ??= GetComponent<CanvasGroup>();
+        replayButton ??= GetComponentInChildren<Button>(true);
+        playerExp ??= FindObjectOfType<P_Exp>(true);
+
+        if (!cg) Debug.LogError("[EndingUI] Missing CanvasGroup.");
+        if (!replayButton) Debug.LogError("[EndingUI] Missing Replay Button.");
+        if (!titleText) Debug.LogError("[EndingUI] Missing titleText.");
+        if (!statsPanel) Debug.LogError("[EndingUI] Missing statsPanel.");
+        if (!levelText) Debug.LogError("[EndingUI] Missing levelText.");
+        if (!expText) Debug.LogError("[EndingUI] Missing expText.");
+        if (!killsText) Debug.LogError("[EndingUI] Missing killsText.");
+        if (!timeText) Debug.LogError("[EndingUI] Missing timeText.");
+        if (!playerExp) Debug.LogWarning("[EndingUI] P_Exp not found; stats will be blank.");
+    }
+
+    void OnEnable()
+    {
+        // start hidden & non-interactive
+        cg.alpha = 0f;
+        cg.interactable = false;
+        cg.blocksRaycasts = false;
+
+        if (playerHealth) playerHealth.OnDied += OnPlayerDied;
+        if (finalBossHealth) finalBossHealth.OnDied += OnBossDied;
+        // Button OnClick -> OnClickReplay() should be wired in Inspector (mouse only; no keyboard handling)
+    }
+
+    void OnDisable()
+    {
+        if (playerHealth) playerHealth.OnDied -= OnPlayerDied;
+        if (finalBossHealth) finalBossHealth.OnDied -= OnBossDied;
+    }
+
+    // Optional public triggers (e.g., from a portal)
+    public void ShowVictory()  => Show(true);
+    public void ShowGameOver() => Show(false);
+
+    private void OnBossDied()   => Show(true);
+
+    private void OnPlayerDied()
+    {
+        if (shown) return;
+        StartCoroutine(ShowGameOverAfterDelay());
+    }
+
+    private System.Collections.IEnumerator ShowGameOverAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(gameOverDelay);
+        Show(false);
+    }
+
+    private void Show(bool win)
+    {
+        if (shown) return;
+        shown = true;
+        isWin = win; 
+        // Pause world while the ending screen is visible
+        Time.timeScale = 0f;
+
+        titleText.text = win ? "Victory!" : "Game Over";
+
+        // Stats now show regardless of outcome
+        statsPanel.SetActive(true);
+        if (playerExp)
         {
-            playerHealth = player.GetComponent<C_Health>();
+            levelText.text = $"Level {playerExp.level}";
+            expText.text   = $"{playerExp.currentExp} XP";
+            killsText.text = playerExp.totalKills.ToString();
+            timeText.text  = FormatTime(playerExp.playTime);
         }
 
-        // Null checks
-        if (!p_Exp) Debug.LogError("EndingUI: P_Exp is missing in the scene.");
-        if (!playerHealth) Debug.LogError("EndingUI: Player's C_Health component not found.");
-        if (!finalBossHealth) Debug.LogError("EndingUI: Final Boss Health is not assigned in the inspector.");
-        if (!endingCanvas) Debug.LogError("EndingUI: EndingCanvas is not assigned.");
+        // Reveal modal
+        cg.alpha = 1f;
+        cg.interactable = true;
+        cg.blocksRaycasts = true;
     }
 
-    private void Start()
+    private string FormatTime(float seconds)
     {
-        // Hide canvas at start
-        endingCanvas.enabled = false;
+        if (seconds < 0f) seconds = 0f;
+        int h = Mathf.FloorToInt(seconds / 3600f);
+        int m = Mathf.FloorToInt((seconds % 3600f) / 60f);
+        int s = Mathf.FloorToInt(seconds % 60f);
+        return h > 0 ? $"{h:D2}:{m:D2}:{s:D2}" : $"{m:D2}:{s:D2}";
+    }
 
+    // Hook this to the Replay button OnClick in the Inspector (mouse click only)
+public void OnClickReplay()
+{
+    if (!shown) return;
 
-        // Assign button listener
-        if (replayButton != null)
+    // Stop taking input first
+    cg.interactable = false;
+    cg.blocksRaycasts = false;
+
+    // Unpause before traveling
+    Time.timeScale = 1f;
+
+    if (isWin)
+    {
+        // Optional: ensure boss-death spawn override is cleared on victory
+        SYS_SaveSystem.Instance.ClearBossDeathReturnSpawn();
+
+        if (!string.IsNullOrEmpty(nextSceneName))
         {
-            replayButton.onClick.AddListener(OnReplayButtonClicked);
+            // Victory + next scene: teleport straight to that scene (start spawn)
+            SYS_SaveSystem.Instance.AdvanceToNextScene(nextSceneName, "Start");
+        }
+        else
+        {
+            // Victory + no next scene: restart from initial save (Level1 start)
+            SYS_SaveSystem.Instance.RestartFromInitial();
         }
     }
-
-    private void OnEnable()
+    else
     {
-        // Subscribe to events
-        if (finalBossHealth != null)
-        {
-            finalBossHealth.OnDied += HandleFinalBossDefeated;
-        }
-        if (playerHealth != null)
-        {
-            playerHealth.OnDied += HandlePlayerDeath;
-        }
+        // Game Over: replay from autosave (boss-return spawn beats checkpoint if set)
+        SYS_SaveSystem.Instance.ReplayFromAutosave();
     }
+}
 
-    private void OnDisable()
-    {
-        // Unsubscribe to prevent leaks
-        if (finalBossHealth != null)
-        {
-            finalBossHealth.OnDied -= HandleFinalBossDefeated;
-        }
-        if (playerHealth != null)
-        {
-            playerHealth.OnDied -= HandlePlayerDeath;
-        }
-    }
-
-    public void ShowEndingScreen(bool winCondition)
-    {
-        if (isGameOver) return; // Prevent showing screen multiple times
-        isGameOver = true;
-
-        Time.timeScale = 0f; // Pause game
-        endingCanvas.enabled = true;
-
-        // Update title
-        endingPanelText.text = winCondition ? "Victory!" : "Game Over";
-
-        // Show/hide stats panel
-        statsPanel.SetActive(winCondition);
-
-        // Update stats if win
-        if (winCondition && p_Exp != null)
-        {
-            levelText.text = $"Level: {p_Exp.level}";
-            expText.text = $"XP: {p_Exp.currentExp}";
-            totalKillsText.text = $"Kills: {p_Exp.totalKills}";
-            totalTimeText.text = $"Time: {FormatTime(p_Exp.playTime)}";
-        }
-    }
-
-    private void OnReplayButtonClicked()
-    {
-        Time.timeScale = 1f; // Resume time
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload current scene
-    }
-
-    private string FormatTime(float timeInSeconds)
-    {
-        int minutes = Mathf.FloorToInt(timeInSeconds / 60f);
-        int seconds = Mathf.FloorToInt(timeInSeconds % 60f);
-        return $"{minutes:D2}:{seconds:D2}";
-    }
-
-    private void HandleFinalBossDefeated()
-    {
-        ShowEndingScreen(true);
-    }
-
-    private void HandlePlayerDeath()
-    {
-        ShowEndingScreen(false);
-    }
 }

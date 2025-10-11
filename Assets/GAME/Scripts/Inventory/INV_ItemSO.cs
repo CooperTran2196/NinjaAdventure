@@ -6,6 +6,7 @@ public class INV_ItemSO : ScriptableObject
 {
     [Header("Item Data")]
     public string itemName = "Auto Filled by OnValidate";
+    public string id;
     [TextArea] public string description;
     public Sprite image;
     public int stackSize = 3;
@@ -22,4 +23,6 @@ public class INV_ItemSO : ScriptableObject
     {
         itemName = name;
     }
+
+    
 }
