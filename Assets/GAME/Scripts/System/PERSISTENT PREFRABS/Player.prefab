@@ -592,7 +592,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
   c_Stats: {fileID: 6644099288169238067}
-  c_Dodge: {fileID: 0}
   useDodgeIFrames: 1
   takingDamageAmount: 1
   healingAmount: 1
@@ -621,8 +620,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_Exp
   level: 1
-  currentXP: 0
+  currentExp: 0
   skillPoints: 5
+  totalKills: 0
+  playTime: 0
   xpBase: 60
   xpStep: 30
   skillPointsPerLevel: 2
@@ -643,6 +644,7 @@ MonoBehaviour:
   healTint: {r: 0.3, g: 1, b: 0.3, a: 1}
   damageTint: {r: 1, g: 0, b: 0, a: 1}
   deathFadeTime: 2
+  destroySelfOnDeath: 0
 --- !u!114 &425422427777249334
 MonoBehaviour:
   m_ObjectHideFlags: 0

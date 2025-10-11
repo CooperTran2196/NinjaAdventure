@@ -193,13 +193,22 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleSetting",
+                    "type": "Button",
+                    "id": "d7d38e11-db8a-4657-9093-ad4d3649d500",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "297a4245-1580-4839-a3ad-75057190f2d3",
-                    "path": "<Keyboard>/l",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -237,6 +246,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "EndConvo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e6c5672-c196-4152-ab6d-31dec1c60c73",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleSetting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

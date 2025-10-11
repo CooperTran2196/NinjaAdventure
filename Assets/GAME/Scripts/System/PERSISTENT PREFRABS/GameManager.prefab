@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 283173575035470599}
   - component: {fileID: 9150887136014047373}
+  - component: {fileID: 2224887624969585592}
   - component: {fileID: 8894136543161484865}
   m_Layer: 0
   m_Name: GameManager
@@ -48,6 +49,7 @@ MonoBehaviour:
   d_Manager: {fileID: 0}
   d_HistoryTracker: {fileID: 0}
   sys_Fader: {fileID: 0}
+  shop_Manager: {fileID: 0}
   audioSource: {fileID: 0}
   persistentObjects:
   - {fileID: 0}
@@ -61,6 +63,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &2224887624969585592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2651765537779792477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451882f7923d7405fbda4eeaef3897df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SYS_SaveSystem
+  autoSaveFile: autosave.json
+  initialSaveFile: initial.json
+  lastSavedScene: 
+  lastSpawnId: 
+  lastSpawnPos: {x: 0, y: 0, z: 0}
+  bossDeathReturnSpawnId: 
 --- !u!82 &8894136543161484865
 AudioSource:
   m_ObjectHideFlags: 0

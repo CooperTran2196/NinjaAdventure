@@ -15,7 +15,7 @@ public class C_FX : MonoBehaviour
 
     [Header("Death")]
     public float deathFadeTime = 1.5f;
-
+    public bool destroySelfOnDeath = true;
     Color baseRGB;
 
     void Awake()
@@ -48,6 +48,6 @@ public class C_FX : MonoBehaviour
             sr.color = new Color(c.r, c.g, c.b, k);
             yield return null;
         }
-        Destroy(go);
+        if (destroySelfOnDeath) Destroy(go);
     }
 }
