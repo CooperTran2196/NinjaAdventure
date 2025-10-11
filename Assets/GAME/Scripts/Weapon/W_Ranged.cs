@@ -43,9 +43,26 @@ public class W_Ranged : W_Base
         // Projectile default art faces RIGHT
         float projAngle = Vector2.SignedAngle(Vector2.right, attackDir);
         
-        // Spawn + init
+        // Spawn
         var go = Instantiate(weaponData.projectilePrefab, currentPosition, Quaternion.Euler(0, 0, projAngle));
+        
+        // Try homing first, fallback to regular
+        var homingProj = go.GetComponent<W_HomingProjectile>();
+        if (homingProj != null)
+        {
+            homingProj.Init(owner, c_Stats, weaponData, attackDir, targetMask);
+            return;
+        }
+
         var proj = go.GetComponent<W_Projectile>();
-        if (proj != null) proj.Init(owner, c_Stats, weaponData, attackDir, targetMask);
+        if (proj != null)
+        {
+            proj.Init(owner, c_Stats, weaponData, attackDir, targetMask);
+            return;
+        }
+
+        // If neither found, log error
+        Debug.LogError($"{name}: projectilePrefab missing W_Projectile or W_HomingProjectile component!");
+        Destroy(go);
     }
 }

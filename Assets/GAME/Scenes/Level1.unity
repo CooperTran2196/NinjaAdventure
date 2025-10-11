@@ -19279,6 +19279,10 @@ PrefabInstance:
       propertyPath: c_Dodge
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9165694127855322997, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f210e310791b4a42ab000fb91724438, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
