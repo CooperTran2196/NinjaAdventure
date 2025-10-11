@@ -8,25 +8,26 @@ public class INV_Loot : MonoBehaviour
     [Header("MUST have components for each loot prefab")]
     [Header("References")]
     public INV_ItemSO itemSO;
-    SpriteRenderer sr;
-    Animator anim;
-    CircleCollider2D trigger;
 
     [Header("Data")]
-    public int quantity = 1;
-    public bool canBePickedUp = true; // false when we drop it from inventory
+    public int  quantity = 1;
+    public bool canBePickedUp = true;
+
+    SpriteRenderer   sr;
+    Animator         anim;
+    CircleCollider2D trigger;
 
     public static event Action<INV_ItemSO, int> OnItemLooted;
 
     void Awake()
     {
-        sr      ??= GetComponentInChildren<SpriteRenderer>();
-        anim    ??= GetComponent<Animator>();
-        trigger ??= GetComponent<CircleCollider2D>();
+        sr            ??= GetComponentInChildren<SpriteRenderer>();
+        anim          ??= GetComponent<Animator>();
+        trigger       ??= GetComponent<CircleCollider2D>();
 
-        if (!sr)      Debug.LogError($"{name}: SpriteRenderer is missing in INV_Loot");
-        if (!anim)    Debug.LogError($"{name}: Animator is missing in INV_Loot");
-        if (!trigger) Debug.LogError($"{name}: CircleCollider2D is missing in INV_Loot");
+        if (!sr)      Debug.LogError("INV_Loot: SpriteRenderer is missing.");
+        if (!anim)    Debug.LogError("INV_Loot: Animator is missing.");
+        if (!trigger) Debug.LogError("INV_Loot: CircleCollider2D is missing.");
     }
 
     // Run in Edit Mode to update sprite in Inspector
@@ -74,6 +75,7 @@ public class INV_Loot : MonoBehaviour
         }
     }
 
+    // Prevent immediate pickup after drop
     IEnumerator EnablePickupAfterDelay(float delay)
     {
         canBePickedUp = false;

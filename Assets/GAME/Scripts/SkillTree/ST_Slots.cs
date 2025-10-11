@@ -1,41 +1,40 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ST_Slots : MonoBehaviour
 {
     [Header("Slot represents one skill in the Skill Tree")]
     [Header("Gate")]
-    public List<ST_Slots> prerequisiteSkillSlots;
+    public List<ST_Slots>   prerequisiteSkillSlots;
 
     [Header("Skill Data")]
-    public ST_SkillSO st_skillSO;
+    public ST_SkillSO       st_skillSO;
 
     [Header("State")]
-    public int  currentLevel;
-    public bool isUnlocked;
+    public int              currentLevel;
+    public bool             isUnlocked;
 
     [Header("UI")]
-    public Image   SkillIcon;
-    public Button  skillButton;
-    public TMP_Text skillLevelText;
+    public Image            SkillIcon;
+    public Button           skillButton;
+    public TMP_Text         skillLevelText;
 
     public static event Action<ST_Slots> OnSkillUpgraded;
     public static event Action<ST_Slots> OnSkillMaxed;
 
     void Awake()
     {
-        // Auto-wire UI components if not assigned in inspector
-        SkillIcon ??= GetComponentInChildren<Image>();
-        skillButton ??= GetComponent<Button>();
-        skillLevelText ??= GetComponentInChildren<TMP_Text>();
+        SkillIcon            ??= GetComponentInChildren<Image>();
+        skillButton          ??= GetComponent<Button>();
+        skillLevelText       ??= GetComponentInChildren<TMP_Text>();
 
-        if (!st_skillSO) Debug.LogError($"{name}: ST_SkillSO is not assigned on {GetType().Name}.", this);
-        if (!SkillIcon) Debug.LogWarning($"{name}: SkillIcon is not assigned.", this);
-        if (!skillButton) Debug.LogWarning($"{name}: skillButton is not assigned.", this);
-        if (!skillLevelText) Debug.LogWarning($"{name}: skillLevelText is not assigned.", this);
+        if (!st_skillSO)     Debug.LogError("ST_Slots: ST_SkillSO is not assigned", this);
+        if (!SkillIcon)      Debug.LogWarning("ST_Slots: SkillIcon is not assigned.", this);
+        if (!skillButton)    Debug.LogWarning("ST_Slots: skillButton is not assigned.", this);
+        if (!skillLevelText) Debug.LogWarning("ST_Slots: skillLevelText is not assigned.", this);
 
         prerequisiteSkillSlots ??= new List<ST_Slots>();
 
@@ -63,8 +62,7 @@ public class ST_Slots : MonoBehaviour
         UpdateUI();
     }
 
-    // This method now checks all prerequisites and unlocks the skill if they are met
-    // It returns true if the skill was newly unlocked
+    // Check all prerequisites and unlock the skill if they are met
     public bool TryUnlock()
     {
         // 1/ Don't do anything if the skill is already unlocked
@@ -98,14 +96,14 @@ public class ST_Slots : MonoBehaviour
         if (isUnlocked)
         {
             skillButton.interactable = true;
-            skillLevelText.text = currentLevel + "/" + st_skillSO.maxLevel;
-            SkillIcon.color = Color.white;
+            skillLevelText.text      = currentLevel + "/" + st_skillSO.maxLevel;
+            SkillIcon.color          = Color.white;
         }
         else
         {
             skillButton.interactable = false;
-            skillLevelText.text = "Locked";
-            SkillIcon.color = Color.gray;
+            skillLevelText.text      = "Locked";
+            SkillIcon.color          = Color.gray;
         }
     }
 }

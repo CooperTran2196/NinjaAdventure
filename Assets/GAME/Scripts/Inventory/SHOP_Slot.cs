@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
@@ -11,46 +11,46 @@ public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     [Header("UI")]
     public TMP_Text itemNameText;
-    public Image itemImage;
+    public Image    itemImage;
     public TMP_Text itemPriceText;
 
     [Header("Runtime Data")]
     public INV_ItemSO itemSO;
-    public int price;
+    public int        price;
 
     void Awake()
     {
-        shop_Manager     ??= GetComponentInParent<SHOP_Manager>();
-        
-        itemNameText    ??= transform.Find("itemNameText")?.GetComponent<TMP_Text>();
-        itemImage       ??= transform.Find("itemImage")?.GetComponent<Image>();
-        itemPriceText   ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
+        shop_Manager        ??= GetComponentInParent<SHOP_Manager>();
 
-        if (shop_Manager == null) Debug.LogError($"{name}: SHOP_Manager is missing in SHOP_Slot");
-        if (inv_ItemInfo == null) Debug.LogError($"{name}: INV_ItemInfo is missing in SHOP_Slot");
-        if (itemImage == null)    Debug.LogError($"{name}: itemImage is missing in SHOP_Slot");
-        if (itemNameText == null) Debug.LogError($"{name}: itemNameText is missing in SHOP_Slot");
-        if (itemPriceText == null)Debug.LogError($"{name}: itemPriceText is missing in SHOP_Slot");
+        itemNameText        ??= transform.Find("itemNameText")?.GetComponent<TMP_Text>();
+        itemImage           ??= transform.Find("itemImage")?.GetComponent<Image>();
+        itemPriceText       ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
+
+        if (!shop_Manager)  Debug.LogError("SHOP_Slot: SHOP_Manager is missing.");
+        if (!inv_ItemInfo)  Debug.LogError("SHOP_Slot: INV_ItemInfo is missing.");
+        if (!itemImage)     Debug.LogError("SHOP_Slot: itemImage is missing.");
+        if (!itemNameText)  Debug.LogError("SHOP_Slot: itemNameText is missing.");
+        if (!itemPriceText) Debug.LogError("SHOP_Slot: itemPriceText is missing.");
     }
 
-    // called by SHOP_Manager at startup
+    // Called by SHOP_Manager at startup
     public void Initialize(INV_ItemSO itemSO)
     {
         this.itemSO = itemSO;
         price = itemSO.price;
 
-        itemImage.enabled = true;
-        itemImage.sprite = itemSO.image;
-        itemNameText.text = itemSO.itemName;
+        itemImage.enabled  = true;
+        itemImage.sprite   = itemSO.image;
+        itemNameText.text  = itemSO.itemName;
         itemPriceText.text = price.ToString();
     }
 
-    // called by Buy button
+    // Called by Buy button
     public void OnBuyButtonClicked()
     {
         shop_Manager.TryBuyItem(itemSO, price);
     }
-    
+
     // Show item info on hover
     public void OnPointerEnter(PointerEventData eventData)
     {

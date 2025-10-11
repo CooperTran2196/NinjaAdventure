@@ -1,29 +1,29 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class StatsUI : MonoBehaviour
 {
     [Header("References")]
-    public C_Stats p_Stats;
+    public C_Stats        p_Stats;
     public P_StatsManager p_StatsManager;
-    public CanvasGroup statsCanvas;
-    public GameObject[] statsSlots;
+    public CanvasGroup    statsCanvas;
+    public GameObject[]   statsSlots;
 
     P_InputActions input;
-    bool statsOpen = false;
+    bool           statsOpen = false;
 
     void Awake()
     {
         input = new P_InputActions();
         input.UI.ToggleStats.Enable();
 
-        p_Stats ??= FindFirstObjectByType<C_Stats>();
+        p_Stats        ??= FindFirstObjectByType<C_Stats>();
         p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
         // start closed
         statsCanvas.alpha = 0;
     }
-    
+
     void OnEnable()
     {
         if (p_StatsManager != null)
@@ -32,71 +32,65 @@ public class StatsUI : MonoBehaviour
 
     void OnDisable()
     {
-        input?.UI.Disable();
-        input?.Dispose();
+        input.UI.Disable();
+        input.Dispose();
 
         if (p_StatsManager != null)
             p_StatsManager.OnStatsChanged -= UpdateAllStats;
     }
 
-    // Initialize all stats display
     void Start()
     {
         UpdateAllStats();
     }
 
-    // Toggle stats UI with input
     void Update()
     {
         if (input.UI.ToggleStats.WasPressedThisFrame())
             SetOpen(!statsOpen);
     }
 
-    //  Open/close the stats UI
     void SetOpen(bool open)
     {
         statsOpen = open;
 
-        Time.timeScale = open ? 0f : 1f;
+        Time.timeScale    = open ? 0f : 1f;
         statsCanvas.alpha = open ? 1f : 0f;
     }
 
-    // Update individual stat displays
     public void UpdateAD()
     {
-        statsSlots[0].GetComponentInChildren<TMP_Text>().text =
-            "AD: " + p_Stats.AD;
+        statsSlots[0].GetComponentInChildren<TMP_Text>().text = "AD: " + p_Stats.AD;
     }
+
     public void UpdateAP()
     {
-        statsSlots[1].GetComponentInChildren<TMP_Text>().text =
-            "AP: " + p_Stats.AP;
+        statsSlots[1].GetComponentInChildren<TMP_Text>().text = "AP: " + p_Stats.AP;
     }
+
     public void UpdateMS()
     {
-        statsSlots[2].GetComponentInChildren<TMP_Text>().text =
-            "MS: " + p_Stats.MS;
+        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "MS: " + p_Stats.MS;
     }
 
     public void UpdateMaxHealth()
     {
-        statsSlots[3].GetComponentInChildren<TMP_Text>().text =
-            "HP: " + p_Stats.maxHP;
+        statsSlots[3].GetComponentInChildren<TMP_Text>().text = "HP: " + p_Stats.maxHP;
     }
+
     public void UpdateAR()
     {
-        statsSlots[4].GetComponentInChildren<TMP_Text>().text =
-            "AR: " + p_Stats.AR;
+        statsSlots[4].GetComponentInChildren<TMP_Text>().text = "AR: " + p_Stats.AR;
     }
+
     public void UpdateMR()
     {
-        statsSlots[5].GetComponentInChildren<TMP_Text>().text =
-            "MR: " + p_Stats.MR;
+        statsSlots[5].GetComponentInChildren<TMP_Text>().text = "MR: " + p_Stats.MR;
     }
-        public void UpdateKR()
+
+    public void UpdateKR()
     {
-        statsSlots[6].GetComponentInChildren<TMP_Text>().text =
-            "KR: " + p_Stats.KR;
+        statsSlots[6].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
     }
 
     public void UpdateAllStats()

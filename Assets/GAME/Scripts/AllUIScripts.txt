@@ -31,7 +31,7 @@ public class EndingUI : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] private P_Exp playerExp;   // provides level/currentExp/totalKills/playTime
-private bool isWin;
+    private bool isWin;
 
     private bool shown;
 
@@ -40,7 +40,8 @@ private bool isWin;
         cg ??= GetComponent<CanvasGroup>();
         replayButton ??= GetComponentInChildren<Button>(true);
         playerExp ??= FindObjectOfType<P_Exp>(true);
-
+        var label = replayButton?.GetComponentInChildren<TMP_Text>(true);
+        if (label) label.text = "Restart";
         if (!cg) Debug.LogError("[EndingUI] Missing CanvasGroup.");
         if (!replayButton) Debug.LogError("[EndingUI] Missing Replay Button.");
         if (!titleText) Debug.LogError("[EndingUI] Missing titleText.");
@@ -71,10 +72,10 @@ private bool isWin;
     }
 
     // Optional public triggers (e.g., from a portal)
-    public void ShowVictory()  => Show(true);
+    public void ShowVictory() => Show(true);
     public void ShowGameOver() => Show(false);
 
-    private void OnBossDied()   => Show(true);
+    private void OnBossDied() => Show(true);
 
     private void OnPlayerDied()
     {
@@ -92,7 +93,7 @@ private bool isWin;
     {
         if (shown) return;
         shown = true;
-        isWin = win; 
+        isWin = win;
         // Pause world while the ending screen is visible
         Time.timeScale = 0f;
 
@@ -103,9 +104,9 @@ private bool isWin;
         if (playerExp)
         {
             levelText.text = $"Level {playerExp.level}";
-            expText.text   = $"{playerExp.currentExp} XP";
+            expText.text = $"{playerExp.currentExp} XP";
             killsText.text = playerExp.totalKills.ToString();
-            timeText.text  = FormatTime(playerExp.playTime);
+            timeText.text = FormatTime(playerExp.playTime);
         }
 
         // Reveal modal
@@ -123,40 +124,16 @@ private bool isWin;
         return h > 0 ? $"{h:D2}:{m:D2}:{s:D2}" : $"{m:D2}:{s:D2}";
     }
 
-    // Hook this to the Replay button OnClick in the Inspector (mouse click only)
-public void OnClickReplay()
-{
-    if (!shown) return;
-
-    // Stop taking input first
-    cg.interactable = false;
-    cg.blocksRaycasts = false;
-
-    // Unpause before traveling
-    Time.timeScale = 1f;
-
-    if (isWin)
+    public void OnClickReplay()
     {
-        // Optional: ensure boss-death spawn override is cleared on victory
-        SYS_SaveSystem.Instance.ClearBossDeathReturnSpawn();
+        if (!shown) return;
+        cg.interactable = false;
+        cg.blocksRaycasts = false;
+        Time.timeScale = 1f;
 
-        if (!string.IsNullOrEmpty(nextSceneName))
-        {
-            // Victory + next scene: teleport straight to that scene (start spawn)
-            SYS_SaveSystem.Instance.AdvanceToNextScene(nextSceneName, "Start");
-        }
-        else
-        {
-            // Victory + no next scene: restart from initial save (Level1 start)
-            SYS_SaveSystem.Instance.RestartFromInitial();
-        }
+        SYS_GameManager.Instance.FreshBoot();  // <- simplest, no special cases
     }
-    else
-    {
-        // Game Over: replay from autosave (boss-return spawn beats checkpoint if set)
-        SYS_SaveSystem.Instance.ReplayFromAutosave();
-    }
-}
+
 
 }
 

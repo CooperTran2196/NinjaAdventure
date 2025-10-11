@@ -1,34 +1,33 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 [DisallowMultipleComponent]
 public class ST_Manager : MonoBehaviour
 {
     [Header("Central API for the Skill Tree system")]
     [Header("References")]
-    public ST_Slots[] st_Slots;
-    public TMP_Text skillPointsText;
-    public P_Exp p_Exp;
+    public ST_Slots[]     st_Slots;
+    public TMP_Text       skillPointsText;
+    public P_Exp          p_Exp;
     public P_StatsManager statsManager;
-
-    private P_InputActions input;
 
     [Header("UI Toggle")]
     public CanvasGroup skillsCanvas;
     public bool panelToggle = false;
+    
+    private P_InputActions input;
 
     void Awake()
     {
-        // Auto-wire UI components if not assigned in inspector
-        p_Exp           ??= FindFirstObjectByType<P_Exp>();
-        statsManager    ??= FindFirstObjectByType<P_StatsManager>();
-        skillsCanvas    ??= GetComponent<CanvasGroup>();
-        skillPointsText ??= GetComponentInChildren<TMP_Text>();
+        p_Exp                 ??= FindFirstObjectByType<P_Exp>();
+        statsManager          ??= FindFirstObjectByType<P_StatsManager>();
+        skillsCanvas          ??= GetComponent<CanvasGroup>();
+        skillPointsText       ??= GetComponentInChildren<TMP_Text>();
 
-        if (!p_Exp)             Debug.LogError($"{name}: P_Exp is missing in ST_Manager");
-        if (!statsManager)      Debug.LogError($"{name}: P_StatsManager is missing in ST_Manager");
-        if (!skillsCanvas)      Debug.LogError($"{name}: skillsCanvas is missing in ST_Manager");
-        if (!skillPointsText)   Debug.LogError($"{name}: skillPointsText is missing in ST_Manager");
+        if (!p_Exp)           Debug.LogError("ST_Manager: P_Exp is missing.");
+        if (!statsManager)    Debug.LogError("ST_Manager: P_StatsManager is missing.");
+        if (!skillsCanvas)    Debug.LogError("ST_Manager: skillsCanvas is missing.");
+        if (!skillPointsText) Debug.LogError("ST_Manager: skillPointsText is missing.");
 
         input = new P_InputActions();
         input.UI.ToggleSkillTree.Enable();
@@ -39,23 +38,23 @@ public class ST_Manager : MonoBehaviour
 
     void OnEnable()
     {
-        p_Exp.OnSPChanged           += HandleSPChanged;
-        p_Exp.OnLevelUp             += HandleLevelUp;
+        p_Exp.OnSPChanged        += HandleSPChanged;
+        p_Exp.OnLevelUp          += HandleLevelUp;
 
-        ST_Slots.OnSkillUpgraded    += HandleSkillUpgraded;
-        ST_Slots.OnSkillMaxed       += HandleSkillMaxed;
+        ST_Slots.OnSkillUpgraded += HandleSkillUpgraded;
+        ST_Slots.OnSkillMaxed    += HandleSkillMaxed;
     }
 
     void OnDisable()
     {
-        input?.UI.Disable();
-        input?.Dispose();
+        input.UI.Disable();
+        input.Dispose();
 
-        p_Exp.OnSPChanged           -= HandleSPChanged;
-        p_Exp.OnLevelUp             -= HandleLevelUp;
+        p_Exp.OnSPChanged        -= HandleSPChanged;
+        p_Exp.OnLevelUp          -= HandleLevelUp;
 
-        ST_Slots.OnSkillUpgraded    -= HandleSkillUpgraded;
-        ST_Slots.OnSkillMaxed       -= HandleSkillMaxed;
+        ST_Slots.OnSkillUpgraded -= HandleSkillUpgraded;
+        ST_Slots.OnSkillMaxed    -= HandleSkillMaxed;
     }
     
     // Initialize skill buttons and UI state
@@ -82,9 +81,9 @@ public class ST_Manager : MonoBehaviour
     {
         panelToggle = open;
 
-        Time.timeScale = open ? 0f : 1f;
-        skillsCanvas.alpha = open ? 1f : 0f;
-        skillsCanvas.interactable = open;
+        Time.timeScale              = open ? 0f : 1f;
+        skillsCanvas.alpha          = open ? 1f : 0f;
+        skillsCanvas.interactable   = open;
         skillsCanvas.blocksRaycasts = open;
     }
 
@@ -108,7 +107,7 @@ public class ST_Manager : MonoBehaviour
         // Apply all modifiers from the skill upgrade
         foreach (P_StatEffect modifier in so.StatEffectList)
         {
-            // Note: The modifier's value is the amount *per level*.
+            // Note: The modifier's value is the amount *per level*
             statsManager.ApplyModifier(modifier);
         }
     }
@@ -139,5 +138,4 @@ public class ST_Manager : MonoBehaviour
     {
         HandleSPChanged(p_Exp.skillPoints);
     }
-
 }

@@ -1,6 +1,6 @@
-using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 [DisallowMultipleComponent]
 public class INV_Manager : MonoBehaviour
@@ -12,15 +12,12 @@ public class INV_Manager : MonoBehaviour
     public P_StatsManager p_statsManager;
 
     [Header("MUST wire MANUALLY in Inspector")]
-    public TMP_Text goldText;
+    public TMP_Text   goldText;
     public GameObject lootPrefab;
-    public Transform player;
+    public Transform  player;
 
-    public int gold;
-    public INV_Slots[] inv_Slots;
-
-    void OnEnable() => INV_Loot.OnItemLooted += AddItem;
-    void OnDisable() => INV_Loot.OnItemLooted -= AddItem;
+    public int          gold;
+    public INV_Slots[]  inv_Slots;
 
     void Awake()
     {
@@ -28,10 +25,13 @@ public class INV_Manager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        p_statsManager ??= FindFirstObjectByType<P_StatsManager>();
+        p_statsManager       ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_statsManager) Debug.LogError($"{name}: P_StatsManager is missing in INV_Manager");
+        if (!p_statsManager) Debug.LogError("INV_Manager: P_StatsManager is missing.");
     }
+
+    void OnEnable()  => INV_Loot.OnItemLooted += AddItem;
+    void OnDisable() => INV_Loot.OnItemLooted -= AddItem;
 
     // Update all slots & gold text at start
     void Start()
@@ -102,9 +102,7 @@ public class INV_Manager : MonoBehaviour
 
         // Apply all StatEffectList from the item
         foreach (var modifier in slot.itemSO.StatEffectList)
-        {
             p_statsManager.ApplyModifier(modifier);
-        }
 
         // Consume the item
         slot.quantity -= 1;
@@ -120,6 +118,7 @@ public class INV_Manager : MonoBehaviour
         var loot = go.GetComponent<INV_Loot>();
         loot.Initialize(itemSO, quantity); // sets sprite/name & canBePickedUp=false
     }
+
     // Do we have at least 1 of this item?
     public bool HasItem(INV_ItemSO itemSO)
     {

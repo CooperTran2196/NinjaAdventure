@@ -1,10 +1,7 @@
-// <summary>
-// Manages screen fade in/out transitions using an Animator.
-// </summary>
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class SYS_Fader : MonoBehaviour
 {
     public Animator animator;
@@ -21,11 +18,11 @@ public class SYS_Fader : MonoBehaviour
         StartCoroutine(DoFadeToScene(sceneName));
     }
 
+    // Fade out, load the scene, then fade in
     IEnumerator DoFadeToScene(string sceneName)
     {
         animator.Play("FadeOut");
         yield return new WaitForSeconds(fadeTime);
-        // Load the scene
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         yield return new WaitForSeconds(fadeTime);
         animator.Play("FadeIn");      // reveal

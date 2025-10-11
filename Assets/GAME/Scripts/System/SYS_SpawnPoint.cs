@@ -1,14 +1,9 @@
-// <summary>
-// Spawns the player at the correct spawn point based on the last teleporter used.
-// </summary>
-
 using UnityEngine;
 
 public class SYS_SpawnPoint : MonoBehaviour
 {
     [Header("Must match the teleporter's Destination Spawn Id")]
     public string spawnId = "DoorA";
-    
 
     void Start()
     {

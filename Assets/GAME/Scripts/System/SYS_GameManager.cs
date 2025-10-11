@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using UnityEngine;
 
 public class SYS_GameManager : MonoBehaviour
@@ -6,10 +5,10 @@ public class SYS_GameManager : MonoBehaviour
     public static SYS_GameManager Instance;
 
     [Header("References")]
-    public D_Manager d_Manager;
-    public D_HistoryTracker d_HistoryTracker;
-    public SYS_Fader sys_Fader; // Centralized reference to Fader
-    public SHOP_Manager shop_Manager;
+    public D_Manager         d_Manager;
+    public D_HistoryTracker  d_HistoryTracker;
+    public SYS_Fader         sys_Fader;
+    public SHOP_Manager      shop_Manager;
 
     [Header("Restart")]
     [SerializeField] private string initialSceneName = "Level1";
@@ -21,7 +20,6 @@ public class SYS_GameManager : MonoBehaviour
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
 
-    // Ensure only one instance of the GameManager exists
     void Awake()
     {
         // If an instance already exists, destroy this one
@@ -30,43 +28,41 @@ public class SYS_GameManager : MonoBehaviour
             CleanUpAndDestroy();
             return;
         }
-        else
-        {
-            // Set the instance and mark this object to not be destroyed on load
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            MarkPersistentObjects();
 
-            // Fallback
-            d_Manager ??= FindFirstObjectByType<D_Manager>();
-            sys_Fader ??= FindFirstObjectByType<SYS_Fader>();
-            shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
-            audioSource ??= GetComponent<AudioSource>();
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        MarkPersistentObjects();
 
-            if (!sys_Fader) Debug.LogWarning("SYS_GameManager: Fader is missing.");
-            if (!audioSource) Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
+        d_Manager ??= FindFirstObjectByType<D_Manager>();
+        d_HistoryTracker ??= FindFirstObjectByType<D_HistoryTracker>();
+        shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
+        sys_Fader    ??= FindFirstObjectByType<SYS_Fader>();
+        audioSource ??= GetComponent<AudioSource>();
 
-            // Setup AudioSource
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-        }
+        if (!d_Manager)         Debug.LogWarning("SYS_GameManager: Dialogue Manager is missing.");
+        if (!d_HistoryTracker)  Debug.LogWarning("SYS_GameManager: Dialogue History Tracker is missing.");
+        if (!shop_Manager)      Debug.LogWarning("SYS_GameManager: Shop Manager is missing.");
+        if (!sys_Fader)         Debug.LogWarning("SYS_GameManager: Fader is missing.");
+        if (!audioSource)       Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
+
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
     }
 
-public void FreshBoot()
-{
-    Time.timeScale = 1f;
+    // Restart the game by loading the initial scene and resetting time scale
+    public void FreshBoot()
+    {
+        Time.timeScale = 1f;
 
-    // Destroy EVERY object in DontDestroyOnLoad scene
-    var temp = new GameObject("DDOL_Cleaner");
-    DontDestroyOnLoad(temp);
-    var ddol = temp.scene;
-    Object.Destroy(temp);
-    foreach (var root in ddol.GetRootGameObjects())
-        Object.Destroy(root);
+        var temp = new GameObject("DDOL_Cleaner");
+        DontDestroyOnLoad(temp);
+        var ddol = temp.scene;
+        Object.Destroy(temp);
+        foreach (var root in ddol.GetRootGameObjects())
+            Object.Destroy(root);
 
-    // Now load the initial scene cleanly (must contain new managers/player)
-    UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
-}
+        UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
+    }
 
     // Play music clip centrally
     public void PlayMusic(AudioClip clip)
@@ -83,21 +79,15 @@ public void FreshBoot()
     void MarkPersistentObjects()
     {
         foreach (var obj in persistentObjects)
-        {
             if (obj)
-            {
                 DontDestroyOnLoad(obj);
-            }
-        }
     }
 
     // Clean up persistent objects and destroy this instance
     void CleanUpAndDestroy()
     {
         foreach (GameObject obj in persistentObjects)
-        {
             Destroy(obj);
-        }
         Destroy(gameObject);
     }
 }
