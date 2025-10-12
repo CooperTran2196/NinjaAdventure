@@ -8,18 +8,20 @@ public class State_Attack : MonoBehaviour
     public Vector2 attackDir;            // Will calculate this internally
 
     [Header("Attack Timings")]
-    float attackDuration = 0.45f;
+    float attackAnimDuration = 0.45f; // How long the attack animation actually is
     float hitDelay       = 0.15f;
 
     // cache
     Animator     anim;
     E_Controller controller;
+    State_Chase  chaseState;
 
     void Awake()
     {
         anim            = GetComponentInChildren<Animator>();
         controller      = GetComponent<E_Controller>();
         activeWeapon    = GetComponentInChildren<W_Base>();
+        chaseState      = GetComponent<State_Chase>();
     }
 
     void OnEnable()
@@ -46,6 +48,15 @@ public class State_Attack : MonoBehaviour
         StopAllCoroutines(); // If enemy dies -> stop attack immediately
         anim.SetBool("isAttacking", false); // Exit Attack animation by bool
         controller.SetAttacking(false); // Normal finish
+        
+        // Restore animation speed in case it was frozen
+        anim.speed = 1f;
+
+        // Restore chase state if still has target
+        if (chaseState != null && controller.GetTarget() != null && !chaseState.enabled)
+        {
+            chaseState.enabled = true;
+        }
     }
 
     void Update()
@@ -57,18 +68,56 @@ public class State_Attack : MonoBehaviour
         anim.SetFloat("idleY", attackDir.y);
     }
 
+    // Attack with weapon and direction (called by controller via OnEnable)
+    public void Attack(W_Base weapon, Vector2 dir)
+    {
+        activeWeapon = weapon;
+        attackDir = dir;
+    }
+
+    // Public getter for chase state to access current weapon (for movement penalty)
+    public W_Base GetActiveWeapon() => activeWeapon;
+
+    // Handles animation timing + weapon showTime lockout
     IEnumerator AttackRoutine()
     {
         // Set animator direction
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
 
+        // Get weapon's showTime (how long the weapon is active/visible)
+        float weaponShowTime = (activeWeapon && activeWeapon.weaponData) 
+            ? activeWeapon.weaponData.showTime 
+            : attackAnimDuration;
+
+        // Phase 1: Wait for hit timing
         yield return new WaitForSeconds(hitDelay);
+        
+        // Phase 2: Execute weapon attack
         activeWeapon.Attack(attackDir);
-        yield return new WaitForSeconds(attackDuration - hitDelay);
 
-        controller.SetAttacking(false); // Normal finish
+        // Phase 3: Wait for animation to complete
+        float animRemaining = attackAnimDuration - hitDelay;
+        yield return new WaitForSeconds(animRemaining);
+
+        // Phase 4: If showTime > animation duration, freeze animation and wait
+        if (weaponShowTime > attackAnimDuration)
+        {
+            // Freeze animation on final frame
+            anim.speed = 0f;
+
+            // Calculate lockout period
+            float lockoutDuration = weaponShowTime - attackAnimDuration;
+
+            // Wait for lockout to complete
+            yield return new WaitForSeconds(lockoutDuration);
+
+            // Restore animation speed
+            anim.speed = 1f;
+        }
+
+        // Phase 5: Attack complete - signal controller and disable this state
+        controller.SetAttacking(false);
+        enabled = false; // Triggers OnDisable() → cleanup
     }
-
-
 }

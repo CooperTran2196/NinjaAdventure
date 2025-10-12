@@ -108,9 +108,6 @@ public class E_Controller : MonoBehaviour, I_Controller
             return;
         }
 
-        // Never interrupt an active attack animation
-        if (isAttacking) return;
-
         // 2/ Sense for the player and update target
         Collider2D targetInAttackRange = Physics2D.OverlapCircle(transform.position, attackRange, playerLayer);
         Collider2D targetInDetectRange = targetInAttackRange ?? Physics2D.OverlapCircle(transform.position, detectionRange, playerLayer);
@@ -120,7 +117,11 @@ public class E_Controller : MonoBehaviour, I_Controller
         // 3/ Decide on the next state based on target's position
         if (currentTarget == null)
         {
-            SwitchState(defaultState);
+            // No target - return to default behavior
+            if (currentState != defaultState && !isAttacking)
+            {
+                SwitchState(defaultState);
+            }
             attackInRangeTimer = 0f; // Reset timer when no target
             return;
         }
@@ -128,19 +129,25 @@ public class E_Controller : MonoBehaviour, I_Controller
         // Update timer only when a target is in attack range
         if (targetInAttackRange)
             attackInRangeTimer += Time.deltaTime;
-
         else // Reset if target steps out of range
             attackInRangeTimer = 0f;
 
         // Check if conditions are met to perform an attack
         bool canAttack = targetInAttackRange 
                       && attackInRangeTimer >= attackStartBuffer 
-                      && attackCooldown <= 0f;
+                      && attackCooldown <= 0f
+                      && !isAttacking; // Don't interrupt active attack
 
         if (canAttack)
-            SwitchState(EState.Attack);
-        else // If not attacking, but target is detected, chase it
+        {
+            TriggerAttack();
+        }
+        else if (currentTarget != null && currentState != EState.Attack)
+        {
+            // If not attacking, but target is detected, chase it
+            // Don't switch away from Attack state if currently attacking
             SwitchState(EState.Chase);
+        }
     }
 
     // Switch states, enabling the chosen one and disabling others
@@ -149,8 +156,11 @@ public class E_Controller : MonoBehaviour, I_Controller
         if (currentState == state) return;
         currentState = state;
 
-        // disable all states first
-        idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
+        // Disable all states first (except attack if it's active)
+        idle.enabled = wander.enabled = chase.enabled = false;
+        
+        // Only disable attack if we're not currently attacking
+        if (!isAttacking) attack.enabled = false;
 
         switch (state)
         {
@@ -162,14 +172,14 @@ public class E_Controller : MonoBehaviour, I_Controller
                 isAttacking         = false;
                 isStunned           = false;
 
+                // Disable attack state on death
+                attack.enabled      = false;
                 anim.SetTrigger("Die");
                 break;
 
             case EState.Attack:
-                desiredVelocity     = Vector2.zero;
-                attack.enabled      = true;
-                isAttacking         = true;
-                attackCooldown      = c_Stats.attackCooldown;
+                // Attack is handled separately via TriggerAttack()
+                // This case exists for state tracking but doesn't enable/disable components
                 break;
 
             case EState.Chase:
@@ -185,6 +195,20 @@ public class E_Controller : MonoBehaviour, I_Controller
                 idle.enabled        = true;
                 break;
         }
+    }
+
+    // Trigger attack without disabling other states (like player's TriggerAttack)
+    void TriggerAttack()
+    {
+        if (isAttacking) return; // Already attacking
+
+        // Enable attack state component
+        attack.enabled = true;
+        
+        // Update state tracking
+        currentState = EState.Attack;
+        isAttacking = true;
+        attackCooldown = c_Stats.attackCooldown;
     }
 
     // Stun coroutine called by W_Base when applying stun effect
@@ -223,7 +247,28 @@ public class E_Controller : MonoBehaviour, I_Controller
 
     // Get/Set methods
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    public void SetAttacking(bool value) => isAttacking = value;
+    
+    public void SetAttacking(bool value)
+    {
+        isAttacking = value;
+
+        // When attack finishes, restore appropriate state
+        if (!value)
+        {
+            // Check if still has a target
+            if (currentTarget != null)
+            {
+                // Return to chase state
+                SwitchState(EState.Chase);
+            }
+            else
+            {
+                // No target, return to default behavior
+                SwitchState(defaultState);
+            }
+        }
+    }
+    
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
     public Transform GetTarget() => currentTarget;
     public float GetAttackRange() => attackRange;
