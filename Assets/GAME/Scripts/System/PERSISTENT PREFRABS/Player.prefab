@@ -361,8 +361,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2544898007547509533}
   - {fileID: 2785555308593296516}
+  - {fileID: 2544898007547509533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7731384130201424669
@@ -567,6 +567,8 @@ MonoBehaviour:
   currentHP: 30
   AR: 0
   MR: 0
+  maxMP: 100
+  currentMP: 100
   KR: 10
   lifesteal: 0
   armorPen: 0

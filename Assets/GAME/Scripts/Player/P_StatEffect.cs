@@ -9,6 +9,7 @@ public enum StatName
     AbilityPower,
     MoveSpeed,
     MaxHealth,
+    MaxMana,
     Armor,
     MagicResist,
     ArmorPen,
@@ -20,6 +21,7 @@ public enum StatName
 
     // Consumable Stats
     Heal,
+    Mana, // Restore mana (like Heal for HP)
 }
 
 // Core definition for any change to a stat

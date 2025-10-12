@@ -12,7 +12,8 @@ public class C_Stats : MonoBehaviour
     public int currentHP = 10;
     public int AR = 0; // Armor
     public int MR = 0; // Magic Resist
-    public int MP = 0; // Mana
+    public int maxMP = 50; // Max Mana
+    public int currentMP = 0; // Current Mana
     public float KR = 10f; // knockback Resist
 
     [Header("Special Stats")]
@@ -22,8 +23,8 @@ public class C_Stats : MonoBehaviour
 
     [Header("Combat")]
     public float attackCooldown = 1.2f;
-    public int   collisionDamage = 1;   // per-enemy
-    public float collisionTick   = 0.5f; // seconds between ticks while touching
+    public int   collisionDamage = 1;
+    public float collisionTick   = 0.5f;
 
     [Header("Dodge (used by Player; Enemy can ignore)")]
     public float dodgeSpeed = 11f;

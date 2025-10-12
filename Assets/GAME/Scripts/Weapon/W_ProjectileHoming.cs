@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [DisallowMultipleComponent]
 
-public class W_HomingProjectile : MonoBehaviour
+public class W_ProjectileHoming : MonoBehaviour
 {
     // Cache
     SpriteRenderer sprite;
@@ -23,6 +23,7 @@ public class W_HomingProjectile : MonoBehaviour
 
     int remainingPierces;
     readonly HashSet<int> alreadyHit = new HashSet<int>();
+    Vector2 lastHitDir; // Store hit direction for stick positioning
 
     // Homing settings
     [Header("Homing Settings")]
@@ -36,6 +37,7 @@ public class W_HomingProjectile : MonoBehaviour
 
     Transform currentTarget;
     bool canHome = false;
+    bool isStuck = false; // Flag to stop spinning when stuck
 
     void Awake()
     {
@@ -77,8 +79,8 @@ public class W_HomingProjectile : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Handle spinning visual (independent of homing)
-        if (spinWhileFlying)
+        // Handle spinning visual (independent of homing, but stop when stuck)
+        if (spinWhileFlying && !isStuck)
         {
             float currentZ = transform.rotation.eulerAngles.z;
             float degreesPerSecond = spinSpeed * 360f; // convert rotations/sec to degrees/sec
@@ -187,6 +189,7 @@ public class W_HomingProjectile : MonoBehaviour
 
         // Calculate hit direction
         Vector2 hitDir = (targetCollider.transform.position - transform.position).normalized;
+        lastHitDir = hitDir; // Store for stick positioning
 
         // Apply damage + effects
         W_Base.ApplyHitEffects(attackerStats, weaponData, targetHealth, hitDir, targetCollider, this);
@@ -198,13 +201,10 @@ public class W_HomingProjectile : MonoBehaviour
             return; // continue flying
         }
 
-        // Stick or destroy
+        // Stick or destroy (matching W_Projectile implementation)
         if (weaponData.stickOnHit > 0f)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            transform.SetParent(targetCollider.transform);
-            StartCoroutine(FadeAndDestroy(weaponData.stickOnHit));
+            StartCoroutine(FadeAndDestroy(targetCollider, weaponData.stickOnHit));
         }
         else
         {
@@ -212,16 +212,33 @@ public class W_HomingProjectile : MonoBehaviour
         }
     }
 
-    IEnumerator FadeAndDestroy(float fadeDuration)
+    IEnumerator FadeAndDestroy(Collider2D targetCollider, float fadeDuration)
     {
-        float t = 0f;
-        Color startColor = sprite.color;
+        // Stop spinning when stuck
+        isStuck = true;
 
+        // Compute a precise surface point on the hit collider
+        var dist = col.Distance(targetCollider);          // distance info between our collider and hit collider
+        Vector2 snap = dist.pointB;               // point on the *hit* collider
+        transform.position = snap + (lastHitDir * 0.02f); // tiny embed so it visually "bites" in
+
+        // Pin it: stop physics & collisions, then parent to the collider
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        col.enabled = false;
+        transform.SetParent(targetCollider.transform, true);
+
+        // Optional: ensure it renders above the target while stuck
+        sprite.sortingOrder += 1;
+
+        // Fade over seconds
+        Color c = sprite.color;
+        float t = 0f;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, t / fadeDuration);
-            sprite.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+            float a = 1f - Mathf.Clamp01(t / fadeDuration);
+            sprite.color = new Color(c.r, c.g, c.b, a);
             yield return null;
         }
 

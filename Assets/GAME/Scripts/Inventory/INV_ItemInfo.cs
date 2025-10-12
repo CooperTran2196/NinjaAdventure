@@ -87,7 +87,9 @@ public class INV_ItemInfo : MonoBehaviour
                 switch (effects.statName)
                 {
                     case StatName.Heal:          line = $"Heals {effects.Value} HP"; break;
+                    case StatName.Mana:          line = $"Restores {effects.Value} Mana"; break;
                     case StatName.MaxHealth:     line = $"+{effects.Value} Max HP"; break;
+                    case StatName.MaxMana:       line = $"+{effects.Value} Max Mana"; break;
                     case StatName.AttackDamage:  line = $"+{effects.Value} Attack Damage"; break;
                     case StatName.AbilityPower:  line = $"+{effects.Value} Ability Power"; break;
                     case StatName.MoveSpeed:     line = $"+{effects.Value} Move Speed"; break;

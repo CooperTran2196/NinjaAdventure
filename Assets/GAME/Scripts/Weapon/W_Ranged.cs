@@ -37,6 +37,21 @@ public class W_Ranged : W_Base
         // Check prefab
         if (!weaponData.projectilePrefab) return;
 
+        // Mana check for homing projectiles only (check if weapon has manaCost)
+        if (weaponData.manaCost > 0)
+        {
+            var manaSystem = c_Stats.GetComponent<C_Mana>();
+            if (manaSystem != null)
+            {
+                // Try to consume mana
+                if (!manaSystem.ConsumeMana(weaponData.manaCost))
+                {
+                    Debug.Log($"{name}: Not enough mana to fire projectile! Need {weaponData.manaCost}, have {manaSystem.CurrentMana}");
+                    return; // Cancel firing
+                }
+            }
+        }
+
         // Spawn from current bow position (mid-thrust)
         Vector3 currentPosition = transform.position;
 
@@ -47,7 +62,7 @@ public class W_Ranged : W_Base
         var go = Instantiate(weaponData.projectilePrefab, currentPosition, Quaternion.Euler(0, 0, projAngle));
         
         // Try homing first, fallback to regular
-        var homingProj = go.GetComponent<W_HomingProjectile>();
+        var homingProj = go.GetComponent<W_ProjectileHoming>();
         if (homingProj != null)
         {
             homingProj.Init(owner, c_Stats, weaponData, attackDir, targetMask);

@@ -6,10 +6,7 @@ public class C_Health : MonoBehaviour
 {
     [Header("References")]
     public C_Stats c_Stats;
-    P_State_Dodge p_State_Dodge; // Use the new state-based dodge
-    C_FX fx;
 
-    P_InputActions input;
     [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
 
@@ -17,17 +14,18 @@ public class C_Health : MonoBehaviour
     public int takingDamageAmount = 1;
     public int healingAmount = 1;
 
-    // Events
+    P_State_Dodge  p_State_Dodge;
+    C_FX           fx;
+    P_InputActions input;
+
     public event Action<int> OnDamaged;
     public event Action<int> OnHealed;
     public event Action OnDied;
 
-    // Accessors
-    int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
+    int  CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
     public bool IsAlive => CurrentHP > 0;
     bool IsDodging => useDodgeIFrames && p_State_Dodge != null && p_State_Dodge.enabled;
 
-    // cached delegates so we can unsubscribe
     Action<int> fxDamagedHandler;
     Action<int> fxHealedHandler;
     Action      fxDiedHandler;
@@ -38,17 +36,15 @@ public class C_Health : MonoBehaviour
         p_State_Dodge ??= GetComponent<P_State_Dodge>();
         fx            ??= GetComponent<C_FX>();
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in C_Health");
-        // P_State_Dodge is optional (only for player)
-        if (!fx)      Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+        if (!c_Stats) Debug.LogError("C_Health: C_Stats is missing.");
+        if (!fx)      Debug.LogWarning("C_Health: C_FX not assigned; no flashes / death fade.", this);
     }
 
     void OnEnable()
     {
         input ??= new P_InputActions();
         input.Debug.Enable();
-        
-        // subscribe to FX events
+
         fxDamagedHandler ??= _ => fx.FlashOnDamaged();
         fxHealedHandler  ??= _ => fx.FlashOnHealed();
         fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
@@ -60,7 +56,7 @@ public class C_Health : MonoBehaviour
 
     void OnDisable()
     {
-        input?.Debug.Disable();
+        input.Debug.Disable();
 
         OnDamaged -= fxDamagedHandler;
         OnHealed  -= fxHealedHandler;

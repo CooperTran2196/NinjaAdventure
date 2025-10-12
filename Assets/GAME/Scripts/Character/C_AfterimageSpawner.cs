@@ -1,8 +1,5 @@
-using UnityEngine;
 using System.Collections;
-
-[RequireComponent(typeof(SpriteRenderer))]
-[DisallowMultipleComponent]
+using UnityEngine;
 
 public class C_AfterimageSpawner : MonoBehaviour
 {
@@ -10,14 +7,14 @@ public class C_AfterimageSpawner : MonoBehaviour
     public float spawnInterval = 0.035f;
     public float ghostLifetime = 0.20f;
     public Color ghostTint = new Color(0.7f, 0.7f, 0.7f, 0.7f);
-    public int sortingOrderOffset = -1; // draw behind player
+    public int   sortingOrderOffset = -1;
 
-    // Cached
     SpriteRenderer sr;
 
     void Awake()
     {
         sr ??= GetComponent<SpriteRenderer>();
+
         if (!sr) Debug.LogWarning("C_AfterimageSpawner: SpriteRenderer missing on this GameObject.");
     }
 
@@ -49,12 +46,12 @@ public class C_AfterimageSpawner : MonoBehaviour
         g.transform.localScale = transform.localScale;
 
         var gsr = g.AddComponent<SpriteRenderer>();
-        gsr.sprite = sprite;
-        gsr.flipX = flipX;
-        gsr.flipY = flipY;
-        gsr.sortingLayerID = sr.sortingLayerID;
-        gsr.sortingOrder = sr.sortingOrder + sortingOrderOffset;
-        gsr.color = ghostTint;
+        gsr.sprite          = sprite;
+        gsr.flipX           = flipX;
+        gsr.flipY           = flipY;
+        gsr.sortingLayerID  = sr.sortingLayerID;
+        gsr.sortingOrder    = sr.sortingOrder + sortingOrderOffset;
+        gsr.color           = ghostTint;
 
         StartCoroutine(FadeAndDestroy(gsr));
     }

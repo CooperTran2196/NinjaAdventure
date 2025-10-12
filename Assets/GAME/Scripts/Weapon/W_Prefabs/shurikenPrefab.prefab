@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6309054725238976264}
   - component: {fileID: -1696550371411751907}
   m_Layer: 0
-  m_Name: projectilePrefab Magic
+  m_Name: shurikenPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,8 +191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b03fd0bd7a13e74f969ef4973364c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_HomingProjectile
-  homingRange: 30.68
-  homingStrength: 180
-  homingDelay: 1.1
+  homingRange: 30
+  homingStrength: 360
+  homingDelay: 0.5
   spinWhileFlying: 1
-  spinSpeed: 720
+  spinSpeed: 10

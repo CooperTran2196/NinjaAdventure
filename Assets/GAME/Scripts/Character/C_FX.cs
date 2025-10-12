@@ -1,13 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
-
 public class C_FX : MonoBehaviour
 {
-    [Header("References")]
-    SpriteRenderer sr;
-
     [Header("Flash")]
     public float flashDuration = 0.1f;
     public Color healTint   = new Color(0.3f, 1f, 0.3f, 1f);
@@ -15,13 +10,16 @@ public class C_FX : MonoBehaviour
 
     [Header("Death")]
     public float deathFadeTime = 1.5f;
-    public bool destroySelfOnDeath = true;
-    Color baseRGB;
+    public bool  destroySelfOnDeath = true;
+
+    SpriteRenderer sr;
+    Color          baseRGB;
 
     void Awake()
     {
         sr ??= GetComponent<SpriteRenderer>();
-        if (!sr) Debug.LogError($"{name}: SpriteRenderer is missing in C_FX");
+
+        if (!sr) Debug.LogError("C_FX: SpriteRenderer is missing.");
 
         baseRGB = sr.color;
     }
@@ -53,8 +51,7 @@ public class C_FX : MonoBehaviour
         {
             // Player path: restore full alpha so it's ready when re-enabled on restart
             sr.color = new Color(c.r, c.g, c.b, 1f);
-            go.SetActive(false);         // keep GO for Ending UI → RestartGame to re-enable
+            go.SetActive(false);
         }
-    
     }
 }

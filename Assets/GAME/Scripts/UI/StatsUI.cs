@@ -101,7 +101,7 @@ public class StatsUI : MonoBehaviour
 
     public void UpdateMP()
     {
-        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.MP;
+        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.maxMP;
     }
     
     public void UpdateLS()
