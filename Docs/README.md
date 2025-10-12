@@ -38,6 +38,11 @@ Documentation for the weapon and combat system implementation.
    - Solution: Auto-restore proper state based on input
    - Status: ✅ Implemented
 
+7. **[Enemy State System](ENEMY_STATE_SYSTEM.md)**
+   - Problem: Enemy AI lacked player's state architecture benefits
+   - Solution: Applied same patterns - concurrent states, weapon penalty, showTime lock
+   - Status: ✅ Implemented
+
 ### Animation System
 
 7. **[Animation Priority](ANIMATION_PRIORITY_FIX.md)**
@@ -62,23 +67,27 @@ If you're new to this codebase, read in this order:
 4. Then: [Attack + Movement Fix](ATTACK_MOVEMENT_FIX.md) - Understanding concurrent states
 5. Then: [State Transition Fix](STATE_TRANSITION_FIX.md) - State management logic
 6. Then: [Animation Priority](ANIMATION_PRIORITY_FIX.md) - Animation system priority
-7. Finally: [Attack State Cleanup](ATTACK_STATE_CLEANUP_FIX.md) - Edge case handling
+7. Then: [Attack State Cleanup](ATTACK_STATE_CLEANUP_FIX.md) - Edge case handling
+8. Finally: [Enemy State System](ENEMY_STATE_SYSTEM.md) - Same architecture applied to enemies
 
 ---
 
 ## 🏗️ System Architecture Overview
 
 ```
-Player Input
-    ↓
-P_Controller (State Manager)
-    ↓
-P_State_* Components (Concurrent States)
-    ├── P_State_Idle
-    ├── P_State_Movement ← Reads weapon penalty
-    ├── P_State_Attack ← Manages weapon showTime
-    └── P_State_Dodge
-    ↓
+Player Input                          Enemy AI (ProcessAI)
+    ↓                                      ↓
+P_Controller (State Manager)      E_Controller (State Manager)
+    ↓                                      ↓
+P_State_* Components              E_State_* Components
+    ├── P_State_Idle                   ├── State_Idle (shared)
+    ├── P_State_Movement               ├── State_Chase
+    ├── P_State_Attack                 ├── State_Attack (enemy version)
+    └── P_State_Dodge                  └── State_Wander (shared with NPCs)
+    ↓                                      ↓
+Concurrent States Support         Concurrent States Support
+(Movement + Attack)              (Chase + Attack)
+    ↓                                      ↓
 Animator (Priority: Attack > Movement > Idle)
     ↓
 Visual Output
@@ -86,11 +95,11 @@ Visual Output
 
 ### Key Components
 
-- **P_Controller**: Central state manager, handles input and state transitions
-- **P_State_Attack**: Attack timing, weapon invocation, animation freeze
-- **P_State_Movement**: Movement velocity, penalty application, animation control
-- **W_Base**: Weapon base class, anchoring system
-- **W_SO**: Weapon ScriptableObject, data-driven design
+- **P_Controller / E_Controller**: Central state managers, handle input/AI and state transitions
+- **P_State_Attack / State_Attack**: Attack timing, weapon invocation, animation freeze
+- **P_State_Movement / State_Chase**: Movement velocity, penalty application, animation control
+- **W_Base**: Weapon base class, anchoring system, hit effects
+- **W_SO**: Weapon ScriptableObject, data-driven design (penalty, showTime, damage)
 
 ---
 

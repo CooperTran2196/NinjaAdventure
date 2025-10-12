@@ -180,10 +180,9 @@ public abstract class W_Base : MonoBehaviour
             }
         }
 
-        // Hit effects
+        // Hit effects: Knockback
         if (weaponData.knockbackForce > 0f)
         {
-            // NEW system first: direct call into controllers
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
@@ -197,39 +196,30 @@ public abstract class W_Base : MonoBehaviour
             }
             else
             {
-                // OLD system fallback (old enemy/rigidbody)
-                W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+                // Fallback for entities without controller (NPCs, etc.)
+                var rb = targetCollider.GetComponentInParent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.AddForce(dir * weaponData.knockbackForce, ForceMode2D.Impulse);
+                }
             }
         }
 
+        // Hit effects: Stun
         if (weaponData.stunTime > 0f)
         {
-            // NEW system first: stun handled inside controller (single coroutine)
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
-            if (ec)
+            if (ec != null)
             {
                 ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
             }
-            else if (pc)
+            else if (pc != null)
             {
                 pc.StartCoroutine(pc.StunFor(weaponData.stunTime));
             }
-            else
-            {
-                // OLD system fallbacks
-                var pm = targetCollider.GetComponentInParent<P_Movement>();
-                if (pm)
-                {
-                    weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
-                }
-                else
-                {
-                    var em = targetCollider.GetComponentInParent<E_Movement>();
-                    if (em) weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime));
-                }
-            }
+            // Note: Entities without controllers (NPCs) won't be stunned
         }
     }
 
