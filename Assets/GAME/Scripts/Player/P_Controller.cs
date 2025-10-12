@@ -126,8 +126,7 @@ public class P_Controller : MonoBehaviour
             return;
         }
 
-        // Don't interrupt while atacking or dodging
-        if (currentState == PState.Attack && isAttacking) return;
+        // Don't interrupt dodge while dodging
         if (currentState == PState.Dodge && isDodging) return;
 
         // Handle dodge input (high)
@@ -137,7 +136,7 @@ public class P_Controller : MonoBehaviour
             return;
         }
 
-        // Handle attack inputs (mid)
+        // Handle attack inputs (mid) - don't change state, just trigger attack
         if (attackCooldown <= 0f)
         {
             Vector2 mouseAim = ReadMouseAim();
@@ -146,18 +145,18 @@ public class P_Controller : MonoBehaviour
             if (input.Player.MeleeAttack.triggered)
             {
                 currentWeapon = meleeWeapon;
-                SwitchState(PState.Attack);
-                return;
+                TriggerAttack();
+                // Don't return - allow movement processing below
             }
-            if (input.Player.RangedAttack.triggered)
+            else if (input.Player.RangedAttack.triggered)
             {
                 currentWeapon = rangedWeapon;
-                SwitchState(PState.Attack);
-                return;
+                TriggerAttack();
+                // Don't return - allow movement processing below
             }
         }
 
-        // Handle movement input (low priority)
+        // Handle movement input (always process unless dodging)
         moveAxis = input.Player.Move.ReadValue<Vector2>();
         if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
 
@@ -165,22 +164,26 @@ public class P_Controller : MonoBehaviour
         {
             lastMove = moveAxis;
 
-            // Continue moving if already in Move state
-            if (currentState == PState.Move)
+            // Always enable movement when moving (even during attack)
+            if (!move.enabled) move.enabled = true;
+            move.SetMoveAxis(moveAxis);
+            
+            // Update state tracking: Switch to Move if not attacking or dodging
+            if (currentState != PState.Attack && currentState != PState.Dodge)
             {
-                // refresh axis without flipping states
-                move.SetMoveAxis(moveAxis);
-            }
-            else // Switch to Move state if not already
-            {
-                SwitchState(PState.Move);
-                move.SetMoveAxis(moveAxis);
+                currentState = PState.Move;
             }
             return;
         }
 
-        // Default to idle (lowest priority)
-        SwitchState(PState.Idle);
+        // No movement input - disable movement state (but keep attack if attacking)
+        if (move.enabled) move.enabled = false;
+        
+        // Update state to Idle only if not attacking or dodging
+        if (currentState != PState.Attack && currentState != PState.Dodge)
+        {
+            SwitchState(PState.Idle);
+        }
     }
 
     // Switch states with integrated death handling and attack logic
@@ -189,8 +192,13 @@ public class P_Controller : MonoBehaviour
         if (currentState == state) return;
         currentState = state;
 
-        // Disable all states first
-        idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
+        // Disable all states first (except attack if it's active)
+        idle.enabled = false;
+        move.enabled = false;
+        dodge.enabled = false;
+        
+        // Only disable attack if we're not currently attacking
+        if (!isAttacking) attack.enabled = false;
 
         switch (state)
         {
@@ -202,6 +210,9 @@ public class P_Controller : MonoBehaviour
                 isAttacking = false;
                 isStunned = false;
                 isDodging = false;
+                
+                // Force disable attack on death
+                attack.enabled = false;
 
                 anim.SetTrigger("Die");
                 break;
@@ -215,21 +226,12 @@ public class P_Controller : MonoBehaviour
                 break;
 
             case PState.Attack:
-                desiredVelocity = Vector2.zero;
-                attack.enabled = true;
-
-                if (currentWeapon != null)
-                {
-                    attackCooldown = c_Stats.attackCooldown;
-                    isAttacking = true;
-                    attack.Attack(currentWeapon, attackDir);
-                    currentWeapon = null;
-                }
+                // Attack is handled separately via TriggerAttack()
+                // This case shouldn't be called anymore
                 break;
 
             case PState.Move:
                 move.enabled = true;
-
                 move.SetMoveAxis(moveAxis);
                 break;
 
@@ -240,6 +242,20 @@ public class P_Controller : MonoBehaviour
                 idle.SetIdleFacing(lastMove);
                 break;
         }
+    }
+
+    // Trigger attack without changing movement state
+    void TriggerAttack()
+    {
+        if (currentWeapon == null) return;
+        
+        currentState = PState.Attack;
+        attack.enabled = true;
+        
+        attackCooldown = c_Stats.attackCooldown;
+        isAttacking = true;
+        attack.Attack(currentWeapon, attackDir);
+        currentWeapon = null;
     }
 
     // STUN FEATURE (same as enemy)
@@ -259,7 +275,45 @@ public class P_Controller : MonoBehaviour
 
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
     public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
+    
     // State setters for external components
-    public void SetAttacking(bool value) => isAttacking = value;
-    public void SetDodging(bool value) => isDodging = value;
+    public void SetAttacking(bool value)
+    {
+        isAttacking = value;
+        
+        // When attack ends, restore proper state based on current input
+        if (!value && currentState == PState.Attack)
+        {
+            // Check if player is currently moving
+            if (move.enabled && moveAxis.sqrMagnitude > MIN_DISTANCE)
+            {
+                currentState = PState.Move;
+            }
+            else
+            {
+                SwitchState(PState.Idle);
+            }
+        }
+    }
+    
+    public void SetDodging(bool value)
+    {
+        isDodging = value;
+        
+        // When dodge ends, restore proper state based on current input
+        if (!value && currentState == PState.Dodge)
+        {
+            // Check if player is currently moving
+            if (moveAxis.sqrMagnitude > MIN_DISTANCE)
+            {
+                move.enabled = true;
+                move.SetMoveAxis(moveAxis);
+                currentState = PState.Move;
+            }
+            else
+            {
+                SwitchState(PState.Idle);
+            }
+        }
+    }
 }

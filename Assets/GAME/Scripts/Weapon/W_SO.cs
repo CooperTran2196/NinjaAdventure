@@ -24,6 +24,8 @@ public class W_SO : ScriptableObject
     [Header("Melee timings + Thrust Distance")]
     public float showTime = 0.3f;
     public float thrustDistance = 0.25f;
+    [Range(0f, 1f)]
+    public float attackMovePenalty = 0.5f; // Movement speed multiplier while attacking (0.5 = 50% speed)
 
     [Header("Ranged + Magic")]
     public GameObject projectilePrefab;

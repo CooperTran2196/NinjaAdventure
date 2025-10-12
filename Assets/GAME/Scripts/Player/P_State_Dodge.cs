@@ -66,6 +66,9 @@ public class P_State_Dodge : MonoBehaviour
     {
         yield return new WaitForSeconds(dodgeDuration);
 
-        controller.SetDodging(false); // Interrupted by Dead
+        controller.SetDodging(false);
+        
+        // Disable this state component to trigger OnDisable() and clean up
+        enabled = false;
     }
 }
