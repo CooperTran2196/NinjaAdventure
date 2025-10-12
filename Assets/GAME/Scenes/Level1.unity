@@ -10707,7 +10707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a2195fb49d54610b3bb91d1db3691f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Mana
-  stats: {fileID: 0}
+  stats: {fileID: 714147524}
 --- !u!1001 &738241317
 PrefabInstance:
   m_ObjectHideFlags: 0
