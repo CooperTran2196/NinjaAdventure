@@ -52,7 +52,18 @@ public class State_Chase : MonoBehaviour
             W_Base activeWeapon = attackState.GetActiveWeapon();
             if (activeWeapon != null && activeWeapon.weaponData != null)
             {
-                speed *= activeWeapon.weaponData.attackMovePenalty;
+                // Use combo-specific penalty for melee, fallback for ranged
+                if (activeWeapon is W_Melee meleeWeapon)
+                {
+                    // Enemy uses random combo attack - get penalty from State_Attack
+                    int comboIndex = attackState.GetComboIndex();
+                    speed *= activeWeapon.weaponData.comboMovePenalties[comboIndex];
+                }
+                else
+                {
+                    // Ranged weapons use simple attackMovePenalty
+                    speed *= activeWeapon.weaponData.attackMovePenalty;
+                }
             }
 
             // During attack, don't override attack animation

@@ -10,109 +10,84 @@ public class W_Melee : W_Base
     // Track hits to avoid multiple hits on same target during one attack
     readonly HashSet<int> alreadyHit = new HashSet<int>();
 
-    // Override attack method
+    // Player attack (reads combo index from P_State_Attack)
     public override void Attack(Vector2 aimDir)
     {
         attackDir = aimDir.normalized;
         
-        // Get combo index from owner's attack state (if player)
+        // Read combo index from player's attack state
         var playerAttackState = owner?.GetComponent<P_State_Attack>();
         if (playerAttackState != null)
-        {
             currentComboIndex = playerAttackState.GetComboIndex();
-        }
         else
-        {
-            currentComboIndex = 0; // Default for non-player entities
-        }
+            currentComboIndex = 0;
         
         StartCoroutine(Hit());
     }
 
-    // Coroutine for handling the hit process with combo patterns
+    // Enemy attack (directly sets combo index)
+    public void AttackAsEnemy(Vector2 aimDir, int comboAttackIndex)
+    {
+        attackDir = aimDir.normalized;
+        currentComboIndex = Mathf.Clamp(comboAttackIndex, 0, 2);
+        StartCoroutine(Hit());
+    }
+
+    // Returns attack angles based on combo index: 0=SlashDown, 1=SlashUp, 2=Thrust
+    (float startAngle, float endAngle, bool isThrust) GetComboPattern(float baseAngle, int index)
+    {
+        if (index == 2) return (0, 0, true);  // Thrust
+        
+        float halfArc = weaponData.slashArcDegrees * 0.5f;
+        bool reverseArc = (index == 1);  // SlashUp reverses arc direction
+        
+        float startAngle = baseAngle + (reverseArc ? halfArc : -halfArc);
+        float endAngle = baseAngle + (reverseArc ? -halfArc : halfArc);
+        
+        return (startAngle, endAngle, false);  // Arc slash
+    }
+
+    // Execute attack: thrust forward OR arc slash based on combo index
     IEnumerator Hit()
     {
-        // Clear hit tracker for this attack
         alreadyHit.Clear();
 
-        // Get combo-specific showTime
         float showTime = weaponData.comboShowTimes[currentComboIndex];
         
-        // Calculate base angle for the attack direction
-        // Using UP as 0°, RIGHT as 90°: angle = atan2(x, y) in degrees
-        // Negate X to fix left/right reversal (Unity's coordinate system)
+        // Angle from attack direction (UP=0°, negated X fixes left/right)
         float baseAngle = Mathf.Atan2(-attackDir.x, attackDir.y) * Mathf.Rad2Deg;
         
-        // Different movement pattern based on combo index
-        switch (currentComboIndex)
+        var pattern = GetComboPattern(baseAngle, currentComboIndex);
+        
+        if (pattern.isThrust)
         {
-            case 0: // Slash Down (arc sweeps downward)
-                {
-                    float halfArc = weaponData.slashArcDegrees * 0.5f;
-                    float startAngle = baseAngle - halfArc;  // Start counter-clockwise
-                    float endAngle = baseAngle + halfArc;    // End clockwise
-                    
-                    // Calculate initial position for visual start (radar arm at start angle)
-                    // IMPORTANT: Negate X to match the position calculation in ArcSlashOverTime
-                    float startAngleRad = startAngle * Mathf.Deg2Rad;
-                    Vector3 startPos = new Vector3(
-                        -Mathf.Sin(startAngleRad) * weaponData.offsetRadius,  // Negate X
-                        Mathf.Cos(startAngleRad) * weaponData.offsetRadius,
-                        0f
-                    );
-                    
-                    BeginVisual(startPos, startAngle, enableHitbox: true);
-                    yield return ArcSlashOverTime(attackDir, startAngle, endAngle, showTime);
-                }
-                break;
-                
-            case 1: // Slash Up (arc sweeps upward - reversed direction)
-                {
-                    float halfArc = weaponData.slashArcDegrees * 0.5f;
-                    float startAngle = baseAngle + halfArc;  // Start clockwise
-                    float endAngle = baseAngle - halfArc;    // End counter-clockwise
-                    
-                    // Calculate initial position for visual start (radar arm at start angle)
-                    // IMPORTANT: Negate X to match the position calculation in ArcSlashOverTime
-                    float startAngleRad = startAngle * Mathf.Deg2Rad;
-                    Vector3 startPos = new Vector3(
-                        -Mathf.Sin(startAngleRad) * weaponData.offsetRadius,  // Negate X
-                        Mathf.Cos(startAngleRad) * weaponData.offsetRadius,
-                        0f
-                    );
-                    
-                    BeginVisual(startPos, startAngle, enableHitbox: true);
-                    yield return ArcSlashOverTime(attackDir, startAngle, endAngle, showTime);
-                }
-                break;
-                
-            case 2: // Thrust Finisher (forward thrust)
-            default:
-                {
-                    Vector3 localPosition = GetPolarPosition(attackDir);
-                    float thrustAngle = GetPolarAngle(attackDir);
-                    
-                    BeginVisual(localPosition, thrustAngle, enableHitbox: true);
-                    yield return ThrustOverTime(attackDir, showTime, weaponData.thrustDistance);
-                }
-                break;
+            // Forward thrust
+            Vector3 localPosition = GetPolarPosition(attackDir);
+            float thrustAngle = GetPolarAngle(attackDir);
+            
+            BeginVisual(localPosition, thrustAngle, enableHitbox: true);
+            yield return ThrustOverTime(attackDir, showTime, weaponData.thrustDistance);
+        }
+        else
+        {
+            // Arc slash (ArcSlashOverTime sets position on first frame)
+            BeginVisual(Vector3.zero, pattern.startAngle, enableHitbox: true);
+            yield return ArcSlashOverTime(attackDir, pattern.startAngle, pattern.endAngle, showTime);
         }
 
-        // End visuals and restore parent
         EndVisual();
     }
 
-    // Hit detection with combo support
+    // Trigger contact → apply combo damage/stun/knockback
     void OnTriggerStay2D(Collider2D targetCollider)
     {
-        // Check if the collider is a valid target
         var (targetHealth, root) = TryGetTarget(targetCollider);
         if (!targetHealth) return;
         
-        // Check if already hit this target in this specific attack
+        // Prevent double-hit on same target
         if (!alreadyHit.Add(root.GetInstanceID())) return;
         
-        // For player attacks, also check attack state hit tracking
+        // Player: also check attack state tracking
         var playerAttackState = owner?.GetComponent<P_State_Attack>();
         if (playerAttackState != null)
         {
@@ -120,7 +95,7 @@ public class W_Melee : W_Base
             playerAttackState.MarkTargetHit(targetHealth);
         }
         
-        // Apply hit effects with combo index for damage/stun multipliers
+        // Apply combo effects (damage/stun/knockback scale with currentComboIndex)
         ApplyHitEffects(c_Stats, weaponData, targetHealth, attackDir, targetCollider, currentComboIndex);
     }
 }

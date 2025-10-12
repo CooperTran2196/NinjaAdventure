@@ -13584,11 +13584,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.8
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.5
+      value: 8.78
       objectReference: {fileID: 0}
     - target: {fileID: 1126310259440076520, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13645,6 +13645,10 @@ PrefabInstance:
     - target: {fileID: 6585411490575730648, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
       propertyPath: m_Name
       value: Samurai (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291888426996785363, guid: 2d9a2490aeb79224591e11422afed4e1, type: 3}
+      propertyPath: selectedComboAttack
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15300,11 +15304,11 @@ PrefabInstance:
       objectReference: {fileID: 535627140}
     - target: {fileID: 6501170808711918719, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.74188
+      value: -21.801882
       objectReference: {fileID: 0}
     - target: {fileID: 6501170808711918719, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -46.27146
+      value: -49.02146
       objectReference: {fileID: 0}
     - target: {fileID: 6501170808711918719, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15312,11 +15316,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6936087775998028762, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.74188
+      value: -21.801882
       objectReference: {fileID: 0}
     - target: {fileID: 6936087775998028762, guid: a062b220ae3d8476ca5904fc259fb61b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -46.27146
+      value: -49.02146
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17110,11 +17114,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: f2d439dbd28434396981bfe103023ad4, type: 2}
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 8.94
       objectReference: {fileID: 0}
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.1
+      value: 4.35
       objectReference: {fileID: 0}
     - target: {fileID: 4290728090841259575, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17183,7 +17187,7 @@ PrefabInstance:
     - target: {fileID: 9165694127855322997, guid: 5a2af003d527d4a5b9f528a2f4baa716, type: 3}
       propertyPath: weaponData
       value: 
-      objectReference: {fileID: 11400000, guid: 6f210e310791b4a42ab000fb91724438, type: 2}
+      objectReference: {fileID: 11400000, guid: 5dffb245dd6ec4db9918217e715d20d0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -9,44 +9,36 @@ public class W_SO : ScriptableObject
     public string id = "weaponId";
     public WeaponType type = WeaponType.Melee;
     public Sprite sprite;
-    public bool pointsUp = true; // Sprite should point UP with pivot at BOTTOM (handle)
-    public float offsetRadius = 0.7f; // Distance from player center to weapon handle
+    public float offsetRadius = 0.4f; // Distance from player center to weapon handle
 
     [Header("Damage (set either/both)")]
     public int AD = 1;
     public int AP = 0;
 
-    [Header("Impact")]
+    [Header("Knockback")]
     public float knockbackForce = 5f;
-    public float stunTime = .5f;
 
-    [Header("Melee timings + Thrust Distance")]
-    public float showTime = 0.3f;
+    [Header("Melee Timing")]
     public float thrustDistance = 0.25f;
-    [Range(0f, 1f)]
-    public float attackMovePenalty = 0.5f; // Movement speed multiplier while attacking (0.5 = 50% speed)
 
-    [Header("Combo System (3-Hit Chain)")]
-    [Tooltip("Arc coverage for slash attacks (degrees). Dagger=30°, Sword=45°, Greatsword=90°")]
-    [Range(15f, 180f)]
-    public float slashArcDegrees = 45f;
-
-    [Tooltip("ShowTime for each combo attack [SlashDown, SlashUp, Thrust]")]
-    public float[] comboShowTimes = { 0.3f, 0.3f, 0.5f };
-
-    [Tooltip("Damage multipliers for combo [SlashDown, SlashUp, Thrust]")]
-    public float[] comboDamageMultipliers = { 1.0f, 1.2f, 2.0f };
-
-    [Tooltip("Movement penalties for combo [SlashDown, SlashUp, Thrust]")]
-    public float[] comboMovePenalties = { 0.6f, 0.5f, 0.3f };
-
-    [Tooltip("Stun times for combo [SlashDown, SlashUp, Thrust]")]
-    public float[] comboStunTimes = { 0.1f, 0.2f, 0.5f };
-
-    [Tooltip("Only thrust (index 2) applies knockback")]
+    [Header("Only thrust applies knockback")]
     public bool onlyThrustKnocksBack = true;
 
+    [Header("Combo System (SlashDown, SlashUp, Thrust)")]
+    [Header("Arc coverage for slash attacks (degrees).")]
+    [Range(15f, 180f)] public float slashArcDegrees = 45f;
+
+    public float[] comboShowTimes = { 0.45f, 0.45f, 0.45f };
+    public float[] comboDamageMultipliers = { 1.0f, 1.2f, 2.0f };
+    public float[] comboMovePenalties = { 0.6f, 0.5f, 0.3f };
+    public float[] comboStunTimes = { 0.1f, 0.2f, 0.5f };
+
     [Header("Ranged + Magic")]
+    [Header("Timing + Settings")]
+    public float showTime = 0.45f;
+    [Range(0f, 1f)] public float attackMovePenalty = 1f; // For ranged weapons only
+    public float stunTime = .5f;
+
     public GameObject projectilePrefab;
     public int manaCost = 0;
     public float projectileSpeed = 0f;

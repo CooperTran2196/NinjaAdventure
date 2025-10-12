@@ -11,6 +11,9 @@ public class State_Attack : MonoBehaviour
     float attackAnimDuration = 0.45f; // How long the attack animation actually is
     float hitDelay       = 0.15f;
 
+    // Runtime - randomly chosen each attack
+    int randomComboAttack; // 0=Slash Down, 1=Slash Up, 2=Thrust
+
     // cache
     Animator     anim;
     E_Controller controller;
@@ -27,6 +30,9 @@ public class State_Attack : MonoBehaviour
     void OnEnable()
     {
         anim.SetBool("isAttacking", true); // animator enter
+
+        // Randomly choose which combo attack to use (0-2)
+        randomComboAttack = Random.Range(0, 3); // 0=Slash Down, 1=Slash Up, 2=Thrust
 
         // Calculate aim direction towards the target provided by the controller
         Transform target = controller.GetTarget();
@@ -77,6 +83,9 @@ public class State_Attack : MonoBehaviour
 
     // Public getter for chase state to access current weapon (for movement penalty)
     public W_Base GetActiveWeapon() => activeWeapon;
+    
+    // Public getter for chase state to access current combo index (for movement penalty)
+    public int GetComboIndex() => randomComboAttack;
 
     // Handles animation timing + weapon showTime lockout
     IEnumerator AttackRoutine()
@@ -85,16 +94,25 @@ public class State_Attack : MonoBehaviour
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
 
-        // Get weapon's showTime (how long the weapon is active/visible)
+        // Get combo-specific showTime based on randomly chosen attack
         float weaponShowTime = (activeWeapon && activeWeapon.weaponData) 
-            ? activeWeapon.weaponData.showTime 
+            ? activeWeapon.weaponData.comboShowTimes[randomComboAttack]
             : attackAnimDuration;
 
         // Phase 1: Wait for hit timing
         yield return new WaitForSeconds(hitDelay);
         
-        // Phase 2: Execute weapon attack
-        activeWeapon.Attack(attackDir);
+        // Phase 2: Execute weapon attack with random combo index
+        // For W_Melee, this will trigger the specific combo attack pattern
+        if (activeWeapon is W_Melee meleeWeapon)
+        {
+            meleeWeapon.AttackAsEnemy(attackDir, randomComboAttack);
+        }
+        else
+        {
+            // Other weapon types use standard attack
+            activeWeapon.Attack(attackDir);
+        }
 
         // Phase 3: Wait for animation to complete
         float animRemaining = attackAnimDuration - hitDelay;

@@ -12,36 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8241be2c4c8ad9947826ddefb0d67fe5, type: 3}
   m_Name: W_Lance
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
-  id: weapon_id
+  id: lance
   type: 0
   sprite: {fileID: 21300000, guid: 2c3ae47c60504ea4295857d0c00bd468, type: 3}
-  pointsUp: 1
-  offsetRadius: 0.4
-  AD: 1
+  offsetRadius: 0
+  AD: 5
   AP: 0
   knockbackForce: 5
-  stunTime: 0.2
-  showTime: 0.78
-  thrustDistance: 2.41
-  attackMovePenalty: 0.866
-  slashArcDegrees: 180
+  thrustDistance: 0.5
+  onlyThrustKnocksBack: 0
+  slashArcDegrees: 90
   comboShowTimes:
+  - 0.6
+  - 0.6
   - 0.45
-  - 0.45
-  - 0.5
   comboDamageMultipliers:
   - 1
   - 1.2
   - 2
   comboMovePenalties:
-  - 0.6
   - 0.5
-  - 0.3
+  - 0.5
+  - 0.2
   comboStunTimes:
   - 0.1
-  - 0.2
   - 0.5
-  onlyThrustKnocksBack: 1
+  - 1
+  showTime: 0.45
+  attackMovePenalty: 1
+  stunTime: 0.2
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0
