@@ -13,10 +13,10 @@ public class W_Ranged : W_Base
         // Normalize aim for consistency
         attackDir = attackDir.normalized;
 
-        // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector3 posision = GetPolarPosition(attackDir);
+        // Get local position and angle
+        Vector3 localPosition = GetPolarPosition(attackDir);
         float angle = GetPolarAngle(attackDir);
-        BeginVisual(posision, angle, enableHitbox: false);
+        BeginVisual(localPosition, angle, enableHitbox: false);
 
         // Run the thrust motion in parallel
         StartCoroutine(ThrustOverTime(attackDir, weaponData.showTime, weaponData.thrustDistance));
@@ -28,8 +28,8 @@ public class W_Ranged : W_Base
         // Finish the remaining half of the show time
         yield return new WaitForSeconds(weaponData.showTime * 0.5f);
 
-        // Hide
-        sprite.enabled = false;
+        // Hide and restore parent
+        EndVisual();
     }
 
     void FireProjectile(Vector2 attackDir)
@@ -53,13 +53,14 @@ public class W_Ranged : W_Base
         }
 
         // Spawn from current bow position (mid-thrust)
-        Vector3 currentPosition = transform.position;
+        // Use WORLD position since weapon is now parented to owner
+        Vector3 currentWorldPosition = transform.position;
 
         // Projectile default art faces RIGHT
         float projAngle = Vector2.SignedAngle(Vector2.right, attackDir);
         
         // Spawn
-        var go = Instantiate(weaponData.projectilePrefab, currentPosition, Quaternion.Euler(0, 0, projAngle));
+        var go = Instantiate(weaponData.projectilePrefab, currentWorldPosition, Quaternion.Euler(0, 0, projAngle));
         
         // Try homing first, fallback to regular
         var homingProj = go.GetComponent<W_ProjectileHoming>();

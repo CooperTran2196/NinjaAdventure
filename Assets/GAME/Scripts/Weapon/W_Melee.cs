@@ -23,16 +23,15 @@ public class W_Melee : W_Base
         alreadyHit.Clear();
 
         // Continuous aim (mouse for Player / player transform for Enemy)
-        Vector3 posision = GetPolarPosition(attackDir);
+        Vector3 localPosition = GetPolarPosition(attackDir);
         float angle = GetPolarAngle(attackDir);
-        BeginVisual(posision, angle, enableHitbox: true);
+        BeginVisual(localPosition, angle, enableHitbox: true);
 
         // Thrust
         yield return ThrustOverTime(attackDir, weaponData.showTime, weaponData.thrustDistance);
 
-        // End visuals
-        hitbox.enabled = false;
-        sprite.enabled = false;
+        // End visuals and restore parent
+        EndVisual();
     }
 
     // Hit detection

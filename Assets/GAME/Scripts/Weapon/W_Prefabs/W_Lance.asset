@@ -16,14 +16,14 @@ MonoBehaviour:
   type: 0
   sprite: {fileID: 21300000, guid: 2c3ae47c60504ea4295857d0c00bd468, type: 3}
   pointsUp: 1
-  offsetRadius: 0.5
+  offsetRadius: 1
   angleBiasDeg: 0
   AD: 1
   AP: 0
   knockbackForce: 5
   stunTime: 0.2
-  showTime: 0.3
-  thrustDistance: 1.5
+  showTime: 1
+  thrustDistance: 0.7
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

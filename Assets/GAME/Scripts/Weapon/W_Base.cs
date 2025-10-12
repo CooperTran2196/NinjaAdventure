@@ -28,11 +28,17 @@ public abstract class W_Base : MonoBehaviour
     [SerializeField] bool debugDrawHitbox = false;
     [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
 
+    // Track original parent for anchoring during attacks
+    Transform originalParent;
+
     void Awake()
     {
         // 1/ Cache weapon components
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
+
+        // Store original parent (usually owner transform)
+        originalParent = transform.parent;
 
         if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Base");
         if (!hitbox) Debug.LogError($"{name}: BoxCollider2D is missing in W_Base");
@@ -61,9 +67,9 @@ public abstract class W_Base : MonoBehaviour
         }
     }
 
-    // Get position around owner at offsetRadius along attackDir
+    // Get position around owner at offsetRadius along attackDir (LOCAL offset when parented)
     protected Vector3 GetPolarPosition(Vector2 attackDir) =>
-        owner.position + (Vector3)(attackDir * weaponData.offsetRadius);
+        (Vector3)(attackDir * weaponData.offsetRadius);
 
     // Get angle in degrees from up/down baseline + bias
     protected float GetPolarAngle(Vector2 attackDir)
@@ -75,26 +81,42 @@ public abstract class W_Base : MonoBehaviour
     }
 
     // Position/rotate + show sprite, optionally enable hitbox
-    protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
+    // Now parents to owner for automatic position anchoring
+    protected void BeginVisual(Vector3 localPos, float angle, bool enableHitbox)
     {
-        transform.position = pos;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        // Parent to owner so weapon follows player automatically
+        transform.SetParent(owner, false);
+        
+        // Set LOCAL position and rotation
+        transform.localPosition = localPos;
+        transform.localRotation = Quaternion.Euler(0, 0, angle);
+        
         sprite.enabled = true;
         hitbox.enabled = enableHitbox;
     }
 
-    // Move forward/back along dir over showTime (no callback)
+    // Hide weapon and restore original parent
+    protected void EndVisual()
+    {
+        sprite.enabled = false;
+        hitbox.enabled = false;
+        
+        // Restore original parent hierarchy
+        transform.SetParent(originalParent, true);
+    }
+
+    // Move forward/back along dir over showTime (LOCAL space motion)
     protected IEnumerator ThrustOverTime(Vector2 dir, float showTime, float thrustDist)
     {
         float t = 0f;
-        Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
-        Vector3 end = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 start = transform.localPosition - (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end = transform.localPosition + (Vector3)(dir * (thrustDist * 0.5f));
 
         while (t < showTime)
         {
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / showTime);
-            transform.position = Vector3.Lerp(start, end, k);
+            transform.localPosition = Vector3.Lerp(start, end, k);
             yield return null;
         }
     }
