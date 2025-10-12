@@ -129,14 +129,20 @@ public class P_Controller : MonoBehaviour
         // Don't interrupt dodge while dodging
         if (currentState == PState.Dodge && isDodging) return;
 
-        // Handle dodge input (high)
+        // Handle dodge input (high) - CANCELS COMBO
         if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
         {
+            // Cancel combo if attacking
+            if (isAttacking && attack != null)
+            {
+                attack.ResetCombo();
+            }
+            
             SwitchState(PState.Dodge);
             return;
         }
 
-        // Handle attack inputs (mid) - don't change state, just trigger attack
+        // Handle attack inputs (mid) - queue if already attacking, trigger if not
         if (attackCooldown <= 0f)
         {
             Vector2 mouseAim = ReadMouseAim();
@@ -145,13 +151,31 @@ public class P_Controller : MonoBehaviour
             if (input.Player.MeleeAttack.triggered)
             {
                 currentWeapon = meleeWeapon;
-                TriggerAttack();
+                
+                if (isAttacking)
+                {
+                    // Queue combo input
+                    attack.QueueComboInput();
+                }
+                else
+                {
+                    TriggerAttack();
+                }
                 // Don't return - allow movement processing below
             }
             else if (input.Player.RangedAttack.triggered)
             {
                 currentWeapon = rangedWeapon;
-                TriggerAttack();
+                
+                if (isAttacking)
+                {
+                    // Queue combo input
+                    attack.QueueComboInput();
+                }
+                else
+                {
+                    TriggerAttack();
+                }
                 // Don't return - allow movement processing below
             }
         }

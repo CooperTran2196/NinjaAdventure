@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class P_State_Attack : MonoBehaviour
@@ -10,6 +11,15 @@ public class P_State_Attack : MonoBehaviour
     [Header("Attack Timings")]
     float attackAnimDuration = 0.45f; // How long the attack animation actually is
     float hitDelay       = 0.15f;
+
+    [Header("Combo System")]
+    [SerializeField] int comboIndex = 0;           // 0=slash down, 1=slash up, 2=thrust
+    [SerializeField] float comboInputWindow = 1.0f; // Time window to press next attack (VERY forgiving)
+    [SerializeField] float comboWindowTimer = 0f;   // Countdown timer
+    [SerializeField] bool comboInputQueued = false; // Input buffering flag
+    
+    // Hit tracking per attack (prevents double-hits on same target in one attack)
+    HashSet<C_Health> hitTargetsThisAttack = new HashSet<C_Health>();
 
     // Cache
     Animator anim;
@@ -36,6 +46,9 @@ public class P_State_Attack : MonoBehaviour
         
         controller.SetAttacking(false); // Normal finish
         
+        // Reset combo on disable
+        ResetCombo();
+        
         // Re-enable movement animation if player is moving
         var moveState = GetComponent<P_State_Movement>();
         if (moveState != null && moveState.enabled)
@@ -61,52 +74,117 @@ public class P_State_Attack : MonoBehaviour
 
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
+        
+        // Restart animation from beginning for combo visual consistency
+        anim.Play("Attack", -1, 0f);
 
         StartCoroutine(AttackRoutine());
     }
     
     // Public getter for movement state to access current weapon
     public W_Base GetActiveWeapon() => activeWeapon;
+    
+    // Get current combo index for movement penalty
+    public int GetComboIndex() => comboIndex;
+    
+    // Get current movement penalty based on combo stage
+    public float GetCurrentMovePenalty()
+    {
+        if (activeWeapon?.weaponData == null) return 0.5f; // Fallback
+        return activeWeapon.weaponData.comboMovePenalties[comboIndex];
+    }
+    
+    // Queue combo input during attack (called by controller)
+    public void QueueComboInput()
+    {
+        // Only queue if within input window and not at final combo attack
+        if (comboWindowTimer > 0f && comboIndex < 2)
+        {
+            comboInputQueued = true;
+        }
+    }
+    
+    // Reset combo state (called on cancel, timeout, or completion)
+    public void ResetCombo()
+    {
+        comboIndex = 0;
+        comboWindowTimer = 0f;
+        comboInputQueued = false;
+        hitTargetsThisAttack.Clear();
+    }
+    
+    // Check if target was already hit in this attack
+    public bool WasTargetHitThisAttack(C_Health target)
+    {
+        return hitTargetsThisAttack.Contains(target);
+    }
+    
+    // Mark target as hit in this attack
+    public void MarkTargetHit(C_Health target)
+    {
+        hitTargetsThisAttack.Add(target);
+    }
 
-    // Handles animation timing + weapon showTime lockout
+    // Handles combo chain, animation timing + weapon showTime lockout
     IEnumerator AttackRoutine()
     {
-        // Get weapon's showTime (how long the weapon is active/visible)
-        float weaponShowTime = activeWeapon.weaponData.showTime;
+        // Get combo-specific showTime
+        float weaponShowTime = activeWeapon.weaponData.comboShowTimes[comboIndex];
         
-        // Wait for hit delay, then trigger weapon attack
+        // IMMEDIATELY open input window (allows button mashing)
+        comboWindowTimer = comboInputWindow; // 1.0s window
+        
+        // Phase 1: Wait for hit delay, then trigger weapon attack
         yield return new WaitForSeconds(hitDelay);
         activeWeapon.Attack(attackDir);
         
-        // Calculate how long until animation finishes
+        // Phase 2: Calculate remaining animation time
         float remainingAnimTime = attackAnimDuration - hitDelay;
         
-        // If weapon showTime is longer than animation, we need to freeze and wait
-        if (weaponShowTime > attackAnimDuration)
+        // Phase 3: Wait for animation/showTime while checking for input
+        float elapsed = 0f;
+        
+        while (elapsed < weaponShowTime)
         {
-            // Let animation play normally until it finishes
-            yield return new WaitForSeconds(remainingAnimTime);
+            // Countdown input window timer
+            if (comboWindowTimer > 0f)
+            {
+                comboWindowTimer -= Time.deltaTime;
+            }
             
-            // Freeze animation at final frame (speed = 0)
-            anim.speed = 0f;
+            elapsed += Time.deltaTime;
             
-            // Wait for the remaining weapon showTime (lockout period)
-            float lockoutTime = weaponShowTime - attackAnimDuration;
-            yield return new WaitForSeconds(lockoutTime);
+            // Check if animation should freeze (showTime > animation duration)
+            if (weaponShowTime > attackAnimDuration && elapsed >= remainingAnimTime && anim.speed > 0f)
+            {
+                anim.speed = 0f; // Freeze at final frame
+            }
             
-            // Restore animation speed
-            anim.speed = 1f;
+            yield return null;
+        }
+        
+        // Restore animation speed if it was frozen
+        anim.speed = 1f;
+        
+        // Phase 4: Determine next state (combo chain or finish)
+        if (comboInputQueued && comboIndex < 2)
+        {
+            // Chain to next combo attack
+            comboIndex++;
+            comboInputQueued = false;
+            hitTargetsThisAttack.Clear(); // Reset hit tracking for next attack
+            
+            // Restart attack routine with new combo index
+            // Don't disable component - keep attacking
+            StartCoroutine(AttackRoutine());
         }
         else
         {
-            // Weapon showTime is shorter than or equal to animation
-            // Just wait for the remaining animation time
-            yield return new WaitForSeconds(remainingAnimTime);
+            // Combo complete or timed out
+            controller.SetAttacking(false);
+            
+            // Disable this state component to trigger OnDisable() and clean up
+            enabled = false;
         }
-
-        controller.SetAttacking(false);
-        
-        // Disable this state component to trigger OnDisable() and clean up animation
-        enabled = false;
     }
 }

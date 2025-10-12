@@ -63,7 +63,11 @@ public abstract class W_Base : MonoBehaviour
         if (autoSizeFromSprite && sprite && sprite.sprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
-            hitbox.offset = Vector2.zero;
+            
+            // Hitbox offset for bottom-pivot sprites (assumed for all weapons)
+            // Bottom pivot (0.5, 0) means sprite center is shifted up by half its height
+            // So hitbox needs to shift UP to cover the blade instead of empty space below handle
+            hitbox.offset = new Vector2(0f, hitbox.size.y * 0.5f);
         }
     }
 
@@ -71,13 +75,12 @@ public abstract class W_Base : MonoBehaviour
     protected Vector3 GetPolarPosition(Vector2 attackDir) =>
         (Vector3)(attackDir * weaponData.offsetRadius);
 
-    // Get angle in degrees from up/down baseline + bias
+    // Get angle in degrees from up baseline (sprite points UP, pivot at BOTTOM)
     protected float GetPolarAngle(Vector2 attackDir)
     {
-        // Angle from up/down baseline + bias
-        Vector2 baseline = weaponData.pointsUp ? Vector2.up : Vector2.down;
-        // Get the signed angle between the baseline and the attack direction
-        return Vector2.SignedAngle(baseline, attackDir) + weaponData.angleBiasDeg;
+        // Angle from UP baseline (0° = up, 90° = right, etc.)
+        // No bias needed - sprite pivot at bottom makes this natural
+        return Vector2.SignedAngle(Vector2.up, attackDir);
     }
 
     // Position/rotate + show sprite, optionally enable hitbox
@@ -120,6 +123,47 @@ public abstract class W_Base : MonoBehaviour
             yield return null;
         }
     }
+
+    // Arc-based slash movement for combo attacks (LOCAL space motion)
+    // Weapon sweeps in arc like radar arm rotating around player center
+    // REQUIRES: Weapon sprite points UP with pivot at BOTTOM (handle)
+    // Handle is offset from player by offsetRadius, blade extends further outward
+    protected IEnumerator ArcSlashOverTime(Vector2 attackDir, float startAngleDeg, float endAngleDeg, float duration)
+    {
+        float t = 0f;
+        
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            
+            // Interpolate the angle from start to end
+            float currentAngleDeg = Mathf.Lerp(startAngleDeg, endAngleDeg, k);
+            
+            // Convert angle to radians for trig calculations
+            float currentAngleRad = currentAngleDeg * Mathf.Deg2Rad;
+            
+            // Calculate position on circular arc
+            // Using polar coordinates with UP as 0°: x = r*sin(θ), y = r*cos(θ)
+            // offsetRadius pushes handle away from player center (so player doesn't cover it)
+            // IMPORTANT: Negate X to match the negated X in angle calculation (fixes left/right offset direction)
+            float radius = weaponData.offsetRadius;
+            Vector3 circularPosition = new Vector3(
+                -Mathf.Sin(currentAngleRad) * radius,  // Negate X to fix left/right offset direction
+                Mathf.Cos(currentAngleRad) * radius,   // y (up = 0°)
+                0f
+            );
+            
+            // Set position (handle at radius distance from player)
+            transform.localPosition = circularPosition;
+            
+            // Set rotation (weapon points outward along radius)
+            // Since pivot is at bottom, the weapon naturally extends outward from handle
+            transform.localRotation = Quaternion.Euler(0, 0, currentAngleDeg);
+            
+            yield return null;
+        }
+    }
     
     // INSTANCE convenience wrappers for from W_Melee / W_Ranged
     protected (C_Health target, GameObject root) TryGetTarget(Collider2D targetCollider)
@@ -151,15 +195,23 @@ public abstract class W_Base : MonoBehaviour
     }
 
     // INSTANCE convenience wrappers for from W_Melee / W_Ranged
-    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider)
-                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this);
+    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider, int comboIndex = 0)
+                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this, comboIndex);
 
-    // Apply damage + hit effects
+    // Apply damage + hit effects with combo support
     public static void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth,
-                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon)
+                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon, int comboIndex = 0)
     {
         int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
-        int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
+        
+        // Apply combo damage multiplier
+        int baseWeaponAD = weaponData.AD;
+        int baseWeaponAP = weaponData.AP;
+        
+        float damageMultiplier = weaponData.comboDamageMultipliers[comboIndex];
+        int weaponAD = Mathf.RoundToInt(baseWeaponAD * damageMultiplier);
+        int weaponAP = Mathf.RoundToInt(baseWeaponAP * damageMultiplier);
+        
         float attackerArmorPen = attackerStats.armorPen;
         float attackerMagicPen = attackerStats.magicPen;
 
@@ -180,8 +232,9 @@ public abstract class W_Base : MonoBehaviour
             }
         }
 
-        // Hit effects: Knockback
-        if (weaponData.knockbackForce > 0f)
+        // Hit effects: Knockback (only on thrust for combos)
+        bool shouldKnockback = !weaponData.onlyThrustKnocksBack || comboIndex == 2;
+        if (shouldKnockback && weaponData.knockbackForce > 0f)
         {
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
@@ -205,19 +258,20 @@ public abstract class W_Base : MonoBehaviour
             }
         }
 
-        // Hit effects: Stun
-        if (weaponData.stunTime > 0f)
+        // Hit effects: Stun (combo-based duration)
+        float stunTime = weaponData.comboStunTimes[comboIndex];
+        if (stunTime > 0f)
         {
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
             if (ec != null)
             {
-                ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
+                ec.StartCoroutine(ec.StunFor(stunTime));
             }
             else if (pc != null)
             {
-                pc.StartCoroutine(pc.StunFor(weaponData.stunTime));
+                pc.StartCoroutine(pc.StunFor(stunTime));
             }
             // Note: Entities without controllers (NPCs) won't be stunned
         }

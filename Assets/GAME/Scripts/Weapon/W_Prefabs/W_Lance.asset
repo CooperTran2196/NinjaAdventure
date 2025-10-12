@@ -16,15 +16,32 @@ MonoBehaviour:
   type: 0
   sprite: {fileID: 21300000, guid: 2c3ae47c60504ea4295857d0c00bd468, type: 3}
   pointsUp: 1
-  offsetRadius: 0.56
-  angleBiasDeg: 0
+  offsetRadius: 0.4
   AD: 1
   AP: 0
   knockbackForce: 5
   stunTime: 0.2
-  showTime: 0.5
-  thrustDistance: 1
-  attackMovePenalty: 0.5
+  showTime: 0.78
+  thrustDistance: 2.41
+  attackMovePenalty: 0.866
+  slashArcDegrees: 180
+  comboShowTimes:
+  - 0.45
+  - 0.45
+  - 0.5
+  comboDamageMultipliers:
+  - 1
+  - 1.2
+  - 2
+  comboMovePenalties:
+  - 0.6
+  - 0.5
+  - 0.3
+  comboStunTimes:
+  - 0.1
+  - 0.2
+  - 0.5
+  onlyThrustKnocksBack: 1
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

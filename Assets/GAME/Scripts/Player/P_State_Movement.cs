@@ -42,15 +42,12 @@ public class P_State_Movement : MonoBehaviour
         // Calculate base movement velocity
         float speed = c_Stats.MS;
         
-        // Apply attack movement penalty if attacking
+        // Apply attack movement penalty if attacking (combo-based)
         if (controller.currentState == P_Controller.PState.Attack)
         {
-            // Get the active weapon and its movement penalty
-            W_Base activeWeapon = attackState.GetActiveWeapon();
-            if (activeWeapon != null && activeWeapon.weaponData != null)
-            {
-                speed *= activeWeapon.weaponData.attackMovePenalty;
-            }
+            // Get combo-specific movement penalty
+            float comboPenalty = attackState.GetCurrentMovePenalty();
+            speed *= comboPenalty;
             
             // Turn off isMoving animation while attacking (attack animation has priority)
             anim.SetBool("isMoving", false);

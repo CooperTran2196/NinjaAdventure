@@ -95,7 +95,17 @@ public class C_Health : MonoBehaviour
         // Clamp to valid range and apply
         int before = CurrentHP;
         int dealt = Mathf.Clamp(total, 0, before);
-        if (dealt > 0) ChangeHealth(-dealt);
+        if (dealt > 0)
+        {
+            ChangeHealth(-dealt);
+            
+            // Cancel combo if player is attacking (damage interrupts combo)
+            var playerAttackState = GetComponent<P_State_Attack>();
+            if (playerAttackState != null && playerAttackState.enabled)
+            {
+                playerAttackState.ResetCombo();
+            }
+        }
         return dealt;
     }
 
