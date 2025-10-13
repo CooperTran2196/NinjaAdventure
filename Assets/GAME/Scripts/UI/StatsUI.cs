@@ -74,52 +74,51 @@ public class StatsUI : MonoBehaviour
         statsSlots[1].GetComponentInChildren<TMP_Text>().text = "AP: " + p_Stats.AP;
     }
 
-    public void UpdateMS()
+    public void UpdateLS()
     {
-        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "MS: " + p_Stats.MS;
-    }
-
-    public void UpdateMaxHealth()
-    {
-        statsSlots[3].GetComponentInChildren<TMP_Text>().text = "HP: " + p_Stats.maxHP;
-    }
-
-    public void UpdateAR()
-    {
-        statsSlots[4].GetComponentInChildren<TMP_Text>().text = "AR: " + p_Stats.AR;
-    }
-
-    public void UpdateMR()
-    {
-        statsSlots[5].GetComponentInChildren<TMP_Text>().text = "MR: " + p_Stats.MR;
-    }
-
-    public void UpdateKR()
-    {
-        statsSlots[6].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
+        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "Lifesteal: " + p_Stats.lifesteal + "%";
     }
 
     public void UpdateMP()
     {
-        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.maxMP;
+        statsSlots[3].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.maxMP;
     }
-    
-    public void UpdateLS()
+
+    public void UpdateMaxHealth()
     {
-        statsSlots[8].GetComponentInChildren<TMP_Text>().text = "Lifesteal: " + p_Stats.lifesteal + "%";
+        statsSlots[4].GetComponentInChildren<TMP_Text>().text = "HP: " + p_Stats.maxHP;
+    }
+
+    public void UpdateKR()
+    {
+        statsSlots[5].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
+    }
+
+    public void UpdateAR()
+    {
+        statsSlots[6].GetComponentInChildren<TMP_Text>().text = "AR: " + p_Stats.AR;
+    }
+
+    public void UpdateMR()
+    {
+        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MR: " + p_Stats.MR;
+    }
+
+    public void UpdateMS()
+    {
+        statsSlots[8].GetComponentInChildren<TMP_Text>().text = "MS: " + p_Stats.MS;
     }
 
     public void UpdateAllStats()
     {
         UpdateAD();
         UpdateAP();
-        UpdateMS();
-
+        UpdateLS();
+        UpdateMP();
         UpdateMaxHealth();
+        UpdateKR();
         UpdateAR();
         UpdateMR();
-        UpdateKR();
-        UpdateMP();
-        UpdateLS();
+        UpdateMS();
     }
 }

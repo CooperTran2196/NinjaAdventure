@@ -24,11 +24,13 @@ public class P_State_Attack : MonoBehaviour
     // Cache
     Animator anim;
     P_Controller controller;
+    C_Stats c_Stats;
 
     void Awake()
     {
         anim        = GetComponent<Animator>();
         controller  = GetComponent<P_Controller>();
+        c_Stats     = GetComponent<C_Stats>();
     }
 
     void OnEnable()
@@ -87,11 +89,18 @@ public class P_State_Attack : MonoBehaviour
     // Get current combo index for movement penalty
     public int GetComboIndex() => comboIndex;
     
-    // Get current movement penalty based on combo stage
+    // Get current movement penalty based on combo stage (with reduction bonus: 1 = 1%)
     public float GetCurrentMovePenalty()
     {
         if (activeWeapon?.weaponData == null) return 0.5f; // Fallback
-        return activeWeapon.weaponData.comboMovePenalties[comboIndex];
+        
+        float basePenalty = activeWeapon.weaponData.comboMovePenalties[comboIndex];
+        
+        // Apply reduction: 1 = 1% less penalty
+        // Example: basePenalty = 0.6 (40% penalty), reduction = 10 (10% less penalty)
+        // Result: 0.6 + (1 - 0.6) * (10/100) = 0.64 (36% penalty)
+        float reduction = c_Stats.movePenaltyReduction / 100f;
+        return basePenalty + (1f - basePenalty) * reduction;
     }
     
     // Queue combo input during attack (called by controller)

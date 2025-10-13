@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6addd2e0894da4bc2862ca5fc8e96ea7, type: 3}
-  m_Name: S_DEF2
+  m_Name: Lifesteal
   m_EditorClassIdentifier: Assembly-CSharp::SkillSO
-  skillName: S_DEF2
-  id: def2
-  skillIcon: {fileID: 21300000, guid: 55c7235010aa69e49b620ce58919c2ba, type: 3}
-  maxLevel: 1
+  id: lifesteal
+  skillName: Lifesteal
+  skillIcon: {fileID: 21300000, guid: bde2059339e294fee80181d000d2806b, type: 3}
+  maxLevel: 5
   StatEffectList:
-  - statName: 5
-    Value: 10
+  - statName: 10
+    Value: 5
     Duration: 0
     IsOverTime: 0

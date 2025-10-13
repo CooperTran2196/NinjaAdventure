@@ -236,20 +236,22 @@ public abstract class W_Base : MonoBehaviour
             }
         }
 
-        // Stun (duration from combo-specific array)
-        float stunTime = weaponData.comboStunTimes[comboIndex];
-        if (stunTime > 0f)
+        // Stun (duration from combo-specific array, with bonus: 1 = 1% increase)
+        float baseStunTime = weaponData.comboStunTimes[comboIndex];
+        float finalStunTime = baseStunTime * (1f + attackerStats.stunTimeBonus / 100f);
+        
+        if (finalStunTime > 0f)
         {
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
             if (ec != null)
             {
-                ec.StartCoroutine(ec.StunFor(stunTime));
+                ec.StartCoroutine(ec.StunFor(finalStunTime));
             }
             else if (pc != null)
             {
-                pc.StartCoroutine(pc.StunFor(stunTime));
+                pc.StartCoroutine(pc.StunFor(finalStunTime));
             }
         }
     }

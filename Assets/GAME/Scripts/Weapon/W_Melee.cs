@@ -38,7 +38,9 @@ public class W_Melee : W_Base
     {
         if (index == 2) return (0, 0, true);  // Thrust
         
-        float halfArc = weaponData.slashArcDegrees * 0.5f;
+        // Apply slash arc bonus from player stats
+        float finalArcDegrees = weaponData.slashArcDegrees + c_Stats.slashArcBonus;
+        float halfArc = finalArcDegrees * 0.5f;
         bool reverseArc = (index == 1);  // SlashUp reverses arc direction
         
         float startAngle = baseAngle + (reverseArc ? halfArc : -halfArc);
@@ -61,12 +63,13 @@ public class W_Melee : W_Base
         
         if (pattern.isThrust)
         {
-            // Forward thrust
+            // Forward thrust with distance bonus (1 = 1% increase)
             Vector3 localPosition = GetPolarPosition(attackDir);
             float thrustAngle = GetPolarAngle(attackDir);
+            float finalThrustDistance = weaponData.thrustDistance * (1f + c_Stats.thrustDistanceBonus / 100f);
             
             BeginVisual(localPosition, thrustAngle, enableHitbox: true);
-            yield return ThrustOverTime(attackDir, showTime, weaponData.thrustDistance);
+            yield return ThrustOverTime(attackDir, showTime, finalThrustDistance);
         }
         else
         {

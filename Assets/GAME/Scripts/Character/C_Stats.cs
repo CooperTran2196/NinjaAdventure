@@ -21,12 +21,18 @@ public class C_Stats : MonoBehaviour
     public float armorPen = 0f;
     public float magicPen = 0f;
 
+    [Header("Weapon Bonuses (Player Only)")]
+    public float slashArcBonus = 0f;           // Additive degrees to slash arc
+    public float movePenaltyReduction = 0f;    // % reduction (0.1 = 10% less penalty)
+    public float stunTimeBonus = 0f;           // % increase (0.1 = 10% more stun)
+    public float thrustDistanceBonus = 0f;     // % increase (0.1 = 10% more distance)
+
     [Header("Combat")]
     public float attackCooldown = 1.2f;
     public int   collisionDamage = 1;
     public float collisionTick   = 0.5f;
 
-    [Header("Dodge (used by Player; Enemy can ignore)")]
+    [Header("Dodge (Player Only)")]
     public float dodgeSpeed = 11f;
     public float dodgeDistance = 2.0f;
     public float dodgeCooldown = 0.45f;

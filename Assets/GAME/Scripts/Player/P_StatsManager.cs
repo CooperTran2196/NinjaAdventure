@@ -17,6 +17,9 @@ public class P_StatsManager : MonoBehaviour
     // Base stats that can be modified
     private int baseAD, baseAP, baseMaxHP, baseMaxMP, baseAR, baseMR;
     private float baseMS, baseKR, baseLifesteal, baseArmorPen, baseMagicPen;
+    
+    // Weapon bonus base values
+    private float baseSlashArcBonus, baseMovePenaltyReduction, baseStunTimeBonus, baseThrustDistanceBonus;
 
     // List of temporary buffs/debuffs.
     private readonly List<P_StatEffect> statsEffectList = new List<P_StatEffect>();
@@ -47,6 +50,12 @@ public class P_StatsManager : MonoBehaviour
         baseLifesteal = c_Stats.lifesteal;
         baseArmorPen  = c_Stats.armorPen;
         baseMagicPen  = c_Stats.magicPen;
+
+        // Weapon bonuses
+        baseSlashArcBonus        = c_Stats.slashArcBonus;
+        baseMovePenaltyReduction = c_Stats.movePenaltyReduction;
+        baseStunTimeBonus        = c_Stats.stunTimeBonus;
+        baseThrustDistanceBonus  = c_Stats.thrustDistanceBonus;
     }
 
     /// The main entry point for applying any stat change
@@ -117,6 +126,12 @@ public class P_StatsManager : MonoBehaviour
             case StatName.Lifesteal:        baseLifesteal += stat.Value; break;
             case StatName.ArmorPen:         baseArmorPen  += stat.Value; break;
             case StatName.MagicPen:         baseMagicPen  += stat.Value; break;
+
+            case StatName.SlashArcBonus:        baseSlashArcBonus        += stat.Value; break;
+            case StatName.MovePenaltyReduction: baseMovePenaltyReduction += stat.Value; break;
+            case StatName.StunTimeBonus:        baseStunTimeBonus        += stat.Value; break;
+            case StatName.ThrustDistanceBonus:  baseThrustDistanceBonus  += stat.Value; break;
+
             case StatName.Heal:             c_Health.ChangeHealth((int)stat.Value); break; // Permanent heal is just an instant heal
             case StatName.Mana:             c_Mana.RestoreMana((int)stat.Value); 
                 break; // Permanent mana is just an instant restore
@@ -139,6 +154,11 @@ public class P_StatsManager : MonoBehaviour
         c_Stats.lifesteal = baseLifesteal;
         c_Stats.armorPen  = baseArmorPen;
         c_Stats.magicPen  = baseMagicPen;
+
+        c_Stats.slashArcBonus        = baseSlashArcBonus;
+        c_Stats.movePenaltyReduction = baseMovePenaltyReduction;
+        c_Stats.stunTimeBonus        = baseStunTimeBonus;
+        c_Stats.thrustDistanceBonus  = baseThrustDistanceBonus;
 
         // 2/ Find all active effects and apply them
         foreach (var stat in statsEffectList)
@@ -173,6 +193,12 @@ public class P_StatsManager : MonoBehaviour
             case StatName.Lifesteal:        c_Stats.lifesteal += value; break;
             case StatName.ArmorPen:         c_Stats.armorPen  += value; break;
             case StatName.MagicPen:         c_Stats.magicPen  += value; break;
+
+            case StatName.SlashArcBonus:        c_Stats.slashArcBonus        += value; break;
+            case StatName.MovePenaltyReduction: c_Stats.movePenaltyReduction += value; break;
+            case StatName.StunTimeBonus:        c_Stats.stunTimeBonus        += value; break;
+            case StatName.ThrustDistanceBonus:  c_Stats.thrustDistanceBonus  += value; break;
+
             case StatName.Heal:             c_Health.ChangeHealth((int)value); break;
             case StatName.Mana:             c_Mana.RestoreMana((int)value); 
             break;

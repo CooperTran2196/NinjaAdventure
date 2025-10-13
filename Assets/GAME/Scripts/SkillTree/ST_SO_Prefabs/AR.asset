@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6addd2e0894da4bc2862ca5fc8e96ea7, type: 3}
-  m_Name: S_HP1
+  m_Name: AR
   m_EditorClassIdentifier: Assembly-CSharp::SkillSO
-  skillName: S_HP1
-  id: hp1
-  skillIcon: {fileID: 21300000, guid: c2185e948824427468216e24d8658881, type: 3}
-  maxLevel: 1
+  id: AR
+  skillName: AR
+  skillIcon: {fileID: 21300000, guid: 1757381d925c8e046a58faf5f6ea070c, type: 3}
+  maxLevel: 5
   StatEffectList:
-  - statName: 3
-    Value: 15
+  - statName: 5
+    Value: 10
     Duration: 0
     IsOverTime: 0

@@ -116,9 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SYS_Fader
   animator: {fileID: 2190982755463382435}
-  fadeOutState: FadeOut
-  fadeInState: FadeIn
-  fadeTime: 0.5
+  fadeTime: 0.8
 --- !u!1 &4094785968961234489
 GameObject:
   m_ObjectHideFlags: 0
