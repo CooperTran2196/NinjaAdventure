@@ -36,8 +36,4 @@ public class C_Stats : MonoBehaviour
     public float dodgeSpeed = 11f;
     public float dodgeDistance = 2.0f;
     public float dodgeCooldown = 0.45f;
-
-    [Header("Placeholders")]
-    public float knockbackForce = 0f;
-    public float stunTime = 0f;
 }

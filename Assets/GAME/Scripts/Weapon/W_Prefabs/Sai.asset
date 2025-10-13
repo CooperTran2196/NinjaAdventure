@@ -21,11 +21,11 @@ MonoBehaviour:
   knockbackForce: 4
   thrustDistance: 0.25
   onlyThrustKnocksBack: 1
-  slashArcDegrees: 45
+  slashArcDegrees: 60
   comboShowTimes:
-  - 0.3
-  - 0.3
-  - 0.2
+  - 0.45
+  - 0.45
+  - 0.45
   comboDamageMultipliers:
   - 1
   - 1.2
@@ -38,9 +38,8 @@ MonoBehaviour:
   - 0.1
   - 0.2
   - 0.5
-  showTime: 0.32
-  attackMovePenalty: 1
-  stunTime: 0.5
+  showTime: 0
+  attackMovePenalty: 0
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

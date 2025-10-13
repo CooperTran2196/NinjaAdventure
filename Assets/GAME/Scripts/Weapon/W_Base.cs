@@ -52,10 +52,10 @@ public abstract class W_Base : MonoBehaviour
         ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
         c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
 
-        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base");
-        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base");
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base");
-        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base");
+        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base",this);
+        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base",this);
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base",this);
+        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base", this);
 
         // Visual + hitbox auto-sizing
         if (weaponData && sprite) sprite.sprite = weaponData.sprite;

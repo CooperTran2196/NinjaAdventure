@@ -18,7 +18,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     [Header("Main controller for enemy AI states")]
     [Header("References")]
     [Min(3f)]   public float detectionRange = 3f;
-    [Min(1.2f)] public float attackRange = 1.2f;
+                public float attackRange = 1.2f;
                 public LayerMask playerLayer;
                 public EState defaultState = EState.Idle;
                 public EState currentState;

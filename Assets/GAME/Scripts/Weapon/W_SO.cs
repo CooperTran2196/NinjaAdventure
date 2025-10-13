@@ -37,7 +37,6 @@ public class W_SO : ScriptableObject
     [Header("Timing + Settings")]
     public float showTime = 0.45f;
     [Range(0f, 1f)] public float attackMovePenalty = 1f; // For ranged weapons only
-    public float stunTime = .5f;
 
     public GameObject projectilePrefab;
     public int manaCost = 0;
