@@ -268,6 +268,7 @@ You mentioned you'll handle this, but here's what to consider:
 - Extended `C_Stats` with weapon bonus fields
 - Updated `P_StatsManager` to handle new stats
 - Modified weapon code to apply bonuses
+- **Updated `E_Controller` to make `State_Attack` optional** (for collision-only enemies)
 - System is fully compatible with existing SkillTree infrastructure
 
 **What You Need to Do:**

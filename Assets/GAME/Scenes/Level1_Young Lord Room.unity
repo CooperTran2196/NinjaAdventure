@@ -2549,124 +2549,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b35e6c29c13dc418ce4eca5a99029d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::D_Manager
---- !u!1001 &663265243
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 459312303814376207, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: p_Exp
-      value: 
-      objectReference: {fileID: 741773952}
-    - target: {fileID: 3234485020185973039, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3234485020185973039, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4484222420092134496, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5792589715836186760, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_Name
-      value: ExpCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 5792589715836186760, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
---- !u!1 &663265244 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5792589715836186760, guid: f49b29a6718244af584f4ed3c46e1f36, type: 3}
-  m_PrefabInstance: {fileID: 663265243}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &682037730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4018,7 +3900,7 @@ PrefabInstance:
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[4]'
       value: 
-      objectReference: {fileID: 663265244}
+      objectReference: {fileID: 0}
     - target: {fileID: 9150887136014047373, guid: d6aa66e2e92664d7b91ae4f5f8835e6b, type: 3}
       propertyPath: 'persistentObjects.Array.data[5]'
       value: 
@@ -4452,10 +4334,16 @@ MonoBehaviour:
   currentHP: 10
   AR: 0
   MR: 0
+  maxMP: 50
+  currentMP: 0
   KR: 10
   lifesteal: 0
   armorPen: 0
   magicPen: 0
+  slashArcBonus: 0
+  movePenaltyReduction: 0
+  stunTimeBonus: 0
+  thrustDistanceBonus: 0
   attackCooldown: 1.2
   collisionDamage: 1
   collisionTick: 0.5
@@ -5573,7 +5461,6 @@ SceneRoots:
   - {fileID: 312973084}
   - {fileID: 1354982997}
   - {fileID: 147384071}
-  - {fileID: 663265243}
   - {fileID: 741773946}
   - {fileID: 399162764}
   - {fileID: 550441880}

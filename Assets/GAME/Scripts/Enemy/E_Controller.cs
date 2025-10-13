@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(State_Idle))]
 [RequireComponent(typeof(State_Wander))]
 [RequireComponent(typeof(State_Chase))]
-[RequireComponent(typeof(State_Attack))]
+// State_Attack is optional - not required for collision-only enemies
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
 [DisallowMultipleComponent]
@@ -53,7 +53,7 @@ public class E_Controller : MonoBehaviour, I_Controller
         idle         = GetComponent<State_Idle>();
         wander       = GetComponent<State_Wander>();
         chase        = GetComponent<State_Chase>();
-        attack       = GetComponent<State_Attack>();
+        attack       = GetComponent<State_Attack>(); // Optional - may be null
         c_Stats      = GetComponent<C_Stats>();
         c_Health     = GetComponent<C_Health>();
 
@@ -72,7 +72,9 @@ public class E_Controller : MonoBehaviour, I_Controller
     void OnDisable()
     {
         c_Health.OnDied -= OnDiedHandler;
-        idle.enabled = wander.enabled = chase.enabled = attack.enabled = false;
+        // Disable all states on death + start + awake (to force manual activation)
+        idle.enabled = wander.enabled = chase.enabled = false;
+        if (attack != null) attack.enabled = false; // Only if attack state exists
     }
 
     void OnDiedHandler() => SwitchState(EState.Dead);
@@ -136,7 +138,8 @@ public class E_Controller : MonoBehaviour, I_Controller
         bool canAttack = targetInAttackRange 
                       && attackInRangeTimer >= attackStartBuffer 
                       && attackCooldown <= 0f
-                      && !isAttacking; // Don't interrupt active attack
+                      && !isAttacking // Don't interrupt active attack
+                      && attack != null; // Only if enemy has attack state
 
         if (canAttack)
         {
@@ -159,8 +162,8 @@ public class E_Controller : MonoBehaviour, I_Controller
         // Disable all states first (except attack if it's active)
         idle.enabled = wander.enabled = chase.enabled = false;
         
-        // Only disable attack if we're not currently attacking
-        if (!isAttacking) attack.enabled = false;
+        // Only disable attack if we're not currently attacking AND it exists
+        if (!isAttacking && attack != null) attack.enabled = false;
 
         switch (state)
         {
@@ -172,8 +175,8 @@ public class E_Controller : MonoBehaviour, I_Controller
                 isAttacking         = false;
                 isStunned           = false;
 
-                // Disable attack state on death
-                attack.enabled      = false;
+                // Disable attack state on death (if it exists)
+                if (attack != null) attack.enabled = false;
                 anim.SetTrigger("Die");
                 break;
 
@@ -200,7 +203,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     // Trigger attack without disabling other states (like player's TriggerAttack)
     void TriggerAttack()
     {
-        if (isAttacking) return; // Already attacking
+        if (isAttacking || attack == null) return; // Already attacking or no attack state
 
         // Enable attack state component
         attack.enabled = true;
