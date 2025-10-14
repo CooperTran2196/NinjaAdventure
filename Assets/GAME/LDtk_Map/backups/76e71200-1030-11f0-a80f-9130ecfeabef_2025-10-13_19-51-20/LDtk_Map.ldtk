@@ -51,7 +51,7 @@
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
-			"displayOpacity": 0.81,
+			"displayOpacity": 1,
 			"inactiveOpacity": 1,
 			"hideInList": false,
 			"hideFieldsWhenInactive": false,
