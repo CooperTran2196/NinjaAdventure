@@ -9,6 +9,7 @@ public class SYS_GameManager : MonoBehaviour
     public D_HistoryTracker  d_HistoryTracker;
     public SYS_Fader         sys_Fader;
     public SHOP_Manager      shop_Manager;
+    public INV_ItemInfo      itemInfoPopup;  // Shared info popup for Shop and Inventory
 
     [Header("Restart")]
     [SerializeField] private string initialSceneName = "Level1";
@@ -37,13 +38,17 @@ public class SYS_GameManager : MonoBehaviour
         d_HistoryTracker ??= FindFirstObjectByType<D_HistoryTracker>();
         shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
         sys_Fader    ??= FindFirstObjectByType<SYS_Fader>();
+        itemInfoPopup ??= FindFirstObjectByType<INV_ItemInfo>();
         audioSource ??= GetComponent<AudioSource>();
 
         if (!d_Manager)         Debug.LogWarning("SYS_GameManager: Dialogue Manager is missing.");
         if (!d_HistoryTracker)  Debug.LogWarning("SYS_GameManager: Dialogue History Tracker is missing.");
         if (!shop_Manager)      Debug.LogWarning("SYS_GameManager: Shop Manager is missing.");
         if (!sys_Fader)         Debug.LogWarning("SYS_GameManager: Fader is missing.");
+        if (!itemInfoPopup)     Debug.LogWarning("SYS_GameManager: ItemInfoPopup is missing.");
         if (!audioSource)       Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
+
+        if (itemInfoPopup) itemInfoPopup.Hide(); // Start hidden
 
         audioSource.loop = true;
         audioSource.playOnAwake = false;

@@ -29,20 +29,24 @@ public class ManaUI : MonoBehaviour
 
     void OnEnable()
     {
+        if (p_Mana != null && p_StatsManager != null)
+        {
+            p_Mana.OnManaChanged += HandleManaChanged;
+            p_Mana.OnManaEmpty   += UpdateUI;
+            p_StatsManager.OnStatsChanged += UpdateUI;
 
-        p_Mana.OnManaChanged += HandleManaChanged;
-        p_Mana.OnManaEmpty   += UpdateUI;
-        p_StatsManager.OnStatsChanged += UpdateUI;
-
-        UpdateUI();
+            UpdateUI();
+        }
     }
 
     void OnDisable()
     {
-        p_Mana.OnManaChanged -= HandleManaChanged;
-        p_Mana.OnManaEmpty   -= UpdateUI;
-        p_StatsManager.OnStatsChanged -= UpdateUI;
-
+        if (p_Mana != null && p_StatsManager != null)
+        {
+            p_Mana.OnManaChanged -= HandleManaChanged;
+            p_Mana.OnManaEmpty   -= UpdateUI;
+            p_StatsManager.OnStatsChanged -= UpdateUI;
+        }
     }
 
     // A helper method to match the signature of OnManaChanged event

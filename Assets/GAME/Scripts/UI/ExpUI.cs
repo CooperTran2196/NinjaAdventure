@@ -29,18 +29,23 @@ public class ExpUI : MonoBehaviour
     {
         input.Debug.Enable();
 
-        p_Exp.OnLevelUp   += HandleLevelUp;
-        p_Exp.OnXPChanged += HandleXPChanged;
-
-        UpdateUI();
+        if (p_Exp != null)
+        {
+            p_Exp.OnLevelUp   += HandleLevelUp;
+            p_Exp.OnXPChanged += HandleXPChanged;
+            UpdateUI();
+        }
     }
 
     void OnDisable()
     {
         input.Debug.Disable();
 
-        p_Exp.OnLevelUp   -= HandleLevelUp;
-        p_Exp.OnXPChanged -= HandleXPChanged;
+        if (p_Exp != null)
+        {
+            p_Exp.OnLevelUp   -= HandleLevelUp;
+            p_Exp.OnXPChanged -= HandleXPChanged;
+        }
     }
 
     // Debug: Gain XP with input

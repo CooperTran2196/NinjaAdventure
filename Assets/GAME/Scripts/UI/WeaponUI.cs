@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,6 @@ public class WeaponUI : MonoBehaviour
     [Header("Weapon Display")]
     public WeaponSlot weaponSlot = WeaponSlot.Melee;
     public Image weaponImage;
-    public TMP_Text weaponNameText; // Optional
 
     P_Controller player;
 
@@ -65,8 +63,5 @@ public class WeaponUI : MonoBehaviour
 
         weaponImage.sprite = newWeapon.image;
         weaponImage.enabled = true;
-
-        if (weaponNameText)
-            weaponNameText.text = newWeapon.id;
     }
 }

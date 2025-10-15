@@ -28,22 +28,28 @@ public class HealthUI : MonoBehaviour
 
     void OnEnable()
     {
-        p_Health.OnDamaged += HandleHealthChanged;
-        p_Health.OnHealed  += HandleHealthChanged;
-        p_Health.OnDied    += UpdateUI;
+        if (p_Health != null && p_StatsManager != null)
+        {
+            p_Health.OnDamaged += HandleHealthChanged;
+            p_Health.OnHealed  += HandleHealthChanged;
+            p_Health.OnDied    += UpdateUI;
 
-        p_StatsManager.OnStatsChanged += UpdateUI;
+            p_StatsManager.OnStatsChanged += UpdateUI;
 
-        UpdateUI();
+            UpdateUI();
+        }
     }
 
     void OnDisable()
     {
-        p_Health.OnDamaged -= HandleHealthChanged;
-        p_Health.OnHealed  -= HandleHealthChanged;
-        p_Health.OnDied    -= UpdateUI;
+        if (p_Health != null && p_StatsManager != null)
+        {
+            p_Health.OnDamaged -= HandleHealthChanged;
+            p_Health.OnHealed  -= HandleHealthChanged;
+            p_Health.OnDied    -= UpdateUI;
 
-        p_StatsManager.OnStatsChanged -= UpdateUI;
+            p_StatsManager.OnStatsChanged -= UpdateUI;
+        }
     }
 
     // A helper method to match the signature of OnDamaged and OnHealed events

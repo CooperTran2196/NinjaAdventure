@@ -46,6 +46,26 @@ public class INV_ItemInfo : MonoBehaviour
         }
     }
 
+    // Overload for weapons
+    public void Show(W_SO weaponSO)
+    {
+        canvasGroup.alpha = 1f;
+
+        if (itemNameText) itemNameText.text = weaponSO ? weaponSO.id : string.Empty;
+        itemDescText.text = weaponSO ? weaponSO.description : string.Empty;
+
+        ClearStatLines();
+        if (weaponSO)
+        {
+            var outLines = BuildWeaponStatLines(weaponSO);
+            foreach (var line in outLines)
+            {
+                var textLine = Instantiate(statLinePrefab, statContainer);
+                textLine.text = line;
+            }
+        }
+    }
+
     // Hide and clear
     public void Hide()
     {
@@ -99,6 +119,53 @@ public class INV_ItemInfo : MonoBehaviour
                 outLines.Add(line);
             }
         }
+        return outLines;
+    }
+
+    // Build formatted stat description lines for the provided weapon
+    List<string> BuildWeaponStatLines(W_SO weaponSO)
+    {
+        var outLines = new List<string>();
+
+        // Format based on weapon type
+        if (weaponSO.type == WeaponType.Melee)
+        {
+            // Line 1: AD and AP
+            outLines.Add($"AD: {weaponSO.AD}   AP: {weaponSO.AP}");
+
+            // Line 2: Knockback Force
+            outLines.Add($"Knockback: {weaponSO.knockbackForce}");
+
+            // Line 3: Thrust Distance
+            outLines.Add($"    Thrust: {weaponSO.thrustDistance}");
+
+            // Line 4: Slash Arc Degree
+            outLines.Add($"      Slash: {weaponSO.slashArcDegrees} Degrees");
+
+            // Line 5: Speed (combo show times)
+            string speedStr = string.Join(" - ", weaponSO.comboShowTimes);
+            outLines.Add($"      Speed: {speedStr}");
+
+            // Line 6: Speed Penalties
+            string penaltiesStr = string.Join(" - ", weaponSO.comboMovePenalties);
+            outLines.Add($"Penalties: {penaltiesStr}");
+
+            // Line 7: Stun Time
+            string stunStr = string.Join(" - ", weaponSO.comboStunTimes);
+            outLines.Add($"Stun Time: {stunStr}");
+        }
+        else if (weaponSO.type == WeaponType.Ranged)
+        {
+            // Line 1: AD and AP
+            outLines.Add($"AD: {weaponSO.AD}  AP: {weaponSO.AP}");
+
+            // Line 2: Mana Cost
+            outLines.Add($"Mana Cost: {weaponSO.manaCost}");
+
+            // Line 3: Projectile Speed
+            outLines.Add($"Projectile Speed: {weaponSO.projectileSpeed}");
+        }
+
         return outLines;
     }
 }
