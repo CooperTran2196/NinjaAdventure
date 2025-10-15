@@ -7,8 +7,10 @@ public class W_SO : ScriptableObject
 {
     [Header("Common")]
     public string id = "weaponId";
+    [TextArea] public string description = ""; // Weapon description for tooltip
     public WeaponType type = WeaponType.Melee;
-    public Sprite sprite;
+    public Sprite sprite; // In-game weapon visual (what player holds)
+    public Sprite image;  // UI icon (inventory, weapon display, etc.)
     public float offsetRadius = 0.4f; // Distance from player center to weapon handle
 
     [Header("Damage (set either/both)")]

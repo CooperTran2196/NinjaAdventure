@@ -29,22 +29,19 @@ public class INV_ItemInfo : MonoBehaviour
 
     public void Show(INV_ItemSO itemSO)
     {
-        // make visible
         canvasGroup.alpha = 1f;
 
-        // header texts
         if (itemNameText) itemNameText.text = itemSO ? itemSO.itemName : string.Empty;
         itemDescText.text = itemSO.description;
 
-        // rebuild stat lines
         ClearStatLines();
         if (itemSO)
         {
-            var outLines = BuildStatLines(itemSO);
-            for (int i = 0; i < outLines.Count; i++)
+            var outLines = BuildItemStatLines(itemSO);
+            foreach (var line in outLines)
             {
-                var line = Instantiate(statLinePrefab, statContainer);
-                line.text = outLines[i];
+                var textLine = Instantiate(statLinePrefab, statContainer);
+                textLine.text = line;
             }
         }
     }
@@ -68,7 +65,7 @@ public class INV_ItemInfo : MonoBehaviour
     }
 
     // Build formatted stat description lines for the provided item
-    List<string> BuildStatLines(INV_ItemSO inv_ItemSO)
+    List<string> BuildItemStatLines(INV_ItemSO inv_ItemSO)
     {
         var outLines = new List<string>();
 

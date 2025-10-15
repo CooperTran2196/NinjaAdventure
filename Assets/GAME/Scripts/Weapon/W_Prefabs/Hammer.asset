@@ -15,15 +15,32 @@ MonoBehaviour:
   id: hammer
   type: 0
   sprite: {fileID: 21300000, guid: 80e752c051e06074e8001223adca17fb, type: 3}
-  pointsUp: 1
+  image: {fileID: 21300000, guid: 80e752c051e06074e8001223adca17fb, type: 3}
   offsetRadius: 0.7
-  angleBiasDeg: 0
   AD: 1
   AP: 0
   knockbackForce: 5
-  stunTime: 0.5
-  showTime: 0.3
   thrustDistance: 0.25
+  onlyThrustKnocksBack: 1
+  slashArcDegrees: 45
+  comboShowTimes:
+  - 0.45
+  - 0.45
+  - 0.45
+  comboDamageMultipliers:
+  - 1
+  - 1.2
+  - 2
+  comboMovePenalties:
+  - 0.6
+  - 0.5
+  - 0.3
+  comboStunTimes:
+  - 0.1
+  - 0.2
+  - 0.5
+  showTime: 0.3
+  attackMovePenalty: 1
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

@@ -54,8 +54,9 @@ public class INV_Manager : MonoBehaviour
         // Stack into existing slots of the same item
         foreach (var slot in inv_Slots)
         {
-            // same item and not full
-            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
+            if (slot.type == INV_Slots.SlotType.Item && 
+                slot.itemSO == itemSO && 
+                slot.quantity < itemSO.stackSize)
             {
                 int availableSpace = itemSO.stackSize - slot.quantity;
                 int amountToAdd = Mathf.Min(availableSpace, quantity);
@@ -71,12 +72,13 @@ public class INV_Manager : MonoBehaviour
         // Fill empty slot
         foreach (var slot in inv_Slots)
         {
-            if (slot.itemSO == null)
+            if (slot.type == INV_Slots.SlotType.Empty)
             {
                 int amountToAdd = Mathf.Min(itemSO.stackSize, quantity);
 
                 slot.itemSO = itemSO;
                 slot.quantity = amountToAdd;
+                slot.type = INV_Slots.SlotType.Item;
                 slot.UpdateUI();
 
                 quantity -= amountToAdd;
@@ -129,5 +131,48 @@ public class INV_Manager : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    // ========== WEAPON HANDLING METHODS ==========
+
+    // ========== WEAPON HANDLING ==========
+
+    public void EquipWeapon(INV_Slots slot)
+    {
+        if (slot.weaponSO == null) return;
+
+        P_Controller playerController = player.GetComponent<P_Controller>();
+        if (!playerController) return;
+
+        W_SO oldWeapon = playerController.EquipWeapon(slot.weaponSO);
+
+        slot.weaponSO = oldWeapon;
+        slot.type = INV_Slots.SlotType.Weapon;
+        slot.UpdateUI();
+    }
+
+    public bool AddWeapon(W_SO weaponSO)
+    {
+        foreach (var slot in inv_Slots)
+        {
+            if (slot.type == INV_Slots.SlotType.Empty)
+            {
+                slot.weaponSO = weaponSO;
+                slot.type = INV_Slots.SlotType.Weapon;
+                slot.UpdateUI();
+                return true;
+            }
+        }
+
+        Debug.Log("Inventory full! Cannot add weapon: " + weaponSO.id);
+        return false;
+    }
+
+    public void DropWeapon(W_SO weaponSO)
+    {
+        if (!weaponSO) return;
+        
+        var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
+        go.GetComponent<INV_Loot>().InitializeWeapon(weaponSO);
     }
 }

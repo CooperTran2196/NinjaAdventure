@@ -15,6 +15,7 @@ MonoBehaviour:
   id: club
   type: 0
   sprite: {fileID: 21300000, guid: 13dd1a67638406c42a569c904d20c757, type: 3}
+  image: {fileID: 21300000, guid: 13dd1a67638406c42a569c904d20c757, type: 3}
   offsetRadius: 0.35
   AD: 1
   AP: 0
@@ -40,7 +41,6 @@ MonoBehaviour:
   - 0.5
   showTime: 0.32
   attackMovePenalty: 1
-  stunTime: 0.5
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

@@ -19,8 +19,10 @@ MonoBehaviour:
   stackSize: 3
   price: 1
   isGold: 0
+  unlocksSkill: 0
+  skillIDToUnlock: 
   StatEffectList:
-  - statName: 11
+  - statName: 15
     Value: 5
     Duration: 1
     IsOverTime: 0

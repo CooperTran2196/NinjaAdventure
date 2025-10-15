@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 5092419035235110540}
   - component: {fileID: 1189801698662502593}
   m_Layer: 5
-  m_Name: IS_1
+  m_Name: ItemPanelSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 614014221699219782}
   - component: {fileID: 7038250512439167940}
   m_Layer: 5
-  m_Name: StatLineTMP
+  m_Name: StatLineText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

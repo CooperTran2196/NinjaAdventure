@@ -15,6 +15,10 @@ public class INV_ItemSO : ScriptableObject
     [Header("Flags")]
     public bool isGold;
 
+    [Header("Ultimate Skill Unlock (Future Feature)")]
+    public bool unlocksSkill = false;
+    public string skillIDToUnlock = ""; // matches ST_SkillSO.id
+
     [Header("Item Effects")]
     public List<P_StatEffect> StatEffectList;
 

@@ -15,6 +15,7 @@ MonoBehaviour:
   id: pickaxe
   type: 0
   sprite: {fileID: 21300000, guid: 949af8d4406d5bf41a3762a0732aa1a9, type: 3}
+  image: {fileID: 21300000, guid: 949af8d4406d5bf41a3762a0732aa1a9, type: 3}
   offsetRadius: 0.35
   AD: 1
   AP: 0
@@ -40,7 +41,6 @@ MonoBehaviour:
   - 0.5
   showTime: 0.32
   attackMovePenalty: 1
-  stunTime: 0.5
   projectilePrefab: {fileID: 0}
   manaCost: 0
   projectileSpeed: 0

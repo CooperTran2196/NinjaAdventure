@@ -14,16 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: shuriken
   type: 2
-  sprite: {fileID: 0}
-  pointsUp: 1
+  sprite: {fileID: 21300000, guid: 4794f386876d3904db8b9112e1618e58, type: 3}
+  image: {fileID: 21300000, guid: 4794f386876d3904db8b9112e1618e58, type: 3}
   offsetRadius: 0.7
-  angleBiasDeg: 0
   AD: 1
   AP: 0
   knockbackForce: 5
-  stunTime: 0.5
-  showTime: 0.3
   thrustDistance: 0.25
+  onlyThrustKnocksBack: 1
+  slashArcDegrees: 45
+  comboShowTimes:
+  - 0.45
+  - 0.45
+  - 0.45
+  comboDamageMultipliers:
+  - 1
+  - 1.2
+  - 2
+  comboMovePenalties:
+  - 0.6
+  - 0.5
+  - 0.3
+  comboStunTimes:
+  - 0.1
+  - 0.2
+  - 0.5
+  showTime: 0.3
   attackMovePenalty: 0.5
   projectilePrefab: {fileID: 21886594188181845, guid: 43f853e670c38934097728e89c117650, type: 3}
   manaCost: 10

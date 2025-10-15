@@ -26,6 +26,10 @@ public class P_Controller : MonoBehaviour
     [Header("Debug")]
     public bool autoKill;
 
+    // NEW: Events for UI updates (2 separate events)
+    public static event System.Action<W_SO> OnMeleeWeaponChanged;
+    public static event System.Action<W_SO> OnRangedWeaponChanged;
+
     Rigidbody2D rb;
     Animator anim;
     P_InputActions input;
@@ -42,6 +46,10 @@ public class P_Controller : MonoBehaviour
     bool isDead, isStunned, isAttacking, isDodging;
     float stunUntil, attackCooldown, dodgeCooldown;
     W_Base currentWeapon;
+
+    // NEW: Track equipped weapon data
+    W_SO currentMeleeData;
+    W_SO currentRangedData;
 
     const float MIN_DISTANCE = 0.000001f;
 
@@ -70,6 +78,22 @@ public class P_Controller : MonoBehaviour
         input.Enable();
         c_Health.OnDied += OnDiedHandler;
         SwitchState(defaultState);
+    }
+
+    void Start()
+    {
+        // Initialize with starting weapons
+        if (meleeWeapon != null && meleeWeapon.weaponData != null)
+        {
+            currentMeleeData = meleeWeapon.weaponData;
+            OnMeleeWeaponChanged?.Invoke(currentMeleeData);
+        }
+
+        if (rangedWeapon != null && rangedWeapon.weaponData != null)
+        {
+            currentRangedData = rangedWeapon.weaponData;
+            OnRangedWeaponChanged?.Invoke(currentRangedData);
+        }
     }
 
     void OnDisable()
@@ -339,5 +363,82 @@ public class P_Controller : MonoBehaviour
                 SwitchState(PState.Idle);
             }
         }
+    }
+
+    // ========== WEAPON SWAPPING SYSTEM ==========
+
+    /// <summary>
+    /// Equips a new weapon, returns the old weapon for inventory swap
+    /// </summary>
+    public W_SO EquipWeapon(W_SO newWeaponData)
+    {
+        if (newWeaponData == null)
+        {
+            Debug.LogError("P_Controller: Cannot equip null weapon!");
+            return null;
+        }
+
+        W_SO oldWeaponData;
+
+        if (newWeaponData.type == WeaponType.Melee)
+        {
+            // Swap melee weapon
+            oldWeaponData = currentMeleeData;
+            currentMeleeData = newWeaponData;
+            
+            if (meleeWeapon != null)
+            {
+                meleeWeapon.weaponData = newWeaponData;
+                
+                // Update visual sprite
+                var spriteRenderer = meleeWeapon.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null && newWeaponData.sprite != null)
+                {
+                    spriteRenderer.sprite = newWeaponData.sprite;
+                }
+            }
+
+            // Notify UI
+            OnMeleeWeaponChanged?.Invoke(newWeaponData);
+        }
+        else // Ranged
+        {
+            // Swap ranged weapon
+            oldWeaponData = currentRangedData;
+            currentRangedData = newWeaponData;
+            
+            if (rangedWeapon != null)
+            {
+                rangedWeapon.weaponData = newWeaponData;
+                
+                // Update visual sprite
+                var spriteRenderer = rangedWeapon.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null && newWeaponData.sprite != null)
+                {
+                    spriteRenderer.sprite = newWeaponData.sprite;
+                }
+            }
+
+            // Notify UI
+            OnRangedWeaponChanged?.Invoke(newWeaponData);
+        }
+
+        return oldWeaponData; // Return old weapon for inventory swap
+    }
+
+    /// <summary>
+    /// Gets current melee weapon SO for UI display
+    /// </summary>
+    public W_SO GetCurrentMeleeWeaponSO()
+    {
+        return currentMeleeData;
+    }
+
+    /// <summary>
+    /// Gets current ranged weapon SO for UI display
+    /// </summary>
+    public W_SO GetCurrentRangedWeaponSO()
+    {
+        return currentRangedData;
     }
 }
