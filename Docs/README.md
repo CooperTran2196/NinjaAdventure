@@ -15,12 +15,14 @@
 
 ## 🚧 Work in Progress
 
-**Current work (still in Week 9):**
+**All Week 9 work complete!** No active WIP items.
 
-- **[ITEM_INFO_POPUP_PLAN.md](ITEM_INFO_POPUP_PLAN.md)** - Shared tooltip popup
-  - Status: ✅ Code Complete - Unity Setup Pending
-  - Shows item/weapon stats on hover
-  - Quick Unity steps: [UNITY_SETUP_GUIDE.md](UNITY_SETUP_GUIDE.md)
+**Recent Completions:**
+- ✅ Item Info Popup system (hover tooltips)
+- ✅ Fixed ExpUI, ManaUI, HealthUI null reference errors
+- ✅ Added hover delay system (1s) for inventory tooltips
+- ✅ Removed weaponNameText from WeaponUI (cleaner display)
+- ✅ Added aspect ratio preservation for weapons in inventory
 
 ---
 
@@ -28,14 +30,17 @@
 
 **Location:** `Week_9_Oct14-18/` folder
 
-**9 Production-Ready Systems:**
+**10 Production-Ready Systems:**
 1. Combo System (3-hit melee)
-2. State System (concurrent states)
-3. Weapon System (anchoring, penalties)
-4. Enemy AI (full state machine)
-5. Enemy Attack Patterns
-6. Inventory System (items + weapons, drag/drop)
-7. Supporting documentation
+2. Combo Code Explanation
+3. State System (concurrent states)
+4. Weapon System (anchoring, penalties)
+5. Enemy AI (full state machine)
+6. Enemy Fixed Attack Patterns
+7. Enemy Random Attack Patterns
+8. Coordinate System Reference
+9. Inventory System (items + weapons, drag/drop)
+10. Item Info Popup (hover tooltips with smart delays)
 
 👉 **[Read Week 9 README](Week_9_Oct14-18/README.md)** for details
 
@@ -62,16 +67,33 @@
 
 ---
 
+## 🗂️ Structure References
+
+**Game hierarchy and organization:**
+
+- **[HIERARCHY.md](HIERARCHY.md)** - Complete Unity scene hierarchy
+  - All GameObjects, components, and prefabs
+  - UI system structure (PlayerCanvas, InventoryCanvas, ShopCanvas, etc.)
+  - Player/Enemy hierarchies
+  - System connections and data flow
+  - **Updated:** October 15, 2025
+
+---
+
 ## 📂 Folder Structure
 
 ```
 Docs/
 ├── README.md                           ← You are here
-├── Week_9_Oct14-18/                    ✅ All completed work (9 systems)
-├── ITEM_INFO_POPUP_PLAN.md             🚧 Current WIP (Item popup)
-├── UNITY_SETUP_GUIDE.md                🚧 Unity instructions for popup
-├── INVENTORY_UI_HIERARCHY.md           📊 UI structure reference
-├── BALANCE_*.md                        📊 Balance references (4 files)
+├── Week_9_Oct14-18/                    ✅ All completed work (10 systems)
+│
+├── HIERARCHY.md                        📊 Complete Unity hierarchy (Level1 scene)
+│
+├── BALANCE_QUICK_REF.md                📊 Balance references
+├── COMPLETE_BALANCE_v2.md              📊 (4 files total)
+├── ENEMY_BALANCE_GUIDE.md              📊
+├── WEAPON_SKILL_BONUSES_GUIDE.md       📊
+│
 └── ULTIMATE_SKILLS_SYSTEM.md           🚧 Future TODO
 ```
 
@@ -117,6 +139,7 @@ Docs/
 
 **Need to...**
 - See current work? → [Work in Progress](#-work-in-progress)
+- Understand hierarchy? → [HIERARCHY.md](HIERARCHY.md)
 - Learn systems? → [Week 9](Week_9_Oct14-18/README.md)
 - See what's done? → Check `Week_9_Oct14-18/` folder
 - Find TODOs? → [ULTIMATE_SKILLS_SYSTEM.md](ULTIMATE_SKILLS_SYSTEM.md)
@@ -124,4 +147,5 @@ Docs/
 
 ---
 
-**Status:** ✅ Week 9 Complete (9 systems) | 🚧 Item Popup WIP (still Week 9)
+**Status:** ✅ Week 9 COMPLETE (10 systems) | 🗂️ Hierarchy Documented (Level1)  
+**Last Updated:** October 15, 2025

@@ -6,13 +6,13 @@
 
 ## 📋 Overview
 
-This week completed **9 major game systems** from combat mechanics to inventory management. All systems are production-ready and fully integrated.
+This week completed **10 major game systems** from combat mechanics to inventory management. All systems are production-ready and fully integrated.
 
 ---
 
 ## 📚 Systems Completed (In Order)
 
-### **1. Combo System** → [1_COMBO_SYSTEM.md](1_COMBO_SYSTEM.md)
+### **1. Combo System** → [1_COMBO_SYSTEM.md](1_COMBO_SYSTEM.md)  
 **What:** 3-hit melee combo with radar-style arc slashing  
 **Status:** ✅ Production Ready (v1.6)  
 **Key Features:**
@@ -154,6 +154,25 @@ This week completed **9 major game systems** from combat mechanics to inventory 
 
 ---
 
+### **10. Item Info Popup** → [10_ITEM_INFO_POPUP.md](10_ITEM_INFO_POPUP.md)
+**What:** Shared hover tooltip for inventory and shop  
+**Status:** ✅ Production Ready  
+**Key Features:**
+- **Shared Popup Instance** - Single popup managed by GameManager
+- **Dual Display** - Items (description + effects) and Weapons (combat stats)
+- **Smart Delays** - Inventory: 1s hover delay, Shop: instant
+- **Weapon Formatting** - Melee: 7 stat lines, Ranged: 3 stat lines
+- **Drag Integration** - Hides during drag, cancels on quick exit
+- **UI Bug Fixes** - Fixed null reference errors in ExpUI/ManaUI/HealthUI
+
+**Technical Highlights:**
+- Coroutine-based hover delay (simple, clean)
+- Polymorphic Show() methods (items + weapons)
+- Centralized GameManager reference
+- Defensive null checks for event subscriptions
+
+---
+
 ## 🎯 System Integration
 
 All 9 systems work together seamlessly:
@@ -189,6 +208,8 @@ All 9 systems work together seamlessly:
 │    Use Items            Equip Weapons                   │
 │         ↓                      ↓                        │
 │    Apply Effects        Update Weapon System (#4)       │
+│         ↓                                               │
+│    Hover Tooltip (#10) ← Info Popup System              │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -196,9 +217,9 @@ All 9 systems work together seamlessly:
 
 ## 📊 Week 9 Statistics
 
-- **Total Systems Completed:** 9
-- **Documentation Files:** 9 comprehensive guides
-- **Code Files Modified:** 15+
+- **Total Systems Completed:** 10
+- **Documentation Files:** 10 comprehensive guides
+- **Code Files Modified:** 20+
 - **Work Days:** 5 days (Oct 14-18)
 - **Status:** 100% Complete & Production Ready
 
@@ -250,10 +271,16 @@ All 9 systems work together seamlessly:
 
 **Inventory Systems:**
 - `INV_Manager.cs` - Inventory controller
-- `INV_Slots.cs` - Slot management, drag/drop
+- `INV_Slots.cs` - Slot management, drag/drop, hover tooltips
 - `INV_Loot.cs` - Unified pickup system
 - `INV_HotbarInput.cs` - Hotbar input handling
-- `UI_WeaponDisplay.cs` - Weapon UI display
+- `INV_ItemInfo.cs` - Item/weapon info popup
+
+**UI Systems:**
+- `WeaponUI.cs` - Weapon icon display
+- `ExpUI.cs` - Experience bar (+ null checks fix)
+- `ManaUI.cs` - Mana bar (+ null checks fix)
+- `HealthUI.cs` - Health bar (+ null checks fix)
 
 **Character Systems:**
 - `C_Stats.cs` - Shared stats system
@@ -291,7 +318,8 @@ All 9 systems work together seamlessly:
 ### **Quick Start (Get Playing Fast):**
 1. Read #1 (Combo System) - 5 min
 2. Read #9 (Inventory) - 10 min
-3. Start playing!
+3. Read #10 (Item Popup) - 5 min
+4. Start playing!
 
 ### **Full Understanding (Complete Knowledge):**
 1. #1 Combo System
@@ -301,7 +329,8 @@ All 9 systems work together seamlessly:
 5. #5 Enemy AI
 6. #6 or #7 Enemy Combos
 7. #9 Inventory
-8. #8 Coordinate Reference (as needed)
+8. #10 Item Popup
+9. #8 Coordinate Reference (as needed)
 
 ### **Code Deep Dive (For Programmers):**
 1. #3 State System (architecture)
@@ -309,6 +338,7 @@ All 9 systems work together seamlessly:
 3. #4 Weapon System (mechanics)
 4. #5 Enemy AI (AI patterns)
 5. #9 Inventory (UI/UX patterns)
+6. #10 Item Popup (tooltip system)
 
 ---
 
@@ -317,6 +347,8 @@ All 9 systems work together seamlessly:
 - ✅ All combat systems implemented
 - ✅ All enemy AI systems implemented
 - ✅ Inventory system fully functional
+- ✅ Item info popup system complete
+- ✅ UI bug fixes (null reference errors)
 - ✅ All systems integrated and tested
 - ✅ Comprehensive documentation written
 - ✅ Code cleanup completed
@@ -325,5 +357,5 @@ All 9 systems work together seamlessly:
 
 ---
 
-**Week 9 Status:** ✅ COMPLETE - All Systems Production Ready!  
+**Week 9 Status:** ✅ COMPLETE - All 10 Systems Production Ready!  
 **Next Week:** Ready for Week 10 features (see main Docs/README.md for TODO list)
