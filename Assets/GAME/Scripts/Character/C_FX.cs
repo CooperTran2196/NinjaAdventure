@@ -3,23 +3,25 @@ using UnityEngine;
 
 public class C_FX : MonoBehaviour
 {
-    [Header("Flash")]
-    public float flashDuration = 0.1f;
-    public Color healTint   = new Color(0.3f, 1f, 0.3f, 1f);
-    public Color damageTint = new Color(1f, 0.3f, 0.3f, 1f);
+    [Header("References")]
+    SpriteRenderer sr;
 
-    [Header("Death")]
-    public float deathFadeTime = 1.5f;
+    [Header("Flash Settings")]
+    public float flashDuration = 0.1f;
+    public Color healTint      = new Color(0.3f, 1f, 0.3f, 1f);
+    public Color damageTint    = new Color(1f, 0.3f, 0.3f, 1f);
+
+    [Header("Death Settings")]
+    public float deathFadeTime      = 1.5f;
     public bool  destroySelfOnDeath = true;
 
-    SpriteRenderer sr;
-    Color          baseRGB;
+    Color baseRGB;
 
     void Awake()
     {
         sr ??= GetComponent<SpriteRenderer>();
 
-        if (!sr) Debug.LogError("C_FX: SpriteRenderer is missing.");
+        if (!sr) { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
 
         baseRGB = sr.color;
     }
@@ -29,9 +31,12 @@ public class C_FX : MonoBehaviour
 
     IEnumerator Flash(Color tint)
     {
+        // Preserve original alpha
         float a = sr.color.a;
+        // Flash with tint color, then revert to base color
         sr.color = new Color(tint.r, tint.g, tint.b, a);
         yield return new WaitForSeconds(flashDuration);
+        // restore original alpha
         sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
     }
 
