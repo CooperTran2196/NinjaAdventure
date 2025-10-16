@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SYS_GameManager : MonoBehaviour
@@ -17,6 +18,10 @@ public class SYS_GameManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private float fadeDuration = 1.5f; // Tunable fade time
+
+    // Internal fade state
+    private Coroutine currentFade;
 
     [Header("Persistent Objects")]
     public GameObject[] persistentObjects; // Objects to persist across scenes
@@ -69,7 +74,7 @@ public class SYS_GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
     }
 
-    // Play music clip centrally
+    // Play music clip centrally (instant switch, no fade)
     public void PlayMusic(AudioClip clip)
     {
         if (audioSource.clip != clip)
@@ -78,6 +83,62 @@ public class SYS_GameManager : MonoBehaviour
             audioSource.clip = clip;
             audioSource.Play();
         }
+    }
+
+    /// <summary>
+    /// Fade smoothly from current music to new clip.
+    /// Stops any existing fade before starting new one.
+    /// </summary>
+    public void PlayMusicWithFade(AudioClip newClip)
+    {
+        // Don't fade if already playing this clip
+        if (audioSource.clip == newClip && audioSource.isPlaying)
+            return;
+
+        // Stop current fade to prevent conflicts
+        if (currentFade != null)
+        {
+            StopCoroutine(currentFade);
+            currentFade = null;
+        }
+
+        currentFade = StartCoroutine(FadeToNewMusic(newClip));
+    }
+
+    private IEnumerator FadeToNewMusic(AudioClip newClip)
+    {
+        float elapsed = 0f;
+        float halfDuration = fadeDuration * 0.5f;
+        float startVolume = audioSource.volume;
+
+        // Fade out current music (ease-out curve using smoothstep)
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t); // Smoothstep
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, smoothT);
+            yield return null;
+        }
+
+        // Swap clips at silent point
+        audioSource.Stop();
+        audioSource.clip = newClip;
+        audioSource.Play();
+
+        // Fade in new music (ease-in curve using smoothstep)
+        elapsed = 0f;
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t); // Smoothstep
+            audioSource.volume = Mathf.Lerp(0f, startVolume, smoothT);
+            yield return null;
+        }
+
+        audioSource.volume = startVolume; // Ensure final volume is exact
+        currentFade = null; // Clear reference
     }
 
     // Mark specified objects to not be destroyed on scene load

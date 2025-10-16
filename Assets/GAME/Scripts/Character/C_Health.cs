@@ -45,22 +45,30 @@ public class C_Health : MonoBehaviour
         input ??= new P_InputActions();
         input.Debug.Enable();
 
-        fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-        fxHealedHandler  ??= _ => fx.FlashOnHealed();
-        fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
+        // Only subscribe to FX events if C_FX component exists (not for destructibles)
+        if (fx != null)
+        {
+            fxDamagedHandler ??= _ => fx.FlashOnDamaged();
+            fxHealedHandler  ??= _ => fx.FlashOnHealed();
+            fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
 
-        OnDamaged += fxDamagedHandler;
-        OnHealed  += fxHealedHandler;
-        OnDied    += fxDiedHandler;
+            OnDamaged += fxDamagedHandler;
+            OnHealed  += fxHealedHandler;
+            OnDied    += fxDiedHandler;
+        }
     }
 
     void OnDisable()
     {
         input.Debug.Disable();
 
-        OnDamaged -= fxDamagedHandler;
-        OnHealed  -= fxHealedHandler;
-        OnDied    -= fxDiedHandler;
+        // Only unsubscribe if FX handlers were subscribed
+        if (fx != null)
+        {
+            OnDamaged -= fxDamagedHandler;
+            OnHealed  -= fxHealedHandler;
+            OnDied    -= fxDiedHandler;
+        }
     }
 
     void Update()
