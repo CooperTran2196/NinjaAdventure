@@ -54,7 +54,7 @@ public class INV_Loot : MonoBehaviour
         StartCoroutine(EnablePickupAfterDelay(1f));
     }
 
-    // NEW: Called by INV_Manager when dropping weapons
+    // Called by INV_Manager when dropping weapons
     public void InitializeWeapon(W_SO weaponSO)
     {
         this.lootType = LootType.Weapon;
