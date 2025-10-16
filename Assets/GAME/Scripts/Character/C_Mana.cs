@@ -4,20 +4,20 @@ using UnityEngine;
 public class C_Mana : MonoBehaviour
 {
     [Header("References")]
-    public C_Stats stats;
+    C_Stats c_Stats;
 
     public event Action<int> OnManaChanged;
-    public event Action OnManaEmpty;
+    public event Action      OnManaEmpty;
 
-    public int  CurrentMana => stats.currentMP;
-    public int  MaxMana => stats.maxMP;
-    public bool HasMana => stats.currentMP > 0;
+    public int  CurrentMana => c_Stats.currentMP;
+    public int  MaxMana     => c_Stats.maxMP;
+    public bool HasMana     => c_Stats.currentMP > 0;
 
     void Awake()
     {
-        stats ??= GetComponent<C_Stats>();
+        c_Stats ??= GetComponent<C_Stats>();
 
-        if (!stats) Debug.LogError("C_Mana: C_Stats is missing.");
+        if (!c_Stats) { Debug.LogError($"{name}: C_Stats is missing!", this); return; }
     }
 
     // Consume mana (returns true if successful, false if not enough mana)
@@ -29,17 +29,20 @@ public class C_Mana : MonoBehaviour
             return false;
         }
 
-        if (stats.currentMP < amount)
+        // Check if enough mana available
+        if (c_Stats.currentMP < amount)
         {
             return false; // Not enough mana
         }
 
-        stats.currentMP -= amount;
+        // Deduct mana and notify listeners
+        c_Stats.currentMP -= amount;
         OnManaChanged?.Invoke(-amount);
 
-        if (stats.currentMP <= 0)
+        // Check if mana depleted
+        if (c_Stats.currentMP <= 0)
         {
-            stats.currentMP = 0;
+            c_Stats.currentMP = 0;
             OnManaEmpty?.Invoke();
         }
 
@@ -55,10 +58,12 @@ public class C_Mana : MonoBehaviour
             return;
         }
 
-        int oldMana = stats.currentMP;
-        stats.currentMP = Mathf.Min(stats.currentMP + amount, stats.maxMP);
-        int actualRestored = stats.currentMP - oldMana;
+        // Calculate actual mana restored (capped at maxMP)
+        int oldMana = c_Stats.currentMP;
+        c_Stats.currentMP = Mathf.Min(c_Stats.currentMP + amount, c_Stats.maxMP);
+        int actualRestored = c_Stats.currentMP - oldMana;
 
+        // Notify listeners if mana changed
         if (actualRestored > 0)
         {
             OnManaChanged?.Invoke(actualRestored);
@@ -68,16 +73,19 @@ public class C_Mana : MonoBehaviour
     // Set mana to a specific value (for debugging/cheats)
     public void SetMana(int value)
     {
-        int oldMana = stats.currentMP;
-        stats.currentMP = Mathf.Clamp(value, 0, stats.maxMP);
-        int delta = stats.currentMP - oldMana;
+        // Clamp value between 0 and maxMP
+        int oldMana = c_Stats.currentMP;
+        c_Stats.currentMP = Mathf.Clamp(value, 0, c_Stats.maxMP);
+        int delta = c_Stats.currentMP - oldMana;
 
+        // Notify listeners if mana changed
         if (delta != 0)
         {
             OnManaChanged?.Invoke(delta);
         }
 
-        if (stats.currentMP <= 0)
+        // Check if mana depleted
+        if (c_Stats.currentMP <= 0)
         {
             OnManaEmpty?.Invoke();
         }
@@ -86,6 +94,6 @@ public class C_Mana : MonoBehaviour
     // Check if entity has enough mana
     public bool HasEnoughMana(int amount)
     {
-        return stats.currentMP >= amount;
+        return c_Stats.currentMP >= amount;
     }
 }

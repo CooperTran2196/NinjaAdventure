@@ -4,6 +4,32 @@
 
 ---
 
+## 🤖 Instructions for AI Assistants
+
+**When a user shares this file with you:**
+
+1. **Read this ENTIRE document first** - All rules are mandatory for this project
+2. **Wait for the user to specify which file to refactor** - Don't act until asked
+3. **Apply ALL rules from this guide** when refactoring:
+   - Component naming (c_Health, c_Stats, sr, rb)
+   - Field order (References → Settings → Runtime)
+   - Awake golden template (assignments → validation → setup)
+   - Alignment (all operators aligned)
+   - Comments (preserve originals + explain complex logic)
+4. **After refactoring, explain changes briefly** - Don't repeat the entire guide
+5. **If user asks about specific rules**, refer to relevant sections below
+
+**Recently refactored files (examples):**
+- `ENV_Destructible.cs` - Environmental objects with particle systems
+- `C_FX.cs` - Flash and fade effects
+- `C_AfterimageSpawner.cs` - Dodge trail effect
+- `C_Mana.cs` - Mana management system
+- `C_Stats.cs` - Character stats (data-only class)
+
+**Project architecture:** See `.github/copilot-instructions.md` for system overview.
+
+---
+
 ## 📋 Field Declaration Order & Rules
 
 ### **1. Component References** (Always First)
@@ -39,6 +65,10 @@ P_Controller → p_Controller
 E_Controller → e_Controller
 W_Sword     → w_Sword
 INV_Manager → inv_Manager
+
+// Enemy-specific files can use e_ prefix for Character components:
+C_Health → e_Health  (in enemy-only scripts)
+C_Stats  → e_Stats   (in enemy-only scripts)
 
 // Unity Components:
 SpriteRenderer   → sr
@@ -406,6 +436,249 @@ When writing/reviewing a script:
 - [ ] **No null checks in OnEnable/OnDisable** (already validated)
 - [ ] **Reuse existing components** (C_FX, C_Health) instead of duplicating
 - [ ] **Align operators** (`??=`, `+=`, `-=`, `=`) for readability
+- [ ] **Keep all original comments** (don't remove existing documentation)
+- [ ] **Add comments for complex code** (per-line explanation when needed)
+
+---
+
+## 💬 Commenting Rules
+
+### **1. ALWAYS Preserve Original Comments:**
+
+```csharp
+// BEFORE (user's original code):
+void Update()
+{
+    // Jump logic - checks if grounded first
+    if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    }
+}
+
+// AFTER (KEEP the comment!):
+void Update()
+{
+    // Jump logic - checks if grounded first
+    if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    }
+}
+```
+
+**Rules:**
+- ✅ **NEVER remove user's original comments**
+- ✅ **Preserve comment style** (line comments, block comments)
+- ✅ **Preserve comment location** (above line, inline, etc.)
+
+---
+
+### **2. Add Comments for Complex Code:**
+
+If code is **not immediately obvious**, add per-line comments:
+
+```csharp
+// COMPLEX CODE - Add comments:
+IEnumerator Flash(Color tint)
+{
+    // Preserve original alpha (don't override transparency)
+    float a = sr.color.a;
+    
+    // Flash with tint color, keep original alpha
+    sr.color = new Color(tint.r, tint.g, tint.b, a);
+    
+    yield return new WaitForSeconds(flashDuration);
+    
+    // Restore original color, keep current alpha
+    sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
+}
+
+// ANOTHER EXAMPLE:
+void CalculateDamage(int attackDamage, int armorPen)
+{
+    // Calculate effective armor after penetration
+    float effectiveArmor = Mathf.Max(0, armor - armorPen);
+    
+    // Armor reduction formula: damage * (100 / (100 + armor))
+    float damageMultiplier = 100f / (100f + effectiveArmor);
+    
+    // Apply damage multiplier, clamp to minimum 1
+    int finalDamage = Mathf.Max(1, Mathf.RoundToInt(attackDamage * damageMultiplier));
+    
+    return finalDamage;
+}
+```
+
+---
+
+### **3. What Needs Comments:**
+
+✅ **Complex math/formulas:**
+```csharp
+// Smoothstep interpolation for fade curve
+float t = time * time * (3f - 2f * time);
+```
+
+✅ **Non-obvious game logic:**
+```csharp
+// Check dash cooldown before allowing input
+if (Time.time - lastDashTime < dashCooldown) return;
+```
+
+✅ **Workarounds/edge cases:**
+```csharp
+// Force re-enable collider (Unity bug: disabled on scene reload)
+boxCol.enabled = false;
+boxCol.enabled = true;
+```
+
+✅ **Performance considerations:**
+```csharp
+// Cache result to avoid expensive GetComponent every frame
+if (cachedController == null)
+    cachedController = GetComponent<P_Controller>();
+```
+
+✅ **Color manipulation:**
+```csharp
+// Preserve alpha channel when changing color
+sr.color = new Color(newColor.r, newColor.g, newColor.b, sr.color.a);
+```
+
+---
+
+### **4. What DOESN'T Need Comments:**
+
+❌ **Self-explanatory code:**
+```csharp
+// BAD (obvious):
+// Set isDead to true
+isDead = true;
+
+// GOOD (no comment needed):
+isDead = true;
+```
+
+❌ **Clear method names:**
+```csharp
+// BAD (method name explains itself):
+// Handle the death event
+HandleDeath();
+
+// GOOD (no comment needed):
+HandleDeath();
+```
+
+❌ **Simple assignments:**
+```csharp
+// BAD (obvious):
+// Store original color
+originalColor = sr.color;
+
+// GOOD (no comment needed):
+originalColor = sr.color;
+```
+
+---
+
+### **5. Comment Style Guide:**
+
+**Single-line comments:**
+```csharp
+// Use for short explanations (preferred)
+float speed = 5f;
+```
+
+**Inline comments:**
+```csharp
+int damage = baseDamage * 2; // Double damage on crit
+```
+
+**Multi-line comments:**
+```csharp
+// Use for longer explanations or algorithm descriptions
+// Line 2 of explanation
+// Line 3 of explanation
+```
+
+**Section separators:**
+```csharp
+// ========== MOVEMENT ==========
+void HandleMovement() { ... }
+
+// ========== COMBAT ==========
+void HandleAttack() { ... }
+```
+
+**Header comments (optional):**
+```csharp
+/// <summary>
+/// Applies damage with armor calculation and triggers events.
+/// </summary>
+/// <param name="damage">Base damage before armor reduction</param>
+/// <returns>Actual damage dealt after armor</returns>
+public int ApplyDamage(int damage) { ... }
+```
+
+---
+
+### **6. Example - Properly Commented Complex Code:**
+
+```csharp
+IEnumerator FadeAndDestroy(GameObject go)
+{
+    float t = 0f;
+    var c = sr.color;
+    
+    // Gradually fade out sprite over deathFadeTime duration
+    while (t < deathFadeTime)
+    {
+        t += Time.deltaTime;
+        
+        // Calculate fade amount (1 = visible, 0 = invisible)
+        float k = 1f - Mathf.Clamp01(t / deathFadeTime);
+        
+        // Apply fade to alpha channel only
+        sr.color = new Color(c.r, c.g, c.b, k);
+        
+        yield return null;
+    }
+    
+    // Enemy path: destroy GameObject
+    if (destroySelfOnDeath)
+    {
+        Destroy(go);
+    }
+    // Player path: restore alpha and disable (for respawn)
+    else
+    {
+        sr.color = new Color(c.r, c.g, c.b, 1f);
+        go.SetActive(false);
+    }
+}
+```
+
+---
+
+## 🎯 Commenting Philosophy
+
+**Goal:** Code should be **self-documenting** through good naming, but **complex logic needs explanation**.
+
+✅ **DO comment:**
+- Complex algorithms
+- Non-obvious game logic
+- Math formulas
+- Workarounds/edge cases
+- Why something is done (not just what)
+
+❌ **DON'T comment:**
+- Obvious operations
+- Self-explanatory code
+- Redundant information
+- What the code does (if clear from reading it)
+
+**Golden Rule:** If someone unfamiliar with the code would ask "why?" or "how does this work?", add a comment! 💡
 
 ---
 
