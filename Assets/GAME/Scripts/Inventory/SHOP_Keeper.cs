@@ -4,48 +4,45 @@ using UnityEngine;
 
 public class SHOP_Keeper : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] Animator   Anim;
+    [SerializeField] Collider2D trigger;
+    public SHOP_Manager   shop_Manager;
+    public CanvasGroup    shopCanvasGroup;
     public static SHOP_Keeper currentShopKeeper;
 
-    [Header("References")]
-    Animator   anim;
-    Collider2D trigger;
-
-    [Header("MUST wire MANUALLY in Inspector")]
-    public SHOP_Manager shop_Manager;
-    public CanvasGroup  shopCanvasGroup;
-
     [Header("Shop Inventory")]
-    public List<INV_ItemSO> shopItems;
-    public List<INV_ItemSO> shopWeapons;
-    public List<INV_ItemSO> shopArmors;
+    [SerializeField] private List<INV_ItemSO> shopItems;
+    [SerializeField] private List<INV_ItemSO> shopWeapons;
+    [SerializeField] private List<INV_ItemSO> shopArmors;
 
     bool           playerInRange;
-    bool           isShopOpen;
+    bool           isShopOpen = false;
     P_InputActions input;
 
     public static event Action<SHOP_Manager, bool> OnShopStateChanged;
 
     void Awake()
     {
-        anim    ??= GetComponentInChildren<Animator>(true);
+        Anim    ??= GetComponentInChildren<Animator>(true);
         trigger ??= GetComponent<CircleCollider2D>();
-        input   = new P_InputActions();
-
-        if (!anim)    Debug.LogWarning($"{name}: Animator is missing!", this);
-        if (!trigger) { Debug.LogError($"{name}: CircleCollider2D is missing!", this); return; }
+        input = new P_InputActions();
     }
 
+    // Assign references in Start to ensure SYS_GameManager.Instance is ready
     void Start()
     {
-        // Get references from GameManager (singletons not ready in Awake)
         if (SYS_GameManager.Instance != null)
         {
-            shop_Manager    ??= SYS_GameManager.Instance.shop_Manager;
-            shopCanvasGroup ??= shop_Manager?.GetComponent<CanvasGroup>();
+            shop_Manager = SYS_GameManager.Instance.shop_Manager;
+            if (shop_Manager != null)
+            {
+                shopCanvasGroup = shop_Manager.GetComponent<CanvasGroup>();
+            }
         }
 
-        if (!shop_Manager)    { Debug.LogError($"{name}: SHOP_Manager not found in SYS_GameManager!", this); return; }
-        if (!shopCanvasGroup) { Debug.LogError($"{name}: CanvasGroup not found on SHOP_Manager!", this); return; }
+        if (!shop_Manager)    Debug.LogError("SHOP_Keeper: Could not find SHOP_Manager from SYS_GameManager.");
+        if (!shopCanvasGroup) Debug.LogError("SHOP_Keeper: Could not find CanvasGroup on SHOP_Manager.");
     }
 
     void OnEnable()
@@ -65,57 +62,56 @@ public class SHOP_Keeper : MonoBehaviour
         {
             if (!isShopOpen)
             {
-                Time.timeScale              = 0;
-                currentShopKeeper           = this;
-                isShopOpen                  = true;
-                shopCanvasGroup.alpha       = 1;
-                shopCanvasGroup.interactable   = true;
-                shopCanvasGroup.blocksRaycasts = true;
+                Time.timeScale                  = 0;
+                currentShopKeeper               = this;
+                isShopOpen                      = true;
                 OnShopStateChanged?.Invoke(shop_Manager, true);
+                shopCanvasGroup.alpha           = 1;
+                shopCanvasGroup.interactable    = true;
+                shopCanvasGroup.blocksRaycasts  = true;
                 OpenItemShop();
             }
             else
             {
-                Time.timeScale              = 1;
-                currentShopKeeper           = null;
-                isShopOpen                  = false;
-                shopCanvasGroup.alpha       = 0;
-                shopCanvasGroup.interactable   = false;
-                shopCanvasGroup.blocksRaycasts = false;
+                Time.timeScale                  = 1;
+                currentShopKeeper               = null;
+                isShopOpen                      = false;
                 OnShopStateChanged?.Invoke(shop_Manager, false);
+                shopCanvasGroup.alpha           = 0;
+                shopCanvasGroup.interactable    = false;
+                shopCanvasGroup.blocksRaycasts  = false;
             }
         }
     }
 
-    // Populate shop with items category
     public void OpenItemShop()
     {
         shop_Manager.PopulateShopItems(shopItems);
     }
 
-    // Populate shop with weapons category
     public void OpenWeaponShop()
     {
         shop_Manager.PopulateShopItems(shopWeapons);
     }
 
-    // Populate shop with armour category
     public void OpenArmourShop()
     {
         shop_Manager.PopulateShopItems(shopArmors);
     }
 
+    // Detect player entering trigger area
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
         playerInRange = true;
-        anim?.SetBool("PlayerInRange", true);
+        Anim?.SetBool("PlayerInRange", true);
     }
 
+    // Detect player exiting trigger area
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
         playerInRange = false;
-        anim?.SetBool("PlayerInRange", false);
+        Anim?.SetBool("PlayerInRange", false);
     }
 }
