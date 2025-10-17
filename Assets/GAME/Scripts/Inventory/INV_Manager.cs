@@ -49,8 +49,12 @@ public class INV_Manager : MonoBehaviour
         {
             gold += quantity;
             UpdateGoldText();
+            SYS_GameManager.Instance.sys_SoundManager.PlayGoldPickup();
             return;
         }
+
+        // Play item pickup sound based on tier
+        SYS_GameManager.Instance.sys_SoundManager.PlayItemPickup(itemSO.itemTier);
 
         // Stack into existing slots of the same item
         foreach (INV_Slots slot in inv_Slots)
@@ -118,6 +122,9 @@ public class INV_Manager : MonoBehaviour
     {
         if (!itemSO) return;
         
+        // Play drop item sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayDropItem();
+        
         GameObject lootGO   = Instantiate(lootPrefab, player.position, Quaternion.identity);
         INV_Loot   loot     = lootGO.GetComponent<INV_Loot>();
         
@@ -142,6 +149,9 @@ public class INV_Manager : MonoBehaviour
 
         P_Controller p_Controller = player.GetComponent<P_Controller>();
         if (!p_Controller) return;
+
+        // Play weapon change sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayWeaponChange();
 
         W_SO oldWeapon = p_Controller.EquipWeapon(slot.weaponSO);
 
@@ -172,6 +182,9 @@ public class INV_Manager : MonoBehaviour
     public void DropWeapon(W_SO weaponSO)
     {
         if (!weaponSO) return;
+        
+        // Play drop item sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayDropItem();
         
         GameObject lootGO = Instantiate(lootPrefab, player.position, Quaternion.identity);
         lootGO.GetComponent<INV_Loot>().InitializeWeapon(weaponSO);

@@ -9,6 +9,8 @@ public class C_Health : MonoBehaviour
     P_State_Dodge  p_State_Dodge;
     C_FX           c_FX;
     P_InputActions input;
+    
+    bool isPlayer; // Cache to determine which hit sound to play
 
     [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
@@ -34,6 +36,9 @@ public class C_Health : MonoBehaviour
         c_Stats       ??= GetComponent<C_Stats>();
         p_State_Dodge ??= GetComponent<P_State_Dodge>();
         c_FX          ??= GetComponent<C_FX>();
+        
+        // Detect if this is player (has P_Controller) or enemy
+        isPlayer = GetComponent<P_Controller>() != null;
 
         if (!c_Stats) { Debug.LogError($"{name}: C_Stats is missing!", this); return; }
         if (!c_FX)    { Debug.LogError($"{name}: C_FX is missing!", this); return; }
@@ -102,6 +107,12 @@ public class C_Health : MonoBehaviour
         if (dealt > 0)
         {
             ChangeHealth(-dealt);
+            
+            // Play hit sound based on who is being hit
+            if (isPlayer)
+                SYS_GameManager.Instance.sys_SoundManager.PlayPlayerHit();
+            else
+                SYS_GameManager.Instance.sys_SoundManager.PlayEnemyHit();
             
             // Cancel combo if player is attacking (damage interrupts combo)
             var playerAttackState = GetComponent<P_State_Attack>();

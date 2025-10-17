@@ -64,6 +64,12 @@ public class StatsUI : MonoBehaviour
     {
         panelToggle = open;
 
+        // Play appropriate sound
+        if (open)
+            SYS_GameManager.Instance.sys_SoundManager.PlayOpenStats();
+        else
+            SYS_GameManager.Instance.sys_SoundManager.PlayClosePanel();
+
         Time.timeScale    = open ? 0f : 1f;
         statsCanvas.alpha = open ? 1f : 0f;
     }

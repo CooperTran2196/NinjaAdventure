@@ -43,6 +43,9 @@ public class SHOP_Manager : MonoBehaviour
         inv_Manager.gold -= price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
         inv_Manager.AddItem(inv_ItemSO, 1);
+        
+        // Play buy item sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayBuyItem();
     }
 
     // Sell item from inventory to shop
@@ -51,6 +54,10 @@ public class SHOP_Manager : MonoBehaviour
         // Update gold
         inv_Manager.gold += itemSO.price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
+        
+        // Play sell item sound
+        SYS_GameManager.Instance.sys_SoundManager.PlaySellItem();
+        
         // INV_Slots handles decreasing quantity & UpdateUI on click
     }
 

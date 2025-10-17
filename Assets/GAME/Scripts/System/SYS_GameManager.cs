@@ -8,6 +8,7 @@ public class SYS_GameManager : MonoBehaviour
     [Header("Central game manager - handles singletons, scene, audio")]
     [Header("References")]
     public SYS_Fader        sys_Fader;
+    public SYS_SoundManager sys_SoundManager;
     public D_Manager        d_Manager;
     public D_HistoryTracker d_HistoryTracker;
     public SHOP_Manager     shop_Manager;
@@ -43,6 +44,7 @@ public class SYS_GameManager : MonoBehaviour
         d_HistoryTracker ??= FindFirstObjectByType<D_HistoryTracker>();
         shop_Manager     ??= FindFirstObjectByType<SHOP_Manager>();
         sys_Fader        ??= FindFirstObjectByType<SYS_Fader>();
+        sys_SoundManager ??= FindFirstObjectByType<SYS_SoundManager>();
         inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
         audioSource      ??= GetComponent<AudioSource>();
 
@@ -50,6 +52,7 @@ public class SYS_GameManager : MonoBehaviour
         if (!d_HistoryTracker) { Debug.LogWarning($"{name}: D_HistoryTracker is missing!", this); }
         if (!shop_Manager)     { Debug.LogWarning($"{name}: SHOP_Manager is missing!", this); }
         if (!sys_Fader)        { Debug.LogWarning($"{name}: SYS_Fader is missing!", this); }
+        if (!sys_SoundManager) { Debug.LogWarning($"{name}: SYS_SoundManager is missing!", this); }
         if (!inv_ItemInfo)     { Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this); }
         if (!audioSource)      { Debug.LogWarning($"{name}: AudioSource is missing!", this); }
         

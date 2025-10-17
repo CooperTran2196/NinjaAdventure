@@ -70,6 +70,9 @@ public class SHOP_Keeper : MonoBehaviour
         {
             if (!isShopOpen)
             {
+                // Play open shop sound
+                SYS_GameManager.Instance.sys_SoundManager.PlayOpenShop();
+                
                 Time.timeScale                  = 0;
                 currentShopKeeper               = this;
                 isShopOpen                      = true;
@@ -81,6 +84,9 @@ public class SHOP_Keeper : MonoBehaviour
             }
             else
             {
+                // Play close panel sound
+                SYS_GameManager.Instance.sys_SoundManager.PlayClosePanel();
+                
                 Time.timeScale                  = 1;
                 currentShopKeeper               = null;
                 isShopOpen                      = false;

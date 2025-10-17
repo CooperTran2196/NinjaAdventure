@@ -76,6 +76,7 @@ public class P_StatsManager : MonoBehaviour
             if (stat.statName == StatName.Heal)
             {
                 CommitStatChange(stat.statName, stat.Value);
+                SYS_GameManager.Instance.sys_SoundManager.PlayInstantHeal();
             }
             else if (stat.statName == StatName.Mana)
             {
@@ -86,6 +87,7 @@ public class P_StatsManager : MonoBehaviour
             {
                 ApplyPermanentEffect(stat);
                 RecalculateAllStats();
+                PlayBuffSound(stat.statName); // Play appropriate buff sound
             }
             return;
         }
@@ -95,6 +97,10 @@ public class P_StatsManager : MonoBehaviour
         {
             if (stat.IsOverTime)
             {
+                // Play overtime heal sound once at the start
+                if (stat.statName == StatName.Heal)
+                    SYS_GameManager.Instance.sys_SoundManager.PlayOvertimeHeal();
+                
                 // Repeatedly, once per second
                 StartCoroutine(ApplyOverTimeEffect(stat));
             }
@@ -103,6 +109,7 @@ public class P_StatsManager : MonoBehaviour
                 // One-time at start
                 statsEffectList.Add(stat);
                 RecalculateAllStats();
+                PlayBuffSound(stat.statName); // Play appropriate buff sound
                 StartCoroutine(StartEffectTimer(stat));
             }
         }
@@ -231,6 +238,29 @@ public class P_StatsManager : MonoBehaviour
             // Apply one "tick" of the effect
             CommitStatChange(stat.statName, stat.Value);
             timePassed += 1;
+        }
+    }
+
+    // Helper to play appropriate buff sound based on stat type
+    private void PlayBuffSound(StatName statName)
+    {
+        var soundManager = SYS_GameManager.Instance.sys_SoundManager;
+        
+        switch (statName)
+        {
+            case StatName.AttackDamage:
+            case StatName.AbilityPower:
+                soundManager.PlayBuffAttack();
+                break;
+            
+            case StatName.Armor:
+            case StatName.MagicResist:
+                soundManager.PlayBuffDefense();
+                break;
+            
+            default:
+                soundManager.PlayBuffGeneric();
+                break;
         }
     }
 }

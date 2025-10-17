@@ -48,6 +48,9 @@ public class P_State_Dodge : MonoBehaviour
         float distance = stats.dodgeDistance;
         dodgeDuration  = distance / speed; // assume valid per your inspector preconditions
 
+        // Play dodge sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayDodge();
+
         // One-time velocity set; controller keeps applying desiredVelocity each FixedUpdate
         controller.SetDesiredVelocity(dodgeDir * speed);
 

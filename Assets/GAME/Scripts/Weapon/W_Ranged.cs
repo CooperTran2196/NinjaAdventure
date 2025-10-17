@@ -5,6 +5,9 @@ public class W_Ranged : W_Base
 {
     public override void Attack(Vector2 attackDir)
     {
+        // Play ranged attack sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayRangedAttack();
+        
         StartCoroutine(Shoot(attackDir));
     }
 

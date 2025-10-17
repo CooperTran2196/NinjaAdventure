@@ -22,6 +22,9 @@ public class W_Melee : W_Base
         else
             currentComboIndex = 0;
         
+        // Play combo slash sound for player
+        SYS_GameManager.Instance.sys_SoundManager.PlayComboSlash(currentComboIndex);
+        
         StartCoroutine(Hit());
     }
 
@@ -30,6 +33,10 @@ public class W_Melee : W_Base
     {
         attackDir = aimDir.normalized;
         currentComboIndex = Mathf.Clamp(comboAttackIndex, 0, 2);
+        
+        // Play combo slash sound for enemy (quieter)
+        SYS_GameManager.Instance.sys_SoundManager.PlayComboSlash_Enemy(currentComboIndex);
+        
         StartCoroutine(Hit());
     }
 

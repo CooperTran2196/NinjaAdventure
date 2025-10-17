@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class ENV_Destructible : MonoBehaviour
 {
+    public enum ObjectType { Grass, Vase, Generic }
+    
+    [Header("Sound Settings")]
+    public ObjectType objectType = ObjectType.Generic;
+    
     [Header("References")]
     C_Health       c_Health;
     C_FX           c_FX;
@@ -100,5 +105,17 @@ public class ENV_Destructible : MonoBehaviour
     void SpawnBreakParticles()
     {
         breakParticleSystem.Play();
+        
+        // Play break sound at position with spatial audio
+        AudioClip breakSound = objectType switch
+        {
+            ObjectType.Grass   => SYS_GameManager.Instance.sys_SoundManager.GetRandomGrassBreak(),
+            ObjectType.Vase    => SYS_GameManager.Instance.sys_SoundManager.GetRandomVaseBreak(),
+            ObjectType.Generic => SYS_GameManager.Instance.sys_SoundManager.GetRandomObjectBreak(),
+            _                  => null
+        };
+        
+        if (breakSound != null)
+            AudioSource.PlayClipAtPoint(breakSound, transform.position, 0.7f);
     }
 }
