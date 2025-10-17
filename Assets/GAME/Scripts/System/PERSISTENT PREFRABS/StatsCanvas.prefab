@@ -112,7 +112,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2231098188727625676}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -672,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2625489656152328843, guid: 30414c4771bb549d7867a904fc3efabd, type: 3}
       propertyPath: m_fontSize
-      value: 38.45
+      value: 38.6
       objectReference: {fileID: 0}
     - target: {fileID: 2625489656152328843, guid: 30414c4771bb549d7867a904fc3efabd, type: 3}
       propertyPath: m_margin.y

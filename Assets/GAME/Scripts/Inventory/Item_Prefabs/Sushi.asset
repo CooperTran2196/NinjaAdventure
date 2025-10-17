@@ -18,9 +18,12 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 5588c272309e701469452cca2d5cdea6, type: 3}
   stackSize: 3
   price: 1
+  itemTier: 1
   isGold: 0
+  unlocksSkill: 0
+  skillIDToUnlock: 
   StatEffectList:
-  - statName: 11
+  - statName: 15
     Value: 5
     Duration: 1
     IsOverTime: 0

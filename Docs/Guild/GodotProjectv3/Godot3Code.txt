@@ -1,0 +1,893 @@
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\DialogArea.gd
+=======================================================================
+extends Area2D
+
+signal dialog_started(player)
+signal dialog_ended
+
+export(String, "TimelineDropdown") var timeline: String
+export(NodePath) var npc_path = ""
+
+onready var tween = $Tween
+onready var dialog_info = $DialogInfo
+var player = null
+
+
+func _ready():
+	if npc_path != "":
+		connect_to_npc(get_node(npc_path))
+	set_process_input(false)
+	$DialogInfo.visible = false
+
+
+func connect_to_npc(npc):
+	self.connect("dialog_started",npc,"start_dialog_with")
+	self.connect("dialog_ended",npc,"stop_dialog")
+
+
+func _on_DialogArea_body_entered(body):
+	show_dialog_info()
+	player = body
+	set_process_input(true)
+
+
+func _on_DialogArea_body_exited(body):
+	$DialogInfo.visible = false
+	set_process_input(false)
+
+
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		launch_dialog()
+
+
+func launch_dialog():
+	pass
+#	emit_signal("dialog_started",player)
+#	player.disabled = true
+#	$DialogInfo.visible = false
+#	set_process_input(false)
+#	var dialog = Dialogic.start(timeline)
+#	dialog.connect("timeline_end",self,"on_dialog_end")
+#	get_tree().get_nodes_in_group("Hud")[0].add_child(dialog)
+
+
+func on_dialog_end(timeline):
+	show_dialog_info()
+	emit_signal("dialog_ended")
+	set_process_input(true)
+
+func show_dialog_info():
+	if player:
+		player.disabled = false
+	$DialogInfo.visible = true
+	tween.interpolate_property(dialog_info,"position",Vector2(0,10),Vector2(0,0),0.5,Tween.TRANS_ELASTIC,Tween.EASE_OUT)
+	tween.start()
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\new_script.gd
+=======================================================================
+tool
+extends EditorScript
+
+func _run():
+	var root = get_editor_interface().get_edited_scene_root()
+	if not root:
+		printerr("No scene open")
+		return
+	_dump(root, "")
+
+func _dump(node, indent):
+	print(indent + node.name + " : " + node.get_class())
+	for child in node.get_children():
+		_dump(child, indent + "    ")
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Hud\Hud.gd
+=======================================================================
+extends CanvasLayer
+
+onready var life_bar = $LifeBar
+
+
+func fade():
+	$Fade/Anim.stop()
+	$Fade/Anim.play("Fade")
+
+
+func _on_map_changed():
+	fade()
+
+func on_player_hit(damage):
+	life_bar.life -= damage
+
+func revive():
+	fade()
+	life_bar.reset()
+	
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Hud\DialogBox\DialogueBox.gd
+=======================================================================
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Hud\LifeBar\LifeBar.gd
+=======================================================================
+extends Control
+
+signal dead
+
+export var start_life = 12
+
+var max_life = 12 setget set_max_life
+var life = 12 setget set_life
+var life_preview = 12 setget set_preview_life
+
+const NBR_BY_HEART = 4.0
+onready var hearts = $Hearts
+onready var tween = $Tween
+
+
+func _ready():
+	self.max_life = 12
+	self.life = start_life
+
+
+func reset():
+	self.life = max_life
+
+
+func set_life(v):
+	life = v
+#	self.life_preview = life
+	tween.stop_all()
+	tween.interpolate_property(self,"life_preview",life_preview,life,abs(life_preview-life)/10,Tween.TRANS_LINEAR,Tween.EASE_IN)
+	tween.start()
+	if life <= 0:
+		emit_signal("dead")
+
+
+func set_preview_life(v):
+	life_preview = v
+	var remaining_life = life_preview
+	for i in range(max_life/NBR_BY_HEART):
+		hearts.get_child(i).frame = 0
+	for i in range(ceil(life_preview/NBR_BY_HEART)):
+		var child = hearts.get_child(i)
+		var frame_target = clamp(remaining_life,0,4)
+		remaining_life = clamp(remaining_life-4,0,INF)
+		child.frame = frame_target
+
+
+func set_max_life(v):
+	max_life = v
+	for child in hearts.get_children():
+		child.visible = false
+	for i in range(max_life/NBR_BY_HEART):
+		hearts.get_child(i).visible = true
+	self.life = clamp(life,0,max_life)
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Hud\Tuto\Tuto.gd
+=======================================================================
+extends Control
+
+onready var tween:Tween = $Tween
+var tuto_move_completed = false
+var tuto_move_attack = false
+
+
+func _input(event):
+	if event.is_action_pressed("move_down") or event.is_action_pressed("move_up") or event.is_action_pressed("move_left") or event.is_action_pressed("move_right"):
+		tuto_move_completed = true
+	if event.is_action_pressed("action"):
+		tuto_move_attack = true
+
+
+func _on_TutoTime_timeout():
+	if tuto_move_attack and tuto_move_completed:
+		hide_tuto()
+	else:
+		$TutoTime.start()
+	
+
+func hide_tuto():
+	tween.interpolate_property(self,"rect_position:y",0,100,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	tween.start()
+	yield(tween,"tween_all_completed")
+	queue_free()
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Main\Main.gd
+=======================================================================
+extends Node
+
+onready var hud = $Hud
+onready var life_bar = $Hud/LifeBar
+
+func _ready():
+	var player = $World/YSort/Character
+	player.connect("hit",hud,"on_player_hit")
+	life_bar.connect("dead",player,"death")
+
+
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\Main\MusicPlayer\MusicPlayer.gd
+=======================================================================
+extends AudioStreamPlayer
+
+onready var tween = $Tween
+const BASE_VOLUME = 0
+const MUTE_VOLUME = -60
+
+func _on_music_changed(v):
+	if v == null:
+		fade_out()
+	else:
+		if stream == v:
+			return
+		stream = v
+		reset_sound()
+		play()
+
+
+func reset_sound():
+	tween.stop_all()
+	volume_db = BASE_VOLUME
+
+
+func fade_out():
+	tween.interpolate_property(self,"volume_db",BASE_VOLUME,MUTE_VOLUME,1.4,Tween.TRANS_LINEAR,Tween.EASE_IN)
+	tween.start()
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\World.gd
+=======================================================================
+extends Node2D
+
+signal map_changed
+
+func _ready():
+	for teleporter in get_tree().get_nodes_in_group("Teleporter"):
+		teleporter.connect("teleported",self,"change_map")
+
+func change_map():
+	emit_signal("map_changed")
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Monster\Monster.gd
+=======================================================================
+extends KinematicBody2D
+
+signal revive
+
+export var speed = 40
+var disabled = false setget set_disabled
+var velocity = Vector2.ZERO
+
+onready var life_bar:TextureProgress = $Pivot/LifeBar
+onready var tween:Tween = $Tween
+onready var sprite = $Pivot/Sprite
+onready var start_pos = global_position
+
+
+func hit(damage):
+	life_bar.value -= damage
+	hit_fx()
+	if !life_bar.value:
+		death()
+
+
+func _physics_process(delta):
+	move_and_slide(velocity)
+
+
+func revive():
+	if disabled:
+		emit_signal("revive")
+		life_bar.value = life_bar.max_value
+		global_position = start_pos
+		sprite.scale = Vector2.ONE
+		self.disabled = false
+
+
+func set_disabled(v):
+	disabled = v
+	visible = !v
+	if disabled:
+		_on_axis_changed(Vector2.ZERO)
+	$Shape.set_deferred("disabled",v)
+	$AreaHitBox/Shape.set_deferred("disabled",v)
+
+
+func hit_fx():
+	tween.interpolate_property(sprite,"scale",Vector2(2,2),Vector2.ONE,0.2,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	tween.interpolate_property(sprite,"modulate",Color(50,50,50),Color.white,0.2,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	$SndHit.play()
+	tween.start()
+
+
+func death():
+	tween.interpolate_property(sprite,"scale",Vector2(2,2),Vector2.ZERO,0.2,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	tween.start()
+	yield(tween,"tween_all_completed")
+	self.disabled = true
+
+
+func _on_axis_changed(axis):
+	velocity = axis*speed
+
+
+func _on_AreaHitBox_body_entered(body):
+	body.hit()
+	body.push(global_position,50)
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\MoveBehavior\MoveBehavior.gd
+=======================================================================
+extends Node
+class_name MoveBehavior
+
+signal axis_changed(axis)
+var axis = Vector2.ZERO setget set_axis
+var disabled = false setget set_disabled
+
+
+func set_axis(v):
+	if disabled:
+		return
+	axis = v
+	emit_signal("axis_changed",v)
+
+
+func set_disabled(v):
+	if disabled:
+		self.axis = Vector2.ZERO
+	disabled = v
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\MoveBehavior\RandomMoveBehavior.gd
+=======================================================================
+extends MoveBehavior
+
+
+func _ready():
+	self.disabled = true
+
+
+func _on_Timer_timeout():
+	if axis.length():
+		self.axis = Vector2.ZERO
+	else:
+		var angle = rand_range(0,360)
+		self.axis = Vector2(cos(angle), sin(angle))
+
+func set_disabled(v):
+	.set_disabled(v)
+	$Timer.paused = disabled
+
+
+func reset():
+	self.disabled = false
+	self.axis = Vector2.ZERO
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Npc\Npc.gd
+=======================================================================
+extends KinematicBody2D
+
+
+export(String,"Left","Right","Up","Down") var direction = "Left" setget set_direction
+export(String,"Idle","Walk") var animation = "Idle" setget set_animation
+var disabled = false setget set_disabled
+var old_direction = "Down"
+
+onready var anim = $Anim
+onready var sprite = $Sprite
+
+
+func _ready():
+	self.direction = direction
+
+
+func set_disabled(v):
+	disabled = v
+	anim.playback_active = !v
+	set_process(!v)
+	set_physics_process(!v)
+
+
+func set_direction(v):
+	direction = v
+	update_sprite()
+
+
+func set_animation(v):
+	animation = v
+	update_sprite()
+
+
+func update_sprite():
+	if sprite:
+		if sprite.frames.has_animation(animation+direction):
+			sprite.animation = animation+direction
+		else:
+			sprite.animation = animation
+
+
+func start_dialog_with(player):
+	self.disabled = true
+	old_direction = direction
+	self.direction = get_target_direction(player)
+
+
+func stop_dialog():
+	self.direction = old_direction
+	self.disabled = false
+
+
+func get_target_direction(target):
+	var target_dir = "Left"
+	var dist_x = (global_position.x-target.global_position.x)
+	var dist_y = (global_position.y-target.global_position.y)
+	if abs(dist_x) > 8:
+		if dist_x < 0:
+			target_dir = "Right"
+		else:
+			target_dir = "Left"
+	else:
+		if dist_y < 0:
+			target_dir = "Down"
+		else:
+			target_dir = "Up"
+	return(target_dir)
+	
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Player\Player.gd
+=======================================================================
+extends KinematicBody2D
+
+signal change_direction(direction)
+signal velocity_changed(velocity)
+signal action_pressed()
+signal hit(damage)
+signal position_changed(position)
+
+var left:bool = false
+var right:bool = false
+var up:bool = false
+var down:bool = false
+var move_axis:Vector2 = Vector2() setget set_move_axis
+var speed:float = 90
+var velocity:Vector2 = Vector2() setget set_velocity
+var push_velocity:Vector2 = Vector2()
+var bloc_move = false
+var disabled = false setget set_disabled
+onready var start_pos = global_position
+
+
+onready var tween:Tween = $Sprite/Tween
+onready var sprite:AnimatedSprite = $Sprite
+
+func _process(delta):
+	if bloc_move:
+		return
+	left = Input.is_action_pressed("move_left")
+	right = Input.is_action_pressed("move_right")
+	up = Input.is_action_pressed("move_up")
+	down = Input.is_action_pressed("move_down")
+	self.move_axis = Vector2(-int(left)+int(right),-int(up)+int(down))
+	if Input.is_action_pressed("action"):
+		emit_signal("action_pressed")
+		bloc_move = true
+		self.move_axis = Vector2.ZERO
+		self.velocity = Vector2.ZERO
+
+
+func _physics_process(delta):
+	push_velocity = push_velocity.linear_interpolate(Vector2.ZERO,0.1)
+	velocity = move_and_slide((velocity+push_velocity).floor())
+	emit_signal("position_changed",global_position)
+
+
+func set_direction(direction):
+	emit_signal("change_direction",direction)
+
+
+func set_move_axis(v):
+	if disabled:
+		return
+	if move_axis != v:
+		if v.length():
+			emit_signal("change_direction",v)
+	self.velocity = move_axis*speed
+	move_axis = v
+
+
+func set_velocity(v):
+	velocity = v
+	emit_signal("velocity_changed",velocity)
+
+
+func _on_ActionTime_timeout():
+	bloc_move = false
+
+
+func hit(damage = 1):
+	emit_signal("hit",damage)
+	hit_fx()
+
+
+func death():
+	self.disabled = true
+	sprite.animation = "Death"
+	yield(get_tree().create_timer(0.5,false),"timeout")
+	get_tree().call_group("Hud","revive")
+	reset()
+
+
+func reset():
+	global_position = start_pos
+	self.disabled = false
+
+
+func push(from,force):
+	push_velocity = (global_position-from).normalized()*force
+
+
+func hit_fx():
+	tween.interpolate_property(sprite,"scale",Vector2(2,2),Vector2.ONE,0.2,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	tween.interpolate_property(sprite,"modulate",Color(50,50,50),Color.white,0.2,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	$SndHit.play()
+	tween.start()
+
+
+func set_disabled(v):
+	disabled = v
+	set_process(!v)
+	set_physics_process(!v)
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Player\Sprite.gd
+=======================================================================
+extends AnimatedSprite
+
+var char_direction = "D" setget set_char_direction
+var current_anim = "Idle" setget set_current_anim
+onready var tween = $Tween 
+
+func update_anim():
+	animation = current_anim+char_direction
+
+
+func _on_change_direction(direction):
+	var angle = floor((rad2deg(direction.angle()))/90)*90
+	match angle:
+		90.0:
+			self.char_direction = "D"
+		-90.0,-180.0:
+			self.char_direction = "U"
+		180.0:
+			self.char_direction = "L"
+		0.0:
+			self.char_direction = "R"
+
+
+func _on_velocity_changed(velocity):
+	if $ActionTime.time_left:
+		return
+	elif velocity.length() > 0:
+		self.current_anim = "Walk"
+	else:
+		self.current_anim = "Idle"
+
+
+func set_char_direction(v):
+	char_direction = v
+	update_anim()
+
+
+func set_current_anim(v):
+	current_anim = v
+	update_anim()
+
+
+func action_started():
+	$ActionTime.start()
+	self.current_anim = "Attack"
+
+
+func _on_ActionTime_timeout():
+	self.current_anim = "Walk"
+
+func _on_hit(damage):
+	tween.interpolate_property(self,"modulate",Color(50,50,50),Color.white,0.1,Tween.TRANS_CIRC,Tween.EASE_OUT)
+	tween.start()
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Weapon\HitBox.gd
+=======================================================================
+extends Area2D
+
+signal hit_something
+
+func _on_body_entered(body):
+	body.hit(owner.damage)
+	emit_signal("hit_something")
+
+
+func _on_area_entered(area):
+	area.owner.hit(owner.damage)
+	emit_signal("hit_something")
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Actor\Weapon\Weapon.gd
+=======================================================================
+extends AnimatedSprite
+
+signal attack_end
+
+var direction = 0 setget set_direction
+export(int) var damage = 3 
+onready var tween = $Tween
+
+
+func _ready():
+	disable_weapon()
+	visible = false
+	tween.connect("tween_all_completed",self,"attack_end")
+
+
+func set_direction(v):
+	direction = v.angle()-PI/2
+	rotation = direction
+	if v.y > 0:
+		z_index = 0
+	else:
+		z_index = -1
+		
+
+
+func _on_change_direction(dir):
+	self.direction = dir
+
+
+func on_attack():
+	visible = true
+	var px = 0
+	var py = 16
+	var final_py = 10
+	match(int(rad2deg(direction))):
+		-90:
+			px = -3
+		90:
+			px = 4
+		0:
+			px = -2
+			py+= 6
+		-180:
+			px += 4
+	$HitBox/Shape.set_deferred("disabled",false)
+	tween.interpolate_property(self,"offset",Vector2(px,py),Vector2(px,final_py),0.2,Tween.TRANS_QUART,Tween.EASE_OUT_IN)
+	tween.start()
+
+func disable_weapon():
+	$HitBox/Shape.set_deferred("disabled",true)
+
+func attack_end():
+	visible = false
+	emit_signal("attack_end")
+	disable_weapon()
+
+
+func _on_hit_something():
+	$ImpactFx.emitting = true
+
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Camera\Camera.gd
+=======================================================================
+extends Camera2D
+
+
+signal screen_pos_changed
+
+const RESOLUTION = Vector2(320,176)
+export(NodePath) var target_path = ""
+var target = ""
+onready var tween:Tween = $Tween
+var screen_pos = Vector2.ZERO setget set_screen_pos
+
+
+func _ready():
+	target = get_node(target_path)
+	update_screen_pos()
+	update_position()
+
+
+func update_position():
+	var cam_offset = RESOLUTION/2
+	var pos_target = (screen_pos*RESOLUTION)+cam_offset
+	tween.interpolate_property(self,"position",position,pos_target,0.6,Tween.TRANS_LINEAR,Tween.EASE_IN_OUT)
+	tween.start()
+
+func _process(delta):
+	update_screen_pos()
+
+
+func update_screen_pos():
+	if !target:
+			return
+	self.screen_pos = ((target.global_position/RESOLUTION).floor())
+
+
+func set_screen_pos(v):
+	if screen_pos != v:
+		screen_pos = v
+		emit_signal("screen_pos_changed")
+		update_position()
+
+
+func _on_World_map_changed():
+	yield(get_tree().create_timer(0.01),"timeout")
+	tween.stop_all()
+	center_pos()
+
+
+func center_pos():
+	update_screen_pos()
+	var cam_offset = RESOLUTION/2
+	var pos_target = (screen_pos*RESOLUTION)+cam_offset
+	position = pos_target
+	tween.start()
+
+
+
+func _on_Camera_screen_pos_changed():
+	reset_map()
+
+func reset_map():
+	yield(tween,"tween_all_completed")
+	get_tree().call_group("Monster","revive")
+	get_tree().call_group("Destroyable","reset")
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Ld\DestroyableItem\DestroyableItem.gd
+=======================================================================
+extends Node2D
+
+
+var life = 1
+var disabled = false setget set_disabled
+
+
+func hit(damage = 1):
+	life -= damage
+	if life <= 0:
+		destroy()
+
+
+func destroy():
+	$SndHit.play()
+	$Anim.play("Destroy")
+
+
+
+func _on_Anim_animation_finished(anim_name):
+	if anim_name == "Destroy":
+		self.disabled = true
+
+
+func set_disabled(v):
+	disabled = v
+	visible = !v
+	$Shape.set_deferred("disabled",v)
+
+
+func reset():
+	if disabled:
+		self.disabled = false
+		$Anim.play("Idle")
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Ld\MusicArea\MusicArea.gd
+=======================================================================
+extends Area2D
+
+signal music_changed(music)
+export(AudioStream) var music = null
+
+
+func _ready():
+	var music_player = get_tree().get_nodes_in_group("MusicPlayer")[0]
+	connect("music_changed",music_player,"_on_music_changed")
+
+
+func _on_body_entered(body):
+	emit_signal("music_changed",music)
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Ld\Spike\Spike.gd
+=======================================================================
+extends Node2D
+
+
+func _on_Area2D_body_entered(body):
+	body.hit(2)
+
+
+=======================================================================
+File: D:\Google Drive\Code\Final project\Project Sample\GodotProjectv3\World\Ld\Teleporter\Teleporter.gd
+=======================================================================
+tool
+extends Area2D
+
+signal teleported
+
+export(NodePath) var target = ""
+export(Vector2) var teleport_direction = Vector2(0,0)
+
+var teleport_node = null
+
+func _ready():
+	if target != "":
+		teleport_node = get_node(target)
+
+func _on_body_entered(body):
+	if $Timer.time_left:
+		return
+	body.global_position = teleport_node.global_position+teleport_direction*10
+	body.set_direction(teleport_direction)
+	teleport_node.waiting()
+	emit_signal("teleported")
+
+
+func waiting():
+	$Timer.start()
+
+
+func _draw():
+	if Engine.is_editor_hint():
+		draw_circle(Vector2.ZERO,5,Color.red)
+		draw_line(Vector2.ZERO,get_node(target).position-position,Color.red,3)
+
+
