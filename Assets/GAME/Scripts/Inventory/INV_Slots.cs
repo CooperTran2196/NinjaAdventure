@@ -44,7 +44,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         canvas      = GetComponentInParent<Canvas>();
 
         // Get reference to shared popup from GameManager
-        itemInfoPopup = SYS_GameManager.Instance?.itemInfoPopup;
+        itemInfoPopup = SYS_GameManager.Instance.inv_ItemInfo;
 
         // Validate required references
         if (!itemImage)            Debug.LogError($"INV_Slots ({name}): itemImage is missing.");

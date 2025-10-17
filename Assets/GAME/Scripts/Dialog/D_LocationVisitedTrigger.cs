@@ -1,7 +1,3 @@
-// <summary>
-// Attach this to a trigger collider to mark a location as visited when the player enters it.
-// </summary>
- 
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]

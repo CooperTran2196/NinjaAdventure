@@ -5,26 +5,26 @@ public class SYS_GameManager : MonoBehaviour
 {
     public static SYS_GameManager Instance;
 
+    [Header("Central game manager - handles singletons, scene, audio")]
     [Header("References")]
-    public D_Manager         d_Manager;
-    public D_HistoryTracker  d_HistoryTracker;
-    public SYS_Fader         sys_Fader;
-    public SHOP_Manager      shop_Manager;
-    public INV_ItemInfo      itemInfoPopup;  // Shared info popup for Shop and Inventory
+    public D_Manager        d_Manager;
+    public D_HistoryTracker d_HistoryTracker;
+    public SYS_Fader        sys_Fader;
+    public SHOP_Manager     shop_Manager;
+    public AudioSource      audioSource;
+    public INV_ItemInfo     inv_ItemInfo;
 
-    [Header("Restart")]
-    [SerializeField] private string initialSceneName = "Level1";
-    [SerializeField] private string initialSpawnId = "Start";
+    [Header("Restart Settings")]
+    public string initialSceneName = "Level1";
+    public string initialSpawnId   = "Start";
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private float fadeDuration = 1.5f; // Tunable fade time
-
-    // Internal fade state
-    private Coroutine currentFade;
+    [Header("Audio Settings")]
+    public float fadeDuration = 1.5f;
 
     [Header("Persistent Objects")]
-    public GameObject[] persistentObjects; // Objects to persist across scenes
+    public GameObject[] persistentObjects;
+
+    Coroutine currentFade;
 
     void Awake()
     {
@@ -39,27 +39,28 @@ public class SYS_GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         MarkPersistentObjects();
 
-        d_Manager ??= FindFirstObjectByType<D_Manager>();
+        d_Manager        ??= FindFirstObjectByType<D_Manager>();
         d_HistoryTracker ??= FindFirstObjectByType<D_HistoryTracker>();
-        shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
-        sys_Fader    ??= FindFirstObjectByType<SYS_Fader>();
-        itemInfoPopup ??= FindFirstObjectByType<INV_ItemInfo>();
-        audioSource ??= GetComponent<AudioSource>();
+        shop_Manager     ??= FindFirstObjectByType<SHOP_Manager>();
+        sys_Fader        ??= FindFirstObjectByType<SYS_Fader>();
+        inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
+        audioSource      ??= GetComponent<AudioSource>();
 
-        if (!d_Manager)         Debug.LogWarning("SYS_GameManager: Dialogue Manager is missing.");
-        if (!d_HistoryTracker)  Debug.LogWarning("SYS_GameManager: Dialogue History Tracker is missing.");
-        if (!shop_Manager)      Debug.LogWarning("SYS_GameManager: Shop Manager is missing.");
-        if (!sys_Fader)         Debug.LogWarning("SYS_GameManager: Fader is missing.");
-        if (!itemInfoPopup)     Debug.LogWarning("SYS_GameManager: ItemInfoPopup is missing.");
-        if (!audioSource)       Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
-
-        if (itemInfoPopup) itemInfoPopup.Hide(); // Start hidden
+        if (!d_Manager)        Debug.LogWarning($"{name}: Dialogue Manager is missing!", this);
+        if (!d_HistoryTracker) Debug.LogWarning($"{name}: Dialogue History Tracker is missing!", this);
+        if (!shop_Manager)     Debug.LogWarning($"{name}: Shop Manager is missing!", this);
+        if (!sys_Fader)        Debug.LogWarning($"{name}: Fader is missing!", this);
+        if (!inv_ItemInfo)     Debug.LogWarning($"{name}: ItemInfoPopup is missing!", this);
+        if (!audioSource)      Debug.LogWarning($"{name}: AudioSource is missing!", this);
+        if (!inv_ItemInfo)     Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this);
+        
+        inv_ItemInfo.Hide();
 
         audioSource.loop = true;
         audioSource.playOnAwake = false;
     }
 
-    // Restart the game by loading the initial scene and resetting time scale
+    // Restart the game by clearing all DDOL objects and loading the initial scene
     public void FreshBoot()
     {
         Time.timeScale = 1f;
@@ -74,7 +75,7 @@ public class SYS_GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
     }
 
-    // Play music clip centrally (instant switch, no fade)
+    // Play music clip instantly without fading
     public void PlayMusic(AudioClip clip)
     {
         if (audioSource.clip != clip)
@@ -85,10 +86,7 @@ public class SYS_GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Fade smoothly from current music to new clip.
-    /// Stops any existing fade before starting new one.
-    /// </summary>
+    // Fade smoothly from current music to new clip, stops any existing fade
     public void PlayMusicWithFade(AudioClip newClip)
     {
         // Don't fade if already playing this clip
@@ -105,51 +103,49 @@ public class SYS_GameManager : MonoBehaviour
         currentFade = StartCoroutine(FadeToNewMusic(newClip));
     }
 
-    private IEnumerator FadeToNewMusic(AudioClip newClip)
+    IEnumerator FadeToNewMusic(AudioClip newClip)
     {
-        float elapsed = 0f;
+        float elapsed      = 0f;
         float halfDuration = fadeDuration * 0.5f;
-        float startVolume = audioSource.volume;
+        float startVolume  = audioSource.volume;
 
-        // Fade out current music (ease-out curve using smoothstep)
+        // Fade out current music
         while (elapsed < halfDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / halfDuration);
-            float smoothT = t * t * (3f - 2f * t); // Smoothstep
+            float t       = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t);
             audioSource.volume = Mathf.Lerp(startVolume, 0f, smoothT);
             yield return null;
         }
 
-        // Swap clips at silent point
+        // Swap clips
         audioSource.Stop();
         audioSource.clip = newClip;
         audioSource.Play();
 
-        // Fade in new music (ease-in curve using smoothstep)
+        // Fade in new music
         elapsed = 0f;
         while (elapsed < halfDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / halfDuration);
-            float smoothT = t * t * (3f - 2f * t); // Smoothstep
+            float t       = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t);
             audioSource.volume = Mathf.Lerp(0f, startVolume, smoothT);
             yield return null;
         }
 
-        audioSource.volume = startVolume; // Ensure final volume is exact
-        currentFade = null; // Clear reference
+        audioSource.volume = startVolume;
+        currentFade        = null;
     }
 
-    // Mark specified objects to not be destroyed on scene load
     void MarkPersistentObjects()
     {
-        foreach (var obj in persistentObjects)
+        foreach (GameObject obj in persistentObjects)
             if (obj)
                 DontDestroyOnLoad(obj);
     }
 
-    // Clean up persistent objects and destroy this instance
     void CleanUpAndDestroy()
     {
         foreach (GameObject obj in persistentObjects)

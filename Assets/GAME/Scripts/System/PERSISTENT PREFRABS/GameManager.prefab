@@ -49,10 +49,11 @@ MonoBehaviour:
   d_HistoryTracker: {fileID: 0}
   sys_Fader: {fileID: 0}
   shop_Manager: {fileID: 0}
-  itemInfoPopup: {fileID: 0}
+  audioSource: {fileID: 8894136543161484865}
+  inv_ItemInfo: {fileID: 0}
   initialSceneName: Level1
   initialSpawnId: Start
-  audioSource: {fileID: 8894136543161484865}
+  fadeDuration: 1.5
   persistentObjects:
   - {fileID: 0}
   - {fileID: 0}

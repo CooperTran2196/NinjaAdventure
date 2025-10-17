@@ -3,75 +3,74 @@ using UnityEngine;
 
 public class SHOP_Manager : MonoBehaviour
 {
-    [Header("Slots")]
-    [SerializeField] SHOP_Slot[] shop_Slots;
+    [Header("References")]
+    INV_Manager inv_Manager;
 
-    [Header("Inventory Link (for buy/sell step)")]
-    public INV_Manager inv_Manager;
+    [Header("MUST wire MANUALLY in Inspector")]
+    public SHOP_Slot[] shop_Slots;
 
     void Awake()
     {
         inv_Manager ??= FindFirstObjectByType<INV_Manager>();
 
-        if (!inv_Manager) Debug.LogError("SHOP_Manager: INV_Manager is missing.");
-        if (shop_Slots == null || shop_Slots.Length == 0)
-            Debug.LogWarning("SHOP_Manager: No shopSlots assigned.", this);
+        if (!inv_Manager)                             { Debug.LogError($"{name}: INV_Manager is missing!", this); return; }
+        if (shop_Slots == null || shop_Slots.Length == 0) Debug.LogWarning($"{name}: shop_Slots array is empty!", this);
     }
 
-    public void PopulateShopItems(List<INV_ItemSO> inv_ItemSOList)
+    // Populate shop slots with items from given list
+    public void PopulateShopItems(List<INV_ItemSO> itemList)
     {
-        // fill used slots
-        int count = Mathf.Min(inv_ItemSOList.Count, shop_Slots.Length);
+        int count = Mathf.Min(itemList.Count, shop_Slots.Length);
+        
+        // Fill used slots
         for (int i = 0; i < count; i++)
         {
             shop_Slots[i].gameObject.SetActive(true);
-            shop_Slots[i].Initialize(inv_ItemSOList[i]);
+            shop_Slots[i].Initialize(itemList[i]);
         }
 
-        // turn off the rest
+        // Disable unused slots
         for (int i = count; i < shop_Slots.Length; i++)
             shop_Slots[i].gameObject.SetActive(false);
     }
 
-    // Attempt to buy item, checking gold and space
-    public void TryBuyItem(INV_ItemSO inv_ItemSO, int price)
+    // Buy item if player has enough gold and inventory space
+    public void TryBuyItem(INV_ItemSO itemSO, int price)
     {
-        if (inv_ItemSO == null) return;
-        if (inv_Manager.gold < price) return;
-        if (!HasSpace(inv_ItemSO)) return;
+        if (itemSO == null)                return;
+        if (inv_Manager.gold < price)      return;
+        if (!HasSpace(itemSO))             return;
 
         inv_Manager.gold -= price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
-        inv_Manager.AddItem(inv_ItemSO, 1);
+        inv_Manager.AddItem(itemSO, 1);
     }
 
-    // Sell item from inventory to shop
+    // Sell item from inventory for gold
     public void SellItem(INV_ItemSO itemSO)
     {
         if (itemSO.price <= 0)
         {
-            Debug.LogWarning("SHOP_Manager: Cannot sell item with zero or negative price.", this);
+            Debug.LogWarning($"{name}: Cannot sell item with zero or negative price!", this);
             return;
         }
 
-        // Update gold
         inv_Manager.gold += itemSO.price;
         inv_Manager.goldText.text = inv_Manager.gold.ToString();
-        // INV_Slots handles decreasing quantity & UpdateUI on click
     }
 
-    // Return T/F if there's space in inventory for this item
+    // Check if inventory has space for item (stackable or empty slot)
     bool HasSpace(INV_ItemSO itemSO)
     {
-        // Loop through inventory slots
-        foreach (var slot in inv_Manager.inv_Slots)
-            // same item with room
+        foreach (INV_Slots slot in inv_Manager.inv_Slots)
+        {
+            // Same item with room to stack
             if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
                 return true;
-            // empty slot
-            else if (slot.itemSO == null)
+            // Empty slot
+            if (slot.itemSO == null)
                 return true;
-        // No space found
+        }
         return false;
     }
 }

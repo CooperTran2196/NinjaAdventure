@@ -1,7 +1,3 @@
-// <summary>
-// Tracks NPCs the player has spoken to in the dialogue system.
-// </summary>
-
 using UnityEngine;
 using System.Collections.Generic;
 

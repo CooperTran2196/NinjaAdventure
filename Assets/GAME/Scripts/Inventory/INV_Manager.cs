@@ -9,15 +9,16 @@ public class INV_Manager : MonoBehaviour
 
     [Header("Central API for the Inventory system, depend on P_StatsManager")]
     [Header("References")]
-    public P_StatsManager p_statsManager;
+    P_StatsManager    p_StatsManager;
 
     [Header("MUST wire MANUALLY in Inspector")]
     public TMP_Text   goldText;
     public GameObject lootPrefab;
     public Transform  player;
 
-    public int          gold;
-    public INV_Slots[]  inv_Slots;
+    [Header("Data")]
+    public int         gold;
+    public INV_Slots[] inv_Slots;
 
     void Awake()
     {
@@ -25,9 +26,9 @@ public class INV_Manager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        p_statsManager       ??= FindFirstObjectByType<P_StatsManager>();
+        p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
-        if (!p_statsManager) Debug.LogError("INV_Manager: P_StatsManager is missing.");
+        if (!p_StatsManager) { Debug.LogError($"{name}: P_StatsManager is missing!", this); return; }
     }
 
     void OnEnable()  => INV_Loot.OnItemLooted += AddItem;
@@ -36,14 +37,14 @@ public class INV_Manager : MonoBehaviour
     // Update all slots & gold text at start
     void Start()
     {
-        foreach (var slot in inv_Slots) slot.UpdateUI();
+        foreach (INV_Slots slot in inv_Slots) slot.UpdateUI();
         UpdateGoldText();
     }
 
     // Adds item to inventory, stacking into existing slots first
     public void AddItem(INV_ItemSO itemSO, int quantity)
     {
-        // Gold is special
+        // Gold is handled specially
         if (itemSO.isGold)
         {
             gold += quantity;
@@ -52,33 +53,33 @@ public class INV_Manager : MonoBehaviour
         }
 
         // Stack into existing slots of the same item
-        foreach (var slot in inv_Slots)
+        foreach (INV_Slots slot in inv_Slots)
         {
             if (slot.type == INV_Slots.SlotType.Item && 
                 slot.itemSO == itemSO && 
                 slot.quantity < itemSO.stackSize)
             {
                 int availableSpace = itemSO.stackSize - slot.quantity;
-                int amountToAdd = Mathf.Min(availableSpace, quantity);
+                int amountToAdd    = Mathf.Min(availableSpace, quantity);
 
                 slot.quantity += amountToAdd;
-                quantity -= amountToAdd;
+                quantity      -= amountToAdd;
 
                 slot.UpdateUI();
                 if (quantity <= 0) return;
             }
         }
 
-        // Fill empty slot
-        foreach (var slot in inv_Slots)
+        // Fill empty slots with remaining quantity
+        foreach (INV_Slots slot in inv_Slots)
         {
             if (slot.type == INV_Slots.SlotType.Empty)
             {
                 int amountToAdd = Mathf.Min(itemSO.stackSize, quantity);
 
-                slot.itemSO = itemSO;
+                slot.itemSO   = itemSO;
                 slot.quantity = amountToAdd;
-                slot.type = INV_Slots.SlotType.Item;
+                slot.type     = INV_Slots.SlotType.Item;
                 slot.UpdateUI();
 
                 quantity -= amountToAdd;
@@ -86,7 +87,7 @@ public class INV_Manager : MonoBehaviour
             }
         }
 
-        // No room -> drop overflow at player
+        // Inventory full - drop overflow at player position
         if (quantity > 0) DropItem(itemSO, quantity);
     }
 
@@ -96,36 +97,37 @@ public class INV_Manager : MonoBehaviour
         goldText.text = gold.ToString();
     }
 
-    // Uses the item in the given slot
+    // Use item from slot and apply its stat effects
     public void UseItem(INV_Slots slot)
     {
         // nothing to use
         if (slot.itemSO == null || slot.itemSO.StatEffectList.Count == 0) return;
 
-        // Apply all StatEffectList from the item
-        foreach (var modifier in slot.itemSO.StatEffectList)
-            p_statsManager.ApplyModifier(modifier);
+        // Apply all stat effects from the item
+        foreach (P_StatEffect effect in slot.itemSO.StatEffectList)
+            p_StatsManager.ApplyModifier(effect);
 
-        // Consume the item
+        // Consume one item
         slot.quantity -= 1;
         if (slot.quantity <= 0) slot.itemSO = null;
         slot.UpdateUI();
     }
 
-    // Spawns loot prefab at player position with given item & quantity
+    // Spawn loot prefab at player position
     public void DropItem(INV_ItemSO itemSO, int quantity)
     {
         if (!itemSO) return;
-        var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
-        var loot = go.GetComponent<INV_Loot>();
-        loot.Initialize(itemSO, quantity); // sets sprite/name & canBePickedUp=false
+        
+        GameObject lootGO   = Instantiate(lootPrefab, player.position, Quaternion.identity);
+        INV_Loot   loot     = lootGO.GetComponent<INV_Loot>();
+        
+        loot.Initialize(itemSO, quantity);
     }
 
-    // Do we have at least 1 of this item?
+    // Check if inventory contains at least 1 of this item
     public bool HasItem(INV_ItemSO itemSO)
     {
-        // Adjust the array name if yours differs (e.g., slots, itemSlots, inventorySlots)
-        foreach (var slot in inv_Slots)
+        foreach (INV_Slots slot in inv_Slots)
         {
             if (slot.itemSO == itemSO && slot.quantity > 0)
                 return true;
@@ -133,46 +135,45 @@ public class INV_Manager : MonoBehaviour
         return false;
     }
 
-    // ========== WEAPON HANDLING METHODS ==========
-
-    // ========== WEAPON HANDLING ==========
-
+    // Equip weapon from inventory slot (swaps with currently equipped weapon)
     public void EquipWeapon(INV_Slots slot)
     {
         if (slot.weaponSO == null) return;
 
-        P_Controller playerController = player.GetComponent<P_Controller>();
-        if (!playerController) return;
+        P_Controller p_Controller = player.GetComponent<P_Controller>();
+        if (!p_Controller) return;
 
-        W_SO oldWeapon = playerController.EquipWeapon(slot.weaponSO);
+        W_SO oldWeapon = p_Controller.EquipWeapon(slot.weaponSO);
 
         slot.weaponSO = oldWeapon;
-        slot.type = INV_Slots.SlotType.Weapon;
+        slot.type     = INV_Slots.SlotType.Weapon;
         slot.UpdateUI();
     }
 
+    // Add weapon to first empty inventory slot
     public bool AddWeapon(W_SO weaponSO)
     {
-        foreach (var slot in inv_Slots)
+        foreach (INV_Slots slot in inv_Slots)
         {
             if (slot.type == INV_Slots.SlotType.Empty)
             {
                 slot.weaponSO = weaponSO;
-                slot.type = INV_Slots.SlotType.Weapon;
+                slot.type     = INV_Slots.SlotType.Weapon;
                 slot.UpdateUI();
                 return true;
             }
         }
 
-        Debug.Log("Inventory full! Cannot add weapon: " + weaponSO.id);
+        Debug.Log($"Inventory full! Cannot add weapon: {weaponSO.id}");
         return false;
     }
 
+    // Drop weapon as loot at player position
     public void DropWeapon(W_SO weaponSO)
     {
         if (!weaponSO) return;
         
-        var go = Instantiate(lootPrefab, player.position, Quaternion.identity);
-        go.GetComponent<INV_Loot>().InitializeWeapon(weaponSO);
+        GameObject lootGO = Instantiate(lootPrefab, player.position, Quaternion.identity);
+        lootGO.GetComponent<INV_Loot>().InitializeWeapon(weaponSO);
     }
 }

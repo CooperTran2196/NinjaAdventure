@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[ExecuteAlways] // lets OnEnable run in Edit Mode so the icon updates in Inspector
+[ExecuteAlways]
 public class INV_Loot : MonoBehaviour
 {
     public enum LootType { Item, Weapon }
@@ -12,11 +12,11 @@ public class INV_Loot : MonoBehaviour
     public LootType lootType = LootType.Item;
 
     [Header("References (set ONE based on lootType)")]
-    public INV_ItemSO itemSO;   // for items
-    public W_SO weaponSO;        // for weapons
+    public INV_ItemSO itemSO;
+    public W_SO       weaponSO;
 
     [Header("Data")]
-    public int  quantity = 1;    // only used for items
+    public int  quantity      = 1;
     public bool canBePickedUp = true;
 
     SpriteRenderer   sr;
@@ -24,32 +24,30 @@ public class INV_Loot : MonoBehaviour
     CircleCollider2D trigger;
 
     public static event Action<INV_ItemSO, int> OnItemLooted;
-    public static event Action<W_SO> OnWeaponLooted;  // NEW: Weapon event
+    public static event Action<W_SO>            OnWeaponLooted;
 
     void Awake()
     {
-        sr            ??= GetComponentInChildren<SpriteRenderer>();
-        anim          ??= GetComponent<Animator>();
-        trigger       ??= GetComponent<CircleCollider2D>();
+        sr      ??= GetComponentInChildren<SpriteRenderer>();
+        anim    ??= GetComponent<Animator>();
+        trigger ??= GetComponent<CircleCollider2D>();
 
-        if (!sr)      Debug.LogError("INV_Loot: SpriteRenderer is missing.");
-        if (!anim)    Debug.LogError("INV_Loot: Animator is missing.");
-        if (!trigger) Debug.LogError("INV_Loot: CircleCollider2D is missing.");
+        if (!sr)      { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
+        if (!anim)    { Debug.LogError($"{name}: Animator is missing!", this); return; }
+        if (!trigger) { Debug.LogError($"{name}: CircleCollider2D is missing!", this); return; }
     }
 
-    // Run in Edit Mode to update sprite in Inspector
     void OnEnable() => RefreshAppearance();
 
     // Called by INV_Manager when spawning overflow/right-click drops (ITEMS)
     public void Initialize(INV_ItemSO itemSO, int qty)
     {
-        this.lootType = LootType.Item;
-        this.itemSO = itemSO;
-        this.weaponSO = null;
-        quantity = qty;
+        lootType      = LootType.Item;
+        this.itemSO   = itemSO;
+        weaponSO      = null;
+        quantity      = qty;
+        
         RefreshAppearance();
-
-        // Play drop animation and start pickup delay
         anim.SetTrigger("Drop");
         StartCoroutine(EnablePickupAfterDelay(1f));
     }
@@ -57,13 +55,12 @@ public class INV_Loot : MonoBehaviour
     // Called by INV_Manager when dropping weapons
     public void InitializeWeapon(W_SO weaponSO)
     {
-        this.lootType = LootType.Weapon;
+        lootType      = LootType.Weapon;
         this.weaponSO = weaponSO;
-        this.itemSO = null;
-        quantity = 1; // weapons don't stack
+        itemSO        = null;
+        quantity      = 1; // Weapons are always quantity 1
+        
         RefreshAppearance();
-
-        // Play drop animation and start pickup delay
         anim.SetTrigger("Drop");
         StartCoroutine(EnablePickupAfterDelay(1f));
     }
@@ -73,12 +70,12 @@ public class INV_Loot : MonoBehaviour
     {
         if (lootType == LootType.Item && itemSO != null)
         {
-            sr.sprite = itemSO.image;
+            sr.sprite       = itemSO.image;
             gameObject.name = itemSO.itemName;
         }
         else if (lootType == LootType.Weapon && weaponSO != null)
         {
-            sr.sprite = weaponSO.image;
+            sr.sprite       = weaponSO.image;
             gameObject.name = weaponSO.id;
         }
     }

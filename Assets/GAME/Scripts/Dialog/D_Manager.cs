@@ -1,7 +1,3 @@
-// <summary>
-// Manages dialog flow, UI updates, and player choices.
-// </summary>
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

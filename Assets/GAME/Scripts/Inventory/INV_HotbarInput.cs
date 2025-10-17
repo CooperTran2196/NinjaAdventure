@@ -1,61 +1,52 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-/// <summary>
-/// Handles number key inputs (1-9) for inventory hotbar
-/// Attach to Player or GameManager
-/// NOTE: You need to add InventorySlot1-9 actions to P_InputActions.inputactions (UI map)
-/// For now, using direct Keyboard input as fallback
-/// </summary>
 public class INV_HotbarInput : MonoBehaviour
 {
-    private INV_Manager invManager;
+    [Header("References")]
+    INV_Manager    inv_Manager;
+    P_InputActions input;
 
     void Start()
     {
-        // Use Start instead of Awake to ensure INV_Manager.Instance is initialized
-        invManager = INV_Manager.Instance;
+        inv_Manager = INV_Manager.Instance;
 
-        if (!invManager)
-            Debug.LogError("INV_HotbarInput: INV_Manager.Instance is null! Make sure INV_Manager exists in the scene.");
+        if (!inv_Manager) { Debug.LogError($"{name}: INV_Manager.Instance is null!", this); return; }
     }
 
-    void Update()
+    void OnEnable()
     {
-        // Fallback: Direct keyboard input (will work immediately)
-        // TODO: Replace with proper Input Actions once created in Unity
-        if (Keyboard.current == null) return;
-        if (invManager == null) return; // Safety check
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) UseSlot(0);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) UseSlot(1);
-        if (Keyboard.current.digit3Key.wasPressedThisFrame) UseSlot(2);
-        if (Keyboard.current.digit4Key.wasPressedThisFrame) UseSlot(3);
-        if (Keyboard.current.digit5Key.wasPressedThisFrame) UseSlot(4);
-        if (Keyboard.current.digit6Key.wasPressedThisFrame) UseSlot(5);
-        if (Keyboard.current.digit7Key.wasPressedThisFrame) UseSlot(6);
-        if (Keyboard.current.digit8Key.wasPressedThisFrame) UseSlot(7);
-        if (Keyboard.current.digit9Key.wasPressedThisFrame) UseSlot(8);
+        input = new P_InputActions();
+        
+        // Subscribe to Inventory action (keys 1-9 return their number as float: 1.0, 2.0, etc.)
+        input.UI.Inventory.performed += ctx => UseSlot(ctx.ReadValue<float>());
+        input.UI.Enable();
     }
 
-    /// <summary>
-    /// Uses inventory slot by index (0-8 for slots 1-9)
-    /// </summary>
-    private void UseSlot(int index)
+    void OnDisable()
     {
-        if (invManager == null) return;
-        if (index >= invManager.inv_Slots.Length) return;
+        input.UI.Inventory.performed -= ctx => UseSlot(ctx.ReadValue<float>());
+        input.UI.Disable();
+    }
 
-        INV_Slots slot = invManager.inv_Slots[index];
+    void UseSlot(float slotNumber)
+    {
+        // Convert slot number (1-9) to array index (0-8)
+        int index = Mathf.RoundToInt(slotNumber) - 1;
+        
+        // Validate index is within bounds
+        if (index < 0 || index >= inv_Manager.inv_Slots.Length) return;
 
+        INV_Slots slot = inv_Manager.inv_Slots[index];
+
+        // Use item if slot contains an item
         if (slot.type == INV_Slots.SlotType.Item)
         {
-            invManager.UseItem(slot);
+            inv_Manager.UseItem(slot);
         }
+        // Equip weapon if slot contains a weapon
         else if (slot.type == INV_Slots.SlotType.Weapon)
         {
-            invManager.EquipWeapon(slot);
+            inv_Manager.EquipWeapon(slot);
         }
-        // If empty, do nothing
     }
 }
