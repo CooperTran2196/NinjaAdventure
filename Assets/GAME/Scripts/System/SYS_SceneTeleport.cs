@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class SYS_SceneTeleport : MonoBehaviour
 {
-    [Header("References")]
-    public string sceneToLoad = "The Name of the Scene to Load";
+    [Header("Teleport Settings")]
+    public string sceneToLoad        = "The Name of the Scene to Load";
     public string destinationSpawnId = "DoorA";
+    
     public static string nextSpawnId;
 
     // When the player enters the teleporter, set the next spawn ID and load the new scene

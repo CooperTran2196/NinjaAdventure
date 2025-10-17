@@ -103,6 +103,11 @@ public class P_Controller : MonoBehaviour
         idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
     }
 
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
+
     void OnDiedHandler() => SwitchState(PState.Dead);
 
     void Update()

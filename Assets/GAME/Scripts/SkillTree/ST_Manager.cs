@@ -48,13 +48,17 @@ public class ST_Manager : MonoBehaviour
     void OnDisable()
     {
         input.UI.Disable();
-        input.Dispose();
 
         p_Exp.OnSPChanged        -= HandleSPChanged;
         p_Exp.OnLevelUp          -= HandleLevelUp;
 
         ST_Slots.OnSkillUpgraded -= HandleSkillUpgraded;
         ST_Slots.OnSkillMaxed    -= HandleSkillMaxed;
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
     }
     
     // Initialize skill buttons and UI state

@@ -1,23 +1,27 @@
-# Unity Particle System Guide for Destructibles
-
-**Purpose:** This guide explains every Particle System setting we configured for the break effect in `ENV_Destructible`. Understanding these settings will help you tweak particle effects yourself.
+# Destructible Objects & Particle System Guide
+**Created:** October 17, 2025  
+**Status:** ✅ Complete  
+**System:** `ENV_Destructible.cs` + Unity Particle System
 
 ---
 
 ## 📋 Overview
 
-**What we created:** A particle burst effect that spawns 6 break pieces when a pot/crate is destroyed.
+**What we created:** Breakable pots/crates with particle burst effects that spawn 6 break pieces when destroyed.
 
-**Key behavior:**
-- Instant burst (not continuous)
+**Key Features:**
+- Health-based destruction system
+- Instant particle burst (not continuous)
+- 6 different break piece sprites (randomized)
 - Particles scatter in a cone
-- Each particle shows a different break sprite
-- Particles fade out over time
-- No gravity (top-down 2D game)
+- Smooth fade-out effect
+- Loot spawn integration
 
 ---
 
-## 🎛️ Module Settings Breakdown
+## 🎛️ Unity Particle System Settings Breakdown
+
+This guide explains every Particle System setting configured for the break effect. Use it to tweak particle effects yourself.
 
 ### **1. Main Module** (Core Settings)
 
@@ -341,9 +345,9 @@ Fast-paced game:
 
 ---
 
-## 🚀 Next Steps
+## 🚀 Creating Variants
 
-**To create variants:**
+**To create different destructible types:**
 1. Duplicate `BreakParticles` prefab
 2. Change **Sprites List** (different pieces)
 3. Adjust **Burst Count** (more/fewer pieces)

@@ -36,13 +36,16 @@ bool isDead;
 ```csharp
 void Awake()
 {
-    // 1. GetComponent (aligned ??=)
+    // 1. GetComponent ONLY for References (aligned ??=)
     c_Health ??= GetComponent<C_Health>();
     sr       ??= GetComponent<SpriteRenderer>();
     
-    // 2. Validate required (aligned, with context + this)
+    // 2. Validate required References (aligned, with context + this)
     if (!c_Health) { Debug.LogError($"{name}: C_Health is missing!", this); return; }
     if (!sr)       { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
+    
+    // 3. Validate "MUST wire MANUALLY" (no ??= for these!)
+    if (!goldText) { Debug.LogError($"{name}: goldText is missing!", this); return; }
 }
 ```
 
@@ -72,6 +75,16 @@ Animator       anim;
 - ✅ Unity components: `sr`, `rb`, `anim`, `boxCol`, `ps`
 - ✅ ALL private (no `public`, no `[SerializeField]`)
 - ✅ Align variable names
+
+**Exception - SYS_GameManager Singleton:**
+```csharp
+[Header("References")]
+public D_Manager     d_Manager;    // Public - accessed globally via Instance
+public SHOP_Manager  shop_Manager;
+public SYS_Fader     sys_Fader;
+```
+- ✅ SYS_GameManager references are ALL public (other scripts access via `SYS_GameManager.Instance.xxx`)
+- ✅ Add inline comment if needed: `// Public - accessed by X`
 
 **Exception - UI/Critical References:**
 ```csharp
@@ -116,7 +129,7 @@ float attackTimer;
 ```csharp
 void Awake()
 {
-    // 1. GetComponent (aligned ??=)
+    // 1. GetComponent ONLY for References section (aligned ??=)
     c_Health ??= GetComponent<C_Health>();
     c_Stats  ??= GetComponent<C_Stats>();
     sr       ??= GetComponent<SpriteRenderer>();
@@ -126,19 +139,25 @@ void Awake()
     if (!c_Health) { Debug.LogError($"{name}: C_Health is missing!", this); return; }
     if (!sr)       { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
     
+    // 3. Validate "MUST wire MANUALLY in Inspector" (no ??= for these!)
+    if (!goldText)      { Debug.LogError($"{name}: goldText is missing!", this); return; }
+    if (!lootPrefab)    { Debug.LogError($"{name}: lootPrefab is missing!", this); return; }
+    if (!statContainer) { Debug.LogError($"{name}: statContainer is missing!", this); return; }
+    
     // Note: c_Stats is optional (no error if missing)
     
-    // 3. Additional setup (if needed)
+    // 4. Additional setup (if needed)
     originalColor = sr.color;
 }
 ```
 
 **Rules:**
-- ✅ All `??=` aligned at top
+- ✅ All `??=` aligned at top (ONLY for References section components)
 - ✅ All `if (!x)` checks aligned next
 - ✅ Format: `Debug.LogError($"{name}: Component is missing!", this)`
 - ✅ ALWAYS `return;` after error
 - ✅ One-liner format: `if (!x) { Debug.LogError(...); return; }`
+- ⚠️ **NEVER use `??=` for "MUST wire MANUALLY in Inspector" fields** - only validate them
 
 **Debug.LogWarning vs LogError:**
 ```csharp
@@ -173,6 +192,46 @@ void OnDisable()
 - ✅ No null checks (already validated in Awake)
 - ✅ Align `+=` and `-=` operators
 - ✅ No null checks in OnDisable if subscribed in OnEnable
+
+---
+
+## ⚠️ 3.1 P_InputActions Lifecycle Pattern (CRITICAL)
+
+**Problem:** Scene transitions can destroy objects WITHOUT calling OnDisable, causing memory leaks.
+
+**Solution:** Use `OnDestroy()` for Dispose(), not OnDisable.
+
+```csharp
+void Awake()
+{
+    input = new P_InputActions();  // Create once
+}
+
+void OnEnable()
+{
+    input.UI.Enable();  // Enable action map
+}
+
+void OnDisable()
+{
+    input.UI.Disable();  // Disable action map
+}
+
+void OnDestroy()
+{
+    input?.Dispose();  // ← ALWAYS in OnDestroy (guaranteed to be called)
+}
+```
+
+**Rules:**
+- ✅ Create `P_InputActions` in **Awake()** (once per object lifetime)
+- ✅ Enable action maps in **OnEnable()** (UI, Player, Debug)
+- ✅ Disable action maps in **OnDisable()** (matching enables)
+- ✅ **Dispose() ONLY in OnDestroy()** with null-conditional `?.`
+- ❌ NEVER create in OnEnable (creates multiple instances)
+- ❌ NEVER Dispose in OnDisable (might not be called during scene changes)
+
+---
 
 ### Optional Components - Use `?.`
 ```csharp

@@ -48,6 +48,11 @@ public class ExpUI : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
+
     // Debug: Gain XP with input
     void Update()
     {

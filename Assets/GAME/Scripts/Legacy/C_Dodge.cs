@@ -53,7 +53,15 @@ public class C_Dodge : MonoBehaviour
 
     void OnDisable()
     {
-        if (usePlayerInput) input.Player.Dodge.Disable();
+        if (usePlayerInput)
+        {
+            input.Player.Dodge.Disable();
+        }
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
     }
 
     void Update()

@@ -7,12 +7,12 @@ public class SYS_GameManager : MonoBehaviour
 
     [Header("Central game manager - handles singletons, scene, audio")]
     [Header("References")]
+    public SYS_Fader        sys_Fader;
     public D_Manager        d_Manager;
     public D_HistoryTracker d_HistoryTracker;
-    public SYS_Fader        sys_Fader;
     public SHOP_Manager     shop_Manager;
-    public AudioSource      audioSource;
     public INV_ItemInfo     inv_ItemInfo;
+    public AudioSource      audioSource;
 
     [Header("Restart Settings")]
     public string initialSceneName = "Level1";
@@ -21,7 +21,7 @@ public class SYS_GameManager : MonoBehaviour
     [Header("Audio Settings")]
     public float fadeDuration = 1.5f;
 
-    [Header("Persistent Objects")]
+    [Header("MUST wire MANUALLY in Inspector")]
     public GameObject[] persistentObjects;
 
     Coroutine currentFade;
@@ -46,18 +46,20 @@ public class SYS_GameManager : MonoBehaviour
         inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
         audioSource      ??= GetComponent<AudioSource>();
 
-        if (!d_Manager)        Debug.LogWarning($"{name}: Dialogue Manager is missing!", this);
-        if (!d_HistoryTracker) Debug.LogWarning($"{name}: Dialogue History Tracker is missing!", this);
-        if (!shop_Manager)     Debug.LogWarning($"{name}: Shop Manager is missing!", this);
-        if (!sys_Fader)        Debug.LogWarning($"{name}: Fader is missing!", this);
-        if (!inv_ItemInfo)     Debug.LogWarning($"{name}: ItemInfoPopup is missing!", this);
-        if (!audioSource)      Debug.LogWarning($"{name}: AudioSource is missing!", this);
-        if (!inv_ItemInfo)     Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this);
+        if (!d_Manager)        { Debug.LogWarning($"{name}: D_Manager is missing!", this); }
+        if (!d_HistoryTracker) { Debug.LogWarning($"{name}: D_HistoryTracker is missing!", this); }
+        if (!shop_Manager)     { Debug.LogWarning($"{name}: SHOP_Manager is missing!", this); }
+        if (!sys_Fader)        { Debug.LogWarning($"{name}: SYS_Fader is missing!", this); }
+        if (!inv_ItemInfo)     { Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this); }
+        if (!audioSource)      { Debug.LogWarning($"{name}: AudioSource is missing!", this); }
         
-        inv_ItemInfo.Hide();
+        inv_ItemInfo?.Hide();
 
-        audioSource.loop = true;
-        audioSource.playOnAwake = false;
+        if (audioSource)
+        {
+            audioSource.loop = true;
+            audioSource.playOnAwake = false;
+        }
     }
 
     // Restart the game by clearing all DDOL objects and loading the initial scene

@@ -62,6 +62,11 @@ public class C_Health : MonoBehaviour
         OnDied    -= fxDiedHandler;
     }
 
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
+
     void Update()
     {
         // Debug keys

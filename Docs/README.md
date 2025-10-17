@@ -1,12 +1,13 @@
 # NinjaAdventure - Documentation
-**Last Updated:** October 15, 2025  
-**Current Week:** Week 9 (Oct 14-18, 2025)
+**Last Updated:** October 17, 2025  
+**Current Week:** Week 10 (Oct 14-18, 2025)
 
 ---
 
 ## 📋 Quick Navigation
 
-- **[Week 9 - All Completed Systems](Week_9_Oct14-18/README.md)** ⭐ **START HERE**
+- **[Week 10 - Current Work](Week_10_Oct14-18/README.md)** 🚧 **IN PROGRESS**
+- **[Week 9 - All Completed Systems](Week_9_Oct14-18/README.md)** ⭐ **COMPLETE**
 - **[Current Work in Progress](#-work-in-progress)** 🚧
 - **[TODO - Future Features](#-todo-incomplete-features)** 🚧
 - **[Balance References](#-balance-references)** 📊
@@ -15,19 +16,35 @@
 
 ## 🚧 Work in Progress
 
-**All Week 9 work complete!** No active WIP items.
+**Current Week:** Week 10 (Oct 14-18, 2025)
 
-**Recent Completions:**
-- ✅ Item Info Popup system (hover tooltips)
-- ✅ Fixed ExpUI, ManaUI, HealthUI null reference errors
-- ✅ Added hover delay system (1s) for inventory tooltips
-- ✅ Removed weaponNameText from WeaponUI (cleaner display)
-- ✅ Added aspect ratio preservation for weapons in inventory
+**Recently Completed:**
+- ✅ Destructible objects with particle effects (Week 10)
+
+**Active Work:**
+- 🚧 More Week 10 features coming...
+
+**Previous Completions:**
+- ✅ Week 9: All 10 combat & inventory systems complete!
+  - Item Info Popup system (hover tooltips)
+  - Fixed ExpUI, ManaUI, HealthUI null reference errors
+  - Added hover delay system (1s) for inventory tooltips
+  - Removed weaponNameText from WeaponUI (cleaner display)
+  - Added aspect ratio preservation for weapons in inventory
 
 ---
 
-## ✅ What's Complete (Week 9)
+## ✅ What's Complete
 
+### **Week 10 (Oct 14-18, 2025)** - Environment & Polish
+**Location:** `Week_10_Oct14-18/` folder
+
+**Systems Completed:**
+1. Destructible Objects & Particle System
+
+👉 **[Read Week 10 README](Week_10_Oct14-18/README.md)** for details
+
+### **Week 9 (Oct 14-18, 2025)** - Combat & Inventory
 **Location:** `Week_9_Oct14-18/` folder
 
 **10 Production-Ready Systems:**
@@ -85,9 +102,11 @@
 ```
 Docs/
 ├── README.md                           ← You are here
-├── Week_9_Oct14-18/                    ✅ All completed work (10 systems)
+├── Week_10_Oct14-18/                   🚧 Current work (environment systems)
+├── Week_9_Oct14-18/                    ✅ Complete (10 combat/inventory systems)
 │
 ├── HIERARCHY.md                        📊 Complete Unity hierarchy (Level1 scene)
+├── CODING_STYLE_GUIDE.md               📊 Code conventions & P_InputActions patterns
 │
 ├── BALANCE_QUICK_REF.md                📊 Balance references
 ├── COMPLETE_BALANCE_v2.md              📊 (4 files total)
@@ -132,20 +151,20 @@ Docs/
 ## 🚀 Quick Start
 
 **New developer?**
-1. Read [Week 9 README](Week_9_Oct14-18/README.md) for production systems
-2. Check [Work in Progress](#-work-in-progress) for current tasks
-3. Check files 1-9 in Week 9 folder (in order)
+1. Read [Week 10 README](Week_10_Oct14-18/README.md) for current work
+2. Read [Week 9 README](Week_9_Oct14-18/README.md) for production systems
+3. Check [Work in Progress](#-work-in-progress) for current tasks
 4. Use balance refs for stats
 
 **Need to...**
-- See current work? → [Work in Progress](#-work-in-progress)
+- See current work? → [Week 10](Week_10_Oct14-18/README.md)
+- Learn production systems? → [Week 9](Week_9_Oct14-18/README.md)
 - Understand hierarchy? → [HIERARCHY.md](HIERARCHY.md)
-- Learn systems? → [Week 9](Week_9_Oct14-18/README.md)
-- See what's done? → Check `Week_9_Oct14-18/` folder
+- Check code style? → [CODING_STYLE_GUIDE.md](CODING_STYLE_GUIDE.md)
 - Find TODOs? → [ULTIMATE_SKILLS_SYSTEM.md](ULTIMATE_SKILLS_SYSTEM.md)
 - Check stats? → [Balance refs above](#-balance-references)
 
 ---
 
-**Status:** ✅ Week 9 COMPLETE (10 systems) | 🗂️ Hierarchy Documented (Level1)  
-**Last Updated:** October 15, 2025
+**Status:** 🚧 Week 10 IN PROGRESS | ✅ Week 9 COMPLETE (10 systems) | 🗂️ Hierarchy Documented  
+**Last Updated:** October 17, 2025

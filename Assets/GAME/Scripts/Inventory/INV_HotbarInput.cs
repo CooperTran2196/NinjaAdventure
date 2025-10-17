@@ -6,6 +6,11 @@ public class INV_HotbarInput : MonoBehaviour
     INV_Manager    inv_Manager;
     P_InputActions input;
 
+    void Awake()
+    {
+        input = new P_InputActions();
+    }
+
     void Start()
     {
         inv_Manager = INV_Manager.Instance;
@@ -15,8 +20,6 @@ public class INV_HotbarInput : MonoBehaviour
 
     void OnEnable()
     {
-        input = new P_InputActions();
-        
         // Subscribe to Inventory action (keys 1-9 return their number as float: 1.0, 2.0, etc.)
         input.UI.Inventory.performed += ctx => UseSlot(ctx.ReadValue<float>());
         input.UI.Enable();
@@ -26,6 +29,11 @@ public class INV_HotbarInput : MonoBehaviour
     {
         input.UI.Inventory.performed -= ctx => UseSlot(ctx.ReadValue<float>());
         input.UI.Disable();
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
     }
 
     void UseSlot(float slotNumber)

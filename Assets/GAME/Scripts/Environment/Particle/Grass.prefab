@@ -305,9 +305,9 @@ GameObject:
   - component: {fileID: 2728519305125009791}
   - component: {fileID: 4482771782995362863}
   m_Layer: 0
-  m_Name: ENV_BreakParticles
+  m_Name: BreakParticles
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: a7aabea3ea55645d19878524e9df9a15, type: 3}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
