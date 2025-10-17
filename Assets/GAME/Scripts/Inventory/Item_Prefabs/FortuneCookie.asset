@@ -12,15 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f1fad2b746b1c4f863d4127142a710, type: 3}
   m_Name: FortuneCookie
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
-  itemName: FortuneCookie
   id: fortune_cookie
+  itemName: FortuneCookie
   description: Crunchy treat with a cryptic tip inside.
   image: {fileID: 21300000, guid: cf4fa894aa1eba046a58478a362f8275, type: 3}
   stackSize: 3
   price: 1
   isGold: 0
+  unlocksSkill: 0
+  skillIDToUnlock: 
   StatEffectList:
-  - statName: 10
+  - statName: 15
+    Value: 8
+    Duration: 0
+    IsOverTime: 0
+  - statName: 16
     Value: 8
     Duration: 0
     IsOverTime: 0

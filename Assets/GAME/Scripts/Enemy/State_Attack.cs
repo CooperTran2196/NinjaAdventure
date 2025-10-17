@@ -8,23 +8,31 @@ public class State_Attack : MonoBehaviour
     public Vector2 attackDir;            // Will calculate this internally
 
     [Header("Attack Timings")]
-    float attackDuration = 0.45f;
+    float attackAnimDuration = 0.45f; // How long the attack animation actually is
     float hitDelay       = 0.15f;
+
+    // Runtime - randomly chosen each attack
+    int randomComboAttack; // 0=Slash Down, 1=Slash Up, 2=Thrust
 
     // cache
     Animator     anim;
     E_Controller controller;
+    State_Chase  chaseState;
 
     void Awake()
     {
         anim            = GetComponentInChildren<Animator>();
         controller      = GetComponent<E_Controller>();
         activeWeapon    = GetComponentInChildren<W_Base>();
+        chaseState      = GetComponent<State_Chase>();
     }
 
     void OnEnable()
     {
         anim.SetBool("isAttacking", true); // animator enter
+
+        // Randomly choose which combo attack to use (0-2)
+        randomComboAttack = Random.Range(0, 3); // 0=Slash Down, 1=Slash Up, 2=Thrust
 
         // Calculate aim direction towards the target provided by the controller
         Transform target = controller.GetTarget();
@@ -46,6 +54,15 @@ public class State_Attack : MonoBehaviour
         StopAllCoroutines(); // If enemy dies -> stop attack immediately
         anim.SetBool("isAttacking", false); // Exit Attack animation by bool
         controller.SetAttacking(false); // Normal finish
+        
+        // Restore animation speed in case it was frozen
+        anim.speed = 1f;
+
+        // Restore chase state if still has target
+        if (chaseState != null && controller.GetTarget() != null && !chaseState.enabled)
+        {
+            chaseState.enabled = true;
+        }
     }
 
     void Update()
@@ -57,18 +74,68 @@ public class State_Attack : MonoBehaviour
         anim.SetFloat("idleY", attackDir.y);
     }
 
+    // Attack with weapon and direction (called by controller via OnEnable)
+    public void Attack(W_Base weapon, Vector2 dir)
+    {
+        activeWeapon = weapon;
+        attackDir = dir;
+    }
+
+    // Public getter for chase state to access current weapon (for movement penalty)
+    public W_Base GetActiveWeapon() => activeWeapon;
+    
+    // Public getter for chase state to access current combo index (for movement penalty)
+    public int GetComboIndex() => randomComboAttack;
+
+    // Handles animation timing + weapon showTime lockout
     IEnumerator AttackRoutine()
     {
         // Set animator direction
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
 
+        // Get combo-specific showTime based on randomly chosen attack
+        float weaponShowTime = (activeWeapon && activeWeapon.weaponData) 
+            ? activeWeapon.weaponData.comboShowTimes[randomComboAttack]
+            : attackAnimDuration;
+
+        // Phase 1: Wait for hit timing
         yield return new WaitForSeconds(hitDelay);
-        activeWeapon.Attack(attackDir);
-        yield return new WaitForSeconds(attackDuration - hitDelay);
+        
+        // Phase 2: Execute weapon attack with random combo index
+        // For W_Melee, this will trigger the specific combo attack pattern
+        if (activeWeapon is W_Melee meleeWeapon)
+        {
+            meleeWeapon.AttackAsEnemy(attackDir, randomComboAttack);
+        }
+        else
+        {
+            // Other weapon types use standard attack
+            activeWeapon.Attack(attackDir);
+        }
 
-        controller.SetAttacking(false); // Normal finish
+        // Phase 3: Wait for animation to complete
+        float animRemaining = attackAnimDuration - hitDelay;
+        yield return new WaitForSeconds(animRemaining);
+
+        // Phase 4: If showTime > animation duration, freeze animation and wait
+        if (weaponShowTime > attackAnimDuration)
+        {
+            // Freeze animation on final frame
+            anim.speed = 0f;
+
+            // Calculate lockout period
+            float lockoutDuration = weaponShowTime - attackAnimDuration;
+
+            // Wait for lockout to complete
+            yield return new WaitForSeconds(lockoutDuration);
+
+            // Restore animation speed
+            anim.speed = 1f;
+        }
+
+        // Phase 5: Attack complete - signal controller and disable this state
+        controller.SetAttacking(false);
+        enabled = false; // Triggers OnDisable() → cleanup
     }
-
-
 }

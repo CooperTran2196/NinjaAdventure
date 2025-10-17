@@ -58,6 +58,11 @@ public class State_Talk : MonoBehaviour
         facingDir = Vector2.zero;           // clear after use
     }
 
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
+
     void Update()
     {
         // NPCs don’t move while talking

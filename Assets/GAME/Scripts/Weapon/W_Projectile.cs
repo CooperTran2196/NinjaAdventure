@@ -79,7 +79,7 @@ public class W_Projectile : MonoBehaviour
         // No more pierce: stick or destroy
         if (weaponData.stickOnHit > 0f)
         {
-            StartCoroutine(hit(targetCollider, weaponData.stickOnHit));
+            StartCoroutine(FadeAndDestroy(targetCollider, weaponData.stickOnHit));
         }
         else
         {
@@ -87,7 +87,7 @@ public class W_Projectile : MonoBehaviour
         }
     }
 
-    IEnumerator hit(Collider2D targetCollider, float fadeDuration)
+    IEnumerator FadeAndDestroy(Collider2D targetCollider, float fadeDuration)
     {
         // Compute a precise surface point on the hit collider
         var dist = col.Distance(targetCollider);          // distance info between our collider and hit collider

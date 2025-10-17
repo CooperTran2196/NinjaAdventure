@@ -48,13 +48,17 @@ public class ST_Manager : MonoBehaviour
     void OnDisable()
     {
         input.UI.Disable();
-        input.Dispose();
 
         p_Exp.OnSPChanged        -= HandleSPChanged;
         p_Exp.OnLevelUp          -= HandleLevelUp;
 
         ST_Slots.OnSkillUpgraded -= HandleSkillUpgraded;
         ST_Slots.OnSkillMaxed    -= HandleSkillMaxed;
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
     }
     
     // Initialize skill buttons and UI state
@@ -87,6 +91,12 @@ public class ST_Manager : MonoBehaviour
     {
         panelToggle = open;
 
+        // Play appropriate sound
+        if (open)
+            SYS_GameManager.Instance.sys_SoundManager.PlayOpenSkillTree();
+        else
+            SYS_GameManager.Instance.sys_SoundManager.PlayClosePanel();
+
         Time.timeScale              = open ? 0f : 1f;
         skillsCanvas.alpha          = open ? 1f : 0f;
         skillsCanvas.interactable   = open;
@@ -96,6 +106,9 @@ public class ST_Manager : MonoBehaviour
     // Called when a skill button is clicked
     void TryToUpgrade(ST_Slots slot)
     {
+        // Play button click sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayButtonClick();
+        
         // ST_Manager should check these first
         if (!slot.isUnlocked) return;
         if (slot.currentLevel >= slot.st_skillSO.maxLevel) return;

@@ -7,6 +7,7 @@ public class P_State_Movement : MonoBehaviour
     Animator     anim;
     C_Stats      c_Stats;
     P_Controller controller;
+    P_State_Attack attackState;
 
     // Runtime
     Vector2      moveAxis;
@@ -16,11 +17,16 @@ public class P_State_Movement : MonoBehaviour
         anim        = GetComponent<Animator>();
         c_Stats     = GetComponent<C_Stats>();
         controller  = GetComponent<P_Controller>();
+        attackState = GetComponent<P_State_Attack>();
     }
 
     void OnEnable()
     {
-        anim.SetBool("isMoving", true);
+        // Only set isMoving if not attacking (attack animation takes priority)
+        if (controller.currentState != P_Controller.PState.Attack)
+        {
+            anim.SetBool("isMoving", true);
+        }
     }
 
     void OnDisable()
@@ -33,10 +39,28 @@ public class P_State_Movement : MonoBehaviour
 
     void Update()
     {
-        // Calculate and apply movement velocity
-        controller.SetDesiredVelocity(moveAxis * c_Stats.MS);
+        // Calculate base movement velocity
+        float speed = c_Stats.MS;
+        
+        // Apply attack movement penalty if attacking (combo-based)
+        if (controller.currentState == P_Controller.PState.Attack)
+        {
+            // Get combo-specific movement penalty
+            float comboPenalty = attackState.GetCurrentMovePenalty();
+            speed *= comboPenalty;
+            
+            // Turn off isMoving animation while attacking (attack animation has priority)
+            anim.SetBool("isMoving", false);
+        }
+        else
+        {
+            // Normal movement - show movement animation
+            anim.SetBool("isMoving", true);
+        }
+        
+        controller.SetDesiredVelocity(moveAxis * speed);
 
-        // Set movement animation
+        // Set movement animation parameters (always update for directional info)
         anim.SetFloat("moveX", moveAxis.x);
         anim.SetFloat("moveY", moveAxis.y);
     }

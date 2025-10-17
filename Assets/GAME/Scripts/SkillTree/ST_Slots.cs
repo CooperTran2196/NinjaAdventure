@@ -56,6 +56,10 @@ public class ST_Slots : MonoBehaviour
 
         // Upgrade and fire events
         currentLevel++;
+        
+        // Play skill upgrade sound
+        SYS_GameManager.Instance.sys_SoundManager.PlaySkillUpgrade();
+        
         OnSkillUpgraded?.Invoke(this);
         if (currentLevel >= st_skillSO.maxLevel) OnSkillMaxed?.Invoke(this);
 

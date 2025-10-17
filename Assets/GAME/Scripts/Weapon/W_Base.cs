@@ -28,82 +28,129 @@ public abstract class W_Base : MonoBehaviour
     [SerializeField] bool debugDrawHitbox = false;
     [SerializeField] Color debugHitboxColor = new Color(1f, 0.4f, 0.1f, 0.9f); // orange
 
+    // Track original parent for anchoring during attacks
+    Transform originalParent;
+
     void Awake()
     {
-        // 1/ Cache weapon components
+        // Cache components
         sprite ??= GetComponent<SpriteRenderer>();
         hitbox ??= GetComponent<BoxCollider2D>();
+
+        originalParent = transform.parent;
 
         if (!sprite) Debug.LogError($"{name}: SpriteRenderer is missing in W_Base");
         if (!hitbox) Debug.LogError($"{name}: BoxCollider2D is missing in W_Base");
 
-        // 2/ Collider mode + default visibility
-        hitbox.isTrigger = true;     // trigger-based hit detection
-        sprite.enabled   = false;      // show only during attack window
+        // Collider setup
+        hitbox.isTrigger = true;
+        sprite.enabled   = false;
         hitbox.enabled   = false;
 
-        // 3/ Owner + deps
+        // Owner references
         owner               = transform.root;
         ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
         c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
 
-        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base");
-        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base");
-        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base");
-        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base");
+        if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base",this);
+        if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base",this);
+        if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base",this);
+        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base", this);
 
-        // 4/ Visual + hitbox sizing
+        // Visual + hitbox auto-sizing
         if (weaponData && sprite) sprite.sprite = weaponData.sprite;
         if (autoSizeFromSprite && sprite && sprite.sprite)
         {
             hitbox.size = sprite.sprite.bounds.size;
-            hitbox.offset = Vector2.zero;
+            
+            // Shift hitbox UP to cover blade (sprite pivot at bottom)
+            hitbox.offset = new Vector2(0f, hitbox.size.y * 0.5f);
         }
     }
 
-    // Get position around owner at offsetRadius along attackDir
+    // Get position at offsetRadius along attackDir (LOCAL space)
     protected Vector3 GetPolarPosition(Vector2 attackDir) =>
-        owner.position + (Vector3)(attackDir * weaponData.offsetRadius);
+        (Vector3)(attackDir * weaponData.offsetRadius);
 
-    // Get angle in degrees from up/down baseline + bias
+    // Get rotation angle from attackDir (UP=0°, sprite points UP, pivot at BOTTOM)
     protected float GetPolarAngle(Vector2 attackDir)
     {
-        // Angle from up/down baseline + bias
-        Vector2 baseline = weaponData.pointsUp ? Vector2.up : Vector2.down;
-        // Get the signed angle between the baseline and the attack direction
-        return Vector2.SignedAngle(baseline, attackDir) + weaponData.angleBiasDeg;
+        return Vector2.SignedAngle(Vector2.up, attackDir);
     }
 
-    // Position/rotate + show sprite, optionally enable hitbox
-    protected void BeginVisual(Vector3 pos, float angle, bool enableHitbox)
+    // Show weapon at position/angle, enable hitbox
+    protected void BeginVisual(Vector3 localPos, float angle, bool enableHitbox)
     {
-        transform.position = pos;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        transform.SetParent(owner, false);  // Parent to owner for auto-follow
+        
+        transform.localPosition = localPos;
+        transform.localRotation = Quaternion.Euler(0, 0, angle);
+        
         sprite.enabled = true;
         hitbox.enabled = enableHitbox;
     }
 
-    // Move forward/back along dir over showTime (no callback)
+    // Hide weapon + restore parent
+    protected void EndVisual()
+    {
+        sprite.enabled = false;
+        hitbox.enabled = false;
+        transform.SetParent(originalParent, true);
+    }
+
+    // Thrust forward/back along dir over showTime (LINEAR motion)
     protected IEnumerator ThrustOverTime(Vector2 dir, float showTime, float thrustDist)
     {
         float t = 0f;
-        Vector3 start = transform.position - (Vector3)(dir * (thrustDist * 0.5f));
-        Vector3 end = transform.position + (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 start = transform.localPosition - (Vector3)(dir * (thrustDist * 0.5f));
+        Vector3 end = transform.localPosition + (Vector3)(dir * (thrustDist * 0.5f));
 
         while (t < showTime)
         {
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / showTime);
-            transform.position = Vector3.Lerp(start, end, k);
+            transform.localPosition = Vector3.Lerp(start, end, k);
+            yield return null;
+        }
+    }
+
+    // Sweep weapon in arc from startAngle to endAngle (CIRCULAR motion)
+    // Weapon rotates like radar arm: handle orbits at offsetRadius, blade extends outward
+    // REQUIRES: sprite points UP, pivot at BOTTOM
+    protected IEnumerator ArcSlashOverTime(Vector2 attackDir, float startAngleDeg, float endAngleDeg, float duration)
+    {
+        float t = 0f;
+        float radius = weaponData.offsetRadius;
+        
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            
+            // Lerp angle from start to end
+            float currentAngleDeg = Mathf.Lerp(startAngleDeg, endAngleDeg, k);
+            float currentAngleRad = currentAngleDeg * Mathf.Deg2Rad;
+            
+            // Polar to Cartesian (UP=0°): x=-sin(θ)*r, y=cos(θ)*r (negated X fixes Unity coords)
+            Vector3 circularPosition = new Vector3(
+                -Mathf.Sin(currentAngleRad) * radius,
+                Mathf.Cos(currentAngleRad) * radius,
+                0f
+            );
+            
+            transform.localPosition = circularPosition;  // Sets initial position on first frame
+            transform.localRotation = Quaternion.Euler(0, 0, currentAngleDeg);
+            
             yield return null;
         }
     }
     
-    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
+    // Instance wrapper → calls static version
     protected (C_Health target, GameObject root) TryGetTarget(Collider2D targetCollider)
         => TryGetTarget(owner, targetMask, targetCollider);
 
-    // STATIC versions for W_Projectile
+    // Static version for projectiles
+    // Returns valid target C_Health or null (filters layer, owner, weapons, dead entities)
     public static (C_Health target, GameObject root)
                 TryGetTarget(Transform owner, LayerMask targetMask, Collider2D targetCollider)
     {
@@ -111,40 +158,45 @@ public abstract class W_Base : MonoBehaviour
         if ((targetMask.value & (1 << targetCollider.gameObject.layer)) == 0)
             return (null, null);
 
-        // Ignore owner
+        // Ignore owner + weapon colliders
         if (targetCollider.transform == owner || targetCollider.transform.IsChildOf(owner))
             return (null, null);
 
-        // Ignore weapon–weapon contacts
         if (targetCollider.GetComponentInParent<W_Base>() != null)
             return (null, null);
 
-        // Find target health on targetCollider's root
+        // Find target health on root
         var target = targetCollider.GetComponentInParent<C_Health>();
         if (target == null || !target.IsAlive)
             return (null, null);
 
-        // Success -> return C_Health and GameObject
         return (target, target.gameObject);
     }
 
-    // INSTANCE convenience wrappers for from W_Melee / W_Ranged
-    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider)
-                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this);
+    // Instance wrapper → calls static version
+    protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider, int comboIndex = 0)
+                => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this, comboIndex);
 
-    // Apply damage + hit effects
+    // Apply damage + combo effects (damage/stun/knockback scale with comboIndex)
     public static void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth,
-                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon)
+                                        Vector2 dir, Collider2D targetCollider, MonoBehaviour weapon, int comboIndex = 0)
     {
         int attackerAD = attackerStats.AD, attackerAP = attackerStats.AP;
-        int weaponAD = weaponData.AD, weaponAP = weaponData.AP;
+        
+        // Scale weapon damage by combo multiplier
+        int baseWeaponAD = weaponData.AD;
+        int baseWeaponAP = weaponData.AP;
+        
+        float damageMultiplier = weaponData.comboDamageMultipliers[comboIndex];
+        int weaponAD = Mathf.RoundToInt(baseWeaponAD * damageMultiplier);
+        int weaponAP = Mathf.RoundToInt(baseWeaponAP * damageMultiplier);
+        
         float attackerArmorPen = attackerStats.armorPen;
         float attackerMagicPen = attackerStats.magicPen;
 
         int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP, attackerArmorPen, attackerMagicPen);
 
-        // LIFESTEAL LOGIC
-        // If damage was dealt and the attacker has lifesteal, heal the attacker.
+        // Lifesteal: heal attacker based on damage dealt
         if (dealtDamage > 0 && attackerStats.lifesteal > 0)
         {
             var attackerHealth = attackerStats.GetComponent<C_Health>();
@@ -158,10 +210,10 @@ public abstract class W_Base : MonoBehaviour
             }
         }
 
-        // Hit effects
-        if (weaponData.knockbackForce > 0f)
+        // Knockback (only thrust if onlyThrustKnocksBack=true)
+        bool shouldKnockback = !weaponData.onlyThrustKnocksBack || comboIndex == 2;
+        if (shouldKnockback && weaponData.knockbackForce > 0f)
         {
-            // NEW system first: direct call into controllers
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
@@ -175,38 +227,31 @@ public abstract class W_Base : MonoBehaviour
             }
             else
             {
-                // OLD system fallback (old enemy/rigidbody)
-                W_Knockback.PushTarget(targetCollider.gameObject, dir, weaponData.knockbackForce);
+                // Fallback for NPCs without controller
+                var rb = targetCollider.GetComponentInParent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.AddForce(dir * weaponData.knockbackForce, ForceMode2D.Impulse);
+                }
             }
         }
 
-        if (weaponData.stunTime > 0f)
+        // Stun (duration from combo-specific array, with bonus: 1 = 1% increase)
+        float baseStunTime = weaponData.comboStunTimes[comboIndex];
+        float finalStunTime = baseStunTime * (1f + attackerStats.stunTimeBonus / 100f);
+        
+        if (finalStunTime > 0f)
         {
-            // NEW system first: stun handled inside controller (single coroutine)
             var ec = targetCollider.GetComponentInParent<E_Controller>();
             var pc = targetCollider.GetComponentInParent<P_Controller>();
             
-            if (ec)
+            if (ec != null)
             {
-                ec.StartCoroutine(ec.StunFor(weaponData.stunTime));
+                ec.StartCoroutine(ec.StunFor(finalStunTime));
             }
-            else if (pc)
+            else if (pc != null)
             {
-                pc.StartCoroutine(pc.StunFor(weaponData.stunTime));
-            }
-            else
-            {
-                // OLD system fallbacks
-                var pm = targetCollider.GetComponentInParent<P_Movement>();
-                if (pm)
-                {
-                    weapon.StartCoroutine(W_Stun.Apply(pm, weaponData.stunTime));
-                }
-                else
-                {
-                    var em = targetCollider.GetComponentInParent<E_Movement>();
-                    if (em) weapon.StartCoroutine(W_Stun.Apply(em, weaponData.stunTime));
-                }
+                pc.StartCoroutine(pc.StunFor(finalStunTime));
             }
         }
     }

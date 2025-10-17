@@ -9,16 +9,15 @@ public class E_HealthBarSlider : MonoBehaviour
 {
     [Header("References")]
     CanvasGroup cg;
-
-    public C_Health e_Health; // Health in parent
-    public Slider   slider;   // slider in child
+    C_Health    e_Health;
+    C_Stats     e_Stats;
+    Slider      slider;
 
     [Header("World Positioning")]
     public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
 
     [Header("Visibility")]
-    public float visibleTime = 2f;   // auto-hide delay
-    public bool  startHidden = true; // start invisible until first event
+    public float visibleTime = 2f;
 
     float hideTimer;
 
@@ -26,18 +25,20 @@ public class E_HealthBarSlider : MonoBehaviour
     {
         cg       ??= GetComponent<CanvasGroup>();
         e_Health ??= GetComponentInParent<C_Health>();
+        e_Stats  ??= GetComponentInParent<C_Stats>();
+        slider   ??= GetComponentInChildren<Slider>();
 
-        if (!e_Health) Debug.LogError($"{name}: C_Health is missing in E_HealthBarSlider");
-        if (!slider)   Debug.LogError($"{name}: Slider is missing in E_HealthBarSlider");
+        if (!e_Health) { Debug.LogError($"{name}: C_Health is missing!", this); return; }
+        if (!e_Stats)  { Debug.LogError($"{name}: C_Stats is missing!", this); return; }
+        if (!slider)   { Debug.LogError($"{name}: Slider is missing!", this); return; }
     }
 
     void OnEnable()
     {
-        var s           = e_Health.c_Stats;      // current/max HP live here
-        slider.maxValue = s.maxHP;     // make slider track the true max
-        slider.value    = s.currentHP; // initialize to current
+        slider.maxValue = e_Stats.maxHP;
+        slider.value    = e_Stats.currentHP;
 
-        if (startHidden) cg.alpha = 0f;
+        cg.alpha = 0f;
 
         e_Health.OnDamaged += OnDamaged;
         e_Health.OnHealed  += OnHealed;
@@ -68,13 +69,13 @@ public class E_HealthBarSlider : MonoBehaviour
     // Event handlers
     void OnDamaged(int amount)
     {
-        slider.value = e_Health.c_Stats.currentHP;
+        slider.value = e_Stats.currentHP;
         Show();
     }
 
     void OnHealed(int amount)
     {
-        slider.value = e_Health.c_Stats.currentHP;
+        slider.value = e_Stats.currentHP;
         Show();
     }
 

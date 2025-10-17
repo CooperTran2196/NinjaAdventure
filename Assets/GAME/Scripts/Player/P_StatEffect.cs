@@ -9,6 +9,7 @@ public enum StatName
     AbilityPower,
     MoveSpeed,
     MaxHealth,
+    MaxMana,
     Armor,
     MagicResist,
     ArmorPen,
@@ -18,14 +19,23 @@ public enum StatName
     // Special Stats
     Lifesteal,
 
+    // Weapon Bonus Stats
+    SlashArcBonus,       // Additive bonus degrees to slash arc (1 = +1°)
+    MovePenaltyReduction, // Percentage reduction of movement penalties (1 = 1% less penalty)
+    StunTimeBonus,       // Percentage increase to stun times (1 = 1% more stun)
+    ThrustDistanceBonus, // Percentage increase to thrust distance (1 = 1% more distance)
+
     // Consumable Stats
     Heal,
+    Mana, // Restore mana (like Heal for HP)
 }
 
 // Core definition for any change to a stat
 [Serializable]
 public class P_StatEffect
 {
+    [Header("Flat: AD, AP, MS, MaxHP, MaxMP, AR, MR, KR, SlashArc, Heal, Mana")]
+    [Header("Percentage 1=1%: Lifesteal, ArmorPen, MagicPen, MovePenalty, StunTime, ThrustDistance")]
     public StatName statName;
     public float Value;
 

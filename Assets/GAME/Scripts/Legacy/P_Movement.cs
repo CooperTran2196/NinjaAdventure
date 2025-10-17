@@ -49,7 +49,16 @@ public class P_Movement : MonoBehaviour
     }
 
     void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    
+    void OnDisable()
+    {
+        input.Disable();
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
 
     void Update()
     {

@@ -1,7 +1,3 @@
-// <summary>
-// Used to define a location in the dialogue system.
-// </summary>
-
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LocationSO", menuName = "Dialogue/LocationSO")]

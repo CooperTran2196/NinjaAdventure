@@ -1,24 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
 public class SYS_GameManager : MonoBehaviour
 {
     public static SYS_GameManager Instance;
 
+    [Header("Central game manager - handles singletons, scene, audio")]
     [Header("References")]
-    public D_Manager         d_Manager;
-    public D_HistoryTracker  d_HistoryTracker;
-    public SYS_Fader         sys_Fader;
-    public SHOP_Manager      shop_Manager;
+    public SYS_Fader        sys_Fader;
+    public SYS_SoundManager sys_SoundManager;
+    public D_Manager        d_Manager;
+    public D_HistoryTracker d_HistoryTracker;
+    public SHOP_Manager     shop_Manager;
+    public INV_ItemInfo     inv_ItemInfo;
+    public AudioSource      audioSource;
 
-    [Header("Restart")]
-    [SerializeField] private string initialSceneName = "Level1";
-    [SerializeField] private string initialSpawnId = "Start";
+    [Header("Restart Settings")]
+    public string initialSceneName = "Level1";
+    public string initialSpawnId   = "Start";
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
+    [Header("Audio Settings")]
+    public float fadeDuration = 1.5f;
 
-    [Header("Persistent Objects")]
-    public GameObject[] persistentObjects; // Objects to persist across scenes
+    [Header("MUST wire MANUALLY in Inspector")]
+    public GameObject[] persistentObjects;
+
+    Coroutine currentFade;
 
     void Awake()
     {
@@ -33,23 +40,32 @@ public class SYS_GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         MarkPersistentObjects();
 
-        d_Manager ??= FindFirstObjectByType<D_Manager>();
+        d_Manager        ??= FindFirstObjectByType<D_Manager>();
         d_HistoryTracker ??= FindFirstObjectByType<D_HistoryTracker>();
-        shop_Manager ??= FindFirstObjectByType<SHOP_Manager>();
-        sys_Fader    ??= FindFirstObjectByType<SYS_Fader>();
-        audioSource ??= GetComponent<AudioSource>();
+        shop_Manager     ??= FindFirstObjectByType<SHOP_Manager>();
+        sys_Fader        ??= FindFirstObjectByType<SYS_Fader>();
+        sys_SoundManager ??= FindFirstObjectByType<SYS_SoundManager>();
+        inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
+        audioSource      ??= GetComponent<AudioSource>();
 
-        if (!d_Manager)         Debug.LogWarning("SYS_GameManager: Dialogue Manager is missing.");
-        if (!d_HistoryTracker)  Debug.LogWarning("SYS_GameManager: Dialogue History Tracker is missing.");
-        if (!shop_Manager)      Debug.LogWarning("SYS_GameManager: Shop Manager is missing.");
-        if (!sys_Fader)         Debug.LogWarning("SYS_GameManager: Fader is missing.");
-        if (!audioSource)       Debug.LogWarning("SYS_GameManager: AudioSource is missing.");
+        if (!d_Manager)        { Debug.LogWarning($"{name}: D_Manager is missing!", this); }
+        if (!d_HistoryTracker) { Debug.LogWarning($"{name}: D_HistoryTracker is missing!", this); }
+        if (!shop_Manager)     { Debug.LogWarning($"{name}: SHOP_Manager is missing!", this); }
+        if (!sys_Fader)        { Debug.LogWarning($"{name}: SYS_Fader is missing!", this); }
+        if (!sys_SoundManager) { Debug.LogWarning($"{name}: SYS_SoundManager is missing!", this); }
+        if (!inv_ItemInfo)     { Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this); }
+        if (!audioSource)      { Debug.LogWarning($"{name}: AudioSource is missing!", this); }
+        
+        inv_ItemInfo?.Hide();
 
-        audioSource.loop = true;
-        audioSource.playOnAwake = false;
+        if (audioSource)
+        {
+            audioSource.loop = true;
+            audioSource.playOnAwake = false;
+        }
     }
 
-    // Restart the game by loading the initial scene and resetting time scale
+    // Restart the game by clearing all DDOL objects and loading the initial scene
     public void FreshBoot()
     {
         Time.timeScale = 1f;
@@ -64,7 +80,7 @@ public class SYS_GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
     }
 
-    // Play music clip centrally
+    // Play music clip instantly without fading
     public void PlayMusic(AudioClip clip)
     {
         if (audioSource.clip != clip)
@@ -75,15 +91,66 @@ public class SYS_GameManager : MonoBehaviour
         }
     }
 
-    // Mark specified objects to not be destroyed on scene load
+    // Fade smoothly from current music to new clip, stops any existing fade
+    public void PlayMusicWithFade(AudioClip newClip)
+    {
+        // Don't fade if already playing this clip
+        if (audioSource.clip == newClip && audioSource.isPlaying)
+            return;
+
+        // Stop current fade to prevent conflicts
+        if (currentFade != null)
+        {
+            StopCoroutine(currentFade);
+            currentFade = null;
+        }
+
+        currentFade = StartCoroutine(FadeToNewMusic(newClip));
+    }
+
+    IEnumerator FadeToNewMusic(AudioClip newClip)
+    {
+        float elapsed      = 0f;
+        float halfDuration = fadeDuration * 0.5f;
+        float startVolume  = audioSource.volume;
+
+        // Fade out current music
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t       = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t);
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, smoothT);
+            yield return null;
+        }
+
+        // Swap clips
+        audioSource.Stop();
+        audioSource.clip = newClip;
+        audioSource.Play();
+
+        // Fade in new music
+        elapsed = 0f;
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t       = Mathf.Clamp01(elapsed / halfDuration);
+            float smoothT = t * t * (3f - 2f * t);
+            audioSource.volume = Mathf.Lerp(0f, startVolume, smoothT);
+            yield return null;
+        }
+
+        audioSource.volume = startVolume;
+        currentFade        = null;
+    }
+
     void MarkPersistentObjects()
     {
-        foreach (var obj in persistentObjects)
+        foreach (GameObject obj in persistentObjects)
             if (obj)
                 DontDestroyOnLoad(obj);
     }
 
-    // Clean up persistent objects and destroy this instance
     void CleanUpAndDestroy()
     {
         foreach (GameObject obj in persistentObjects)

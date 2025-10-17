@@ -5,53 +5,53 @@ using UnityEngine;
 public class C_Health : MonoBehaviour
 {
     [Header("References")]
-    public C_Stats c_Stats;
-    P_State_Dodge p_State_Dodge; // Use the new state-based dodge
-    C_FX fx;
-
+    C_Stats        c_Stats;
+    P_State_Dodge  p_State_Dodge;
+    C_FX           c_FX;
     P_InputActions input;
+    
+    bool isPlayer; // Cache to determine which hit sound to play
+
     [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
 
     [Header("Debug Keys (N/B)")]
     public int takingDamageAmount = 1;
-    public int healingAmount = 1;
+    public int healingAmount      = 1;
 
-    // Events
     public event Action<int> OnDamaged;
     public event Action<int> OnHealed;
     public event Action OnDied;
 
-    // Accessors
-    int CurrentHP { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
-    public bool IsAlive => CurrentHP > 0;
-    bool IsDodging => useDodgeIFrames && p_State_Dodge != null && p_State_Dodge.enabled;
-
-    // cached delegates so we can unsubscribe
     Action<int> fxDamagedHandler;
     Action<int> fxHealedHandler;
     Action      fxDiedHandler;
+
+    int         CurrentHP  { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
+    public bool IsAlive    => CurrentHP > 0;
+    bool        IsDodging  => useDodgeIFrames && p_State_Dodge != null && p_State_Dodge.enabled;
 
     void Awake()
     {
         c_Stats       ??= GetComponent<C_Stats>();
         p_State_Dodge ??= GetComponent<P_State_Dodge>();
-        fx            ??= GetComponent<C_FX>();
+        c_FX          ??= GetComponent<C_FX>();
+        
+        // Detect if this is player (has P_Controller) or enemy
+        isPlayer = GetComponent<P_Controller>() != null;
 
-        if (!c_Stats) Debug.LogError($"{name}: C_Stats is missing in C_Health");
-        // P_State_Dodge is optional (only for player)
-        if (!fx)      Debug.LogWarning($"{name}: C_FX not assigned; no flashes / death fade.", this);
+        if (!c_Stats) { Debug.LogError($"{name}: C_Stats is missing!", this); return; }
+        if (!c_FX)    { Debug.LogError($"{name}: C_FX is missing!", this); return; }
     }
 
     void OnEnable()
     {
         input ??= new P_InputActions();
         input.Debug.Enable();
-        
-        // subscribe to FX events
-        fxDamagedHandler ??= _ => fx.FlashOnDamaged();
-        fxHealedHandler  ??= _ => fx.FlashOnHealed();
-        fxDiedHandler    ??= () => StartCoroutine(fx.FadeAndDestroy(gameObject));
+
+        fxDamagedHandler = _ => c_FX.FlashOnDamaged();
+        fxHealedHandler  = _ => c_FX.FlashOnHealed();
+        fxDiedHandler    = () => StartCoroutine(c_FX.FadeAndDestroy(gameObject));
 
         OnDamaged += fxDamagedHandler;
         OnHealed  += fxHealedHandler;
@@ -60,11 +60,16 @@ public class C_Health : MonoBehaviour
 
     void OnDisable()
     {
-        input?.Debug.Disable();
+        input.Debug.Disable();
 
         OnDamaged -= fxDamagedHandler;
         OnHealed  -= fxHealedHandler;
         OnDied    -= fxDiedHandler;
+    }
+
+    void OnDestroy()
+    {
+        input?.Dispose();
     }
 
     void Update()
@@ -99,7 +104,23 @@ public class C_Health : MonoBehaviour
         // Clamp to valid range and apply
         int before = CurrentHP;
         int dealt = Mathf.Clamp(total, 0, before);
-        if (dealt > 0) ChangeHealth(-dealt);
+        if (dealt > 0)
+        {
+            ChangeHealth(-dealt);
+            
+            // Play hit sound based on who is being hit
+            if (isPlayer)
+                SYS_GameManager.Instance.sys_SoundManager.PlayPlayerHit();
+            else
+                SYS_GameManager.Instance.sys_SoundManager.PlayEnemyHit();
+            
+            // Cancel combo if player is attacking (damage interrupts combo)
+            var playerAttackState = GetComponent<P_State_Attack>();
+            if (playerAttackState != null && playerAttackState.enabled)
+            {
+                playerAttackState.ResetCombo();
+            }
+        }
         return dealt;
     }
 

@@ -9,9 +9,9 @@ public class State_Chase : MonoBehaviour
     Animator     anim;
     C_Stats      c_Stats;
     E_Controller controller;
+    State_Attack attackState;
 
     // runtime
-    // Vector2 moveAxis; // Will be calculated in Update
     Vector2 lastMove = Vector2.down;
 
     void Awake()
@@ -19,9 +19,17 @@ public class State_Chase : MonoBehaviour
         anim        = GetComponent<Animator>();
         c_Stats     = GetComponent<C_Stats>();
         controller  = GetComponent<E_Controller>();
+        attackState = GetComponent<State_Attack>();
     }
 
-    void OnEnable() {}
+    void OnEnable()
+    {
+        // Only set isMoving if not attacking (attack animation takes priority)
+        if (controller.currentState != E_Controller.EState.Attack)
+        {
+            anim.SetBool("isMoving", true);
+        }
+    }
 
     void OnDisable()
     {
@@ -34,10 +42,44 @@ public class State_Chase : MonoBehaviour
         // Calculate chase direction
         Vector2 moveAxis = ComputeChaseDir();
 
-        // Calculate and apply movement velocity
-        controller.SetDesiredVelocity(moveAxis * c_Stats.MS);
+        // Calculate base speed
+        float speed = c_Stats.MS;
 
-        // Set movement animation
+        // Apply weapon movement penalty if attacking
+        if (controller.currentState == E_Controller.EState.Attack)
+        {
+            // Get active weapon from attack state
+            W_Base activeWeapon = attackState.GetActiveWeapon();
+            if (activeWeapon != null && activeWeapon.weaponData != null)
+            {
+                // Use combo-specific penalty for melee, fallback for ranged
+                if (activeWeapon is W_Melee meleeWeapon)
+                {
+                    // Enemy uses random combo attack - get penalty from State_Attack
+                    int comboIndex = attackState.GetComboIndex();
+                    speed *= activeWeapon.weaponData.comboMovePenalties[comboIndex];
+                }
+                else
+                {
+                    // Ranged weapons use simple attackMovePenalty
+                    speed *= activeWeapon.weaponData.attackMovePenalty;
+                }
+            }
+
+            // During attack, don't override attack animation
+            anim.SetBool("isMoving", false);
+        }
+        else
+        {
+            // Not attacking - show movement animation if moving
+            bool moving = moveAxis.sqrMagnitude > 0f;
+            anim.SetBool("isMoving", moving);
+        }
+
+        // Apply movement velocity
+        controller.SetDesiredVelocity(moveAxis * speed);
+
+        // Set movement animation parameters
         anim.SetFloat("moveX", moveAxis.x);
         anim.SetFloat("moveY", moveAxis.y);
 
@@ -45,10 +87,6 @@ public class State_Chase : MonoBehaviour
         if (moveAxis.sqrMagnitude > 0f) lastMove = moveAxis;
         anim.SetFloat("idleX", lastMove.x);
         anim.SetFloat("idleY", lastMove.y);
-
-        // Optional: derive isMoving from axis (keeps old visuals)
-        bool moving = moveAxis.sqrMagnitude > 0f;
-        anim.SetBool("isMoving", moving);
     }
 
     Vector2 ComputeChaseDir()

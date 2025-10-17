@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     [Header("References")]
-    public SHOP_Manager shop_Manager;
-    public INV_ItemInfo inv_ItemInfo;
+    SHOP_Manager shop_Manager;
+    INV_ItemInfo inv_ItemInfo;
 
-    [Header("UI")]
+    [Header("MUST wire MANUALLY in Inspector")]
     public TMP_Text itemNameText;
     public Image    itemImage;
     public TMP_Text itemPriceText;
@@ -20,17 +20,14 @@ public class SHOP_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     void Awake()
     {
-        shop_Manager        ??= GetComponentInParent<SHOP_Manager>();
+        shop_Manager ??= GetComponentInParent<SHOP_Manager>();
+        inv_ItemInfo ??= FindFirstObjectByType<INV_ItemInfo>();
 
-        itemNameText        ??= transform.Find("itemNameText")?.GetComponent<TMP_Text>();
-        itemImage           ??= transform.Find("itemImage")?.GetComponent<Image>();
-        itemPriceText       ??= transform.Find("itemPriceText")?.GetComponent<TMP_Text>();
-
-        if (!shop_Manager)  Debug.LogError("SHOP_Slot: SHOP_Manager is missing.");
-        if (!inv_ItemInfo)  Debug.LogError("SHOP_Slot: INV_ItemInfo is missing.");
-        if (!itemImage)     Debug.LogError("SHOP_Slot: itemImage is missing.");
-        if (!itemNameText)  Debug.LogError("SHOP_Slot: itemNameText is missing.");
-        if (!itemPriceText) Debug.LogError("SHOP_Slot: itemPriceText is missing.");
+        if (!shop_Manager)  { Debug.LogError($"{name}: SHOP_Manager is missing!", this); return; }
+        if (!inv_ItemInfo)  { Debug.LogError($"{name}: INV_ItemInfo is missing!", this); return; }
+        if (!itemImage)     { Debug.LogError($"{name}: itemImage is missing!", this); return; }
+        if (!itemNameText)  { Debug.LogError($"{name}: itemNameText is missing!", this); return; }
+        if (!itemPriceText) { Debug.LogError($"{name}: itemPriceText is missing!", this); return; }
     }
 
     // Called by SHOP_Manager at startup

@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e3e871d6697774da9043adff344fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_Melee
-  weaponData: {fileID: 11400000, guid: 75144ae3672c14dacb8aa402fee99de1, type: 2}
+  weaponData: {fileID: 11400000, guid: f2d439dbd28434396981bfe103023ad4, type: 2}
   owner: {fileID: 4290728090841259575}
   targetMask:
     serializedVersion: 2
@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 9212602258907453368}
   - component: {fileID: 6644099288169238067}
   - component: {fileID: 8164142730254441224}
+  - component: {fileID: 5063024469757411480}
   - component: {fileID: 4324443832536490533}
   - component: {fileID: 7982763556792287459}
   - component: {fileID: 5987711013172155053}
@@ -341,6 +342,7 @@ GameObject:
   - component: {fileID: 4103756141362777526}
   - component: {fileID: 1952565714420619451}
   - component: {fileID: 3690183229213289973}
+  - component: {fileID: 3749159996894364924}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -361,8 +363,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2544898007547509533}
   - {fileID: 2785555308593296516}
+  - {fileID: 2544898007547509533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7731384130201424669
@@ -563,22 +565,26 @@ MonoBehaviour:
   AD: 1
   AP: 0
   MS: 5
-  maxHP: 100
-  currentHP: 30
+  maxHP: 1000
+  currentHP: 100
   AR: 0
   MR: 0
+  maxMP: 100
+  currentMP: 100
   KR: 10
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  attackCooldown: 1.2
+  slashArcBonus: 0
+  movePenaltyReduction: 0
+  stunTimeBonus: 0
+  thrustDistanceBonus: 0
+  attackCooldown: 0
   collisionDamage: 1
   collisionTick: 0.5
   dodgeSpeed: 10
   dodgeDistance: 2
   dodgeCooldown: 0.45
-  knockbackForce: 0
-  stunTime: 0
 --- !u!114 &8164142730254441224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,6 +601,19 @@ MonoBehaviour:
   useDodgeIFrames: 1
   takingDamageAmount: 1
   healingAmount: 1
+--- !u!114 &5063024469757411480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43a2195fb49d54610b3bb91d1db3691f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_Mana
+  stats: {fileID: 6644099288169238067}
 --- !u!114 &4324443832536490533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,7 +640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::P_Exp
   level: 1
   currentExp: 0
-  skillPoints: 5
+  skillPoints: 50
   totalKills: 0
   playTime: 0
   xpBase: 60
@@ -704,6 +723,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Attack
   activeWeapon: {fileID: 0}
   attackDir: {x: 0, y: 0}
+  comboIndex: 0
+  comboInputWindow: 1
+  comboWindowTimer: 0
+  comboInputQueued: 0
 --- !u!114 &1952565714420619451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729,3 +752,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19c8e4729d448c78f6d8f965dbae23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Movement
+--- !u!114 &3749159996894364924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322c7892e901343e6b765e28722ca529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::INV_HotbarInput

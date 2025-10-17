@@ -1,7 +1,3 @@
-// <summary>
-// Used to define a dialog node in the dialog system.
-// </summary>
-
 using System.Collections.Generic;
 using Unity.AppUI.UI;
 using UnityEngine;

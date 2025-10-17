@@ -288,6 +288,15 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Value"",
+                    ""id"": ""24c2f603-f2f7-4bb7-84f6-55c23cdbe1ce"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -343,6 +352,105 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleSetting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""707d00c0-58f1-4bf0-8e12-8d5397859a13"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7c26e77-3e2c-4485-8b0a-43d72f0e8422"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=2)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f2be5e3-a16b-4601-91f7-9ea485963d76"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=3)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50b30252-29c3-40b8-acfd-952fe40be6ce"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=4)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02e34ccc-fdbd-46ea-a0fa-f4ac1ad40877"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d41969d9-3ba8-45e7-98e8-5798f572058d"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=6)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92a7c81c-de70-49e0-bc78-af09d78a5754"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=7)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3584df4-13bf-4816-951e-5e51aeeaf055"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=8)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35431e02-2a18-4cc7-9f79-8130660585b3"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=9)"",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -433,6 +541,7 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         m_UI_ToggleShop = m_UI.FindAction("ToggleShop", throwIfNotFound: true);
         m_UI_EndConvo = m_UI.FindAction("EndConvo", throwIfNotFound: true);
         m_UI_ToggleSetting = m_UI.FindAction("ToggleSetting", throwIfNotFound: true);
+        m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_GainExp = m_Debug.FindAction("GainExp", throwIfNotFound: true);
@@ -665,6 +774,7 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ToggleShop;
     private readonly InputAction m_UI_EndConvo;
     private readonly InputAction m_UI_ToggleSetting;
+    private readonly InputAction m_UI_Inventory;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -696,6 +806,10 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/ToggleSetting".
         /// </summary>
         public InputAction @ToggleSetting => m_Wrapper.m_UI_ToggleSetting;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Inventory".
+        /// </summary>
+        public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -737,6 +851,9 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @ToggleSetting.started += instance.OnToggleSetting;
             @ToggleSetting.performed += instance.OnToggleSetting;
             @ToggleSetting.canceled += instance.OnToggleSetting;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         /// <summary>
@@ -763,6 +880,9 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
             @ToggleSetting.started -= instance.OnToggleSetting;
             @ToggleSetting.performed -= instance.OnToggleSetting;
             @ToggleSetting.canceled -= instance.OnToggleSetting;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         /// <summary>
@@ -999,6 +1119,13 @@ public partial class @P_InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleSetting(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventory(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.

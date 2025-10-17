@@ -115,13 +115,31 @@
             }
         },
         {
-            "_key": "InteriorFloor_2",
+            "_key": "InteriorFloor_4",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_6",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_5",
             "_asset": {
                 "instanceID": 0
             }
         },
         {
             "_key": "InteriorFloor_3",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "InteriorFloor_2",
             "_asset": {
                 "instanceID": 0
             }
@@ -158,6 +176,18 @@
         },
         {
             "_key": "Floor_6",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_7",
+            "_asset": {
+                "instanceID": 0
+            }
+        },
+        {
+            "_key": "Floor_8",
             "_asset": {
                 "instanceID": 0
             }

@@ -62,6 +62,9 @@ public class P_Exp : MonoBehaviour
             level++;
             skillPoints += skillPointsPerLevel;
 
+            // Play level up sound
+            SYS_GameManager.Instance.sys_SoundManager.PlayLevelUp();
+
             OnLevelUp?.Invoke(level);
             OnSPChanged?.Invoke(skillPoints);
 

@@ -72,6 +72,11 @@ public class P_Combat : MonoBehaviour
         input?.Disable();
     }
 
+    void OnDestroy()
+    {
+        input?.Dispose();
+    }
+
     void Update()
     {
         // Read aim from MOUSE

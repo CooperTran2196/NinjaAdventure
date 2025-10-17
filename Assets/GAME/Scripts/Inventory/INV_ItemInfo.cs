@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class INV_ItemInfo : MonoBehaviour
 {
-    [Header("Showing Info of Items")]
-    [Header("References")]
+    [Header("MUST wire MANUALLY in Inspector")]
     public CanvasGroup   canvasGroup;
     public RectTransform rectTransform;
     public TMP_Text      itemNameText;
@@ -13,43 +12,60 @@ public class INV_ItemInfo : MonoBehaviour
     public TMP_Text      statLinePrefab;
     public Transform     statContainer;
 
+    [Header("Settings")]
     public Vector2 offset = new Vector2(12f, -8f);
 
     void Awake()
     {
-        canvasGroup          ??= GetComponent<CanvasGroup>();
-        rectTransform        ??= GetComponent<RectTransform>();
+        canvasGroup   ??= GetComponent<CanvasGroup>();
+        rectTransform ??= GetComponent<RectTransform>();
 
-        if (!canvasGroup)    Debug.LogError("INV_ItemInfo: CanvasGroup is missing.");
-        if (!rectTransform)  Debug.LogError("INV_ItemInfo: RectTransform is missing.");
-        if (!itemDescText)   Debug.LogError("INV_ItemInfo: itemDescText is missing.");
-        if (!statLinePrefab) Debug.LogError("INV_ItemInfo: statLinePrefab is missing.");
-        if (!statContainer)  Debug.LogError("INV_ItemInfo: statContainer is missing.");
+        if (!canvasGroup)    { Debug.LogError($"{name}: CanvasGroup is missing!", this); return; }
+        if (!rectTransform)  { Debug.LogError($"{name}: RectTransform is missing!", this); return; }
+        if (!itemNameText)   { Debug.LogError($"{name}: itemNameText is missing!", this); return; }
+        if (!itemDescText)   { Debug.LogError($"{name}: itemDescText is missing!", this); return; }
+        if (!statLinePrefab) { Debug.LogError($"{name}: statLinePrefab is missing!", this); return; }
+        if (!statContainer)  { Debug.LogError($"{name}: statContainer is missing!", this); return; }
     }
 
     public void Show(INV_ItemSO itemSO)
     {
-        // make visible
         canvasGroup.alpha = 1f;
 
-        // header texts
         if (itemNameText) itemNameText.text = itemSO ? itemSO.itemName : string.Empty;
         itemDescText.text = itemSO.description;
 
-        // rebuild stat lines
         ClearStatLines();
         if (itemSO)
         {
-            var outLines = BuildStatLines(itemSO);
-            for (int i = 0; i < outLines.Count; i++)
+            List<string> statLines = BuildItemStatLines(itemSO);
+            foreach (string line in statLines)
             {
-                var line = Instantiate(statLinePrefab, statContainer);
-                line.text = outLines[i];
+                TMP_Text textLine = Instantiate(statLinePrefab, statContainer);
+                textLine.text = line;
             }
         }
     }
 
-    // Hide and clear
+    public void Show(W_SO weaponSO)
+    {
+        canvasGroup.alpha = 1f;
+
+        if (itemNameText) itemNameText.text = weaponSO ? weaponSO.id : string.Empty;
+        itemDescText.text = weaponSO ? weaponSO.description : string.Empty;
+
+        ClearStatLines();
+        if (weaponSO)
+        {
+            List<string> statLines = BuildWeaponStatLines(weaponSO);
+            foreach (string line in statLines)
+            {
+                TMP_Text textLine = Instantiate(statLinePrefab, statContainer);
+                textLine.text = line;
+            }
+        }
+    }
+
     public void Hide()
     {
         canvasGroup.alpha = 0f;
@@ -60,46 +76,72 @@ public class INV_ItemInfo : MonoBehaviour
         rectTransform.position = (Vector3)screenPos + (Vector3)offset;
     }
 
-    // Remove all existing stat lines
     void ClearStatLines()
     {
         for (int i = statContainer.childCount - 1; i >= 0; i--)
             Destroy(statContainer.GetChild(i).gameObject);
     }
 
-    // Build formatted stat description lines for the provided item
-    List<string> BuildStatLines(INV_ItemSO inv_ItemSO)
+    List<string> BuildItemStatLines(INV_ItemSO inv_ItemSO)
     {
-        var outLines = new List<string>();
+        List<string> statLines = new List<string>();
 
         if (inv_ItemSO.isGold)
         {
-            outLines.Add("A pile of gold coins.");
-            return outLines;
+            statLines.Add("A pile of gold coins.");
+            return statLines;
         }
 
         if (inv_ItemSO.StatEffectList != null)
         {
-            for (int i = 0; i < inv_ItemSO.StatEffectList.Count; i++)
+            foreach (P_StatEffect effect in inv_ItemSO.StatEffectList)
             {
-                var effects = inv_ItemSO.StatEffectList[i];
                 string line;
-                switch (effects.statName)
+                switch (effect.statName)
                 {
-                    case StatName.Heal:          line = $"Heals {effects.Value} HP"; break;
-                    case StatName.MaxHealth:     line = $"+{effects.Value} Max HP"; break;
-                    case StatName.AttackDamage:  line = $"+{effects.Value} Attack Damage"; break;
-                    case StatName.AbilityPower:  line = $"+{effects.Value} Ability Power"; break;
-                    case StatName.MoveSpeed:     line = $"+{effects.Value} Move Speed"; break;
-                    case StatName.Armor:         line = $"+{effects.Value} Armor"; break;
-                    case StatName.MagicResist:   line = $"+{effects.Value} Magic Resist"; break;
-                    case StatName.Lifesteal:     line = $"+{effects.Value}% Lifesteal"; break;
-                    default:                     line = $"+{effects.Value} {effects.statName}"; break;
+                    case StatName.Heal:          line = $"Heals {effect.Value} HP"; break;
+                    case StatName.Mana:          line = $"Restores {effect.Value} Mana"; break;
+                    case StatName.MaxHealth:     line = $"+{effect.Value} Max HP"; break;
+                    case StatName.MaxMana:       line = $"+{effect.Value} Max Mana"; break;
+                    case StatName.AttackDamage:  line = $"+{effect.Value} Attack Damage"; break;
+                    case StatName.AbilityPower:  line = $"+{effect.Value} Ability Power"; break;
+                    case StatName.MoveSpeed:     line = $"+{effect.Value} Move Speed"; break;
+                    case StatName.Armor:         line = $"+{effect.Value} Armor"; break;
+                    case StatName.MagicResist:   line = $"+{effect.Value} Magic Resist"; break;
+                    case StatName.Lifesteal:     line = $"+{effect.Value}% Lifesteal"; break;
+                    default:                     line = $"+{effect.Value} {effect.statName}"; break;
                 }
-                if (effects.Duration > 1) line = $"{line} in ({effects.Duration}s)";
-                outLines.Add(line);
+                
+                // Add duration if effect is temporary
+                if (effect.Duration > 1) line = $"{line} in ({effect.Duration}s)";
+                
+                statLines.Add(line);
             }
         }
-        return outLines;
+        return statLines;
+    }
+
+    List<string> BuildWeaponStatLines(W_SO weaponSO)
+    {
+        List<string> statLines = new List<string>();
+
+        if (weaponSO.type == WeaponType.Melee)
+        {
+            statLines.Add($"AD: {weaponSO.AD}   AP: {weaponSO.AP}");
+            statLines.Add($"Knockback: {weaponSO.knockbackForce}");
+            statLines.Add($"    Thrust: {weaponSO.thrustDistance}");
+            statLines.Add($"      Slash: {weaponSO.slashArcDegrees} Degrees");
+            statLines.Add($"     Speed: {string.Join(" - ", weaponSO.comboShowTimes)}");
+            statLines.Add($"Penalties: {string.Join(" - ", weaponSO.comboMovePenalties)}");
+            statLines.Add($"Stun Time: {string.Join(" - ", weaponSO.comboStunTimes)}");
+        }
+        else if (weaponSO.type == WeaponType.Ranged)
+        {
+            statLines.Add($"AD: {weaponSO.AD}  AP: {weaponSO.AP}");
+            statLines.Add($"Mana Cost: {weaponSO.manaCost}");
+            statLines.Add($"Projectile Speed: {weaponSO.projectileSpeed}");
+        }
+
+        return statLines;
     }
 }

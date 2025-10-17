@@ -1,7 +1,3 @@
-// <summary>
-// Manages dialog flow, UI updates, and player choices.
-// </summary>
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -49,6 +45,10 @@ public class D_Manager : MonoBehaviour
         var line = currentDialog.lines[dialogIndex++]; 
         // Record NPC spoken to
         SYS_GameManager.Instance.d_HistoryTracker.RecordNPC(line.speaker);
+        
+        // Play random NPC talk sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayNPCTalk();
+        
         // Update UI
         avatar.sprite           = line.speaker.avatar;
         characterNameText.text  = line.speaker.characterName;
@@ -146,6 +146,9 @@ public class D_Manager : MonoBehaviour
         dialogIndex = 0;
         isDialogActive = false;
         ClearOptions();
+
+        // Play dialog end sound
+        SYS_GameManager.Instance.sys_SoundManager.PlayDialogEnd();
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;

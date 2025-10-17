@@ -4,15 +4,20 @@ using UnityEngine.SceneManagement;
 
 public class SYS_Fader : MonoBehaviour
 {
-    public Animator animator;
+    [Header("References")]
+    Animator anim;
+
+    [Header("Fade Settings")]
     public float fadeTime = 0.5f;
 
     void Awake()
     {
-        animator ??= GetComponentInChildren<Animator>(true);
-        if (!animator) Debug.LogError("SYS_Fader: Animator is missing.");
+        anim ??= GetComponentInChildren<Animator>(true);
+
+        if (!anim) { Debug.LogError($"{name}: Animator is missing!", this); return; }
     }
 
+    // Fade to a new scene with fade out/in transition
     public void FadeToScene(string sceneName)
     {
         StartCoroutine(DoFadeToScene(sceneName));
@@ -21,10 +26,10 @@ public class SYS_Fader : MonoBehaviour
     // Fade out, load the scene, then fade in
     IEnumerator DoFadeToScene(string sceneName)
     {
-        animator.Play("FadeOut");
+        anim.Play("FadeOut");
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         yield return new WaitForSeconds(fadeTime);
-        animator.Play("FadeIn");      // reveal
+        anim.Play("FadeIn");      // reveal
     }
 }
