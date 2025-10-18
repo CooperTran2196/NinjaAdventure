@@ -67,7 +67,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -81,7 +81,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -104,7 +104,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -135,10 +135,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 7
+        width: 8
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: Fire_1
       rect:
         serializedVersion: 2
-        x: 7
+        x: 8
         y: 0
-        width: 9
-        height: 10
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -177,12 +177,12 @@ TextureImporter:
       name: Fire_2
       rect:
         serializedVersion: 2
-        x: 15
+        x: 16
         y: 0
-        width: 9
-        height: 11
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -199,12 +199,12 @@ TextureImporter:
       name: Fire_3
       rect:
         serializedVersion: 2
-        x: 23
+        x: 24
         y: 0
-        width: 9
-        height: 10
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -221,12 +221,12 @@ TextureImporter:
       name: Fire_4
       rect:
         serializedVersion: 2
-        x: 31
+        x: 32
         y: 0
         width: 8
-        height: 11
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -243,12 +243,12 @@ TextureImporter:
       name: Fire_5
       rect:
         serializedVersion: 2
-        x: 39
+        x: 40
         y: 0
         width: 8
-        height: 11
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -265,12 +265,12 @@ TextureImporter:
       name: Fire_6
       rect:
         serializedVersion: 2
-        x: 47
+        x: 48
         y: 0
         width: 8
-        height: 11
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -287,12 +287,12 @@ TextureImporter:
       name: Fire_7
       rect:
         serializedVersion: 2
-        x: 55
+        x: 56
         y: 0
         width: 8
-        height: 10
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -311,10 +311,10 @@ TextureImporter:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 7
-        height: 9
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -333,10 +333,10 @@ TextureImporter:
         serializedVersion: 2
         x: 72
         y: 0
-        width: 7
-        height: 8
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -353,12 +353,12 @@ TextureImporter:
       name: Fire_10
       rect:
         serializedVersion: 2
-        x: 81
+        x: 80
         y: 0
-        width: 14
-        height: 7
+        width: 8
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -371,11 +371,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Fire_11
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 0
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6530d023d21174879b323c8dffd4367d
+      internalID: 600765673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 44169dce9184448fe9b161cc9a10c071
     internalID: 0
     vertices: []
     indices: 
@@ -383,11 +405,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":8.0,"y":12.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Fire_0: 1098286324429101383
       Fire_1: 7419590508823533442
       Fire_10: 4566438268169137410
+      Fire_11: 600765673
       Fire_2: 2333874723133794383
       Fire_3: 6211036013863027259
       Fire_4: 2168491126659702453

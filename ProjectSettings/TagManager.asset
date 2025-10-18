@@ -61,7 +61,7 @@ TagManager:
   - name: Loot
     uniqueID: 2498439127
     locked: 0
-  - name: Sky
+  - name: Effect
     uniqueID: 1912278453
     locked: 0
   - name: UI
