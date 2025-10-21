@@ -24,7 +24,6 @@ public class E_Controller : MonoBehaviour, I_Controller
                 public EState currentState;
                 
     [Header("Weapons")]
-    // public W_Base activeWeapon; // No longer needed, State_Attack will handle it
 
     [Header("Attack Delay Buffer (For Easy/Hard Mode)")]
     public float attackStartBuffer = 0.2f;  

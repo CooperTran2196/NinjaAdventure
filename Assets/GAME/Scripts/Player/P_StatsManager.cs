@@ -10,9 +10,9 @@ public class P_StatsManager : MonoBehaviour
     [Header("Depend on C_Stats and C_Health")]
 
     [Header("References")]
-    C_Stats c_Stats;
+    C_Stats  c_Stats;
     C_Health c_Health;
-    C_Mana c_Mana;
+    C_Mana   c_Mana;
 
     // Base stats that can be modified
     private int baseAD, baseAP, baseMaxHP, baseMaxMP, baseAR, baseMR;
@@ -115,7 +115,7 @@ public class P_StatsManager : MonoBehaviour
         }
     }
 
-    /// Handles permanent stat changes
+    // Handles permanent stat changes
     private void ApplyPermanentEffect(P_StatEffect stat)
     {
         // Apply the permanent change to the BASE stat
