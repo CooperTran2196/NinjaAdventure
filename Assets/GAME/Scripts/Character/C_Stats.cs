@@ -21,7 +21,8 @@ public class C_Stats : MonoBehaviour
     public float magicPen   = 0f;
 
     [Header("Weapon Bonuses (Player Only)")]
-    public float slashArcBonus        = 0f; // Additive degrees to slash arc
+    public float slashArc        = 0f; // Additive degrees to slash arc
+    public float attackSpeed     = 0f; // Attack speed (1 = 10% faster)
     public float movePenaltyReduction = 0f; // % reduction (0.1 = 10% less penalty)
     public float stunTimeBonus        = 0f; // % increase (0.1 = 10% more stun)
     public float thrustDistanceBonus  = 0f; // % increase (0.1 = 10% more distance)

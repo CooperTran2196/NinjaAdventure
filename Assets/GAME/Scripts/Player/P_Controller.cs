@@ -136,7 +136,8 @@ public class P_Controller : MonoBehaviour
     }
 
     // Convert mouse position to world direction
-    Vector2 ReadMouseAim()
+    // Read mouse aim direction for attacks (public for P_State_Attack to update direction mid-combo)
+    public Vector2 ReadMouseAim()
     {
         Vector2 m = Mouse.current.position.ReadValue();
         var cam = Camera.main;

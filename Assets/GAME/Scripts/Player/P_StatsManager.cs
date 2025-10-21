@@ -19,7 +19,7 @@ public class P_StatsManager : MonoBehaviour
     private float baseMS, baseKR, baseLifesteal, baseArmorPen, baseMagicPen;
     
     // Weapon bonus base values
-    private float baseSlashArcBonus, baseMovePenaltyReduction, baseStunTimeBonus, baseThrustDistanceBonus;
+    private float baseSlashArc, baseAttackSpeed, baseMovePenaltyReduction, baseStunTimeBonus, baseThrustDistanceBonus;
 
     // List of temporary buffs/debuffs.
     private readonly List<P_StatEffect> statsEffectList = new List<P_StatEffect>();
@@ -52,7 +52,8 @@ public class P_StatsManager : MonoBehaviour
         baseMagicPen  = c_Stats.magicPen;
 
         // Weapon bonuses
-        baseSlashArcBonus        = c_Stats.slashArcBonus;
+        baseSlashArc        = c_Stats.slashArc;
+        baseAttackSpeed     = c_Stats.attackSpeed;
         baseMovePenaltyReduction = c_Stats.movePenaltyReduction;
         baseStunTimeBonus        = c_Stats.stunTimeBonus;
         baseThrustDistanceBonus  = c_Stats.thrustDistanceBonus;
@@ -134,7 +135,8 @@ public class P_StatsManager : MonoBehaviour
             case StatName.ArmorPen:         baseArmorPen  += stat.Value; break;
             case StatName.MagicPen:         baseMagicPen  += stat.Value; break;
 
-            case StatName.SlashArcBonus:        baseSlashArcBonus        += stat.Value; break;
+            case StatName.SlashArc:        baseSlashArc        += stat.Value; break;
+            case StatName.AttackSpeed:     baseAttackSpeed     += stat.Value; break;
             case StatName.MovePenaltyReduction: baseMovePenaltyReduction += stat.Value; break;
             case StatName.StunTimeBonus:        baseStunTimeBonus        += stat.Value; break;
             case StatName.ThrustDistanceBonus:  baseThrustDistanceBonus  += stat.Value; break;
@@ -162,7 +164,8 @@ public class P_StatsManager : MonoBehaviour
         c_Stats.armorPen  = baseArmorPen;
         c_Stats.magicPen  = baseMagicPen;
 
-        c_Stats.slashArcBonus        = baseSlashArcBonus;
+        c_Stats.slashArc        = baseSlashArc;
+        c_Stats.attackSpeed     = baseAttackSpeed;
         c_Stats.movePenaltyReduction = baseMovePenaltyReduction;
         c_Stats.stunTimeBonus        = baseStunTimeBonus;
         c_Stats.thrustDistanceBonus  = baseThrustDistanceBonus;
@@ -201,7 +204,8 @@ public class P_StatsManager : MonoBehaviour
             case StatName.ArmorPen:         c_Stats.armorPen  += value; break;
             case StatName.MagicPen:         c_Stats.magicPen  += value; break;
 
-            case StatName.SlashArcBonus:        c_Stats.slashArcBonus        += value; break;
+            case StatName.SlashArc:        c_Stats.slashArc        += value; break;
+            case StatName.AttackSpeed:     c_Stats.attackSpeed     += value; break;
             case StatName.MovePenaltyReduction: c_Stats.movePenaltyReduction += value; break;
             case StatName.StunTimeBonus:        c_Stats.stunTimeBonus        += value; break;
             case StatName.ThrustDistanceBonus:  c_Stats.thrustDistanceBonus  += value; break;

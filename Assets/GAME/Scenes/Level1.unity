@@ -11904,6 +11904,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4080615f50927db40a6ab67efef46189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_ItemInfoPanel
+--- !u!225 &1318591809
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318591799}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1329391908
 GameObject:
   m_ObjectHideFlags: 0
@@ -11990,7 +12002,8 @@ MonoBehaviour:
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  slashArcBonus: 0
+  slashArc: 0
+  attackSpeed: 0
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
@@ -13445,7 +13458,8 @@ MonoBehaviour:
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  slashArcBonus: 0
+  slashArc: 0
+  attackSpeed: 0
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
@@ -15259,6 +15273,30 @@ PrefabInstance:
       propertyPath: p_StatsManager
       value: 
       objectReference: {fileID: 714147528}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786770078869875970, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4972588838816631288, guid: 750a12dd90dca432aa7f88cb243ac64f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16063,10 +16101,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkillsCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 4053735735308213154, guid: 9bb4adb2d79614664a94dbf232ea7572, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
+    - target: {fileID: 4541714736622974587, guid: 9bb4adb2d79614664a94dbf232ea7572, type: 3}
+      propertyPath: p_Exp
+      value: 
+      objectReference: {fileID: 714147527}
+    - target: {fileID: 4541714736622974587, guid: 9bb4adb2d79614664a94dbf232ea7572, type: 3}
+      propertyPath: statsManager
+      value: 
+      objectReference: {fileID: 714147528}
     - target: {fileID: 8006678914412642050, guid: 9bb4adb2d79614664a94dbf232ea7572, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -17369,6 +17411,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5416011113591269050, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 1318591809}
     - target: {fileID: 6717595031056114710, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -17525,10 +17571,15 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4028551908832895920, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
+    - {fileID: 902322117646651962, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8560643762338775362, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1318591809}
   m_SourcePrefab: {fileID: 100100000, guid: 9ca6d9644b3204f75b22a41beb8b5a33, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

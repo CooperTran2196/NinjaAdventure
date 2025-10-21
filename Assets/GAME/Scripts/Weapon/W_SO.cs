@@ -22,6 +22,10 @@ public class W_SO : ScriptableObject
 
     [Header("Melee Timing")]
     public float thrustDistance = 0.25f;
+    
+    [Header("Melee Attack Speed")]
+    [Tooltip("Base attack speed: +1 = 10% faster, -1 = 10% slower (0 = normal)")]
+    [Range(-10f, 10f)] public float maxAttackSpeed = 0f;
 
     [Header("Only thrust applies knockback")]
     public bool onlyThrustKnocksBack = true;

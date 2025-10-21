@@ -18,6 +18,9 @@ public class P_State_Attack : MonoBehaviour
     [SerializeField] float comboWindowTimer = 0f;   // Countdown timer
     [SerializeField] bool comboInputQueued = false; // Input buffering flag
     
+    [Header("Keep idle facing attack direction during attack?")]
+    [SerializeField] bool lockIdleToAttackDir = false;
+    
     // Hit tracking per attack (prevents double-hits on same target in one attack)
     HashSet<C_Health> hitTargetsThisAttack = new HashSet<C_Health>();
 
@@ -61,11 +64,14 @@ public class P_State_Attack : MonoBehaviour
 
     void Update()
     {
-        // OPTIONAL: Keep idle facing towards attack direction - else use last movement direction
-        // anim.SetFloat("moveX", 0f);
-        // anim.SetFloat("moveY", 0f);
-        // anim.SetFloat("idleX", attackDir.x);
-        // anim.SetFloat("idleY", attackDir.y);
+        // Optional: Keep idle facing towards attack direction (controlled by inspector toggle)
+        if (lockIdleToAttackDir)
+        {
+            anim.SetFloat("moveX", 0f);
+            anim.SetFloat("moveY", 0f);
+            anim.SetFloat("idleX", attackDir.x);
+            anim.SetFloat("idleY", attackDir.y);
+        }
     }
 
     // Attack with weapon and direction (called by controller)
@@ -140,11 +146,27 @@ public class P_State_Attack : MonoBehaviour
         // Get combo-specific showTime
         float weaponShowTime = activeWeapon.weaponData.comboShowTimes[comboIndex];
         
+        // Calculate actual duration based on maxAttackSpeed
+        // Combine weapon base speed + player speed bonus
+        float totalSpeed = activeWeapon.weaponData.maxAttackSpeed + c_Stats.attackSpeed;
+        float speedMultiplier = 1.0f - (totalSpeed * 0.1f); // Linear: 1 = 10% faster
+        float actualWeaponDuration = weaponShowTime * speedMultiplier;
+        
         // IMMEDIATELY open input window (allows button mashing)
         comboWindowTimer = comboInputWindow; // 1.0s window
         
         // Phase 1: Wait for hit delay, then trigger weapon attack
         yield return new WaitForSeconds(hitDelay);
+        
+        // Update attack direction based on current mouse position (allows direction changes mid-combo)
+        Vector2 currentMouseAim = controller.ReadMouseAim();
+        if (currentMouseAim != Vector2.zero)
+        {
+            attackDir = currentMouseAim;
+            anim.SetFloat("atkX", attackDir.x);
+            anim.SetFloat("atkY", attackDir.y);
+        }
+        
         activeWeapon.Attack(attackDir);
         
         // Phase 2: Calculate remaining animation time
@@ -153,7 +175,7 @@ public class P_State_Attack : MonoBehaviour
         // Phase 3: Wait for animation/showTime while checking for input
         float elapsed = 0f;
         
-        while (elapsed < weaponShowTime)
+        while (elapsed < actualWeaponDuration)
         {
             // Countdown input window timer
             if (comboWindowTimer > 0f)
@@ -163,8 +185,8 @@ public class P_State_Attack : MonoBehaviour
             
             elapsed += Time.deltaTime;
             
-            // Check if animation should freeze (showTime > animation duration)
-            if (weaponShowTime > attackAnimDuration && elapsed >= remainingAnimTime && anim.speed > 0f)
+            // Check if animation should freeze (actualDuration > animation duration)
+            if (actualWeaponDuration > attackAnimDuration && elapsed >= remainingAnimTime && anim.speed > 0f)
             {
                 anim.speed = 0f; // Freeze at final frame
             }
