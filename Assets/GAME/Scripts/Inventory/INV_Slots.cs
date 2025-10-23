@@ -9,23 +9,23 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     public enum SlotType { Empty, Item, Weapon }
 
     [Header("References")]
-    INV_Manager  inv_Manager;
-    Canvas       canvas;
+    Canvas            canvas;
+    INV_Manager       inv_Manager;
+    Image             itemImage;
+    TMP_Text          amountText;
     INV_ItemInfo itemInfoPopup;
     
     [Header("MUST wire MANUALLY in Inspector")]
-    public Image      itemImage;
-    public TMP_Text   amountText;
     public GameObject draggingIconPrefab;
 
     [Header("Data")]
-                    public SlotType    type     = SlotType.Empty;
-                    public INV_ItemSO  itemSO;
-                    public W_SO        weaponSO;
-                    public int         quantity;
+    public SlotType    type     = SlotType.Empty;
+    public INV_ItemSO  itemSO;
+    public W_SO        weaponSO;
+    public int         quantity;
 
     [Header("Hover Settings")]
-                    public float hoverDelay = 1f;
+    public float hoverDelay = 1f;
 
     // Runtime state
     static SHOP_Manager shop_Manager;
@@ -35,18 +35,17 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     void Awake()
     {
         // GetComponent same-GameObject refs
-        itemImage   ??= transform.Find("Icon")?.GetComponent<Image>();
-        amountText  ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
+        canvas      ??= GetComponentInParent<Canvas>();
         inv_Manager ??= GetComponentInParent<INV_Manager>();
-        canvas      = GetComponentInParent<Canvas>();
+        itemImage   ??= transform.Find("Image")?.GetComponent<Image>();
+        amountText  ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
 
         // Validate required components
-        if (!itemImage)  { Debug.LogError($"{name}: itemImage is missing!", this); return; }
-        if (!amountText) { Debug.LogError($"{name}: amountText is missing!", this); return; }
-        if (!inv_Manager) { Debug.LogError($"{name}: INV_Manager is missing!", this); return; }
-        if (!canvas)     { Debug.LogError($"{name}: Canvas parent is missing!", this); return; }
+        if (!canvas)             { Debug.LogError($"{name}: Canvas parent is missing!", this); return; }
+        if (!inv_Manager)        { Debug.LogError($"{name}: INV_Manager is missing!", this); return; }
+        if (!itemImage)          { Debug.LogError($"{name}: itemImage is missing!", this); return; }
+        if (!amountText)         { Debug.LogError($"{name}: amountText is missing!", this); return; }
         
-        // Validate "MUST wire MANUALLY" refs
         if (!draggingIconPrefab) { Debug.LogError($"{name}: draggingIconPrefab is not assigned!", this); return; }
     }
 
@@ -150,8 +149,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         }
     }
 
-    // ===== DRAG AND DROP SYSTEM =====
-    
+    // DRAG AND DROP SYSTEM 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (type == SlotType.Empty) return;
@@ -237,7 +235,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         otherSlot.UpdateUI();
     }
 
-    // ===== HOVER SYSTEM =====
+    // HOVER SYSTEM
 
     public void OnPointerEnter(PointerEventData eventData)
     {

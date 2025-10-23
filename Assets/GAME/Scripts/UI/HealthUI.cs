@@ -13,14 +13,16 @@ public class HealthUI : MonoBehaviour
 
     void Awake()
     {
-        p_Stats        ??= FindFirstObjectByType<C_Stats>();
-        p_Health       ??= FindFirstObjectByType<C_Health>();
-        p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        if (!p_Stats)        Debug.LogError("HealthUI: C_Stats is missing.");
-        if (!p_Health)       Debug.LogError("HealthUI: C_Health is missing.");
-        if (!p_StatsManager) Debug.LogError("HealthUI: P_StatsManager is missing.");
-        if (!healthSlider)   Debug.LogError("HealthUI: healthSlider is missing.");
+        p_Stats        = player.GetComponent<C_Stats>();
+        p_Health       = player.GetComponent<C_Health>();
+        p_StatsManager = player.GetComponent<P_StatsManager>();
+
+        if (!p_Stats)        { Debug.LogError("HealthUI: C_Stats is missing on Player!", this); return; }
+        if (!p_Health)       { Debug.LogError("HealthUI: C_Health is missing on Player!", this); return; }
+        if (!p_StatsManager) { Debug.LogError("HealthUI: P_StatsManager is missing on Player!", this); return; }
+        if (!healthSlider)   { Debug.LogError("HealthUI: healthSlider is missing!", this); return; }
 
         healthSlider.maxValue = p_Stats.maxHP;
         healthSlider.value    = p_Stats.currentHP;

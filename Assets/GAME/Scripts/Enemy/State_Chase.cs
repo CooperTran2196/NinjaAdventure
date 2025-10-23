@@ -77,7 +77,12 @@ public class State_Chase : MonoBehaviour
         }
 
         // Apply movement velocity
-        controller.SetDesiredVelocity(moveAxis * speed);
+        Vector2 velocity = moveAxis * speed;
+        
+        // Apply ladder modifiers if on ladder
+        velocity = controller.ApplyLadderModifiers(velocity);
+        
+        controller.SetDesiredVelocity(velocity);
 
         // Set movement animation parameters
         anim.SetFloat("moveX", moveAxis.x);

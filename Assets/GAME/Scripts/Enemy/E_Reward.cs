@@ -37,9 +37,9 @@ public class E_Reward : MonoBehaviour
 
     void Start()
     {
-        if (!p_Exp) p_Exp = FindFirstObjectByType<P_Exp>();
+        p_Exp = GameObject.FindGameObjectWithTag("Player")?.GetComponent<P_Exp>();
         
-        if (!p_Exp) { Debug.LogError($"{name}: P_Exp is missing!", this); return; }
+        if (!p_Exp) { Debug.LogError($"{name}: P_Exp is missing on Player!", this); return; }
     }
 
     void OnEnable()

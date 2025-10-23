@@ -43,6 +43,11 @@ public class E_Controller : MonoBehaviour, I_Controller
     Vector2         knockback, desiredVelocity; //, attackDir, lastAimDir;
     bool            isStunned, isDead, isAttacking;    
     float           stunUntil, attackCooldown, attackInRangeTimer, contactTimer;
+    
+    // Ladder system
+    ENV_Ladder      currentLadder;
+    float           originalGravityScale;
+    bool            isOnLadder;
 
     void Awake()
     {
@@ -274,6 +279,32 @@ public class E_Controller : MonoBehaviour, I_Controller
     public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
     public Transform GetTarget() => currentTarget;
     public float GetAttackRange() => attackRange;
+    
+    // LADDER SYSTEM
+    
+    public void EnterLadder(ENV_Ladder ladder)
+    {
+        currentLadder = ladder;
+        isOnLadder = true;
+        originalGravityScale = rb.gravityScale;
+        rb.gravityScale = ladder.ladderGravityScale;
+    }
+    
+    public void ExitLadder()
+    {
+        currentLadder = null;
+        isOnLadder = false;
+        rb.gravityScale = originalGravityScale;
+    }
+    
+    public Vector2 ApplyLadderModifiers(Vector2 velocity)
+    {
+        if (!isOnLadder || !currentLadder) return velocity;
+        
+        return currentLadder.ApplyLadderSpeed(velocity);
+    }
+    
+    public bool IsOnLadder() => isOnLadder;
     
     // DEBUG: visualize detection/attack ranges
     void OnDrawGizmosSelected()

@@ -147,12 +147,18 @@ public INV_Slots[]   inv_Slots;
 bool isDead;
 bool isGrounded;
 float attackTimer;
+
+// Ladder system
+ENV_Ladder currentLadder;
+float originalGravityScale;
+bool isOnLadder;
 ```
 
 **Rules:**
 - ✅ Last field section
 - ✅ Private (no keyword)
 - ✅ Comment: `// Runtime state` or `// Internal state`
+- ✅ Can have **sub-sections** with descriptive comments (e.g., `// Ladder system`, `// Combo system`)
 - ❌ No header attribute
 
 ---
@@ -339,26 +345,41 @@ void OnDestroy()
 
 ## 💬 5. Commenting Rules
 
+### Section Comments for Methods
+```csharp
+// LADDER SYSTEM
+
+public void EnterLadder(ENV_Ladder ladder) { ... }
+public void ExitLadder() { ... }
+
+// WEAPON SYSTEM
+
+public W_SO EquipWeapon(W_SO newWeaponData) { ... }
+```
+
+**Rules:**
+- ✅ Use **ALL CAPS** section comments (e.g., `// LADDER SYSTEM`, `// WEAPON SYSTEM`) to group related methods
+- ✅ Blank line before section comment
+- ✅ No blank line after section comment (methods start immediately)
+
 ### Function Comments (Selective)
 ```csharp
-// Adds item to inventory, stacking into existing slots first
-public void AddItem(INV_ItemSO itemSO, int quantity) { ... }
+// Called when player enters a ladder trigger zone
+public void EnterLadder(ENV_Ladder ladder) { ... }
 
-// Spawns loot prefab at player position
-public void DropItem(INV_ItemSO itemSO, int quantity) { ... }
-
-// Update all slots & gold text at start
-void Start() { ... }
+// Returns modified velocity based on movement direction relative to ladder
+public Vector2 ApplyLadderSpeed(Vector2 inputVelocity) { ... }
 
 // Self-explanatory - no comment needed
 public void Hide() { ... }
 ```
 
 **Rules:**
-- ✅ Comment public methods if behavior non-obvious
+- ✅ Use **single-line `//` comments** for public methods (not XML `///`)
+- ✅ Comment should be concise and action-oriented
 - ✅ Skip if method name is self-explanatory (`Hide`, `Show`, `UpdateUI`)
-- ✅ Unity lifecycle methods if doing something special
-- ✅ Focus on WHAT/WHY, not HOW
+- ✅ Comment appears **directly above** the method (no blank line)
+- ❌ Don't use verbose XML summaries unless it's a complex API
 
 ### Inline Comments (Complex Logic Only)
 ```csharp

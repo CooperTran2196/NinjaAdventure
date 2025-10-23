@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -22,13 +21,19 @@ public class INV_Manager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         p_StatsManager ??= FindFirstObjectByType<P_StatsManager>();
 
         if (!p_StatsManager) { Debug.LogError($"{name}: P_StatsManager is missing!", this); return; }
+        if (!goldText)       { Debug.LogError($"{name}: goldText is missing!", this); return; }
+        if (!lootPrefab)     { Debug.LogError($"{name}: lootPrefab is missing!", this); return; }
+        if (!player)         { Debug.LogError($"{name}: player is missing!", this); return; }
+        
+        if (inv_Slots == null || inv_Slots.Length == 0)
+        {
+            Debug.LogError($"{name}: inv_Slots array is empty!", this); return; 
+        }
     }
 
     void OnEnable()  => INV_Loot.OnItemLooted += AddItem;

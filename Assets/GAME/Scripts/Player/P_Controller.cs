@@ -50,6 +50,11 @@ public class P_Controller : MonoBehaviour
     // NEW: Track equipped weapon data
     W_SO currentMeleeData;
     W_SO currentRangedData;
+    
+    // Ladder system
+    ENV_Ladder currentLadder;
+    float originalGravityScale;
+    bool isOnLadder;
 
     const float MIN_DISTANCE = 0.000001f;
 
@@ -371,11 +376,9 @@ public class P_Controller : MonoBehaviour
         }
     }
 
-    // ========== WEAPON SWAPPING SYSTEM ==========
+    // WEAPON SWAPPING SYSTEM
 
-    /// <summary>
-    /// Equips a new weapon, returns the old weapon for inventory swap
-    /// </summary>
+    // Equips a new weapon, returns the old weapon for inventory swap
     public W_SO EquipWeapon(W_SO newWeaponData)
     {
         if (newWeaponData == null)
@@ -432,19 +435,46 @@ public class P_Controller : MonoBehaviour
         return oldWeaponData; // Return old weapon for inventory swap
     }
 
-    /// <summary>
-    /// Gets current melee weapon SO for UI display
-    /// </summary>
+    // Gets current melee weapon SO for UI display
     public W_SO GetCurrentMeleeWeaponSO()
     {
         return currentMeleeData;
     }
 
-    /// <summary>
-    /// Gets current ranged weapon SO for UI display
-    /// </summary>
+    // Gets current ranged weapon SO for UI display
     public W_SO GetCurrentRangedWeaponSO()
     {
         return currentRangedData;
     }
+    
+    // LADDER SYSTEM
+    
+    // Called when player enters a ladder trigger zone
+    public void EnterLadder(ENV_Ladder ladder)
+    {
+        currentLadder = ladder;
+        isOnLadder = true;
+        originalGravityScale = rb.gravityScale;
+        rb.gravityScale = ladder.ladderGravityScale;
+    }
+    
+    // Called when player exits a ladder trigger zone
+    public void ExitLadder()
+    {
+        currentLadder = null;
+        isOnLadder = false;
+        rb.gravityScale = originalGravityScale;
+    }
+    
+    // Modifies movement velocity based on ladder climbing direction.
+    public Vector2 ApplyLadderModifiers(Vector2 velocity)
+    {
+        if (!isOnLadder || !currentLadder) return velocity;
+        
+        return currentLadder.ApplyLadderSpeed(velocity);
+    }
+
+    // Returns true if player is currently on a ladder
+    public bool IsOnLadder() => isOnLadder;
 }
+
