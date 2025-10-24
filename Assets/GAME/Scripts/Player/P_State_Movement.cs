@@ -4,9 +4,9 @@ using UnityEngine;
 public class P_State_Movement : MonoBehaviour
 {
     // Cache
-    Animator     anim;
-    C_Stats      c_Stats;
-    P_Controller controller;
+    Animator       anim;
+    C_Stats        c_Stats;
+    P_Controller   controller;
     P_State_Attack attackState;
 
     // Runtime

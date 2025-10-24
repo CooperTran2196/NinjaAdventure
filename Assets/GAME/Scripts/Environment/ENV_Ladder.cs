@@ -10,7 +10,6 @@ public class ENV_Ladder : MonoBehaviour
                         public Vector2 climbDirection = Vector2.up;
     [Range(0.1f, 1.0f)] public float climbUpMultiplier   = 0.6f;
     [Range(1.0f, 2.0f)] public float climbDownMultiplier = 1.3f;
-                        public float ladderGravityScale = 0f;
 
     // Runtime state
     Vector2 normalizedClimbDir;
