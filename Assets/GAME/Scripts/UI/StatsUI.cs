@@ -84,45 +84,51 @@ public class StatsUI : MonoBehaviour
         statsSlots[1].GetComponentInChildren<TMP_Text>().text = "AP: " + p_Stats.AP;
     }
 
+    public void UpdateAS()
+    {
+        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "AS: " + p_Stats.attackSpeed + "0%";
+    }
+
     public void UpdateLS()
     {
-        statsSlots[2].GetComponentInChildren<TMP_Text>().text = "Lifesteal: " + p_Stats.lifesteal + "%";
+        statsSlots[3].GetComponentInChildren<TMP_Text>().text = "Lifesteal: " + p_Stats.lifesteal + "%";
     }
 
     public void UpdateMP()
     {
-        statsSlots[3].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.maxMP;
+        statsSlots[4].GetComponentInChildren<TMP_Text>().text = "MP: " + p_Stats.maxMP;
     }
 
     public void UpdateMaxHealth()
     {
-        statsSlots[4].GetComponentInChildren<TMP_Text>().text = "HP: " + p_Stats.maxHP;
+        statsSlots[5].GetComponentInChildren<TMP_Text>().text = "HP: " + p_Stats.maxHP;
     }
 
     public void UpdateKR()
     {
-        statsSlots[5].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
+        statsSlots[6].GetComponentInChildren<TMP_Text>().text = "KR: " + p_Stats.KR;
     }
 
     public void UpdateAR()
     {
-        statsSlots[6].GetComponentInChildren<TMP_Text>().text = "AR: " + p_Stats.AR;
+        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "AR: " + p_Stats.AR;
     }
 
     public void UpdateMR()
     {
-        statsSlots[7].GetComponentInChildren<TMP_Text>().text = "MR: " + p_Stats.MR;
+        statsSlots[8].GetComponentInChildren<TMP_Text>().text = "MR: " + p_Stats.MR;
     }
 
     public void UpdateMS()
     {
-        statsSlots[8].GetComponentInChildren<TMP_Text>().text = "MS: " + p_Stats.MS;
+        statsSlots[9].GetComponentInChildren<TMP_Text>().text = "MS: " + p_Stats.MS;
     }
 
     public void UpdateAllStats()
     {
         UpdateAD();
         UpdateAP();
+        UpdateAS();
         UpdateLS();
         UpdateMP();
         UpdateMaxHealth();

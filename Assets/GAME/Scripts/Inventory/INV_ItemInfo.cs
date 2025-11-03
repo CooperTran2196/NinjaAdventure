@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class INV_ItemInfo : MonoBehaviour
 {
+    [Header("References")]
+    CanvasGroup   canvasGroup;
+    RectTransform rectTransform;
+
     [Header("MUST wire MANUALLY in Inspector")]
-    public CanvasGroup   canvasGroup;
-    public RectTransform rectTransform;
     public TMP_Text      itemNameText;
     public TMP_Text      itemDescText;
     public TMP_Text      statLinePrefab;
     public Transform     statContainer;
 
-    [Header("Settings")]
+    [Header("Offset")]
     public Vector2 offset = new Vector2(12f, -8f);
 
     void Awake()
     {
         canvasGroup   ??= GetComponent<CanvasGroup>();
-        rectTransform ??= GetComponent<RectTransform>();
+        rectTransform ??= GetComponentInChildren<RectTransform>();
 
         if (!canvasGroup)    { Debug.LogError($"{name}: CanvasGroup is missing!", this); return; }
         if (!rectTransform)  { Debug.LogError($"{name}: RectTransform is missing!", this); return; }
@@ -68,6 +70,7 @@ public class INV_ItemInfo : MonoBehaviour
 
     public void Hide()
     {
+        if (!canvasGroup) return;
         canvasGroup.alpha = 0f;
     }
 
@@ -129,9 +132,9 @@ public class INV_ItemInfo : MonoBehaviour
         {
             statLines.Add($"AD: {weaponSO.AD}   AP: {weaponSO.AP}");
             statLines.Add($"Knockback: {weaponSO.knockbackForce}");
-            statLines.Add($"    Thrust: {weaponSO.thrustDistance}");
-            statLines.Add($"      Slash: {weaponSO.slashArcDegrees} Degrees");
-            statLines.Add($"     Speed: {string.Join(" - ", weaponSO.comboShowTimes)}");
+            statLines.Add($"Thrust    : {weaponSO.thrustDistance}");
+            statLines.Add($"Slash      : {weaponSO.slashArcDegrees} Degrees");
+            statLines.Add($"Speed      : {string.Join(" - ", weaponSO.comboShowTimes)}");
             statLines.Add($"Penalties: {string.Join(" - ", weaponSO.comboMovePenalties)}");
             statLines.Add($"Stun Time: {string.Join(" - ", weaponSO.comboStunTimes)}");
         }

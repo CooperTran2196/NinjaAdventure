@@ -61,5 +61,11 @@ TagManager:
   - name: Loot
     uniqueID: 2498439127
     locked: 0
+  - name: Effect
+    uniqueID: 1912278453
+    locked: 0
+  - name: UI
+    uniqueID: 724366543
+    locked: 0
   m_RenderingLayers:
   - Default

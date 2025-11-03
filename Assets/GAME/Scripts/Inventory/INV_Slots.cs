@@ -2,57 +2,62 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections;
 
 public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public enum SlotType { Empty, Item, Weapon }
 
-    [Header("Slot Type")]
-    public SlotType type = SlotType.Empty;
+    [Header("References")]
+    Canvas            canvas;
+    INV_Manager       inv_Manager;
+    Image             itemImage;
+    TMP_Text          amountText;
+    INV_ItemInfo itemInfoPopup;
+    
+    [Header("MUST wire MANUALLY in Inspector")]
+    public GameObject draggingIconPrefab;
 
     [Header("Data")]
-    public INV_ItemSO itemSO;
-    public W_SO weaponSO;
-    public int quantity;
+    public SlotType    type     = SlotType.Empty;
+    public INV_ItemSO  itemSO;
+    public W_SO        weaponSO;
+    public int         quantity;
 
-    [Header("UI References")]
-    public Image itemImage;
-    public TMP_Text amountText;
+    [Header("Hover Settings")]
+    public float hoverDelay = 1f;
 
-    [Header("Drag & Drop Prefab")]
-    public GameObject draggingIconPrefab; // Visual icon that follows mouse during drag
-
-    [Header("Info Popup Settings")]
-    public float hoverDelay = 1f; // Delay before showing popup
-
-    // Internal references
-    INV_Manager inv_Manager;
-    Canvas canvas;
+    // Runtime state
     static SHOP_Manager shop_Manager;
-    INV_ItemInfo itemInfoPopup;  // Reference to shared popup
-
-    // Runtime drag state
     GameObject currentDragIcon;
-    Coroutine hoverCoroutine;  // Coroutine for delay
+    Coroutine hoverCoroutine;
 
     void Awake()
     {
-        // Auto-find components
-        itemImage   ??= transform.Find("Icon")?.GetComponent<Image>();
-        amountText  ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
+        // GetComponent same-GameObject refs
+        canvas      ??= GetComponentInParent<Canvas>();
         inv_Manager ??= GetComponentInParent<INV_Manager>();
-        canvas      = GetComponentInParent<Canvas>();
+        itemImage   ??= transform.Find("Image")?.GetComponent<Image>();
+        amountText  ??= transform.Find("QuantityText")?.GetComponent<TMP_Text>();
 
-        // Get reference to shared popup from GameManager
-        itemInfoPopup = SYS_GameManager.Instance.inv_ItemInfo;
+        // Validate required components
+        if (!canvas)             { Debug.LogError($"{name}: Canvas parent is missing!", this); return; }
+        if (!inv_Manager)        { Debug.LogError($"{name}: INV_Manager is missing!", this); return; }
+        if (!itemImage)          { Debug.LogError($"{name}: itemImage is missing!", this); return; }
+        if (!amountText)         { Debug.LogError($"{name}: amountText is missing!", this); return; }
+        
+        if (!draggingIconPrefab) { Debug.LogError($"{name}: draggingIconPrefab is not assigned!", this); return; }
+    }
 
-        // Validate required references
-        if (!itemImage)            Debug.LogError($"INV_Slots ({name}): itemImage is missing.");
-        if (!amountText)           Debug.LogError($"INV_Slots ({name}): amountText is missing.");
-        if (!inv_Manager)          Debug.LogError($"INV_Slots ({name}): INV_Manager is missing.");
-        if (!canvas)               Debug.LogError($"INV_Slots ({name}): Canvas parent is missing.");
-        if (!draggingIconPrefab)   Debug.LogError($"INV_Slots ({name}): Dragging Icon Prefab is not assigned!");
-        if (!itemInfoPopup)        Debug.LogWarning($"INV_Slots ({name}): itemInfoPopup not found in GameManager.");
+    void Start()
+    {
+        // Get shared popup from GameManager (may be null if not ready yet)
+        if (SYS_GameManager.Instance != null)
+        {
+            itemInfoPopup = SYS_GameManager.Instance.inv_ItemInfo;
+        }
+        
+        if (!itemInfoPopup) Debug.LogWarning($"{name}: itemInfoPopup not found - will retry on hover!", this);
     }
 
     void OnEnable()  => SHOP_Keeper.OnShopStateChanged += HandleShopStateChanged;
@@ -63,12 +68,11 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         shop_Manager = isOpen ? shop : null;
     }
 
-    // update icon and amount text
+    // Update icon and amount text based on slot contents
     public void UpdateUI()
     {
         if (type == SlotType.Item && itemSO)
         {
-            // Existing item display
             itemImage.enabled = true;
             itemImage.sprite = itemSO.image;
             itemImage.preserveAspect = false; // Items fill slot
@@ -76,13 +80,12 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         }
         else if (type == SlotType.Weapon && weaponSO)
         {
-            // NEW: Weapon display
             itemImage.enabled = true;
             itemImage.sprite = weaponSO.image;
             itemImage.preserveAspect = true; // Weapons preserve aspect ratio
-            amountText.text = ""; // weapons don't stack
+            amountText.text = ""; // Weapons don't stack
         }
-        else // Empty
+        else
         {
             itemImage.enabled = false;
             amountText.text = "";
@@ -90,23 +93,25 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         }
     }
 
-    // LEFT = use or sell; RIGHT = drop (ONLY IF shop closed)
+    // Handle left/right click: use/equip, sell, drop
     public void OnPointerClick(PointerEventData eventData)
     {
         if (type == SlotType.Empty) return;
 
-        // Shop interactions (items only, weapons can't be sold in shop)
+        // Shop interactions (items only)
         if (shop_Manager && type == SlotType.Item)
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 shop_Manager.SellItem(itemSO);
                 quantity -= 1;
+                
                 if (quantity <= 0)
                 {
                     itemSO = null;
                     type = SlotType.Empty;
                 }
+                
                 UpdateUI();
             }
             return;
@@ -116,18 +121,17 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             if (type == SlotType.Item)
-                inv_Manager.UseItem(this); // existing
+                inv_Manager.UseItem(this);
             else if (type == SlotType.Weapon)
-                inv_Manager.EquipWeapon(this); // NEW method
+                inv_Manager.EquipWeapon(this);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // Drop to world
             if (type == SlotType.Item)
             {
-                // Existing drop item code
                 inv_Manager.DropItem(itemSO, 1);
                 quantity -= 1;
+                
                 if (quantity <= 0)
                 {
                     itemSO = null;
@@ -136,18 +140,16 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
             }
             else if (type == SlotType.Weapon)
             {
-                // NEW: Drop weapon (placeholder for now)
                 inv_Manager.DropWeapon(weaponSO);
                 weaponSO = null;
                 type = SlotType.Empty;
             }
+            
             UpdateUI();
         }
     }
 
-    // ===== DRAG AND DROP SYSTEM =====
-    
-    // Called ONCE when you start dragging (click + hold)
+    // DRAG AND DROP SYSTEM 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (type == SlotType.Empty) return;
@@ -160,26 +162,24 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
             hoverCoroutine = null;
         }
 
-        // Hide popup when starting drag
-        if (itemInfoPopup) itemInfoPopup.Hide();
+        itemInfoPopup?.Hide();
 
         // Create visual icon that follows mouse
         currentDragIcon = Instantiate(draggingIconPrefab, canvas.transform);
-        currentDragIcon.transform.SetAsLastSibling(); // Render on top of everything
+        currentDragIcon.transform.SetAsLastSibling();
         
-        // Copy item/weapon sprite to the drag icon
+        // Copy item/weapon sprite to drag icon
         Image iconImage = currentDragIcon.GetComponent<Image>();
         if (iconImage != null)
         {
             iconImage.sprite = itemImage.sprite;
         }
         
-        // Fade original slot icon (so it looks like item "lifted off")
+        // Fade original slot icon (looks like item lifted off)
         Color originalColor = itemImage.color;
         itemImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.5f);
     }
 
-    // Called EVERY FRAME while dragging (moves icon with mouse)
     public void OnDrag(PointerEventData eventData)
     {
         if (currentDragIcon != null)
@@ -188,10 +188,9 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         }
     }
 
-    // Called ONCE when you release mouse button (cleanup)
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Destroy the floating icon
+        // Destroy floating icon
         if (currentDragIcon != null)
         {
             Destroy(currentDragIcon);
@@ -202,7 +201,6 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         itemImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
     }
 
-    // Called when you drop onto another slot
     public void OnDrop(PointerEventData eventData)
     {
         INV_Slots draggedSlot = eventData.pointerDrag?.GetComponent<INV_Slots>();
@@ -215,10 +213,10 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     void SwapSlots(INV_Slots otherSlot)
     {
         // Store this slot's data
-        SlotType    tempType     = type;
-        INV_ItemSO  tempItemSO   = itemSO;
-        W_SO        tempWeaponSO = weaponSO;
-        int         tempQuantity = quantity;
+        SlotType   tempType     = type;
+        INV_ItemSO tempItemSO   = itemSO;
+        W_SO       tempWeaponSO = weaponSO;
+        int        tempQuantity = quantity;
 
         // Copy other slot's data to this slot
         type     = otherSlot.type;
@@ -237,13 +235,12 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
         otherSlot.UpdateUI();
     }
 
-    // ===== HOVER SYSTEM =====
+    // HOVER SYSTEM
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (type == SlotType.Empty || !itemInfoPopup) return;
 
-        // Start delay before showing popup
         hoverCoroutine = StartCoroutine(ShowPopupWithDelay(eventData.position));
     }
 
@@ -256,19 +253,25 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
             hoverCoroutine = null;
         }
 
-        // Hide popup
-        if (itemInfoPopup)
-        {
-            itemInfoPopup.Hide();
-        }
+        itemInfoPopup?.Hide();
     }
 
-    // Show popup with delay
-    System.Collections.IEnumerator ShowPopupWithDelay(Vector2 mousePosition)
+    IEnumerator ShowPopupWithDelay(Vector2 mousePosition)
     {
         yield return new WaitForSeconds(hoverDelay);
 
-        // Position and show popup
+        // Lazy initialization if not available in Awake
+        if (!itemInfoPopup && SYS_GameManager.Instance != null)
+        {
+            itemInfoPopup = SYS_GameManager.Instance.inv_ItemInfo;
+        }
+
+        if (!itemInfoPopup)
+        {
+            hoverCoroutine = null;
+            yield break;
+        }
+
         itemInfoPopup.FollowMouse(mousePosition);
 
         if (type == SlotType.Item && itemSO)

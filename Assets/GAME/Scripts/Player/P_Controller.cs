@@ -3,12 +3,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
 [RequireComponent(typeof(P_State_Idle))]
 [RequireComponent(typeof(P_State_Movement))]
 [RequireComponent(typeof(P_State_Attack))]
 [RequireComponent(typeof(P_State_Dodge))]
-[RequireComponent(typeof(C_Stats))]
-[RequireComponent(typeof(C_Health))]
 
 public class P_Controller : MonoBehaviour
 {
@@ -16,6 +17,17 @@ public class P_Controller : MonoBehaviour
 
     [Header("Main controller for player input states")]
     [Header("References")]
+    Rigidbody2D      rb;
+    Animator         anim;
+    P_InputActions   input;
+    P_State_Idle     idle;
+    P_State_Movement move;
+    P_State_Attack   attack;
+    P_State_Dodge    dodge;
+    C_Stats          c_Stats;
+    C_Health         c_Health;
+
+    [Header("State")]
     public PState defaultState = PState.Idle;
     public PState currentState;
 
@@ -26,47 +38,38 @@ public class P_Controller : MonoBehaviour
     [Header("Debug")]
     public bool autoKill;
 
-    // NEW: Events for UI updates (2 separate events)
+    // Events for weapon UI updates
     public static event System.Action<W_SO> OnMeleeWeaponChanged;
     public static event System.Action<W_SO> OnRangedWeaponChanged;
 
-    Rigidbody2D rb;
-    Animator anim;
-    P_InputActions input;
-
-    P_State_Idle idle;
-    P_State_Movement move;
-    P_State_Attack attack;
-    P_State_Dodge dodge;
-    C_Stats c_Stats;
-    C_Health c_Health;
-
-    // Runtime vars - grouped by type
+    // Runtime state
     Vector2 desiredVelocity, knockback, moveAxis, attackDir = Vector2.down, lastMove = Vector2.down;
-    bool isDead, isStunned, isAttacking, isDodging;
-    float stunUntil, attackCooldown, dodgeCooldown;
+    bool    isDead, isStunned, isAttacking, isDodging;
+    float   stunUntil, attackCooldown, dodgeCooldown;
+    
+    // Weapon system
     W_Base currentWeapon;
-
-    // NEW: Track equipped weapon data
-    W_SO currentMeleeData;
-    W_SO currentRangedData;
+    W_SO   currentMeleeData;
+    W_SO   currentRangedData;
+    
+    // Ladder system
+    ENV_Ladder currentLadder;
 
     const float MIN_DISTANCE = 0.000001f;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        c_Stats = GetComponent<C_Stats>();
+        rb       = GetComponent<Rigidbody2D>();
+        anim     = GetComponent<Animator>();
+        c_Stats  = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
+        idle     = GetComponent<P_State_Idle>();
+        move     = GetComponent<P_State_Movement>();
+        attack   = GetComponent<P_State_Attack>();
+        dodge    = GetComponent<P_State_Dodge>();
+        input    = new P_InputActions();
 
-        idle = GetComponent<P_State_Idle>();
-        move = GetComponent<P_State_Movement>();
-        attack = GetComponent<P_State_Attack>();
-        dodge = GetComponent<P_State_Dodge>();  // Changed from State_Dodge to P_State_Dodge
-
-        input ??= new P_InputActions();
-
+        // Set default animator facing (down)
         anim.SetFloat("moveX", 0f);
         anim.SetFloat("moveY", -1f);
         anim.SetFloat("idleX", 0f);
@@ -82,14 +85,14 @@ public class P_Controller : MonoBehaviour
 
     void Start()
     {
-        // Initialize with starting weapons
-        if (meleeWeapon != null && meleeWeapon.weaponData != null)
+        // Notify UI of starting weapons
+        if (meleeWeapon?.weaponData != null)
         {
             currentMeleeData = meleeWeapon.weaponData;
             OnMeleeWeaponChanged?.Invoke(currentMeleeData);
         }
 
-        if (rangedWeapon != null && rangedWeapon.weaponData != null)
+        if (rangedWeapon?.weaponData != null)
         {
             currentRangedData = rangedWeapon.weaponData;
             OnRangedWeaponChanged?.Invoke(currentRangedData);
@@ -103,23 +106,19 @@ public class P_Controller : MonoBehaviour
         idle.enabled = move.enabled = attack.enabled = dodge.enabled = false;
     }
 
-    void OnDestroy()
-    {
-        input?.Dispose();
-    }
+    void OnDestroy() => input?.Dispose();
 
     void OnDiedHandler() => SwitchState(PState.Dead);
 
     void Update()
     {
         if (isDead || isStunned) return;
+        
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
-        if (dodgeCooldown > 0f) dodgeCooldown -= Time.deltaTime;
+        if (dodgeCooldown > 0f)  dodgeCooldown  -= Time.deltaTime;
 
-        // Debug kill
         if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
 
-        // PROCESS INPUTS
         ProcessInputs();
     }
 
@@ -127,51 +126,44 @@ public class P_Controller : MonoBehaviour
     {
         if (isDead) return;
 
-        // Apply this frame: block state intent when stunned/dead, but still allow knockback
+        // Block movement when stunned, but allow knockback
         Vector2 baseVel = isStunned ? Vector2.zero : desiredVelocity;
         rb.linearVelocity = baseVel + knockback;
 
-        // Decay knockback for the NEXT frame (always decay - MoveTowards handles zero gracefully)
+        // Decay knockback each frame
         knockback = Vector2.MoveTowards(knockback, Vector2.zero, c_Stats.KR * Time.fixedDeltaTime);
     }
 
-    // Convert mouse position to world direction
-    Vector2 ReadMouseAim()
+    // INPUT PROCESSING
+
+    // Converts mouse screen position to world direction from player
+    public Vector2 ReadMouseAim()
     {
-        Vector2 m = Mouse.current.position.ReadValue();
-        var cam = Camera.main;
+        Vector2 m   = Mouse.current.position.ReadValue();
+        var     cam = Camera.main;
         if (!cam) return Vector2.zero;
+        
         Vector3 world = cam.ScreenToWorldPoint(new Vector3(m.x, m.y, -cam.transform.position.z));
-        Vector2 dir = (Vector2)world - (Vector2)transform.position;
+        Vector2 dir   = (Vector2)world - (Vector2)transform.position;
+        
         return dir.sqrMagnitude > MIN_DISTANCE ? dir.normalized : Vector2.zero;
     }
 
+    // Processes player input with priority: Death > Dodge > Attack > Movement > Idle
     void ProcessInputs()
     {
-        // Handle death first (highest)
-        if (c_Stats.currentHP <= 0)
-        {
-            SwitchState(PState.Dead);
-            return;
-        }
-
-        // Don't interrupt dodge while dodging
+        if (c_Stats.currentHP <= 0) { SwitchState(PState.Dead); return; }
         if (currentState == PState.Dodge && isDodging) return;
 
-        // Handle dodge input (high) - CANCELS COMBO
+        // Dodge cancels combo
         if (input.Player.Dodge.triggered && dodgeCooldown <= 0f)
         {
-            // Cancel combo if attacking
-            if (isAttacking && attack != null)
-            {
-                attack.ResetCombo();
-            }
-            
+            if (isAttacking && attack != null) attack.ResetCombo();
             SwitchState(PState.Dodge);
             return;
         }
 
-        // Handle attack inputs (mid) - queue if already attacking, trigger if not
+        // Attack input: queue if attacking, trigger if not
         if (attackCooldown <= 0f)
         {
             Vector2 mouseAim = ReadMouseAim();
@@ -180,107 +172,70 @@ public class P_Controller : MonoBehaviour
             if (input.Player.MeleeAttack.triggered)
             {
                 currentWeapon = meleeWeapon;
-                
-                if (isAttacking)
-                {
-                    // Queue combo input
-                    attack.QueueComboInput();
-                }
-                else
-                {
-                    TriggerAttack();
-                }
-                // Don't return - allow movement processing below
+                if (isAttacking) attack.QueueComboInput();
+                else TriggerAttack();
             }
             else if (input.Player.RangedAttack.triggered)
             {
                 currentWeapon = rangedWeapon;
-                
-                if (isAttacking)
-                {
-                    // Queue combo input
-                    attack.QueueComboInput();
-                }
-                else
-                {
-                    TriggerAttack();
-                }
-                // Don't return - allow movement processing below
+                if (isAttacking) attack.QueueComboInput();
+                else TriggerAttack();
             }
         }
 
-        // Handle movement input (always process unless dodging)
+        // Movement input
         moveAxis = input.Player.Move.ReadValue<Vector2>();
         if (moveAxis.sqrMagnitude > 1f) moveAxis.Normalize();
 
         if (moveAxis.sqrMagnitude > MIN_DISTANCE)
         {
             lastMove = moveAxis;
-
-            // Always enable movement when moving (even during attack)
             if (!move.enabled) move.enabled = true;
             move.SetMoveAxis(moveAxis);
             
-            // Update state tracking: Switch to Move if not attacking or dodging
             if (currentState != PState.Attack && currentState != PState.Dodge)
-            {
                 currentState = PState.Move;
-            }
             return;
         }
 
-        // No movement input - disable movement state (but keep attack if attacking)
+        // No input: return to idle
         if (move.enabled) move.enabled = false;
-        
-        // Update state to Idle only if not attacking or dodging
         if (currentState != PState.Attack && currentState != PState.Dodge)
-        {
             SwitchState(PState.Idle);
-        }
     }
 
-    // Switch states with integrated death handling and attack logic
+    // STATE SYSTEM
+
+    // Switches to new state, disabling others (except attack if mid-combo)
     public void SwitchState(PState state)
     {
         if (currentState == state) return;
         currentState = state;
 
-        // Disable all states first (except attack if it's active)
-        idle.enabled = false;
-        move.enabled = false;
+        idle.enabled  = false;
+        move.enabled  = false;
         dodge.enabled = false;
-        
-        // Only disable attack if we're not currently attacking
         if (!isAttacking) attack.enabled = false;
 
         switch (state)
         {
-            case PState.Dead: // Highest priority
-                desiredVelocity = Vector2.zero;
-                knockback = Vector2.zero;
+            case PState.Dead:
+                desiredVelocity   = Vector2.zero;
+                knockback         = Vector2.zero;
                 rb.linearVelocity = Vector2.zero;
-                isDead = true;
-                isAttacking = false;
-                isStunned = false;
-                isDodging = false;
-                
-                // Force disable attack on death
-                attack.enabled = false;
-
+                isDead            = true;
+                isAttacking       = false;
+                isStunned         = false;
+                isDodging         = false;
+                attack.enabled    = false;
                 anim.SetTrigger("Die");
                 break;
 
             case PState.Dodge:
                 dodge.enabled = true;
-                isDodging = true;
+                isDodging     = true;
                 dodgeCooldown = c_Stats.dodgeCooldown;
-
                 dodge.Dodge(lastMove);
-                break;
-
-            case PState.Attack:
-                // Attack is handled separately via TriggerAttack()
-                // This case shouldn't be called anymore
                 break;
 
             case PState.Move:
@@ -288,162 +243,108 @@ public class P_Controller : MonoBehaviour
                 move.SetMoveAxis(moveAxis);
                 break;
 
-            case PState.Idle: // Lowest priority
+            case PState.Idle:
                 desiredVelocity = Vector2.zero;
-                idle.enabled = true;
-
+                idle.enabled    = true;
                 idle.SetIdleFacing(lastMove);
                 break;
         }
     }
 
-    // Trigger attack without changing movement state
+    // Initiates attack without disabling movement state (allows attack while moving)
     void TriggerAttack()
     {
         if (currentWeapon == null) return;
         
-        currentState = PState.Attack;
+        currentState   = PState.Attack;
         attack.enabled = true;
-        
         attackCooldown = c_Stats.attackCooldown;
-        isAttacking = true;
+        isAttacking    = true;
+        
         attack.Attack(currentWeapon, attackDir);
         currentWeapon = null;
     }
 
-    // STUN FEATURE (same as enemy)
+    // COMBAT EFFECTS
+
+    // Stuns player for duration (extends if longer stun applied)
     public IEnumerator StunFor(float duration)
     {
         if (duration <= 0f) yield break;
 
-        // Extend the stun end if a longer one arrives
         float newEnd = Time.time + duration;
         if (newEnd > stunUntil) stunUntil = newEnd;
 
         isStunned = true;
         while (Time.time < stunUntil) yield return null;
-
         isStunned = false;
     }
 
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
     public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
     
-    // State setters for external components
+    // Called by P_State_Attack when attack animation ends
     public void SetAttacking(bool value)
     {
         isAttacking = value;
-        
-        // When attack ends, restore proper state based on current input
         if (!value && currentState == PState.Attack)
         {
-            // Check if player is currently moving
-            if (move.enabled && moveAxis.sqrMagnitude > MIN_DISTANCE)
-            {
-                currentState = PState.Move;
-            }
-            else
-            {
-                SwitchState(PState.Idle);
-            }
+            if (move.enabled && moveAxis.sqrMagnitude > MIN_DISTANCE) currentState = PState.Move;
+            else SwitchState(PState.Idle);
         }
     }
     
+    // Called by P_State_Dodge when dodge animation ends
     public void SetDodging(bool value)
     {
         isDodging = value;
-        
-        // When dodge ends, restore proper state based on current input
         if (!value && currentState == PState.Dodge)
         {
-            // Check if player is currently moving
             if (moveAxis.sqrMagnitude > MIN_DISTANCE)
             {
                 move.enabled = true;
                 move.SetMoveAxis(moveAxis);
                 currentState = PState.Move;
             }
-            else
-            {
-                SwitchState(PState.Idle);
-            }
+            else SwitchState(PState.Idle);
         }
     }
 
-    // ========== WEAPON SWAPPING SYSTEM ==========
+    // WEAPON SYSTEM
 
-    /// <summary>
-    /// Equips a new weapon, returns the old weapon for inventory swap
-    /// </summary>
+    // Swaps equipped weapon, returns old weapon for inventory management
     public W_SO EquipWeapon(W_SO newWeaponData)
     {
-        if (newWeaponData == null)
+        if (newWeaponData == null) { Debug.LogError($"{name}: Cannot equip null weapon!", this); return null; }
+
+        bool   isMelee      = newWeaponData.type == WeaponType.Melee;
+        W_SO   oldWeaponData = isMelee ? currentMeleeData : currentRangedData;
+        W_Base weaponSlot   = isMelee ? meleeWeapon : rangedWeapon;
+        
+        if (isMelee) currentMeleeData  = newWeaponData;
+        else         currentRangedData = newWeaponData;
+        
+        if (weaponSlot != null)
         {
-            Debug.LogError("P_Controller: Cannot equip null weapon!");
-            return null;
+            weaponSlot.weaponData = newWeaponData;
+            var spriteRenderer = weaponSlot.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null && newWeaponData.sprite != null)
+                spriteRenderer.sprite = newWeaponData.sprite;
         }
 
-        W_SO oldWeaponData;
+        if (isMelee) OnMeleeWeaponChanged?.Invoke(newWeaponData);
+        else         OnRangedWeaponChanged?.Invoke(newWeaponData);
 
-        if (newWeaponData.type == WeaponType.Melee)
-        {
-            // Swap melee weapon
-            oldWeaponData = currentMeleeData;
-            currentMeleeData = newWeaponData;
-            
-            if (meleeWeapon != null)
-            {
-                meleeWeapon.weaponData = newWeaponData;
-                
-                // Update visual sprite
-                var spriteRenderer = meleeWeapon.GetComponent<SpriteRenderer>();
-                if (spriteRenderer != null && newWeaponData.sprite != null)
-                {
-                    spriteRenderer.sprite = newWeaponData.sprite;
-                }
-            }
-
-            // Notify UI
-            OnMeleeWeaponChanged?.Invoke(newWeaponData);
-        }
-        else // Ranged
-        {
-            // Swap ranged weapon
-            oldWeaponData = currentRangedData;
-            currentRangedData = newWeaponData;
-            
-            if (rangedWeapon != null)
-            {
-                rangedWeapon.weaponData = newWeaponData;
-                
-                // Update visual sprite
-                var spriteRenderer = rangedWeapon.GetComponent<SpriteRenderer>();
-                if (spriteRenderer != null && newWeaponData.sprite != null)
-                {
-                    spriteRenderer.sprite = newWeaponData.sprite;
-                }
-            }
-
-            // Notify UI
-            OnRangedWeaponChanged?.Invoke(newWeaponData);
-        }
-
-        return oldWeaponData; // Return old weapon for inventory swap
+        return oldWeaponData;
     }
 
-    /// <summary>
-    /// Gets current melee weapon SO for UI display
-    /// </summary>
-    public W_SO GetCurrentMeleeWeaponSO()
-    {
-        return currentMeleeData;
-    }
-
-    /// <summary>
-    /// Gets current ranged weapon SO for UI display
-    /// </summary>
-    public W_SO GetCurrentRangedWeaponSO()
-    {
-        return currentRangedData;
-    }
+    public W_SO GetCurrentMeleeWeaponSO()  => currentMeleeData;
+    public W_SO GetCurrentRangedWeaponSO() => currentRangedData;
+    
+    // LADDER SYSTEM
+    
+    public void EnterLadder(ENV_Ladder ladder) => currentLadder = ladder;
+    public void ExitLadder() => currentLadder = null;
+    public Vector2 ApplyLadderModifiers(Vector2 velocity) => currentLadder ? currentLadder.ApplyLadderSpeed(velocity) : velocity;
 }
+

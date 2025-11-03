@@ -20,7 +20,8 @@ public enum StatName
     Lifesteal,
 
     // Weapon Bonus Stats
-    SlashArcBonus,       // Additive bonus degrees to slash arc (1 = +1°)
+    SlashArc,            // Additive bonus degrees to slash arc (1 = +1°)
+    AttackSpeed,         // Attack speed bonus (1 = 10% faster)
     MovePenaltyReduction, // Percentage reduction of movement penalties (1 = 1% less penalty)
     StunTimeBonus,       // Percentage increase to stun times (1 = 1% more stun)
     ThrustDistanceBonus, // Percentage increase to thrust distance (1 = 1% more distance)
@@ -36,6 +37,7 @@ public class P_StatEffect
 {
     [Header("Flat: AD, AP, MS, MaxHP, MaxMP, AR, MR, KR, SlashArc, Heal, Mana")]
     [Header("Percentage 1=1%: Lifesteal, ArmorPen, MagicPen, MovePenalty, StunTime, ThrustDistance")]
+    [Header("Linear 1=10%: AttackSpeed (1=10% faster, -1=10% slower)")]
     public StatName statName;
     public float Value;
 

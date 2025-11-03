@@ -29,7 +29,7 @@ public class SHOP_Keeper : MonoBehaviour
         talkTrigger ??= GetComponentInChildren<CircleCollider2D>();
         input       = new P_InputActions();
         
-        if (!anim)    { Debug.LogError($"{name}: Animator is missing!", this); return; }
+        if (!anim)        { Debug.LogError($"{name}: Animator is missing!", this); return; }
         if (!talkTrigger) { Debug.LogError($"{name}: CircleCollider2D is missing!", this); return; }
     }
 

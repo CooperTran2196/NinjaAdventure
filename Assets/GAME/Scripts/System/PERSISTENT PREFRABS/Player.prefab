@@ -325,6 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4290728090841259575}
+  - component: {fileID: 8288528992324758544}
   - component: {fileID: 7731384130201424669}
   - component: {fileID: 4071749663884111934}
   - component: {fileID: 4250485183414373112}
@@ -367,6 +368,14 @@ Transform:
   - {fileID: 2544898007547509533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &8288528992324758544
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589123278789176120}
+  m_Enabled: 1
 --- !u!212 &7731384130201424669
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -575,7 +584,8 @@ MonoBehaviour:
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  slashArcBonus: 0
+  slashArc: 0
+  attackSpeed: 0
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
@@ -597,7 +607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  c_Stats: {fileID: 6644099288169238067}
   useDodgeIFrames: 1
   takingDamageAmount: 1
   healingAmount: 1
@@ -613,7 +622,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a2195fb49d54610b3bb91d1db3691f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Mana
-  stats: {fileID: 6644099288169238067}
 --- !u!114 &4324443832536490533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,6 +735,7 @@ MonoBehaviour:
   comboInputWindow: 1
   comboWindowTimer: 0
   comboInputQueued: 0
+  lockIdleToAttackDir: 0
 --- !u!114 &1952565714420619451
 MonoBehaviour:
   m_ObjectHideFlags: 0

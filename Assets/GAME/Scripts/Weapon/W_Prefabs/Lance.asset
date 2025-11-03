@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Lance
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: lance
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: 2c3ae47c60504ea4295857d0c00bd468, type: 3}
   image: {fileID: 21300000, guid: 2c3ae47c60504ea4295857d0c00bd468, type: 3}
@@ -21,8 +22,9 @@ MonoBehaviour:
   AP: 0
   knockbackForce: 5
   thrustDistance: 0.5
+  maxAttackSpeed: 0
   onlyThrustKnocksBack: 1
-  slashArcDegrees: 90
+  slashArcDegrees: 130
   comboShowTimes:
   - 0.6
   - 0.6

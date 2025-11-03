@@ -4,9 +4,9 @@ using UnityEngine;
 public class P_State_Movement : MonoBehaviour
 {
     // Cache
-    Animator     anim;
-    C_Stats      c_Stats;
-    P_Controller controller;
+    Animator       anim;
+    C_Stats        c_Stats;
+    P_Controller   controller;
     P_State_Attack attackState;
 
     // Runtime
@@ -58,7 +58,12 @@ public class P_State_Movement : MonoBehaviour
             anim.SetBool("isMoving", true);
         }
         
-        controller.SetDesiredVelocity(moveAxis * speed);
+        Vector2 velocity = moveAxis * speed;
+        
+        // Apply ladder modifiers if on ladder (slower up, faster down)
+        velocity = controller.ApplyLadderModifiers(velocity);
+        
+        controller.SetDesiredVelocity(velocity);
 
         // Set movement animation parameters (always update for directional info)
         anim.SetFloat("moveX", moveAxis.x);

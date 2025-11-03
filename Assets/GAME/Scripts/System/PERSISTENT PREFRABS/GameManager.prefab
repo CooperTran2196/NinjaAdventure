@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 283173575035470599}
   - component: {fileID: 9150887136014047373}
+  - component: {fileID: 3922532356362314020}
   - component: {fileID: 8894136543161484865}
   m_Layer: 0
   m_Name: GameManager
@@ -45,15 +46,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6308c8f2d5ea94dd29a0684c667964a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  sys_Fader: {fileID: 0}
+  sys_SoundManager: {fileID: 3922532356362314020}
   d_Manager: {fileID: 0}
   d_HistoryTracker: {fileID: 0}
-  sys_Fader: {fileID: 0}
   shop_Manager: {fileID: 0}
-  audioSource: {fileID: 8894136543161484865}
   inv_ItemInfo: {fileID: 0}
+  audioSource: {fileID: 8894136543161484865}
   initialSceneName: Level1
   initialSpawnId: Start
-  fadeDuration: 1.5
+  fadeDuration: 3
   persistentObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -68,6 +70,70 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &3922532356362314020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2651765537779792477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154617093cd294e6e900fa66a2c70160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SYS_SoundManager
+  comboSlash1: {fileID: 8300000, guid: 30ccc94b16ffe8441a76ab786949b26c, type: 3}
+  comboSlash2: {fileID: 8300000, guid: 8c282346d1624a043b1731061decc612, type: 3}
+  comboSlash3: {fileID: 8300000, guid: 68b3507e0bc36654aa1862d75de92e78, type: 3}
+  playerHit: {fileID: 8300000, guid: 569f080e4e54e3b45af15c19f7f716ec, type: 3}
+  enemyHit: {fileID: 8300000, guid: 050bfe669e9dbf74c8ff8778f52617ff, type: 3}
+  dodge: {fileID: 8300000, guid: c8c8d0eb390c00d4e97563086518a637, type: 3}
+  rangedAttack: {fileID: 8300000, guid: 4f97b9d5f630ac547adabb5f5219a37f, type: 3}
+  npcTalkSounds:
+  - {fileID: 8300000, guid: 1c7c785583308a849af8533908f01354, type: 3}
+  - {fileID: 8300000, guid: cb29a05ca9f7acb4ca07f41c5751e44f, type: 3}
+  - {fileID: 8300000, guid: 4462bcd7e1ce6cc46a644218073c7980, type: 3}
+  - {fileID: 8300000, guid: 36db12001780ca84a967ea7318bb8b0a, type: 3}
+  - {fileID: 8300000, guid: abf31ef8b45ba6b44a8a83b938345158, type: 3}
+  - {fileID: 8300000, guid: 762e9d82da9f8864483a23b2c645f46c, type: 3}
+  instantHeal: {fileID: 8300000, guid: 68bcd12e430e3174ab737c928d64ddbf, type: 3}
+  overtimeHeal: {fileID: 8300000, guid: 0ead3a98d4020bc4195a6e2643b97dae, type: 3}
+  buffAttack: {fileID: 8300000, guid: 8335141974f59b947b59593331963065, type: 3}
+  buffDefense: {fileID: 8300000, guid: 955426776a20c384bbf1756f1d73e4c4, type: 3}
+  buffGeneric: {fileID: 8300000, guid: 9ab40104debe8e147a3271198891a263, type: 3}
+  debuff: {fileID: 0}
+  levelUp: {fileID: 8300000, guid: 41d0569054a55354ebcae93fa397391d, type: 3}
+  skillUpgrade: {fileID: 8300000, guid: 9ab40104debe8e147a3271198891a263, type: 3}
+  itemPickup_Tier1: {fileID: 8300000, guid: cb565dc5bc1f8cc40a4d4899f17be9d7, type: 3}
+  itemPickup_Tier2: {fileID: 8300000, guid: 1d87d051f0c17844892d83a9c18c8625, type: 3}
+  goldPickup: {fileID: 8300000, guid: ceec86e30eb7fa348910be4e9fb18a54, type: 3}
+  weaponChange: {fileID: 8300000, guid: 11f1ce23cc9d42848a13c2707fcdb14b, type: 3}
+  dropItem: {fileID: 8300000, guid: 3efd8e9c26d3ef8429faf552ad49e82e, type: 3}
+  buyItem: {fileID: 8300000, guid: fbef9da687d48454e9b4b7f8f3aa79f8, type: 3}
+  sellItem: {fileID: 8300000, guid: 4827577ada85cf04faf2c3b2d82f7385, type: 3}
+  openSkillTree: {fileID: 8300000, guid: 92360c75b763a5c4fa5440bfb0d1955e, type: 3}
+  openStats: {fileID: 8300000, guid: 92360c75b763a5c4fa5440bfb0d1955e, type: 3}
+  openShop: {fileID: 8300000, guid: 37d98aab5d472db4ea10fae6fa456ebb, type: 3}
+  closePanel: {fileID: 8300000, guid: e3ec3294bc0a5fd4794498419d762d49, type: 3}
+  buttonClick: {fileID: 8300000, guid: b9763e6a962e9e24e9d8dc0130171009, type: 3}
+  grassBreak:
+  - {fileID: 8300000, guid: e53f7cb55464b9341904df3c172412f0, type: 3}
+  - {fileID: 8300000, guid: 1ecd0bb75919e1145be5c9e332364b5b, type: 3}
+  vaseBreak:
+  - {fileID: 8300000, guid: 6d3709c0f8e513b4e998b71327cec547, type: 3}
+  - {fileID: 8300000, guid: 123cf1c2c28f89744b22dc30f4666944, type: 3}
+  objectBreak:
+  - {fileID: 8300000, guid: 46021e43b55b59b49930e3980a8e6ac1, type: 3}
+  - {fileID: 8300000, guid: a51e813ff017a094e854fc9788ac0fb2, type: 3}
+  - {fileID: 8300000, guid: fb5d00bd51623a348958f5d27a15b406, type: 3}
+  - {fileID: 8300000, guid: d579f2e19bf3ca54c8994ed37c10e948, type: 3}
+  - {fileID: 8300000, guid: deb418023aab0d4419d342b9da27586d, type: 3}
+  - {fileID: 8300000, guid: 5cc8881624eeb5848b7220de446809af, type: 3}
+  masterVolume: 0.7
+  combatVolume: 1
+  uiVolume: 0.8
+  effectVolume: 0.9
+  enemyVolumeMult: 0.6
 --- !u!82 &8894136543161484865
 AudioSource:
   m_ObjectHideFlags: 0
@@ -81,7 +147,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

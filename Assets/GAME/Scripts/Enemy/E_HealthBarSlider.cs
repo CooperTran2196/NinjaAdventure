@@ -1,9 +1,5 @@
-// File: E_HealthBarSlider.cs  (enemy-only, green-only)
 using UnityEngine;
 using UnityEngine.UI;
-
-[RequireComponent(typeof(CanvasGroup))]
-[DisallowMultipleComponent]
 
 public class E_HealthBarSlider : MonoBehaviour
 {

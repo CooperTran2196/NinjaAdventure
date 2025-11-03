@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 1957346209677143365}
   - component: {fileID: 8334425152070152719}
   - component: {fileID: 8134912037211693433}
-  - component: {fileID: 902322117646651962}
-  - component: {fileID: 4028551908832895920}
   m_Layer: 5
   m_Name: InfoPopup
   m_TagString: Untagged
@@ -80,37 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
---- !u!225 &902322117646651962
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 663189057543520519}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
---- !u!114 &4028551908832895920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 663189057543520519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4080615f50927db40a6ab67efef46189, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_ItemInfoPanel
-  canvasGroup: {fileID: 902322117646651962}
-  rectTransform: {fileID: 1957346209677143365}
-  itemNameText: {fileID: 3888715613056653744}
-  itemDescText: {fileID: 1635814844677366555}
-  statLinePrefab: {fileID: 7038250512439167940, guid: 320a72c58ceb93f47a4bce4a81a6e57f, type: 3}
-  statContainer: {fileID: 430011281110407589}
-  offset: {x: 50, y: 450}
 --- !u!1 &2055580545796627733
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,6 +485,8 @@ GameObject:
   - component: {fileID: 899782437796822080}
   - component: {fileID: 7580413769678851154}
   - component: {fileID: 4719601175457378704}
+  - component: {fileID: 4263526064893474177}
+  - component: {fileID: 5416011113591269050}
   m_Layer: 5
   m_Name: ItemInfoCanvas
   m_TagString: Untagged
@@ -608,6 +577,37 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &4263526064893474177
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8560643762338775362}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!114 &5416011113591269050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8560643762338775362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4080615f50927db40a6ab67efef46189, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_ItemInfoPanel
+  canvasGroup: {fileID: 4263526064893474177}
+  rectTransform: {fileID: 1957346209677143365}
+  itemNameText: {fileID: 3888715613056653744}
+  itemDescText: {fileID: 1635814844677366555}
+  statLinePrefab: {fileID: 7038250512439167940, guid: 320a72c58ceb93f47a4bce4a81a6e57f, type: 3}
+  statContainer: {fileID: 430011281110407589}
+  offset: {x: 50, y: 450}
 --- !u!1 &8673248242817896055
 GameObject:
   m_ObjectHideFlags: 0

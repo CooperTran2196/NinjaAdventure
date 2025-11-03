@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   id: noodles
   itemName: Noodles
-  description: 'Ninja loves it: mends some HP/MP + increase max HP/MP'
+  description: All your Ninja is asking for.
   image: {fileID: 21300000, guid: 132729c9fadf54e4f9fc9c49bd2faeab, type: 3}
   stackSize: 3
   price: 1
+  itemTier: 2
   isGold: 0
   unlocksSkill: 0
   skillIDToUnlock: 

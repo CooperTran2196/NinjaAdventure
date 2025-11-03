@@ -1,37 +1,36 @@
 # NinjaAdventure - Documentation
-**Last Updated:** October 17, 2025  
+**Last Updated:** October 18, 2025  
 **Current Week:** Week 10 (Oct 21-25, 2025)
 
 ---
 
 ## 📋 Quick Navigation
 
-- **[Week 10 Audio - Latest](Week_10_Oct21-25/README.md)** ⭐ **COMPLETE**
-- **[Week 10 Destructibles](Week_10_Oct14-18/README.md)** ✅ **COMPLETE**
+- **[Week 10 - Latest](Week_10_Oct21-25/README.md)** ⭐ **COMPLETE**
 - **[Week 9 - All Core Systems](Week_9_Oct14-18/README.md)** ✅ **COMPLETE**
-- **[Guild - References](Guild/)** � **LIVING DOCS**
+- **[Guild - References](Guild/)** 📚 **LIVING DOCS**
 - **[TODO - Future Features](#-todo-incomplete-features)** 🚧
 
 ---
 
 ## ✅ What's Complete
 
-### **Week 10 (Oct 21-25, 2025)** - Audio System ⭐ **LATEST**
+### **Week 10 (Oct 21-25, 2025)** - Environment & Audio Systems ⭐ **LATEST**
 **Location:** `Week_10_Oct21-25/` folder
 
 **Systems Completed:**
-1. Complete Audio System (41 sounds, 17 files integrated)
-2. SYS_SoundManager with AudioSource pooling
-
-👉 **[Read Week 10 Audio README](Week_10_Oct21-25/README.md)** for details
-
-### **Week 10 (Oct 14-18, 2025)** - Environment & Polish
-**Location:** `Week_10_Oct14-18/` folder
-
-**Systems Completed:**
 1. Destructible Objects & Particle System
+2. Complete Audio System (41 sounds, 17 files integrated)
+3. Weather System (7 effects, always-on architecture)
 
-👉 **[Read Week 10 Destructibles README](Week_10_Oct14-18/README.md)** for details
+**Key Features:**
+- ENV_Destructible with C_Health integration
+- SYS_SoundManager with AudioSource pooling
+- 7 weather effects with zero scripts (Unity built-ins)
+- 3D spatial audio for weather zones
+- Automatic particle culling (performance)
+
+👉 **[Read Week 10 README](Week_10_Oct21-25/README.md)** for complete details
 
 ### **Week 9 (Oct 14-18, 2025)** - Combat & Inventory
 **Location:** `Week_9_Oct14-18/` folder

@@ -11,7 +11,7 @@ public class INV_ItemSO : ScriptableObject
                 public Sprite      image;
                 public int         stackSize = 3;
     [Min(0)]    public int         price     = 1;
-    [Range(1,2)]public int         itemTier  = 1; // 1 = common (Bonus2), 2 = rare (Bonus3)
+    [Range(1,2)]public int         itemTier  = 1; // 1 = common, 2 = rare
 
     [Header("Flags")]
     public bool isGold;

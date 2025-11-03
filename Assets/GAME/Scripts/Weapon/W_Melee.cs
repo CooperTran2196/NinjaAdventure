@@ -46,7 +46,7 @@ public class W_Melee : W_Base
         if (index == 2) return (0, 0, true);  // Thrust
         
         // Apply slash arc bonus from player stats
-        float finalArcDegrees = weaponData.slashArcDegrees + c_Stats.slashArcBonus;
+        float finalArcDegrees = weaponData.slashArcDegrees + c_Stats.slashArc;
         float halfArc = finalArcDegrees * 0.5f;
         bool reverseArc = (index == 1);  // SlashUp reverses arc direction
         

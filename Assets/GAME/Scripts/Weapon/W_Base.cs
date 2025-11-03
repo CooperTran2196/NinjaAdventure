@@ -98,37 +98,56 @@ public abstract class W_Base : MonoBehaviour
         transform.SetParent(originalParent, true);
     }
 
-    // Thrust forward/back along dir over showTime (LINEAR motion)
+    // Thrust forward/back along dir over showTime (EASE-IN-OUT motion)
     protected IEnumerator ThrustOverTime(Vector2 dir, float showTime, float thrustDist)
     {
+        // Calculate dynamic duration based on maxAttackSpeed
+        // Combine weapon base speed + player speed bonus
+        float totalSpeed = weaponData.maxAttackSpeed + c_Stats.attackSpeed;
+        float speedMultiplier = 1.0f - (totalSpeed * 0.1f); // Linear: 1 = 10% faster
+        float actualDuration = showTime * speedMultiplier;
+        
         float t = 0f;
         Vector3 start = transform.localPosition - (Vector3)(dir * (thrustDist * 0.5f));
         Vector3 end = transform.localPosition + (Vector3)(dir * (thrustDist * 0.5f));
 
-        while (t < showTime)
+        while (t < actualDuration)
         {
             t += Time.deltaTime;
-            float k = Mathf.Clamp01(t / showTime);
-            transform.localPosition = Vector3.Lerp(start, end, k);
+            float k = Mathf.Clamp01(t / actualDuration);
+            
+            // Apply ease-in-out curve (slow → fast → slow)
+            float easedK = EaseInOutCubic(k);
+            
+            transform.localPosition = Vector3.Lerp(start, end, easedK);
             yield return null;
         }
     }
 
-    // Sweep weapon in arc from startAngle to endAngle (CIRCULAR motion)
+    // Sweep weapon in arc from startAngle to endAngle (EASE-IN-OUT motion)
     // Weapon rotates like radar arm: handle orbits at offsetRadius, blade extends outward
     // REQUIRES: sprite points UP, pivot at BOTTOM
     protected IEnumerator ArcSlashOverTime(Vector2 attackDir, float startAngleDeg, float endAngleDeg, float duration)
     {
+        // Calculate dynamic duration based on maxAttackSpeed
+        // Combine weapon base speed + player speed bonus
+        float totalSpeed = weaponData.maxAttackSpeed + c_Stats.attackSpeed;
+        float speedMultiplier = 1.0f - (totalSpeed * 0.1f); // Linear: 1 = 10% faster
+        float actualDuration = duration * speedMultiplier;
+        
         float t = 0f;
         float radius = weaponData.offsetRadius;
         
-        while (t < duration)
+        while (t < actualDuration)
         {
             t += Time.deltaTime;
-            float k = Mathf.Clamp01(t / duration);
+            float k = Mathf.Clamp01(t / actualDuration);
             
-            // Lerp angle from start to end
-            float currentAngleDeg = Mathf.Lerp(startAngleDeg, endAngleDeg, k);
+            // Apply ease-in-out curve (slow → fast → slow)
+            float easedK = EaseInOutCubic(k);
+            
+            // Lerp angle from start to end using eased progress
+            float currentAngleDeg = Mathf.Lerp(startAngleDeg, endAngleDeg, easedK);
             float currentAngleRad = currentAngleDeg * Mathf.Deg2Rad;
             
             // Polar to Cartesian (UP=0°): x=-sin(θ)*r, y=cos(θ)*r (negated X fixes Unity coords)
@@ -145,7 +164,15 @@ public abstract class W_Base : MonoBehaviour
         }
     }
     
-    // Instance wrapper → calls static version
+    // Ease-in-out cubic curve: slow → fast → slow
+    protected float EaseInOutCubic(float t)
+    {
+        return t < 0.7f 
+            ? 4f * t * t * t  // Ease-in: accelerate (first half)
+            : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;  // Ease-out: decelerate (second half)
+    }
+    
+    // Instance wrapper -> calls static version
     protected (C_Health target, GameObject root) TryGetTarget(Collider2D targetCollider)
         => TryGetTarget(owner, targetMask, targetCollider);
 
@@ -173,7 +200,7 @@ public abstract class W_Base : MonoBehaviour
         return (target, target.gameObject);
     }
 
-    // Instance wrapper → calls static version
+    // Instance wrapper -> calls static version
     protected void ApplyHitEffects(C_Stats attackerStats, W_SO weaponData, C_Health targetHealth, Vector2 dir, Collider2D targetCollider, int comboIndex = 0)
                 => ApplyHitEffects(attackerStats, weaponData, targetHealth, dir, targetCollider, this, comboIndex);
 
@@ -258,22 +285,6 @@ public abstract class W_Base : MonoBehaviour
 
     // Called by owner when attacking
     public abstract void Attack(Vector2 attackDir);
-
-    // Called by owner when equipping
-    public virtual void Equip(Transform newOwner)
-    {
-        owner = newOwner;
-        ownerAnimator = owner.GetComponent<Animator>();
-        c_Stats = owner.GetComponent<C_Stats>();
-    }
-
-    // Change weapon data at runtime
-    public void SetData(W_SO weaponData)
-    {
-        this.weaponData = weaponData;
-        sprite.sprite = this.weaponData.sprite;
-    }
-
 
     // Debug: draw hitbox when active
     void OnDrawGizmos()
