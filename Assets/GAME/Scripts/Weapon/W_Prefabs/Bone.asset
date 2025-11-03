@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bone
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: bone
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: b0bd2e4bdc12aed4380b07961d8c23a9, type: 3}
   image: {fileID: 21300000, guid: 13dd1a67638406c42a569c904d20c757, type: 3}
@@ -21,12 +22,13 @@ MonoBehaviour:
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
+  maxAttackSpeed: 0
   onlyThrustKnocksBack: 1
-  slashArcDegrees: 45
+  slashArcDegrees: 90
   comboShowTimes:
-  - 0.3
-  - 0.3
-  - 0.2
+  - 0.45
+  - 0.45
+  - 0.5
   comboDamageMultipliers:
   - 1
   - 1.2

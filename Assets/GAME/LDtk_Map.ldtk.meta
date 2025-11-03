@@ -26,6 +26,10 @@ ScriptedImporter:
     _asset: {instanceID: 0}
   - _key: Fence_3
     _asset: {instanceID: 0}
+  - _key: Fence_4
+    _asset: {instanceID: 0}
+  - _key: Fence_5
+    _asset: {instanceID: 0}
   - _key: Field_5
     _asset: {instanceID: 0}
   - _key: Field_4
@@ -79,6 +83,8 @@ ScriptedImporter:
   - _key: Floor_7
     _asset: {instanceID: 0}
   - _key: Floor_8
+    _asset: {instanceID: 0}
+  - _key: Floor_9
     _asset: {instanceID: 0}
   - _key: Water_1
     _asset: {instanceID: 0}

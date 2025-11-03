@@ -13,32 +13,34 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: axe
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: 18179c9c51be14d42852f6687aa270cd, type: 3}
   image: {fileID: 21300000, guid: 18179c9c51be14d42852f6687aa270cd, type: 3}
   offsetRadius: 0.35
-  AD: 1
+  AD: 5
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
-  onlyThrustKnocksBack: 1
-  slashArcDegrees: 45
+  maxAttackSpeed: -6
+  onlyThrustKnocksBack: 0
+  slashArcDegrees: 120
   comboShowTimes:
-  - 0.3
-  - 0.3
-  - 0.2
+  - 0.45
+  - 0.45
+  - 0.45
   comboDamageMultipliers:
   - 1
   - 1.2
   - 2
   comboMovePenalties:
-  - 0.6
   - 0.5
+  - 0.4
   - 0.3
   comboStunTimes:
-  - 0.1
-  - 0.2
   - 0.5
+  - 0.5
+  - 1
   showTime: 0.32
   attackMovePenalty: 1
   projectilePrefab: {fileID: 0}

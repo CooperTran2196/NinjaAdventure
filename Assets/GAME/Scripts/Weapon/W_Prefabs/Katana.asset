@@ -13,31 +13,33 @@ MonoBehaviour:
   m_Name: Katana
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: katana
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: dca399bdb02e89248b8185c55cd0ff20, type: 3}
   image: {fileID: 21300000, guid: dca399bdb02e89248b8185c55cd0ff20, type: 3}
   offsetRadius: 0.35
-  AD: 1
+  AD: 2
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
-  onlyThrustKnocksBack: 1
-  slashArcDegrees: 45
+  maxAttackSpeed: -2
+  onlyThrustKnocksBack: 0
+  slashArcDegrees: 90
   comboShowTimes:
-  - 0.3
-  - 0.3
-  - 0.2
+  - 0.45
+  - 0.45
+  - 0.45
   comboDamageMultipliers:
   - 1
   - 1.2
   - 2
   comboMovePenalties:
-  - 0.6
   - 0.5
-  - 0.3
+  - 0.5
+  - 0.5
   comboStunTimes:
-  - 0.1
-  - 0.2
+  - 0.5
+  - 0.5
   - 0.5
   showTime: 0.32
   attackMovePenalty: 1
