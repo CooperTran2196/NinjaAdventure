@@ -707,3 +707,69 @@ No meeting this week.
 
 Student Signature: _____________________________     Date: ___________
 Advisor Signature: ____________________________     Date: ___________
+
+
+CS 4395 – Weekly Progress Report Template
+Student Name: ________________Cooper Tran__________________________
+Student ID: _________________2106638____________________________
+Advisor Name: __________________Ling Xu________________________
+Week Number: ________________10__________________________
+Date Range (): _______Oct 21 - Oct 25, 2025 __________________
+
+1. Summary of Work Completed This Week
+Boss system
+●	Built boss controller using the same interface as regular enemies with physics-based special attack that calculates exact distance for dynamic gap-closing. Special attack follows charge, dash, double hit sequence.
+●	Implemented multi-gate decision logic combining Y-alignment checks, distance ranges, and cooldowns. Horizontal-first chase with gradual Y-alignment prevents attack range overlap.
+●	Created "face spot" mechanic where boss stops short of player during dash with afterimage effects for counterplay window.
+
+Weather particle system
+●	Created weather particle component with camera-following option for scrolling levels and auto-detection for child particle systems.
+●	Added playOnStart setting and runtime control methods. Weather effects like rain and snow follow the viewport smoothly.
+
+Audio system
+●	Finished sound manager with full coverage for combat, UI, healing, buffs, inventory, shop, dialog, and destructibles. Implemented AudioSource pooling with 8 sources to prevent clicks.
+●	Added granular volume controls for master, combat, UI, and effects with separate enemy volume multiplier at 60%.
+●	Wired animation events for frame-perfect combo sounds and integrated throughout codebase with hierarchical volume calculation.
+
+Destructible objects
+●	Created breakable objects like grass, vases, and crates. Each object has HP, triggers particle effects on break, and can drop loot.
+●	Added type-specific break sounds using random selection. Objects fade and destroy after breaking with configurable timing.
+●	Integrated with weapon damage system so melee and ranged attacks can break objects.
+
+Ladder system
+●	Built ladder component that modifies movement speed based on climb direction using dot product for directional alignment detection.
+●	Climbing up is 0.6x slower and climbing down is 1.3x faster. Works at any angle including vertical, horizontal, and diagonal ladders.
+●	Integrated with player and enemy controllers for seamless state transitions.
+
+2. Challenges or Issues Encountered
+Boss special attack prediction math
+●	The original fixed-range dash felt unfair because the boss either overshot or stopped too far away.
+●	Fix: Implemented dynamic range calculation using physics. TimeReach equals dashSpeed times the computed move window which is the total hit time minus special hit delay minus pre-hit stop bias. The boss now reaches the exact face spot consistently.
+
+Boss chase entering attack range
+●	The chase state sometimes pushed the boss into attack range before switching states which caused animation glitches.
+●	Fix: Added stopBuffer of 0.10f. The chase velocity is set to zero when the player is within attack range plus the buffer. This creates a clean gap and prevents overlap.
+
+Audio clicks and cutoff
+●	Playing multiple sounds on the same AudioSource caused clicks and cut off previous sounds early.
+●	Fix: Created a pool of 8 AudioSources. PlaySound cycles through the pool so each new sound gets a fresh source. Overlapping sounds now play cleanly without interference.
+
+Weather particles not following camera
+●	Static weather particle systems stayed in place when the camera moved which broke immersion in scrolling levels.
+●	Fix: Added followCamera option that updates the particle system position to match the camera position plus the initial offset. This keeps rain and snow locked to the viewport.
+
+3. Plans for Next Week
+Level 2 design and mapping
+●	Draw the full layout for Level 2 in LDtk including main path, side areas, secret rooms, and boss arena.
+●	Export tilemap to Unity and configure all colliders, sorting layers, spawn points, and teleporters.
+●	Add background layers and parallax scrolling for depth.
+
+4. Feedback from Advisor (if any)
+No meeting this week.
+
+
+
+
+
+Student Signature: _____________________________     Date: ___________
+Advisor Signature: ____________________________     Date: ___________
