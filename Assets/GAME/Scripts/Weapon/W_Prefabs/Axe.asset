@@ -20,7 +20,7 @@ MonoBehaviour:
   offsetRadius: 0.35
   AD: 5
   AP: 0
-  knockbackForce: 4
+  knockbackForce: 5
   thrustDistance: 0.25
   maxAttackSpeed: -6
   onlyThrustKnocksBack: 0
@@ -30,16 +30,16 @@ MonoBehaviour:
   - 0.45
   - 0.45
   comboDamageMultipliers:
-  - 1
   - 1.2
-  - 2
+  - 1.5
+  - 1
   comboMovePenalties:
   - 0.5
   - 0.4
   - 0.3
   comboStunTimes:
-  - 0.5
-  - 0.5
+  - 1
+  - 1
   - 1
   showTime: 0.32
   attackMovePenalty: 1

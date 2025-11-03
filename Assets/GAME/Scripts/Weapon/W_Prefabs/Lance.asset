@@ -21,26 +21,26 @@ MonoBehaviour:
   AD: 5
   AP: 0
   knockbackForce: 5
-  thrustDistance: 0.5
-  maxAttackSpeed: 0
-  onlyThrustKnocksBack: 1
+  thrustDistance: 0.7
+  maxAttackSpeed: -5
+  onlyThrustKnocksBack: 0
   slashArcDegrees: 130
   comboShowTimes:
   - 0.6
   - 0.6
   - 0.45
   comboDamageMultipliers:
-  - 1
   - 1.2
+  - 1.5
   - 2
   comboMovePenalties:
   - 0.5
   - 0.5
   - 0.2
   comboStunTimes:
-  - 0.1
-  - 0.5
   - 1
+  - 1
+  - 1.5
   showTime: 0.45
   attackMovePenalty: 1
   projectilePrefab: {fileID: 0}

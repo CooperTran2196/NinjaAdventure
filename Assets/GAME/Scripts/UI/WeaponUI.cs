@@ -16,16 +16,21 @@ public class WeaponUI : MonoBehaviour
 
     void Awake()
     {
-        if (!weaponImage) { Debug.LogError($"{name}: weaponImage is missing!", this); return; }
-    }
-
-    void Start()
-    {
         player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<P_Controller>();
+        
+        if (!weaponImage) { Debug.LogError($"{name}: weaponImage is missing!", this); return; }
+        if (!player)      { Debug.LogError($"{name}: Player (P_Controller) not found!", this); return; }
     }
 
     void OnEnable()
     {
+        // Safety check in case player isn't ready yet
+        if (!player) 
+        {
+            player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<P_Controller>();
+            if (!player) return; // Player not in scene yet, skip initialization
+        }
+
         if (weaponSlot == WeaponSlot.Melee)
         {
             P_Controller.OnMeleeWeaponChanged += UpdateDisplay;

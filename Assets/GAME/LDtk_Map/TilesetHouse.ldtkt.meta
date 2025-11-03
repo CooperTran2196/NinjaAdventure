@@ -3115,7 +3115,15 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 62ee391d5dc732a4caf30423682e28ed
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -2, y: -8}
+      - {x: 2, y: -8}
+      - {x: 2, y: -4}
+      - {x: 8, y: -4}
+      - {x: 8, y: 4}
+      - {x: 0, y: 4}
+      - {x: -2, y: 2}
     tessellationDetail: 0
   - name: TilesetHouse_207
     originalName: 
@@ -3130,7 +3138,15 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8502a76f92387674a96991b04494c58e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -8, y: -4}
+      - {x: -2, y: -4}
+      - {x: -2, y: -8}
+      - {x: 2, y: -8}
+      - {x: 2, y: 2}
+      - {x: 0, y: 4}
+      - {x: -8, y: 4}
     tessellationDetail: 0
   - name: TilesetHouse_208
     originalName: 
@@ -3145,7 +3161,19 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 4e7b4bba809e0bf4c861bc01454902bb
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -1, y: 2}
+      - {x: 1, y: 0}
+      - {x: 3, y: 0}
+      - {x: 3, y: -3}
+      - {x: 6, y: -3}
+      - {x: 6, y: -2}
+      - {x: 8, y: -2}
+      - {x: 8, y: 4}
+      - {x: 2, y: 4}
+      - {x: 2, y: 5}
+      - {x: -1, y: 5}
     tessellationDetail: 0
   - name: TilesetHouse_209
     originalName: 
@@ -3160,7 +3188,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3bcb3890ba40c1e43a1007c27a6255a3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 2, y: 5}
+      - {x: 2, y: 8}
+      - {x: -2, y: 8}
+      - {x: -2, y: -8}
+      - {x: 2, y: -8}
     tessellationDetail: 0
   - name: TilesetHouse_210
     originalName: 
@@ -3205,7 +3239,16 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6b7c3def99e75a5498627a1a8b7364af
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -3, y: -2}
+      - {x: -1, y: -2}
+      - {x: -1, y: -3}
+      - {x: 2, y: -3}
+      - {x: 2, y: -2}
+      - {x: 4, y: -2}
+      - {x: 4, y: 4}
+      - {x: -3, y: 4}
     tessellationDetail: 0
   - name: TilesetHouse_213
     originalName: 
@@ -3610,7 +3653,14 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1a4dd9f0abd07ab48a92c58a9eb20202
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -2, y: -4}
+      - {x: 8, y: -4}
+      - {x: 8, y: 4}
+      - {x: 2, y: 4}
+      - {x: 2, y: 8}
+      - {x: -2, y: 8}
     tessellationDetail: 0
   - name: TilesetHouse_240
     originalName: 
@@ -3625,7 +3675,14 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 71888ca68563fb44cbf60d311eac5f8e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -2, y: 4}
+      - {x: -8, y: 4}
+      - {x: -8, y: -4}
+      - {x: 2, y: -4}
+      - {x: 2, y: 8}
+      - {x: -2, y: 8}
     tessellationDetail: 0
   - name: TilesetHouse_241
     originalName: 
@@ -3640,7 +3697,19 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 74750fbe8b25e2f4b9d74f65f361102b
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -8, y: -2}
+      - {x: -6, y: -2}
+      - {x: -6, y: -3}
+      - {x: -3, y: -3}
+      - {x: -3, y: 0}
+      - {x: -1, y: 0}
+      - {x: 1, y: 2}
+      - {x: 1, y: 5}
+      - {x: -2, y: 5}
+      - {x: -2, y: 4}
+      - {x: -8, y: 4}
     tessellationDetail: 0
   - name: TilesetHouse_242
     originalName: 
@@ -3655,7 +3724,20 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: d704c6ac7cf4234448ed4983e1adb144
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -8, y: -2}
+      - {x: -6, y: -2}
+      - {x: -6, y: -3}
+      - {x: -3, y: -3}
+      - {x: -3, y: -2}
+      - {x: 1, y: -2}
+      - {x: 1, y: -3}
+      - {x: 4, y: -3}
+      - {x: 4, y: -2}
+      - {x: 8, y: -2}
+      - {x: 8, y: 4}
+      - {x: -8, y: 4}
     tessellationDetail: 0
   - name: TilesetHouse_243
     originalName: 
@@ -3700,7 +3782,24 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 02e0f2e8940a83646bd8768a24c5b8d2
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -8, y: 4}
+      - {x: -8, y: -2}
+      - {x: -6, y: -2}
+      - {x: -6, y: -3}
+      - {x: -2, y: -3}
+      - {x: -2, y: -8}
+      - {x: 2, y: -8}
+      - {x: 2, y: -3}
+      - {x: 4, y: -3}
+      - {x: 4, y: -2}
+      - {x: 8, y: -2}
+      - {x: 8, y: 4}
+      - {x: 2, y: 4}
+      - {x: 2, y: 8}
+      - {x: -2, y: 8}
+      - {x: -2, y: 4}
     tessellationDetail: 0
   - name: TilesetHouse_246
     originalName: 
@@ -13873,4 +13972,4 @@ ScriptedImporter:
     spriteOutline: []
     tessellationDetail: 0
   _secondaryTextures: []
-  _artifacts: {instanceID: 0}
+  _artifacts: {fileID: -2988177865379244337, guid: 19d18e1ad1577bb45831886f5e9b6569, type: 3}

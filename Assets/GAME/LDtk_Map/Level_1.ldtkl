@@ -765,31 +765,6 @@
 			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
-		},
-		{
-			"__identifier": "AutoLayer_grass",
-			"__type": "AutoLayer",
-			"__cWid": 18,
-			"__cHei": 15,
-			"__gridSize": 16,
-			"__opacity": 1,
-			"__pxTotalOffsetX": 0,
-			"__pxTotalOffsetY": 0,
-			"__tilesetDefUid": 111,
-			"__tilesetRelPath": "Backgrounds/Tilesets/TilesetFloorDetail.png",
-			"iid": "71a82c9c-8560-11f0-b59c-87f8321c914f",
-			"levelId": 2434,
-			"layerDefUid": 113,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"visible": true,
-			"optionalRules": [],
-			"intGridCsv": [],
-			"autoLayerTiles": [],
-			"seed": 4853813,
-			"overrideTilesetUid": null,
-			"gridTiles": [],
-			"entityInstances": []
 		}
 	],
 	"__neighbours": [{ "levelIid": "76e73910-1030-11f0-a80f-b3430cf3f45b", "dir": "s" }]
