@@ -18063,7 +18063,7 @@
 				{ "value": 7, "identifier": "desert_floor", "color": "#EAD4AA", "tile": { "tilesetUid": 2431, "x": 448, "y": 0, "w": 48, "h": 48 }, "groupUid": 0 },
 				{ "value": 8, "identifier": "desert_border", "color": "#733E39", "tile": { "tilesetUid": 2431, "x": 464, "y": 80, "w": 16, "h": 16 }, "groupUid": 0 },
 				{ "value": 9, "identifier": "desert_water", "color": "#E8B796", "tile": { "tilesetUid": 2431, "x": 0, "y": 0, "w": 48, "h": 48 }, "groupUid": 0 },
-				{ "value": 10, "identifier": "Manual", "color": "#3E2731", "tile": null, "groupUid": 0 }
+				{ "value": 10, "identifier": "Manual", "color": "#3E2731", "tile": { "tilesetUid": 2431, "x": 192, "y": 48, "w": 16, "h": 16 }, "groupUid": 0 }
 			],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
@@ -28091,46 +28091,6 @@
 			"tilePivotX": 0,
 			"tilePivotY": 0,
 			"biomeFieldUid": null
-		},
-		{
-			"__type": "IntGrid",
-			"identifier": "Water",
-			"type": "IntGrid",
-			"uid": 1714,
-			"doc": null,
-			"uiColor": null,
-			"gridSize": 16,
-			"guideGridWid": 0,
-			"guideGridHei": 0,
-			"displayOpacity": 1,
-			"inactiveOpacity": 1,
-			"hideInList": false,
-			"hideFieldsWhenInactive": false,
-			"canSelectWhenInactive": true,
-			"renderInWorldView": true,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"parallaxFactorX": 0,
-			"parallaxFactorY": 0,
-			"parallaxScaling": true,
-			"requiredTags": [],
-			"excludedTags": [],
-			"autoTilesKilledByOtherLayerUid": null,
-			"uiFilterTags": [],
-			"useAsyncRender": false,
-			"intGridValues": [
-				{ "value": 1, "identifier": "WaterLowground", "color": "#63C74D", "tile": { "tilesetUid": 341, "x": 0, "y": 96, "w": 48, "h": 48 }, "groupUid": 0 },
-				{ "value": 2, "identifier": "WaterDesert", "color": "#D77643", "tile": { "tilesetUid": 341, "x": 0, "y": 0, "w": 48, "h": 48 }, "groupUid": 0 },
-				{ "value": 3, "identifier": "WaterSnow", "color": "#FFFFFF", "tile": { "tilesetUid": 341, "x": 208, "y": 0, "w": 48, "h": 48 }, "groupUid": 0 },
-				{ "value": 4, "identifier": "WaterDanger", "color": "#68386C", "tile": { "tilesetUid": 341, "x": 208, "y": 96, "w": 48, "h": 48 }, "groupUid": 0 }
-			],
-			"intGridValuesGroups": [],
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0,
-			"biomeFieldUid": null
 		}
 	], "entities": [], "tilesets": [
 		{
@@ -28535,10 +28495,10 @@
 			"identifier": "Level_3",
 			"iid": "c8b8d4d0-8560-11f0-9756-9db9ebcd3aaf",
 			"uid": 3351,
-			"worldX": 1968,
+			"worldX": 2208,
 			"worldY": 1088,
 			"worldDepth": 0,
-			"pxWid": 3040,
+			"pxWid": 2576,
 			"pxHei": 2528,
 			"__bgColor": "#696A79",
 			"bgColor": null,
