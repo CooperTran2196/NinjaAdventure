@@ -773,3 +773,63 @@ No meeting this week.
 
 Student Signature: _____________________________     Date: ___________
 Advisor Signature: ____________________________     Date: ___________
+
+
+CS 4395 – Weekly Progress Report Template
+Student Name: ________________Cooper Tran__________________________
+Student ID: _________________2106638____________________________
+Advisor Name: __________________Ling Xu________________________
+Week Number: ________________11__________________________
+Date Range (): _______Oct 28 - Nov 1, 2025 __________________
+
+1. Summary of Work Completed This Week
+Level 2 tilemap and colliders
+●	Finished complete Level 2 layout with main path, side areas, secret rooms, and boss arena exported from LDtk to Unity.
+●	Added precise tilemap colliders for each tile type. Walls, platforms, and terrain now have accurate collision shapes that match the visual tiles exactly.
+●	Configured all collision layers to separate player, enemies, destructibles, and environment. This prevents unwanted interactions and keeps physics clean.
+
+Collision polish
+●	Refined player collision with world objects including walls, ladders, breakables, and NPCs. Movement now feels tight without clipping or sliding through geometry.
+●	Improved enemy pathfinding around obstacles. Enemies navigate around walls and platforms smoothly without getting stuck.
+●	Fixed edge cases where fast-moving projectiles could pass through thin walls. Added continuous collision detection for arrows and thrown weapons.
+
+Sorting layers and rendering order
+●	Reorganized all sorting layers to display foreground, midground, background, and UI in correct order.
+●	Foreground elements like trees, tall grass, and building tops now render in front of characters when appropriate.
+●	Characters render above ground tiles but below overhead objects. This creates proper depth and keeps the visual hierarchy clear.
+●	Fixed Z-fighting and flickering by assigning unique order-in-layer values to overlapping sprites.
+
+Level 2 music integration
+●	Added new music theme for Level 2 with proper loop points. The track transitions smoothly from Level 1 music when entering the new area.
+●	Configured music triggers at scene boundaries so the theme change happens exactly when crossing into Level 2 territory.
+●	Balanced music volume to complement ambient sounds and combat audio without drowning them out.
+
+2. Challenges or Issues Encountered
+Tilemap collider accuracy
+●	Auto-generated colliders from LDtk had gaps and overlaps that caused movement bugs. Players could walk through corners or get stuck on invisible edges.
+●	Fix: Manually adjusted composite colliders for each tilemap layer. Used edge colliders for platforms and polygon colliders for complex shapes. Tested every tile type to ensure clean collision.
+
+Foreground rendering conflicts
+●	Trees and building tops sometimes rendered behind characters or flickered when moving.
+●	Fix: Split foreground into multiple sorting layers with clear order. Ground-level foreground renders below characters and overhead foreground renders above. Assigned unique order values to prevent Z-fighting.
+
+Projectile tunneling through walls
+●	Fast projectiles like arrows occasionally passed through thin walls without triggering collision.
+●	Fix: Enabled continuous collision detection on all projectile rigidbodies. Reduced physics timestep for more accurate collision checks at high speeds.
+
+Music transition timing
+●	Music sometimes switched mid-combat or in awkward moments when crossing zone boundaries.
+●	Fix: Added small trigger zones before the actual scene boundary. Music now fades and transitions slightly before the player fully enters the new area, making the change feel more natural.
+
+3. Plans for Next Week
+
+
+4. Feedback from Advisor (if any)
+No meeting this week.
+
+
+
+
+
+Student Signature: _____________________________     Date: ___________
+Advisor Signature: ____________________________     Date: ___________

@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e3e871d6697774da9043adff344fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_Melee
-  weaponData: {fileID: 11400000, guid: f2d439dbd28434396981bfe103023ad4, type: 2}
+  weaponData: {fileID: 11400000, guid: c350d1be209bc4735ab77a1ba5681df7, type: 2}
   owner: {fileID: 4290728090841259575}
   targetMask:
     serializedVersion: 2

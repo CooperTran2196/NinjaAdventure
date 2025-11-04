@@ -69,7 +69,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &3922532356362314020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,13 +88,6 @@ MonoBehaviour:
   enemyHit: {fileID: 8300000, guid: 050bfe669e9dbf74c8ff8778f52617ff, type: 3}
   dodge: {fileID: 8300000, guid: c8c8d0eb390c00d4e97563086518a637, type: 3}
   rangedAttack: {fileID: 8300000, guid: 4f97b9d5f630ac547adabb5f5219a37f, type: 3}
-  npcTalkSounds:
-  - {fileID: 8300000, guid: 1c7c785583308a849af8533908f01354, type: 3}
-  - {fileID: 8300000, guid: cb29a05ca9f7acb4ca07f41c5751e44f, type: 3}
-  - {fileID: 8300000, guid: 4462bcd7e1ce6cc46a644218073c7980, type: 3}
-  - {fileID: 8300000, guid: 36db12001780ca84a967ea7318bb8b0a, type: 3}
-  - {fileID: 8300000, guid: abf31ef8b45ba6b44a8a83b938345158, type: 3}
-  - {fileID: 8300000, guid: 762e9d82da9f8864483a23b2c645f46c, type: 3}
   instantHeal: {fileID: 8300000, guid: 68bcd12e430e3174ab737c928d64ddbf, type: 3}
   overtimeHeal: {fileID: 8300000, guid: 0ead3a98d4020bc4195a6e2643b97dae, type: 3}
   buffAttack: {fileID: 8300000, guid: 8335141974f59b947b59593331963065, type: 3}
@@ -114,6 +106,13 @@ MonoBehaviour:
   openSkillTree: {fileID: 8300000, guid: 92360c75b763a5c4fa5440bfb0d1955e, type: 3}
   openStats: {fileID: 8300000, guid: 92360c75b763a5c4fa5440bfb0d1955e, type: 3}
   openShop: {fileID: 8300000, guid: 37d98aab5d472db4ea10fae6fa456ebb, type: 3}
+  npcTalkSounds:
+  - {fileID: 8300000, guid: 1c7c785583308a849af8533908f01354, type: 3}
+  - {fileID: 8300000, guid: cb29a05ca9f7acb4ca07f41c5751e44f, type: 3}
+  - {fileID: 8300000, guid: 4462bcd7e1ce6cc46a644218073c7980, type: 3}
+  - {fileID: 8300000, guid: 36db12001780ca84a967ea7318bb8b0a, type: 3}
+  - {fileID: 8300000, guid: abf31ef8b45ba6b44a8a83b938345158, type: 3}
+  - {fileID: 8300000, guid: 762e9d82da9f8864483a23b2c645f46c, type: 3}
   closePanel: {fileID: 8300000, guid: e3ec3294bc0a5fd4794498419d762d49, type: 3}
   buttonClick: {fileID: 8300000, guid: b9763e6a962e9e24e9d8dc0130171009, type: 3}
   grassBreak:
@@ -129,7 +128,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d579f2e19bf3ca54c8994ed37c10e948, type: 3}
   - {fileID: 8300000, guid: deb418023aab0d4419d342b9da27586d, type: 3}
   - {fileID: 8300000, guid: 5cc8881624eeb5848b7220de446809af, type: 3}
-  masterVolume: 0.7
+  masterVolume: 0
   combatVolume: 1
   uiVolume: 0.8
   effectVolume: 0.9
@@ -147,7 +146,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0

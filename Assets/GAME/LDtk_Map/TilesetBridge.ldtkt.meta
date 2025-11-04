@@ -970,7 +970,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 19744c01ef2e60845bb3e35fb922e83f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -3, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: -3, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_64
     originalName: 
@@ -1000,7 +1005,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1723edd215ad8e34a87e9f2028840b3c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: 3, y: 8}
+      - {x: 3, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_66
     originalName: 
@@ -1720,7 +1730,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 375b41f898629db4d99385b555814115
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -3, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: -3, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_114
     originalName: 
@@ -1750,7 +1765,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1991197ad22cd8246980f6c1f4aabf9b
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: 3, y: 8}
+      - {x: 3, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_116
     originalName: 
@@ -2470,7 +2490,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9137ec8d287fc944b8dbc21fe565a7d3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: -3, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -4}
+      - {x: -3, y: -4}
     tessellationDetail: 0
   - name: TilesetBridge_164
     originalName: 
@@ -2500,7 +2525,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: dd18c85383786084e8dd90e8a9c83a77
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: 3, y: 8}
+      - {x: 3, y: -4}
+      - {x: 8, y: -4}
     tessellationDetail: 0
   - name: TilesetBridge_166
     originalName: 
@@ -3955,7 +3985,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f9586c314a0eb3843ace5127a3b95f4f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: 3}
+      - {x: 8, y: 3}
     tessellationDetail: 0
   - name: TilesetBridge_263
     originalName: 
@@ -3970,7 +4005,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 45fab77b8eac2ba4c97cf6fd8ad45599
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: 3}
+      - {x: 8, y: 3}
     tessellationDetail: 0
   - name: TilesetBridge_264
     originalName: 
@@ -3985,7 +4025,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6e496192f358bc04abc4196b44bb337d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: 3}
+      - {x: 4, y: 3}
     tessellationDetail: 0
   - name: TilesetBridge_265
     originalName: 
@@ -5455,7 +5500,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: bc7a24b5571020649a28cb3ce7849e27
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -3}
+      - {x: -8, y: -3}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_363
     originalName: 
@@ -5470,7 +5520,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 5789d899ea7b71a44bedec3b5ecc56bb
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -3}
+      - {x: -8, y: -3}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_364
     originalName: 
@@ -5485,7 +5540,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 54398365ff554e347b19a653360e7b9e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: -3}
+      - {x: -8, y: -3}
+      - {x: -8, y: -8}
+      - {x: 4, y: -8}
     tessellationDetail: 0
   - name: TilesetBridge_365
     originalName: 
@@ -37513,4 +37573,4 @@ ScriptedImporter:
     spriteOutline: []
     tessellationDetail: 0
   _secondaryTextures: []
-  _artifacts: {instanceID: 0}
+  _artifacts: {fileID: -2988177865379244337, guid: 6438c467b2cc33b4f9b3f27cb2e1a95c, type: 3}

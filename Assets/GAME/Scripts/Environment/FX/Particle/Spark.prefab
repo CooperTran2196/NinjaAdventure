@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 2230166323601433527}
   - component: {fileID: 1159144504269266794}
   - component: {fileID: 254324809035939852}
-  - component: {fileID: 6683487065749437294}
   m_Layer: 0
   m_Name: Spark
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 1290912a12d6a41e7807ecee26387e09, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2230166323601433527
 Transform:
   m_ObjectHideFlags: 0
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 968596910782229669}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 39.45, y: 63.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4843,18 +4842,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6683487065749437294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968596910782229669}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69bef88c73bdb47e0b024f628795dff5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ENV_ParticleWeather
-  playOnStart: 1
-  followCamera: 1
-  particleSystems: []

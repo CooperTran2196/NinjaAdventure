@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3302215156215320260, guid: a7aabea3ea55645d19878524e9df9a15, type: 3}
+  m_Sprite: {fileID: 8130591403050335115, guid: d06a83703eaf69a4b929b0bc2300fad5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -199,7 +199,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.875, y: 0.875}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 0.875, y: 0.875}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -232,7 +232,8 @@ MonoBehaviour:
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  slashArcBonus: 0
+  slashArc: 0
+  attackSpeed: 0
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
@@ -286,6 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6c7f19743d443a58d5e16dda1772c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ENV_Destructible
+  objectType: 2
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
   dropSpread: 0.75
   dropChance: 100

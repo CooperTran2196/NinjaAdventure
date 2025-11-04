@@ -21,8 +21,8 @@ TagManager:
   - Weapon
   - Loot
   - NPC
-  - 
-  - 
+  - ForeGround
+  - Effect
   - 
   - 
   - 
@@ -60,6 +60,9 @@ TagManager:
     locked: 0
   - name: Loot
     uniqueID: 2498439127
+    locked: 0
+  - name: ForeGround
+    uniqueID: 3893950711
     locked: 0
   - name: Effect
     uniqueID: 1912278453

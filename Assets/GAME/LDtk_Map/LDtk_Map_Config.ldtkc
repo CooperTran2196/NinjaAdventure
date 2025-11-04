@@ -187,25 +187,7 @@
             }
         },
         {
-            "_key": "Water_1",
-            "_asset": {
-                "instanceID": 0
-            }
-        },
-        {
-            "_key": "Water_2",
-            "_asset": {
-                "instanceID": 0
-            }
-        },
-        {
-            "_key": "Water_3",
-            "_asset": {
-                "instanceID": 0
-            }
-        },
-        {
-            "_key": "Water_4",
+            "_key": "Floor_10",
             "_asset": {
                 "instanceID": 0
             }

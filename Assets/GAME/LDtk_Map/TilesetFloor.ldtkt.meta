@@ -4792,10 +4792,10 @@ ScriptedImporter:
     spriteID: fb077d5d5189b6546825e2a9ea2aa59d
     spriteOutline:
     - shape:
-      - {x: 8, y: 3}
-      - {x: -8, y: 3}
-      - {x: -8, y: -8}
-      - {x: 8, y: -8}
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: 0}
+      - {x: 8, y: 0}
     tessellationDetail: 0
   - name: TilesetFloor_302
     originalName: 
@@ -5594,12 +5594,7 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 98e822f1bfce26e4295dc5702b552f81
-    spriteOutline:
-    - shape:
-      - {x: 8, y: 8}
-      - {x: -8, y: 8}
-      - {x: -8, y: -8}
-      - {x: 8, y: -8}
+    spriteOutline: []
     tessellationDetail: 0
   - name: TilesetFloor_352
     originalName: 
@@ -6397,10 +6392,10 @@ ScriptedImporter:
     spriteID: 504cade6eae9acd45b79a34f7130d28e
     spriteOutline:
     - shape:
-      - {x: 8, y: 8}
-      - {x: -8, y: 8}
-      - {x: -8, y: -4}
-      - {x: 8, y: -4}
+      - {x: 8, y: -1}
+      - {x: -8, y: -1}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_402
     originalName: 
