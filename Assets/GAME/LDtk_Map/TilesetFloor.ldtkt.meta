@@ -25,8 +25,14 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: d4db329bc86f9bd4a816948ddbb64753
-    spriteOutline: []
-    tessellationDetail: 0
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 3}
+      - {x: 1, y: 2}
+      - {x: -4, y: -3}
+      - {x: -4, y: -8}
+      - {x: 8, y: -8}
+    tessellationDetail: 0.025
   - name: TilesetFloor_1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -40,7 +46,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 55b04ce3732a5784d9e74b6d1daebd0e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 3}
+      - {x: -8, y: 3}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_2
     originalName: 
@@ -55,7 +66,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9ad94c61dcc776a47bbc1287962a2b92
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: -3}
+      - {x: -1, y: 2}
+      - {x: -8, y: 3}
+      - {x: -8, y: -8}
+      - {x: 4, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_3
     originalName: 
@@ -70,7 +87,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e62628921c2dcf642ae0e6a4a441503e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 3}
+      - {x: -7, y: 3}
+      - {x: -7, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_4
     originalName: 
@@ -85,7 +107,14 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e6580664580695640b36c2c17fbffea4
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 4}
+      - {x: 4, y: 4}
+      - {x: 0, y: 3}
+      - {x: -5, y: -2}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_5
     originalName: 
@@ -100,7 +129,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: dda549448572ddf448eb81860b14cc19
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_6
     originalName: 
@@ -115,7 +149,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 83e81bc5e3607f5489653b134199849d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_7
     originalName: 
@@ -130,7 +169,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: c596dcd47eb07784ab19b95b47f93f8d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: -2}
+      - {x: 0, y: 3}
+      - {x: -8, y: 4}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_8
     originalName: 
@@ -145,7 +190,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 329fc0bbbc61775438331ebf413ef135
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 6}
+      - {x: -8, y: 6}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_9
     originalName: 
@@ -160,7 +210,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3a585a15f8dc180469a2ccc1a8ea2b45
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_10
     originalName: 
@@ -775,7 +830,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 261905ebf3de93b439436d6dec0f8378
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -4, y: 8}
+      - {x: -4, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_51
     originalName: 
@@ -790,7 +850,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e990609e499fa824cbd939b0c4709130
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_52
     originalName: 
@@ -805,7 +870,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 7987d765c4eaa2149844e9bb78388c82
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 4, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_53
     originalName: 
@@ -820,7 +890,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 58c2e66a02cd97441b75b3652f844469
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_54
     originalName: 
@@ -835,7 +910,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a8c75138c213b6f40a41a784fe805cc0
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -5, y: 8}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_55
     originalName: 
@@ -850,7 +930,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 7be16f6ce81678f4bb53089f6527e471
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_56
     originalName: 
@@ -865,7 +950,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fc5aa55e67cad3646b63fc5e8c07f424
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_57
     originalName: 
@@ -880,7 +970,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 28462fd740179024baca5e6f77862bc2
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_58
     originalName: 
@@ -895,7 +990,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f2e7f856e8fa5924dabad18f9ccaa4d5
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_59
     originalName: 
@@ -910,7 +1010,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: b4e3bd38af208924f9fa8114a89f6f0f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_60
     originalName: 
@@ -1525,7 +1630,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 54ca2c4991298f54092e797109e73fa3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -4, y: 8}
+      - {x: -4, y: 2}
+      - {x: 2, y: -4}
+      - {x: 8, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_101
     originalName: 
@@ -1540,7 +1651,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f14bac04433ff9c4b966fa9bbc8243e2
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -4}
+      - {x: 8, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_102
     originalName: 
@@ -1555,7 +1671,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 92d653c1f9db0eb47836baeffde6fcdb
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: 2}
+      - {x: 4, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -4}
+      - {x: -2, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_103
     originalName: 
@@ -1570,7 +1692,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f7c788263017ca04aabd06fdfc096b4f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -6}
+      - {x: 7, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_104
     originalName: 
@@ -1585,7 +1712,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: df11c6c20aca8c248b90324c2d04b1cd
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -5, y: 8}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_105
     originalName: 
@@ -1600,7 +1732,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: b380730691fa0184094072a806a41a29
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_106
     originalName: 
@@ -1615,7 +1752,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 92e586dbdf55f5f4892e433103d8b3f3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_107
     originalName: 
@@ -1630,7 +1772,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1843b06890c67eb41979998ebdccd99a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_108
     originalName: 
@@ -1645,7 +1792,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: ff54f043bf210034dbfe1d025f1a2956
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_109
     originalName: 
@@ -1660,7 +1812,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e117d1368b73e7e429503aae8047adbf
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_110
     originalName: 
@@ -1675,7 +1832,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 41512eb7e1c6c724abf7f99be5cbfc34
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_111
     originalName: 
@@ -2275,7 +2437,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3deb7b2855e151b4bab46debf07420d0
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 6}
+      - {x: -6, y: 6}
+      - {x: -6, y: -7}
+      - {x: 8, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_151
     originalName: 
@@ -2290,7 +2457,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 05dbb85cd7bd88e48a5beea018123f1a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -7}
+      - {x: 8, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_152
     originalName: 
@@ -2305,7 +2477,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 944476c9aabc3474295139ea3e5954c7
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 6}
+      - {x: -8, y: 6}
+      - {x: -8, y: -7}
+      - {x: 6, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_153
     originalName: 
@@ -2320,7 +2497,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fe29902e165cc9f4eb64fbf6ed2017c3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 6}
+      - {x: -7, y: 6}
+      - {x: -7, y: -6}
+      - {x: 7, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_154
     originalName: 
@@ -2335,7 +2517,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e4da89061be0c4b469f5faa412409c4f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -6, y: 8}
+      - {x: -6, y: 0}
+      - {x: 0, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_155
     originalName: 
@@ -2350,7 +2538,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a019466f28f794d4a8bd1b5685507835
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_156
     originalName: 
@@ -2365,7 +2558,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: ebb1c90ef52b20148a5fa74ca2892981
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_157
     originalName: 
@@ -2380,7 +2578,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 103dc1cac127f634ba050e0594ac877f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 0, y: -6}
+      - {x: 6, y: 0}
     tessellationDetail: 0
   - name: TilesetFloor_158
     originalName: 
@@ -2395,7 +2599,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 436d1b925a70e2940ae546e873399d99
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_159
     originalName: 
@@ -2410,7 +2619,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3b83c0109feb852448be4519d1e8e893
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_160
     originalName: 
@@ -2425,7 +2639,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: edebae234ca55004aa058fe9a44c473b
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_161
     originalName: 
@@ -3085,7 +3304,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f1ccde60fd6c9a44ab6d10852c48ee95
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -6, y: 8}
+      - {x: -6, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_205
     originalName: 
@@ -3100,7 +3324,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: eb2dff7a8d0b95a47a264fbb886d2ef1
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_206
     originalName: 
@@ -3115,7 +3344,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6b1d3d49091dd6442b344e2ec1b4abf8
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_207
     originalName: 
@@ -3130,7 +3364,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: ee02e44bbe965234398547abad9eec73
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 6, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_208
     originalName: 
@@ -3145,7 +3384,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1144e261da4f45841b3fec08238114fa
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_209
     originalName: 
@@ -4525,7 +4769,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 05d5e6776453824438c9f05c44af20fd
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 3}
+      - {x: 1, y: 2}
+      - {x: -4, y: -3}
+      - {x: -4, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_301
     originalName: 
@@ -4540,7 +4790,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fb077d5d5189b6546825e2a9ea2aa59d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 3}
+      - {x: -8, y: 3}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_302
     originalName: 
@@ -4555,7 +4810,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 07bd1c29d35394944ad218487218cd9e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: -3}
+      - {x: -1, y: 2}
+      - {x: -8, y: 3}
+      - {x: -8, y: -8}
+      - {x: 4, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_303
     originalName: 
@@ -4570,7 +4831,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f5bb0ea99ec2eb04baf3f0fb9bce838e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 3}
+      - {x: -7, y: 3}
+      - {x: -7, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_304
     originalName: 
@@ -4585,7 +4851,14 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: ddab7c5d3658bfe47a2c7982fc31abd3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 4}
+      - {x: 4, y: 4}
+      - {x: 0, y: 3}
+      - {x: -5, y: -2}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_305
     originalName: 
@@ -4600,7 +4873,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f8bd10fbc5d516c44b49a884564321c1
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_306
     originalName: 
@@ -4615,7 +4893,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 5e2f504c541f1e344bdd7c0058a4819a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_307
     originalName: 
@@ -4630,7 +4913,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 5ececd51d916ea246b8cadc035997814
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: -2}
+      - {x: 0, y: 3}
+      - {x: -8, y: 4}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_308
     originalName: 
@@ -4645,7 +4934,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: d28e4506956b514449a44a23866171ad
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 6}
+      - {x: -8, y: 6}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_309
     originalName: 
@@ -4660,7 +4954,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 0cf232f019fa8d84bb6736204795fad9
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_310
     originalName: 
@@ -5275,7 +5574,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1a948832949493b4c8e5d61e84bd654a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -4, y: 8}
+      - {x: -4, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_351
     originalName: 
@@ -5290,7 +5594,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 98e822f1bfce26e4295dc5702b552f81
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_352
     originalName: 
@@ -5305,7 +5614,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3b8e8c83e19efe34099ec0ff48114a4a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 4, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_353
     originalName: 
@@ -5320,7 +5634,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e7c55553e0a626646852944ea35ceea3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_354
     originalName: 
@@ -5335,7 +5654,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 742e5aac1b51dd54b91b6f3a4c6488c4
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -5, y: 8}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_355
     originalName: 
@@ -5350,7 +5674,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: d07e1bd2d5001ac46af70e83ae30e091
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_356
     originalName: 
@@ -5365,7 +5694,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9a3d89f810f80364a8297576d9e51dfb
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_357
     originalName: 
@@ -5380,7 +5714,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f923dfe4f57e3d94f8bff35919c65114
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_358
     originalName: 
@@ -5395,7 +5734,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6956c65b50a95894bab5a587fccfddfa
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_359
     originalName: 
@@ -5410,7 +5754,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3bf8049cbee4b11468c88ef09909b03e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_360
     originalName: 
@@ -6025,7 +6374,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3f561f9314db79a42aaa918507f25172
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -4, y: 8}
+      - {x: -4, y: 2}
+      - {x: 2, y: -4}
+      - {x: 8, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_401
     originalName: 
@@ -6040,7 +6395,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 504cade6eae9acd45b79a34f7130d28e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -4}
+      - {x: 8, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_402
     originalName: 
@@ -6055,7 +6415,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 97a5f90a5d5f1594689e2b5160aa2103
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 4, y: 2}
+      - {x: 4, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -4}
+      - {x: -2, y: -4}
     tessellationDetail: 0
   - name: TilesetFloor_403
     originalName: 
@@ -6070,7 +6436,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 73d844c6604911543b25e8c0ab680035
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -6}
+      - {x: 7, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_404
     originalName: 
@@ -6085,7 +6456,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: c726d3a4e39bef24e97444a0dd7927ce
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -5, y: 8}
+      - {x: -5, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_405
     originalName: 
@@ -6100,7 +6476,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a62c05e29b0f8a640b3ee482de1be78f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_406
     originalName: 
@@ -6115,7 +6496,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: bcd2a1f8ea18a734e904f1e9b69ce153
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_407
     originalName: 
@@ -6130,7 +6516,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 4a723cb432c52984dafa2cb6c28f70cc
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 5, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 5, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_408
     originalName: 
@@ -6145,7 +6536,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 117ffc4ce8a736d49bf5dbeb8945ea7f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_409
     originalName: 
@@ -6160,7 +6556,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e9d1755b26bb79f4d834c0a4ec685bb3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_410
     originalName: 
@@ -6175,7 +6576,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8bb438fd5c5112f4f84fe416fc29293c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_411
     originalName: 
@@ -6775,7 +7181,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 358d222c8b006e94891ee8b940235e79
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 6}
+      - {x: -6, y: 6}
+      - {x: -6, y: -7}
+      - {x: 8, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_451
     originalName: 
@@ -6790,7 +7201,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 97ec6fd9443237045afcb02a5019ed51
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 5}
+      - {x: -8, y: 5}
+      - {x: -8, y: -7}
+      - {x: 8, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_452
     originalName: 
@@ -6805,7 +7221,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 2d9be9e499d88f34faba2ead27f9cb8a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 6}
+      - {x: -8, y: 6}
+      - {x: -8, y: -7}
+      - {x: 6, y: -7}
     tessellationDetail: 0
   - name: TilesetFloor_453
     originalName: 
@@ -6820,7 +7241,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 504d3104437358544aef1a302974e160
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 6}
+      - {x: -7, y: 6}
+      - {x: -7, y: -6}
+      - {x: 7, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_454
     originalName: 
@@ -6835,7 +7261,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 2e045e17c25f1fa41aa494570f48548d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -6, y: 8}
+      - {x: -6, y: 0}
+      - {x: 0, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_455
     originalName: 
@@ -6850,7 +7282,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 34574492f78b82b4d8c5721e6bcbc0a4
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_456
     originalName: 
@@ -6865,7 +7302,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 34c5486ee4588c44fab29c77233e693c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_457
     originalName: 
@@ -6880,7 +7322,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 19e18d5f7a8778f44bf509aa3eda80fd
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 0, y: -6}
+      - {x: 6, y: 0}
     tessellationDetail: 0
   - name: TilesetFloor_458
     originalName: 
@@ -6895,7 +7343,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: daa44a0514fe934439898f48b09aae03
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetFloor_459
     originalName: 
@@ -6910,7 +7363,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 18c4479209285d344b25854f3f0f71e2
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_460
     originalName: 
@@ -6925,7 +7383,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 2db0e1f2a7bc24a49adccbc28e4c1333
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_461
     originalName: 
@@ -7585,7 +8048,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 7a76563afdafb9e4caa86552aed770c6
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -6, y: 8}
+      - {x: -6, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_505
     originalName: 
@@ -7600,7 +8068,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 54231e87296a60140aac9e8fb87a447b
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_506
     originalName: 
@@ -7615,7 +8088,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a16640717216f474cbd1dbaeeaa1f1a5
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_507
     originalName: 
@@ -7630,7 +8108,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a295a4c12239fee489f0509335a19a8f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 6, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 6, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_508
     originalName: 
@@ -7645,7 +8128,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 31619b73f1eabd84d9ff1d49a5e81885
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetFloor_509
     originalName: 
@@ -20263,4 +20751,4 @@ ScriptedImporter:
     spriteOutline: []
     tessellationDetail: 0
   _secondaryTextures: []
-  _artifacts: {instanceID: 0}
+  _artifacts: {fileID: -2988177865379244337, guid: 88299854adaca1c46ad1b743af3208d4, type: 3}

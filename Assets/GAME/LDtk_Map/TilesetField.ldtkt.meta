@@ -25,7 +25,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 2baf934d75ccb414bbe291177cb97afe
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: 0, y: 7}
+      - {x: -7, y: 0}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_1
     originalName: 
@@ -40,7 +46,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: b951b299e7fa4bb4f810ae7c54dd7269
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_2
     originalName: 
@@ -55,7 +66,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: cbda4054cbf23df41b120b88b0907535
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 0}
+      - {x: 0, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_3
     originalName: 
@@ -70,7 +87,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 7c98d468795e4d94885f227da79d5da7
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_4
     originalName: 
@@ -85,7 +107,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e182a5186d1361142afbfd45ffd857b7
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_5
     originalName: 
@@ -100,7 +127,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8cc58849cae0a5940a28924d98a688b9
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_6
     originalName: 
@@ -115,7 +147,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f807781e32a06d64bb016cc93633a823
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_7
     originalName: 
@@ -130,7 +167,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 76378f264d646534da8be23db48252de
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_8
     originalName: 
@@ -145,7 +187,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 69e2049d5d75d724e918dc72a3fbd92a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_9
     originalName: 
@@ -160,7 +207,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a6ed4b8c4dac60c4eaafa1ae6191ae55
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_10
     originalName: 
@@ -175,7 +227,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: efe5c2a937a143c428729b170a0fd53f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -1}
+      - {x: -2, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_11
     originalName: 
@@ -190,7 +248,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: dbb2682124325b9458b3cd5edaed7bf0
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_12
     originalName: 
@@ -205,7 +268,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 55635bef6c9390647a267fb836981ece
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: -1}
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 2, y: -6}
     tessellationDetail: 0
   - name: TilesetField_13
     originalName: 
@@ -250,7 +319,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: b67690038150c994c887028884d51e0e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: 0, y: 7}
+      - {x: -7, y: 0}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_16
     originalName: 
@@ -265,7 +340,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3de549e6530cf2c4f904aa4b3a121045
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_17
     originalName: 
@@ -280,7 +360,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: c407f4ed2afa11c47a99c205f9cf2b54
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 0}
+      - {x: 0, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_18
     originalName: 
@@ -295,7 +381,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 825dc441c4b9ad94f847c5a59d4a4336
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_19
     originalName: 
@@ -310,7 +401,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 4b0a13ceae39e1f43ad6b851eeda42da
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_20
     originalName: 
@@ -325,7 +421,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 95f71eeffe7772345af45222306389cd
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_21
     originalName: 
@@ -340,7 +441,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 26e636988165b234884e88843f70fe54
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_22
     originalName: 
@@ -355,7 +461,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8b4071926b8d4a0499b7f585e77a8c25
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_23
     originalName: 
@@ -370,7 +481,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: cc8f8aaad09c27245954bbca6ca09bb9
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_24
     originalName: 
@@ -385,7 +501,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 60f28f0463560014aa4ff5726934b4d3
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_25
     originalName: 
@@ -400,7 +521,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6fea1a7cb94ddc848966c3185161d188
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -1}
+      - {x: -2, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_26
     originalName: 
@@ -415,7 +542,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 246f1e2b276fb954383c4eb01e3fc566
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_27
     originalName: 
@@ -430,7 +562,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: cb328e543aaf72141a98ccae6445e8ac
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: -1}
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 2, y: -6}
     tessellationDetail: 0
   - name: TilesetField_28
     originalName: 
@@ -475,7 +613,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9234997886745a04693eebd693216286
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: 0, y: 7}
+      - {x: -7, y: 0}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_31
     originalName: 
@@ -490,7 +634,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3532d9923f310af4b98ff3fc594545b0
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_32
     originalName: 
@@ -505,7 +654,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 7eefeee19154cdb4c9581879f9a043ff
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 0}
+      - {x: 0, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_33
     originalName: 
@@ -520,7 +675,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 13e913717d5037f43ba69936915b82dd
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_34
     originalName: 
@@ -535,7 +695,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 6f5c813ba29e40e4691e40978cb8b1c8
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_35
     originalName: 
@@ -550,7 +715,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 05b03a69519f9bd4ca7c49c67ebdb7fe
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_36
     originalName: 
@@ -565,7 +735,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8806f82cf1419684887c250d8cd84b2e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_37
     originalName: 
@@ -580,7 +755,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a58ca78f700f8b4429df38c33eeb691c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_38
     originalName: 
@@ -595,7 +775,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 638d6a884393d884abb44b7fb841aa56
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_39
     originalName: 
@@ -610,7 +795,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: b7dd9bacdc3d3a34d8430113dffd4b2d
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_40
     originalName: 
@@ -625,7 +815,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 938d9b0642d225f4886eb159be31bc68
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -1}
+      - {x: -2, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_41
     originalName: 
@@ -640,7 +836,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: f55e4c4e9c6a264448c4bfe30dff2415
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_42
     originalName: 
@@ -655,7 +856,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 4a306d9fe9e90634b87ef3184c62b0ba
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: -1}
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 2, y: -6}
     tessellationDetail: 0
   - name: TilesetField_43
     originalName: 
@@ -700,7 +907,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: d01965d73a5d6ec4f8c3b89acfd37b47
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: 0, y: 7}
+      - {x: -7, y: 0}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_46
     originalName: 
@@ -715,7 +928,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: cbe3b1aa44231954cb3839df8672394c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_47
     originalName: 
@@ -730,7 +948,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 58068db7e2c6a294baaf8aaa6ed1b76a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 0}
+      - {x: 0, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_48
     originalName: 
@@ -745,7 +969,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 82f560b98e6ce124b812d24f22164f48
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_49
     originalName: 
@@ -760,7 +989,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 935171321537af34da763038bd123caa
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_50
     originalName: 
@@ -775,7 +1009,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 454e90ffd2fb3b947be61eb9241b7d7c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_51
     originalName: 
@@ -790,7 +1029,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a4c1332752c01c548a9cc92ea711dfd1
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_52
     originalName: 
@@ -805,7 +1049,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 56810b77cd4bdc844969c19bb3471e6f
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_53
     originalName: 
@@ -820,7 +1069,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 55bd28e66b446134aa7aec4afe8fdb56
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_54
     originalName: 
@@ -835,7 +1089,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fe8e1e4604ba8544385a14597660df98
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_55
     originalName: 
@@ -850,7 +1109,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 930eb1d5cf1df6d4586902fe0f150d2e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -1}
+      - {x: -2, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_56
     originalName: 
@@ -865,7 +1130,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 72e85b014efe0c140b291b2bd27f4573
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_57
     originalName: 
@@ -880,7 +1150,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 5c0016349618dcd4eac4839f7f88f2e1
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: -1}
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 2, y: -6}
     tessellationDetail: 0
   - name: TilesetField_58
     originalName: 
@@ -925,7 +1201,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8d083990204f3a147afbe34df339eecc
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: 0, y: 7}
+      - {x: -7, y: 0}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_61
     originalName: 
@@ -940,7 +1222,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 38909ad59128652488758eacf5e745f5
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_62
     originalName: 
@@ -955,7 +1242,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 08f1fc6085052344791f1f202367ab89
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 0}
+      - {x: 0, y: 7}
+      - {x: -8, y: 7}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_63
     originalName: 
@@ -970,7 +1263,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3d83864a1a0a25a4b98993e382d5ef08
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_64
     originalName: 
@@ -985,7 +1283,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 479b43de4c38a814783358600c05e48e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_65
     originalName: 
@@ -1000,7 +1303,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 0ca55e483ea89d34888bccf3a7813c04
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_66
     originalName: 
@@ -1015,7 +1323,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 09e9d59055b5e5d4c8505d9ca243918c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_67
     originalName: 
@@ -1030,7 +1343,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fcdc43a7f821c1440b48c81dc1c109c9
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 7, y: -8}
     tessellationDetail: 0
   - name: TilesetField_68
     originalName: 
@@ -1045,7 +1363,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: a160927279940ef428d7f4f4d39cb54b
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_69
     originalName: 
@@ -1060,7 +1383,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: cd752c896b2bbe04c9102a58d4265c4a
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetField_70
     originalName: 
@@ -1075,7 +1403,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 8666fadf28e49834c84c06f502d2371e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -7, y: 8}
+      - {x: -7, y: -1}
+      - {x: -2, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_71
     originalName: 
@@ -1090,7 +1424,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 736d3064af426344c8542b1794794751
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 8, y: -6}
     tessellationDetail: 0
   - name: TilesetField_72
     originalName: 
@@ -1105,7 +1444,13 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 170e65984b9aef04d98eee940885b77c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 7, y: -1}
+      - {x: 7, y: 8}
+      - {x: -8, y: 8}
+      - {x: -8, y: -6}
+      - {x: 2, y: -6}
     tessellationDetail: 0
   - name: TilesetField_73
     originalName: 
@@ -1138,4 +1483,4 @@ ScriptedImporter:
     spriteOutline: []
     tessellationDetail: 0
   _secondaryTextures: []
-  _artifacts: {instanceID: 0}
+  _artifacts: {fileID: -2988177865379244337, guid: be6c790dbe9c879429abbbb7d565c56e, type: 3}
