@@ -2567,11 +2567,7 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 13a2b0f8bcb9cec4b93100b92e6864a9
-    spriteOutline:
-    - shape:
-      - {x: 8, y: 1}
-      - {x: -8, y: -8}
-      - {x: 8, y: -8}
+    spriteOutline: []
     tessellationDetail: 0
   - name: TilesetForeground_158
     originalName: 
@@ -3597,11 +3593,7 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9ffcdc117d5ca8949a5d89463935415b
-    spriteOutline:
-    - shape:
-      - {x: -8, y: 4}
-      - {x: -8, y: -8}
-      - {x: 6, y: -8}
+    spriteOutline: []
     tessellationDetail: 0
   - name: TilesetForeground_223
     originalName: 
