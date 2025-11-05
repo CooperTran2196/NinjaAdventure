@@ -2011,8 +2011,8 @@ ScriptedImporter:
     spriteID: 657029f83d7eb5d4cb480b07d4904fd0
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2031,8 +2031,8 @@ ScriptedImporter:
     spriteID: d60e9fc4bbd24c24082eb1f8e3f31042
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2051,8 +2051,8 @@ ScriptedImporter:
     spriteID: d19ca293d15b1e24cbc425a171ac4e82
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2071,8 +2071,8 @@ ScriptedImporter:
     spriteID: 99ae7cce77031a34c9aecf8b0f4d5b18
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2091,8 +2091,8 @@ ScriptedImporter:
     spriteID: 687b4affc3af30347a7bc2d7e4328669
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2111,8 +2111,8 @@ ScriptedImporter:
     spriteID: 831d8966d5d0e974386185aca4dc5531
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -2698,8 +2698,8 @@ ScriptedImporter:
     spriteID: 91e447c4cdf038041bfc749c8b9c6ef5
     spriteOutline:
     - shape:
-      - {x: 8, y: -6}
-      - {x: -8, y: -6}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -5154,8 +5154,8 @@ ScriptedImporter:
     spriteID: 815bb7ec76017cc47b29082be3c2c423
     spriteOutline:
     - shape:
-      - {x: 8, y: -7}
-      - {x: -8, y: -7}
+      - {x: 8, y: -5}
+      - {x: -8, y: -5}
       - {x: -8, y: -8}
       - {x: 8, y: -8}
     tessellationDetail: 0
@@ -5967,7 +5967,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 416883271c8b0124ebed103471ae6ef5
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 2, y: 8}
+      - {x: -2, y: 8}
+      - {x: -2, y: -8}
+      - {x: 2, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_373
     originalName: 
@@ -14343,7 +14348,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 4340d81e413744f4190d2a0c70f9b121
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -4}
+      - {x: -8, y: -4}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_929
     originalName: 
@@ -14358,7 +14368,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 9f0bb241fc054b7439b07e9d96445184
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -4}
+      - {x: -8, y: -4}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_930
     originalName: 
@@ -16865,7 +16880,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: fe0e91463c1e65f438501ad013543b8e
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -4}
+      - {x: -8, y: -4}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_1091
     originalName: 
@@ -16880,7 +16900,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 1ffafeb79fe3cc24a8f57cf4b8b35333
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -4}
+      - {x: -8, y: -4}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_1092
     originalName: 

@@ -128,7 +128,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d579f2e19bf3ca54c8994ed37c10e948, type: 3}
   - {fileID: 8300000, guid: deb418023aab0d4419d342b9da27586d, type: 3}
   - {fileID: 8300000, guid: 5cc8881624eeb5848b7220de446809af, type: 3}
-  masterVolume: 0
+  masterVolume: 0.8
   combatVolume: 1
   uiVolume: 0.8
   effectVolume: 0.9
@@ -146,7 +146,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

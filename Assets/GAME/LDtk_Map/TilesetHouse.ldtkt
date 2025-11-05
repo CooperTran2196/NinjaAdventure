@@ -45,7 +45,23 @@
     "pxWid": 528,
     "relPath": "Backgrounds/Tilesets/TilesetHouse.png",
     "savedSelections": [
-
+      {
+        "ids": [
+          256,
+          289,
+          322,
+          257,
+          290,
+          323,
+          258,
+          291,
+          324,
+          259,
+          292,
+          325
+        ],
+        "mode": "Stamp"
+      }
     ],
     "spacing": 0,
     "tags": [
