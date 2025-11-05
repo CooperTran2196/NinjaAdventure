@@ -328,11 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebe36921889d4cb5976dfb915a9382c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_HealthBarSlider
-  e_Health: {fileID: 4546788015201490769}
-  slider: {fileID: 8060526039584646634}
   worldOffset: {x: 0, y: 0.6, z: 0}
   visibleTime: 10
-  startHidden: 1
 --- !u!1 &3728443105300888120
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,7 +978,8 @@ MonoBehaviour:
   lifesteal: 0
   armorPen: 0
   magicPen: 0
-  slashArcBonus: 0
+  slashArc: 0
+  attackSpeed: 0
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
@@ -1003,7 +1001,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  c_Stats: {fileID: 5830313803427634576}
   useDodgeIFrames: 0
   takingDamageAmount: 1
   healingAmount: 1
@@ -1021,12 +1018,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::E_Controller
   detectionRange: 4
   attackRange: 1.2
+  attackStartBuffer: 0.2
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   defaultState: 1
   currentState: 0
-  attackStartBuffer: 0.2
 --- !u!114 &2366073166199938134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,7 +1112,7 @@ MonoBehaviour:
   expReward: 10
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
   dropSpread: 0.75
-  dropChance: 80
+  dropChance: 20
   numberOfDrops: 2
   lootTable:
   - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}

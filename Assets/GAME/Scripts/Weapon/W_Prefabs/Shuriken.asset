@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Shuriken
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: shuriken
+  description: 
   type: 2
   sprite: {fileID: 21300000, guid: 4794f386876d3904db8b9112e1618e58, type: 3}
   image: {fileID: 21300000, guid: 4794f386876d3904db8b9112e1618e58, type: 3}
@@ -21,6 +22,7 @@ MonoBehaviour:
   AP: 0
   knockbackForce: 5
   thrustDistance: 0.25
+  maxAttackSpeed: 0
   onlyThrustKnocksBack: 1
   slashArcDegrees: 45
   comboShowTimes:
@@ -39,11 +41,11 @@ MonoBehaviour:
   - 0.1
   - 0.2
   - 0.5
-  showTime: 0.3
+  showTime: 0.1
   attackMovePenalty: 0.5
   projectilePrefab: {fileID: 21886594188181845, guid: 43f853e670c38934097728e89c117650, type: 3}
   manaCost: 10
   projectileSpeed: 10
-  projectileLifetime: 3
+  projectileLifetime: 1.5
   stickOnHit: 3
   pierceCount: 0

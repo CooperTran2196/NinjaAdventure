@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b03fd0bd7a13e74f969ef4973364c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_HomingProjectile
-  homingRange: 30
+  homingRange: 7
   homingStrength: 360
   homingDelay: 0.5
   spinWhileFlying: 1

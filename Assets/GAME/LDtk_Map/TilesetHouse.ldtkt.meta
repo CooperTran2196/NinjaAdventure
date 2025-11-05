@@ -16838,8 +16838,8 @@ ScriptedImporter:
     spriteID: 0116579664218b64fbf347920b99ffd4
     spriteOutline:
     - shape:
-      - {x: 6, y: 5}
-      - {x: -6, y: 5}
+      - {x: 6, y: 8}
+      - {x: -6, y: 8}
       - {x: -6, y: -8}
       - {x: 6, y: -8}
     tessellationDetail: 0
