@@ -18,7 +18,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 9fc01efeec7136644b92228cbd6d8264, type: 3}
   image: {fileID: 21300000, guid: 9fc01efeec7136644b92228cbd6d8264, type: 3}
   offsetRadius: 0.45
-  AD: 5
+  AD: 0
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.5

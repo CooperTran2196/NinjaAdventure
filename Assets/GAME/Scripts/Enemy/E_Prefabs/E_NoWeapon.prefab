@@ -499,8 +499,8 @@ MonoBehaviour:
   AD: 0
   AP: 0
   MS: 2.5
-  maxHP: 15
-  currentHP: 15
+  maxHP: 80
+  currentHP: 80
   AR: 0
   MR: 0
   maxMP: 0

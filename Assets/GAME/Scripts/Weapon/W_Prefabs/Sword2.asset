@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Sword2
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: sword2
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: eccdbc7e9c2d7be4f8a3ef4a52bed71f, type: 3}
   image: {fileID: 21300000, guid: eccdbc7e9c2d7be4f8a3ef4a52bed71f, type: 3}
   offsetRadius: 0.35
-  AD: 1
+  AD: 4
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
+  maxAttackSpeed: 1
   onlyThrustKnocksBack: 1
   slashArcDegrees: 45
   comboShowTimes:
@@ -34,7 +36,7 @@ MonoBehaviour:
   comboMovePenalties:
   - 0.6
   - 0.5
-  - 0.3
+  - 0.4
   comboStunTimes:
   - 0.1
   - 0.2

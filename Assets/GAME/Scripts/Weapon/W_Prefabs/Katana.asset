@@ -22,7 +22,7 @@ MonoBehaviour:
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
-  maxAttackSpeed: -2
+  maxAttackSpeed: 0
   onlyThrustKnocksBack: 0
   slashArcDegrees: 90
   comboShowTimes:

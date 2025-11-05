@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stick
   m_EditorClassIdentifier: Assembly-CSharp::W_SO
   id: stick
+  description: 
   type: 0
   sprite: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
   image: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
@@ -21,6 +22,7 @@ MonoBehaviour:
   AP: 0
   knockbackForce: 3
   thrustDistance: 0.5
+  maxAttackSpeed: 3
   onlyThrustKnocksBack: 1
   slashArcDegrees: 60
   comboShowTimes:

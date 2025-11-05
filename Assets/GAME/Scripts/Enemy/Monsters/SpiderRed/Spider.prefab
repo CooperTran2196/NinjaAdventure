@@ -244,8 +244,8 @@ MonoBehaviour:
   AD: 0
   AP: 0
   MS: 2.5
-  maxHP: 15
-  currentHP: 15
+  maxHP: 30
+  currentHP: 30
   AR: 0
   MR: 0
   maxMP: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   stunTimeBonus: 0
   thrustDistanceBonus: 0
   attackCooldown: 0
-  collisionDamage: 1
+  collisionDamage: 5
   collisionTick: 0.5
   dodgeSpeed: 0
   dodgeDistance: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Wander
   startCenter: {x: 0, y: 0}
   width: 5
-  height: 7.12
+  height: 7
   pauseDuration: 1
   wanderSpeed: 1
 --- !u!114 &941825255539935814
@@ -371,10 +371,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
-  expReward: 5
+  expReward: 40
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
   dropSpread: 0.75
-  dropChance: 10
+  dropChance: 20
   numberOfDrops: 1
   lootTable:
   - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
