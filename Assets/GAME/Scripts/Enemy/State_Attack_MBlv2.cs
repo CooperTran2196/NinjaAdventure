@@ -3,80 +3,87 @@ using UnityEngine;
 
 public class State_Attack_MBlv2 : MonoBehaviour
 {
-    [Header("Target Layer")]
+    [Header("References")]
+    Rigidbody2D         rb;
+    Animator            anim;
+    I_Controller        controller;
+    SpriteRenderer      sr;
+    C_AfterimageSpawner afterimage;
+    W_Base              activeWeapon;
+
+    [Header("Target")]
     public LayerMask playerLayer;
 
-    [Header("Charge Attack")]
-    public float chargeClipLength = 2.35f;  // GR_CAtk_L/R total length (0f to 2.35f)
-    public float chargeHitDelay   = 2.0f;   // Charge phase (0f to 2f), then attack starts
-    public float chargeDashSpeed  = 9.0f;
-    public float chargeDashMaxDist = 5.0f;
-    public int   chargeDamage     = 22;
-    public float chargeKnockback  = 3.5f;
+    [Header("Normal Attack (Charge)")]
+    public float attackCooldown   = 1.10f;
+    public float attackClipLength = 2.35f;
+    public float attackHitDelay   = 2.00f;   // Telegraph duration
 
-    [Header("Jump Attack")]
-    public float jumpClipLength   = 5.0f;   // Jump animation total length (0f to 5f)
-    public float jumpHitDelay     = 3.0f;   // Charge phase (0f to 3f), then jump starts
-    public float jumpAoERadius    = 1.5f;
-    public int   jumpDamage       = 18;
-    public float jumpKnockback    = 2.5f;
-    public float jumpCooldown     = 5.0f;
-    public float jumpIdleTime     = 2.0f;  // Idle time after landing
+    [Header("Special Attack (Jump)")]
+    public float specialCooldown       = 8.0f;
+    public float specialClipLength     = 5.0f;
+    public float specialHitDelay       = 3.0f;   // Telegraph duration
+    public float specialAoERadius      = 1.8f;
+    public float specialAoEOffsetY     = -1f;
+    public int   specialDamage         = 25;
+    public float specialKnockbackForce = 8f;
 
-    [Header("Weapon")]
-    public W_Base activeWeapon;
+    [Header("Dash Settings")]
+    public float preHitStopBias  = 0.02f;
+    public float stopShortOffset = 0.96f;
 
     // Animator params
-    const string kIsIdle     = "isIdle";
-    const string kIsCharging = "isCharging";
-    const string kIsJumping  = "isJumping";
-    const string kIsMoving   = "isMoving";
+    const string kIsAttacking     = "isAttacking";
+    const string kIsSpecialAttack = "isSpecialAttack";
 
-    // Cache
-    Rigidbody2D rb;
-    Animator anim;
-    I_Controller controller;
-    C_Stats stats;
-    SpriteRenderer sr;
-    C_AfterimageSpawner afterimage;
-
-    // Runtime
+    // Runtime state
     Transform target;
-    Vector2 lastFace = Vector2.right;
-    float chargeRange = 5f;
-    float jumpRange   = 8f;
+    Vector2   lastFace = Vector2.right;
+    float     attackRange;
+    float     specialRange;
+    float     nextAttackReadyAt;
+    float     nextSpecialReadyAt;
+    bool      isDashing;
 
-    // Cooldowns
-    float nextJumpReadyAt;
+    // Dash runtime
+    Vector2 dashDest;
+    Vector2 dashDir;
 
-    // Status
     public bool IsAttacking { get; private set; }
-    bool isDashing;
-    bool hasHitTarget;
+
+    // Computed move windows
+    float AttackComputedMoveWindow  => Mathf.Max(0f, attackClipLength - attackHitDelay - preHitStopBias);
+    float SpecialComputedMoveWindow => Mathf.Max(0f, specialClipLength - specialHitDelay - preHitStopBias);
 
     void Awake()
     {
-        rb         ??= GetComponent<Rigidbody2D>();
-        anim       ??= GetComponentInChildren<Animator>();
-        controller ??= GetComponent<I_Controller>();
-        stats      ??= GetComponent<C_Stats>();
-        sr         ??= GetComponentInChildren<SpriteRenderer>();
+        rb           ??= GetComponent<Rigidbody2D>();
+        anim         ??= GetComponentInChildren<Animator>();
+        controller   ??= GetComponent<I_Controller>();
         activeWeapon ??= GetComponentInChildren<W_Base>();
-        afterimage ??= sr ? sr.GetComponent<C_AfterimageSpawner>() : null;
+        sr           ??= GetComponentInChildren<SpriteRenderer>();
+        afterimage   ??= sr ? sr.GetComponent<C_AfterimageSpawner>() : null;
+    }
+
+    void OnEnable()
+    {
+        // Clear idle state when entering attack
+        anim.SetBool("isIdle", false);
+        anim.SetBool("isMoving", false);
+        anim.SetBool("isWandering", false);
     }
 
     void OnDisable()
     {
         IsAttacking = false;
         isDashing   = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
-        anim.SetBool(kIsIdle, true);
-        anim.SetBool(kIsCharging, false);
-        anim.SetBool(kIsJumping, false);
-        anim.SetBool(kIsMoving, false);
-        UpdateIdleFacing(lastFace);
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim?.SetBool(kIsAttacking, false);
+        anim?.SetBool(kIsSpecialAttack, false);
     }
+
+    // ATTACK DECISION
 
     void Update()
     {
@@ -84,213 +91,154 @@ public class State_Attack_MBlv2 : MonoBehaviour
         if (!target) return;
 
         Vector2 to = (Vector2)target.position - (Vector2)transform.position;
-        float dist = to.magnitude;
+        float dx = to.x, dy = to.y;
+        float d  = to.magnitude;
 
-        Vector2 dir = dist > 0.0001f ? to.normalized : lastFace;
-        
-        // Update idle facing animator floats
+        Vector2 dir = d > 0.0001f ? to.normalized : lastFace;
         UpdateIdleFacing(IsAttacking ? lastFace : dir);
 
-        bool jumpReady   = Time.time >= nextJumpReadyAt;
-        bool canAttackNow = !IsAttacking;
+        if (IsAttacking) return;
 
-        if (canAttackNow)
+        bool specialReady  = Time.time >= nextSpecialReadyAt;
+        bool canAttackNow  = Time.time >= nextAttackReadyAt;
+        bool inSpecialRange = d <= specialRange;
+        bool inAttackRange = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+
+        // Priority: Special > Normal
+        if (specialReady && inSpecialRange)
         {
-            // Jump attack: long range + cooldown ready
-            if (jumpReady && dist > chargeRange && dist <= jumpRange)
-            {
-                StartCoroutine(JumpRoutine(dir));
-                return;
-            }
-            
-            // Charge attack: normal range (no cooldown, always available)
-            if (dist <= chargeRange)
-            {
-                StartCoroutine(ChargeRoutine(dir));
-                return;
-            }
+            StartCoroutine(AttackRoutine(dir, isSpecial: true));
+        }
+        else if (canAttackNow && inAttackRange)
+        {
+            StartCoroutine(AttackRoutine(dir, isSpecial: false));
         }
     }
 
-    // -------- controller hooks ----------
+    // CONTROLLER HOOKS
+
     public void SetTarget(Transform t) => target = t;
-    public void SetRanges(float chargeRange, float jumpRange)
+
+    public void SetRanges(float attackRange, float specialRange)
     {
-        this.chargeRange = chargeRange;
-        this.jumpRange   = jumpRange;
+        this.attackRange  = attackRange;
+        this.specialRange = specialRange;
     }
 
-    // -------- Charge Attack ----------
-    IEnumerator ChargeRoutine(Vector2 dirAtStart)
+    public bool CanSpecialNow(Vector2 bossPos, Vector2 playerPos)
+    {
+        if (Time.time < nextSpecialReadyAt) return false;
+        return Vector2.Distance(bossPos, playerPos) <= specialRange;
+    }
+
+    // ATTACK ROUTINES
+
+    IEnumerator AttackRoutine(Vector2 dirAtStart, bool isSpecial)
     {
         IsAttacking = true;
-        hasHitTarget = false;
-        anim.SetBool(kIsIdle, false);
-        anim.SetBool(kIsJumping, false);
-        anim.SetBool(kIsMoving, false);
-        anim.SetBool(kIsCharging, true);
-
-        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         
-        // Set attack direction for blend tree
+        // Set animator bools
+        anim.SetBool(kIsSpecialAttack, isSpecial);
+        anim.SetBool(kIsAttacking, !isSpecial);
+
+        // Set facing direction
+        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         anim.SetFloat("atkX", lastFace.x);
         anim.SetFloat("atkY", lastFace.y);
+        UpdateIdleFacing(lastFace);
+
+        // Select timing based on attack type
+        float clipLength = isSpecial ? specialClipLength : attackClipLength;
+        float hitDelay   = isSpecial ? specialHitDelay   : attackHitDelay;
+        float moveWindow = isSpecial ? SpecialComputedMoveWindow : AttackComputedMoveWindow;
 
         float t = 0f;
 
-        // Wait for telegraph
-        while (t < chargeHitDelay)
+        // A) Telegraph phase
+        while (t < hitDelay) { t += Time.deltaTime; yield return null; }
+
+        // B) Dash toward player
+        BeginDash(moveWindow);
+        
+        // Normal attack: enable weapon hitbox during dash
+        if (!isSpecial)
+        {
+            activeWeapon?.Attack(lastFace);
+        }
+        
+        while (t < clipLength)
         {
             t += Time.deltaTime;
+            if (ReachedDashDest()) StopDash();
             yield return null;
         }
-
-        // Dash phase
-        Vector2 startPos = transform.position;
-        Vector2 targetPos = target ? (Vector2)target.position : startPos + lastFace * chargeDashMaxDist;
+        StopDash();
         
-        // Dash toward target (any direction, blend tree handles animation)
-        Vector2 dashDir = (targetPos - startPos).normalized;
-        if (dashDir.sqrMagnitude == 0f) dashDir = lastFace;
-        
-        float dashDist = Mathf.Min(Vector2.Distance(startPos, targetPos), chargeDashMaxDist);
-        Vector2 dashDest = startPos + dashDir * dashDist;
+        // C) Special attack: AoE damage at landing
+        if (isSpecial)
+        {
+            ApplyAoEDamageKnockback();
+        }
 
-        controller?.SetDesiredVelocity(dashDir * chargeDashSpeed);
+        // Set cooldowns
+        nextAttackReadyAt = Time.time + attackCooldown;
+        if (isSpecial)
+        {
+            nextSpecialReadyAt = Time.time + specialCooldown;
+        }
+
+        IsAttacking = false;
+        anim.SetBool(kIsSpecialAttack, false);
+        anim.SetBool(kIsAttacking, false);
+    }
+
+    void ApplyAoEDamageKnockback()
+    {
+        Vector2 aoeCenter = (Vector2)transform.position + new Vector2(0f, specialAoEOffsetY);
+        Collider2D hit = Physics2D.OverlapCircle(aoeCenter, specialAoERadius, playerLayer);
+        
+        if (!hit || !hit.CompareTag("Player")) return;
+        
+        C_Health playerHealth = hit.GetComponent<C_Health>();
+        if (!playerHealth) return;
+        
+        playerHealth.ApplyDamage(specialDamage, 0, 0, 0, 0, 0);
+        
+        // Radial knockback from AoE center
+        Vector2 knockbackDir = ((Vector2)hit.transform.position - aoeCenter).normalized;
+        P_Controller pc = hit.GetComponent<P_Controller>();
+        
+        if (pc)
+        {
+            pc.ReceiveKnockback(knockbackDir * specialKnockbackForce);
+        }
+        else
+        {
+            Rigidbody2D playerRb = hit.GetComponent<Rigidbody2D>();
+            playerRb?.AddForce(knockbackDir * specialKnockbackForce, ForceMode2D.Impulse);
+        }
+    }
+
+    // DASH SYSTEM
+    void BeginDash(float moveWindow)
+    {
+        if (!target) return;
+
+        Vector2 start     = transform.position;
+        Vector2 targetPos = target.position;
+        int     sign      = (targetPos.x - start.x) >= 0f ? +1 : -1;
+        Vector2 faceSpot  = new Vector2(targetPos.x - sign * stopShortOffset, targetPos.y);
+        Vector2 toFace    = faceSpot - start;
+        
+        float dashSpeed = (moveWindow > 0f) ? (toFace.magnitude / moveWindow) : 0f;
+
+        dashDir  = toFace.sqrMagnitude > 0f ? toFace.normalized : new Vector2(sign, 0f);
+        dashDest = faceSpot;
+
+        controller.SetDesiredVelocity(dashDir * dashSpeed);
         isDashing = true;
 
-        // Dash until clip ends OR destination reached
-        while (t < chargeClipLength)
-        {
-            t += Time.deltaTime;
-
-            // Check if reached destination early
-            Vector2 currentPos = transform.position;
-            Vector2 toDest = dashDest - currentPos;
-            if (Vector2.Dot(toDest, dashDir) <= 0f || toDest.sqrMagnitude <= 0.01f)
-                break;
-
-            yield return null;
-        }
-
-        StopDash();
-
-        IsAttacking = false;
-        anim.SetBool(kIsCharging, false);
-        anim.SetBool(kIsIdle, true);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!isDashing || hasHitTarget || !other.CompareTag("Player")) return;
-
-        C_Health playerHealth = other.GetComponent<C_Health>();
-        if (playerHealth != null)
-        {
-            playerHealth.ApplyDamage(chargeDamage, 0, 0, 0, 0, 0);
-            
-            // Apply knockback
-            Vector2 knockbackDir = ((Vector2)other.transform.position - (Vector2)transform.position).normalized;
-            Rigidbody2D playerRb = other.GetComponent<Rigidbody2D>();
-            if (playerRb)
-            {
-                playerRb.linearVelocity = knockbackDir * chargeKnockback * 10f; // Multiply for force
-            }
-
-            hasHitTarget = true;
-        }
-    }
-
-    // -------- Jump Attack ----------
-    IEnumerator JumpRoutine(Vector2 dirAtStart)
-    {
-        IsAttacking = true;
-        anim.SetBool(kIsIdle, false);
-        anim.SetBool(kIsCharging, false);
-        anim.SetBool(kIsMoving, false);
-        anim.SetBool(kIsJumping, true);
-
-        if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
-
-        // Set attack direction for blend tree
-        anim.SetFloat("atkX", lastFace.x);
-        anim.SetFloat("atkY", lastFace.y);
-
-        // Store landing position (player's current position)
-        Vector2 landingPos = target ? (Vector2)target.position : (Vector2)transform.position + lastFace * 3f;
-
-        float t = 0f;
-
-        // Wait for telegraph
-        while (t < jumpHitDelay)
-        {
-            t += Time.deltaTime;
-            yield return null;
-        }
-
-        // Jump phase - leap toward landing position
-        Vector2 startPos = transform.position;
-        Vector2 jumpDir = (landingPos - startPos).normalized;
-        float jumpDist = Vector2.Distance(startPos, landingPos);
-        float jumpPhaseTime = jumpClipLength - jumpHitDelay;
-        float jumpSpeed = jumpDist / jumpPhaseTime;
-
-        controller?.SetDesiredVelocity(jumpDir * jumpSpeed);
-
-        // Start afterimage burst for jump duration
-        if (afterimage && sr)
-            afterimage.StartBurst(jumpPhaseTime, sr.sprite, sr.flipX, sr.flipY);
-
-        // Jump arc
-        while (t < jumpClipLength)
-        {
-            t += Time.deltaTime;
-
-            // Simple arc effect (optional: scale sprite or use Y offset)
-            float jumpProgress = (t - jumpHitDelay) / jumpPhaseTime;
-            if (jumpProgress > 0f)
-            {
-                float arcHeight = Mathf.Sin(jumpProgress * Mathf.PI) * 1.5f;
-                transform.position = new Vector3(transform.position.x, transform.position.y, arcHeight);
-            }
-
-            yield return null;
-        }
-
-        // Reset Z position
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
-        controller?.SetDesiredVelocity(Vector2.zero);
-
-        // Landing - AoE damage
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, jumpAoERadius, playerLayer);
-        foreach (Collider2D hit in hits)
-        {
-            if (hit.CompareTag("Player"))
-            {
-                C_Health playerHealth = hit.GetComponent<C_Health>();
-                if (playerHealth != null)
-                {
-                    playerHealth.ApplyDamage(jumpDamage, 0, 0, 0, 0, 0);
-
-                    // Apply knockback
-                    Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
-                    Rigidbody2D playerRb = hit.GetComponent<Rigidbody2D>();
-                    if (playerRb)
-                    {
-                        playerRb.linearVelocity = knockbackDir * jumpKnockback * 10f;
-                    }
-                }
-            }
-        }
-
-        anim.SetBool(kIsJumping, false);
-
-        // Idle after landing - vulnerable window
-        yield return new WaitForSeconds(jumpIdleTime);
-
-        nextJumpReadyAt = Time.time + jumpCooldown;
-        IsAttacking = false;
-        anim.SetBool(kIsIdle, true);
+        afterimage?.StartBurst(moveWindow, sr.sprite, sr.flipX, sr.flipY);
     }
 
     void StopDash()
@@ -300,7 +248,14 @@ public class State_Attack_MBlv2 : MonoBehaviour
         if (rb) rb.linearVelocity = Vector2.zero;
     }
 
-    // -------- anim helper ----------
+    bool ReachedDashDest()
+    {
+        Vector2 pos = transform.position;
+        Vector2 toDest = dashDest - pos;
+        return Vector2.Dot(toDest, dashDir) <= 0f || (toDest.sqrMagnitude <= 0.0004f);
+    }
+
+    // ANIMATION
     void UpdateIdleFacing(Vector2 faceDir)
     {
         anim.SetFloat("moveX", 0f);
@@ -308,29 +263,20 @@ public class State_Attack_MBlv2 : MonoBehaviour
         Vector2 f = faceDir.sqrMagnitude > 0f ? faceDir.normalized : lastFace;
         anim.SetFloat("idleX", f.x);
         anim.SetFloat("idleY", f.y);
-        anim.SetFloat("atkX", f.x);
-        anim.SetFloat("atkY", f.y);
     }
 
-    // -------- gizmos ----------
+    // GIZMOS
     void OnDrawGizmosSelected()
     {
-        if (!target) return;
+        if (!Application.isPlaying) return;
 
         Vector3 p = transform.position;
+        Vector3 aoeCenter = p + new Vector3(0f, specialAoEOffsetY, 0f);
 
-        // Charge range (yellow)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(p, chargeRange);
-
-        // Jump range (cyan)
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(p, jumpRange);
-
-        // Jump AoE radius at current position (red)
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        Gizmos.DrawSphere(p, jumpAoERadius);
+        // AoE radius (red) - jump attack damage area with Y offset
+        Gizmos.color = new Color(1f, 0f, 0f, 0.3f); // Semi-transparent red
+        Gizmos.DrawSphere(aoeCenter, specialAoERadius);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(p, jumpAoERadius);
+        Gizmos.DrawWireSphere(aoeCenter, specialAoERadius);
     }
 }

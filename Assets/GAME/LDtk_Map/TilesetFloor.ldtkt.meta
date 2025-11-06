@@ -850,12 +850,7 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: e990609e499fa824cbd939b0c4709130
-    spriteOutline:
-    - shape:
-      - {x: 8, y: 8}
-      - {x: -8, y: 8}
-      - {x: -8, y: -8}
-      - {x: 8, y: -8}
+    spriteOutline: []
     tessellationDetail: 0
   - name: TilesetFloor_52
     originalName: 

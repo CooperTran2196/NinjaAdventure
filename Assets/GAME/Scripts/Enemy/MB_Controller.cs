@@ -6,34 +6,40 @@ public class MB_Controller : MonoBehaviour, I_Controller
 {
     public enum MBState { Idle, Wander, Chase, Attack }
 
+    [Header("References")]
+    Rigidbody2D rb;
+    C_Stats     c_Stats;
+    C_Health    c_Health;
+
     [Header("States")]
-    public MBState defaultState = MBState.Idle;
-    public State_Idle          idle;
-    public State_Wander        wander;
-    public State_Chase_MBlv2   chase;
-    public State_Attack_MBlv2  attack;
+    State_Idle         idle;
+    State_Wander       wander;
+    State_Chase_MBlv2  chase;
+    State_Attack_MBlv2 attack;
 
     [Header("Detection")]
-    [Min(0.1f)] public float detectionRange = 8f;
-    [Min(0.1f)] public float chargeRange    = 5f;    // Max range for charge attack
-    [Min(0.1f)] public float jumpRange      = 8f;    // Max range for jump attack
-    public LayerMask playerLayer;
-    public float attackStartBuffer = 0.20f;
+                public MBState   defaultState = MBState.Idle;
+    [Min(0.1f)] public float     detectionRange = 10f;   // Chase + special attack range
+    [Min(0.1f)] public float     attackRange = 3f;       // Normal attack trigger range
+                public LayerMask playerLayer;
+                public float     attackStartBuffer = 0.20f;
 
-    Rigidbody2D rb;
-    Vector2 desiredVelocity;
-
+    // Runtime state
+    Vector2   desiredVelocity;
     Transform target;
-    float inRangeTimer;
-    MBState current;
+    float     inRangeTimer;
+    float     contactTimer;   // Collision damage cooldown
+    MBState   current;
 
     void Awake()
     {
-        idle   ??= GetComponent<State_Idle>();
-        wander ??= GetComponent<State_Wander>();
-        chase  ??= GetComponent<State_Chase_MBlv2>();
-        attack ??= GetComponent<State_Attack_MBlv2>();
-        rb     ??= GetComponent<Rigidbody2D>();
+        rb       ??= GetComponent<Rigidbody2D>();
+        c_Stats  ??= GetComponent<C_Stats>();
+        c_Health ??= GetComponent<C_Health>();
+        idle     ??= GetComponent<State_Idle>();
+        wander   ??= GetComponent<State_Wander>();
+        chase    ??= GetComponent<State_Chase_MBlv2>();
+        attack   ??= GetComponent<State_Attack_MBlv2>();
     }
 
     void OnEnable()
@@ -41,8 +47,8 @@ public class MB_Controller : MonoBehaviour, I_Controller
         desiredVelocity = Vector2.zero;
         if (rb) rb.linearVelocity = Vector2.zero;
 
-        chase?.SetRanges(chargeRange);
-        attack?.SetRanges(chargeRange, jumpRange);
+        chase?.SetRanges(attackRange);
+        attack?.SetRanges(attackRange, detectionRange);
         SwitchState(defaultState);
     }
 
@@ -57,7 +63,8 @@ public class MB_Controller : MonoBehaviour, I_Controller
         if (rb) rb.linearVelocity = Vector2.zero;
     }
 
-    // -------- I_Controller --------
+    // I_CONTROLLER
+
     public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
 
     void FixedUpdate()
@@ -66,34 +73,37 @@ public class MB_Controller : MonoBehaviour, I_Controller
         rb.linearVelocity = desiredVelocity;
     }
 
+    // STATE MACHINE
+
     void Update()
     {
         Vector2 pos = transform.position;
 
-        var cDet = Physics2D.OverlapCircle(pos, detectionRange, playerLayer);
+        var cAtk = Physics2D.OverlapCircle(pos, attackRange,    playerLayer);
+        var cDet = cAtk ?? Physics2D.OverlapCircle(pos, detectionRange, playerLayer);
+
+        bool inAttack = cAtk;
         bool inDetect = cDet;
 
         if (inDetect) target = cDet.transform;
 
-        // Check if in attack range (either charge or jump)
-        float distToTarget = target ? Vector2.Distance(pos, target.position) : float.MaxValue;
-        bool inAttackRange = distToTarget <= jumpRange;
+        inRangeTimer = inAttack ? inRangeTimer + Time.deltaTime : 0f;
+        bool readyMelee = inAttack && inRangeTimer >= attackStartBuffer;
 
-        inRangeTimer = inAttackRange ? inRangeTimer + Time.deltaTime : 0f;
-        bool readyAttack = inAttackRange && inRangeTimer >= attackStartBuffer;
-
+        bool readySpecial = attack && target && attack.CanSpecialNow(transform.position, target.position);
         bool attackingNow = attack && attack.IsAttacking;
 
         var desired =
-            attackingNow  ? MBState.Attack :
-            readyAttack   ? MBState.Attack :
-            inDetect      ? MBState.Chase  :
-                            defaultState;
+            attackingNow   ? MBState.Attack :
+            readySpecial   ? MBState.Attack :
+            readyMelee     ? MBState.Attack :
+            inDetect       ? MBState.Chase  :
+                             defaultState;
 
         if (desired != current) SwitchState(desired);
     }
 
-    public void SwitchState(MBState s)
+    void SwitchState(MBState s)
     {
         current = s;
 
@@ -105,32 +115,56 @@ public class MB_Controller : MonoBehaviour, I_Controller
         if (s == MBState.Chase)
         {
             chase?.SetTarget(target);
-            chase?.SetRanges(chargeRange);
+            chase?.SetRanges(attackRange);
             desiredVelocity = Vector2.zero;
         }
         else if (s == MBState.Attack)
         {
             attack?.SetTarget(target);
-            attack?.SetRanges(chargeRange, jumpRange);
+            attack?.SetRanges(attackRange, detectionRange);
             desiredVelocity = Vector2.zero;
         }
         else desiredVelocity = Vector2.zero;
     }
 
+    // COLLISION DAMAGE
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!c_Health || !c_Health.IsAlive) return;
+
+        // Filter to only player layer
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
+            return;
+
+        // Cooldown using physics timestep
+        if (contactTimer > 0f)
+        {
+            contactTimer -= Time.fixedDeltaTime;
+            return;
+        }
+
+        var playerHealth = collision.collider.GetComponent<C_Health>();
+        if (!playerHealth || !playerHealth.IsAlive) return;
+
+        if (!c_Stats) return;
+
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+        contactTimer = c_Stats.collisionTick;
+    }
+
+    // GIZMOS
+
     void OnDrawGizmosSelected()
     {
         Vector3 p = transform.position;
 
-        // Detection range (orange)
+        // Detection range (orange) - when boss starts chasing AND special attack range
         Gizmos.color = new Color(1f, 0.65f, 0f);
         Gizmos.DrawWireSphere(p, detectionRange);
 
-        // Charge attack range (yellow)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(p, chargeRange);
-
-        // Jump attack range (cyan)
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(p, jumpRange);
+        // Attack range (red) - when boss can do normal attack (then dashes forward)
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(p, attackRange);
     }
 }

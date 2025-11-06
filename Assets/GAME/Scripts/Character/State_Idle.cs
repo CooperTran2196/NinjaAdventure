@@ -15,9 +15,12 @@ public class State_Idle : MonoBehaviour
         anim   = GetComponent<Animator>();
         stats  = GetComponent<C_Stats>();
 
-        // Make this work for Player, Enemy, or NPC
+        // Make this work for Player, Enemy, NPC, or Boss
 
-        controller = (I_Controller)(GetComponent<E_Controller>() ?? (Component)GetComponent<NPC_Controller>());
+        controller = (I_Controller)(GetComponent<E_Controller>() ??
+                        (Component)GetComponent<NPC_Controller>() ??
+                        (Component)GetComponent<B_Controller>() ??
+                        (Component)GetComponent<MB_Controller>());
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Idle");
     }
@@ -28,7 +31,7 @@ public class State_Idle : MonoBehaviour
         controller?.SetDesiredVelocity(Vector2.zero);
         anim.SetBool("isMoving", false);
         anim.SetBool("isWandering", false);
-        anim.SetBool("isAttacking", false);
+        // Don't set isAttacking here - let attack state manage it
     }
 
     // Idle: no movement intent; controller handles knockback for all states

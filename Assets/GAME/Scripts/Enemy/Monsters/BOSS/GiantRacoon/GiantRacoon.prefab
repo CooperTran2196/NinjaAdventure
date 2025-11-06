@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.41}
+  m_AnchoredPosition: {x: 0, y: 1.6}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8680854334772461227
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebe36921889d4cb5976dfb915a9382c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_HealthBarSlider
-  worldOffset: {x: 0, y: 0.82, z: 0}
+  worldOffset: {x: 0, y: 1.6, z: 0}
   visibleTime: 10
 --- !u!1 &1787384725578257675
 GameObject:
@@ -165,7 +165,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7041267087320776556
 CanvasRenderer:
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e3e871d6697774da9043adff344fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_Melee
-  weaponData: {fileID: 11400000, guid: db478191066a946bb85a337bd4996f38, type: 2}
+  weaponData: {fileID: 11400000, guid: f8053561b58c9204ab686c3577e5d367, type: 2}
   owner: {fileID: 516870147140707505}
   targetMask:
     serializedVersion: 2
@@ -397,7 +397,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6002508224266660145
 GameObject:
@@ -434,7 +434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 33}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2395718113865180697
@@ -657,15 +657,15 @@ GameObject:
   - component: {fileID: 516870147140707505}
   - component: {fileID: 303538930976470595}
   - component: {fileID: 5316174333513583366}
-  - component: {fileID: 7978545847479055895}
+  - component: {fileID: 4801467147598660924}
   - component: {fileID: 7517336061248405286}
   - component: {fileID: 1586582498145122361}
   - component: {fileID: 4606356722139382044}
-  - component: {fileID: 3498481810056378355}
+  - component: {fileID: 189981797826091190}
+  - component: {fileID: 4726432630930991426}
   - component: {fileID: 8223950156215462241}
   - component: {fileID: 7439300620683537284}
-  - component: {fileID: 2436023186432343511}
-  - component: {fileID: 8754682776586802809}
+  - component: {fileID: 3519765349200833066}
   - component: {fileID: 667372961441021014}
   - component: {fileID: 2708953151966360670}
   m_Layer: 7
@@ -778,8 +778,8 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &7978545847479055895
-BoxCollider2D:
+--- !u!60 &4801467147598660924
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -812,7 +812,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.05163288, y: -0.036325395}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -822,8 +822,34 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.8691611, y: 2.9174871}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.99481857, y: -0.79459286}
+      - {x: 1.3772674, y: -0.88271874}
+      - {x: 1.617976, y: -0.6043479}
+      - {x: 1.2850153, y: -0.20896538}
+      - {x: 0.8217712, y: -0.07261856}
+      - {x: 0.8018839, y: 0.22208586}
+      - {x: 1.0044658, y: 0.43717527}
+      - {x: 1.0510101, y: 0.8886241}
+      - {x: 0.5625, y: 1.3656284}
+      - {x: -0.5392863, y: 1.3563651}
+      - {x: -0.9881719, y: 0.9976573}
+      - {x: -1.0690944, y: 0.9494308}
+      - {x: -1.0876211, y: 0.5978601}
+      - {x: -0.90704095, y: 0.24596405}
+      - {x: -0.9037817, y: -0.017634481}
+      - {x: -1.3228388, y: -0.15973192}
+      - {x: -1.6690862, y: -0.472282}
+      - {x: -1.4147222, y: -0.8435633}
+      - {x: -1.1001624, y: -0.66867214}
+      - {x: -0.9384447, y: -1.0166934}
+      - {x: -1.2098858, y: -1.2539158}
+      - {x: -1.1152979, y: -1.522605}
+      - {x: 1.0570984, y: -1.4838055}
+      - {x: 1.126948, y: -1.1644362}
+      - {x: 0.9417572, y: -1.0370535}
+  m_UseDelaunayMesh: 0
 --- !u!95 &7517336061248405286
 Animator:
   serializedVersion: 7
@@ -834,7 +860,7 @@ Animator:
   m_GameObject: {fileID: 8273029760021090776}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2cd1d60f7c03e4d61abdd2864b22274a, type: 2}
+  m_Controller: {fileID: 22100000, guid: 1dd74ffe4b996914a915f90b4f1a3a80, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -858,11 +884,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7695cc333434368acf0afa63faf9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Stats
-  AD: 1
+  AD: 10
   AP: 0
   MS: 2
-  maxHP: 50
-  currentHP: 50
+  maxHP: 500
+  currentHP: 500
   AR: 0
   MR: 0
   maxMP: 0
@@ -876,12 +902,12 @@ MonoBehaviour:
   movePenaltyReduction: 0
   stunTimeBonus: 0
   thrustDistanceBonus: 0
-  attackCooldown: 1.2
-  collisionDamage: 1
-  collisionTick: 0.5
-  dodgeSpeed: 11
-  dodgeDistance: 2
-  dodgeCooldown: 0.45
+  attackCooldown: 0
+  collisionDamage: 5
+  collisionTick: 1
+  dodgeSpeed: 0
+  dodgeDistance: 0
+  dodgeCooldown: 0
 --- !u!114 &4606356722139382044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -897,7 +923,7 @@ MonoBehaviour:
   useDodgeIFrames: 0
   takingDamageAmount: 1
   healingAmount: 1
---- !u!114 &3498481810056378355
+--- !u!114 &189981797826091190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -906,21 +932,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 8273029760021090776}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01dbe2a3aa34241679822e3b2ac175e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 965fb370912bb8d489c4767a61fde343, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MB_Controller
+  m_EditorClassIdentifier: Assembly-CSharp::GR_Controller
   defaultState: 0
-  idle: {fileID: 7439300620683537284}
-  wander: {fileID: 8223950156215462241}
-  chase: {fileID: 8754682776586802809}
-  attack: {fileID: 2436023186432343511}
   detectionRange: 10
-  chargeRange: 6
-  jumpRange: 9
+  attackRange: 3
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   attackStartBuffer: 0.2
+--- !u!114 &4726432630930991426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8273029760021090776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c8b80629d3dd3439ab7dbff64fe871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GR_State_Attack
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  attackCooldown: 2
+  attackClipLength: 2.35
+  attackHitDelay: 2
+  specialCooldown: 8
+  specialClipLength: 3.44
+  specialHitDelay: 3
+  specialAoERadius: 2
+  specialAoEOffsetY: -1
+  specialDamage: 20
+  specialKnockbackForce: 15
+  preHitStopBias: 0.02
+  stopShortOffset: 0.96
 --- !u!114 &8223950156215462241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -934,8 +982,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Wander
   startCenter: {x: 0, y: 0}
-  width: 18.21
-  height: 12.92
+  width: 18
+  height: 12
   pauseDuration: 1
   wanderSpeed: 1
 --- !u!114 &7439300620683537284
@@ -950,47 +998,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91086e46dce9d4f428f369972b0b371d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC_State_Idle
---- !u!114 &2436023186432343511
+--- !u!114 &3519765349200833066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8273029760021090776}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89e527ca523c44e6bb4e52d314fcb82a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a2136ba4ee313f44bc900a1ca6ad22b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::State_Attack_MBlv2
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  chargeClipLength: 2.35
-  chargeHitDelay: 2
-  chargeDashSpeed: 9
-  chargeDashMaxDist: 5
-  chargeDamage: 22
-  chargeKnockback: 3.5
-  jumpClipLength: 5
-  jumpHitDelay: 3
-  jumpAoERadius: 1.5
-  jumpDamage: 18
-  jumpKnockback: 2.5
-  jumpCooldown: 5
-  jumpIdleTime: 2
-  activeWeapon: {fileID: 3816420475507484107}
---- !u!114 &8754682776586802809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8273029760021090776}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d495f381a219a43ce860edf943289e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::State_Chase_MBlv2
+  m_EditorClassIdentifier: Assembly-CSharp::GR_State_Chase
   stopBuffer: 0.1
 --- !u!114 &667372961441021014
 MonoBehaviour:
