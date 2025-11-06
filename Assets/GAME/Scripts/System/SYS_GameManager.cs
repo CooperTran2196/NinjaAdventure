@@ -16,7 +16,7 @@ public class SYS_GameManager : MonoBehaviour
     public AudioSource      audioSource;
 
     [Header("Restart Settings")]
-    public string initialSceneName = "Level1";
+    public string initialSceneName = "Level0";
     public string initialSpawnId   = "Start";
 
     [Header("Audio Settings")]
@@ -62,6 +62,7 @@ public class SYS_GameManager : MonoBehaviour
         {
             audioSource.loop = true;
             audioSource.playOnAwake = false;
+            audioSource.volume = 0.7f;
         }
     }
 

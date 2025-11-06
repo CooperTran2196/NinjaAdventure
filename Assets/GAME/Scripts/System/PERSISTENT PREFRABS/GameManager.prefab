@@ -53,7 +53,7 @@ MonoBehaviour:
   shop_Manager: {fileID: 0}
   inv_ItemInfo: {fileID: 0}
   audioSource: {fileID: 8894136543161484865}
-  initialSceneName: Level1
+  initialSceneName: Level0
   initialSpawnId: Start
   fadeDuration: 3
   persistentObjects:

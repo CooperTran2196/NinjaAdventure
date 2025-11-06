@@ -22,15 +22,9 @@ public class GRS_State_Attack : MonoBehaviour
     [Header("Special (single clip flow)")]
     public float specialCooldown   = 8.0f;
     public float specialClipLength = 1.50f;
-    public float specialHitDelay   = 0.50f;   // Charge ends -> start dash
-    public float hitTime           = 1.05f;   // First contact; follow-up auto
-
-    [Header("Auto Move Window")]
-    public float preHitStopBias = 0.02f;
-
-    [Header("Dash")]
-    public float dashSpeed       = 9.0f;
-    public float stopShortOffset = 0.96f;     // Distance kept in front of player
+    public float specialHitDelay   = 0.50f;   // Charging duration
+    public float specialDashSpeed  = 9.0f;    // Constant dash velocity
+    public float followupGap       = 0.14f;   // Gap between first and second hit
 
     [Header("Alignment Gate")]
     public float yHardCap = 0.55f;            // Must be within this to attack
@@ -43,6 +37,7 @@ public class GRS_State_Attack : MonoBehaviour
     Transform target;
     Vector2   lastFace = Vector2.right;
     float     attackRange;
+    float     detectionRange;
     float     nextAttackReadyAt;
     float     nextSpecialReadyAt;
     bool      isDashing;
@@ -50,15 +45,9 @@ public class GRS_State_Attack : MonoBehaviour
     // Dash runtime
     Vector2 dashDest;
     Vector2 dashDir;
-
-    // Follow-up gap for continuous second swing
-    const float followupGap = 0.14f;
+    float   currentDashSpeed;
 
     public bool IsAttacking { get; private set; }
-
-    // Computed move window
-    float ComputedMoveWindow => Mathf.Max(0f, hitTime - specialHitDelay - preHitStopBias);
-    float TimeReach => dashSpeed * ComputedMoveWindow;
 
     void Awake()
     {
@@ -74,17 +63,18 @@ public class GRS_State_Attack : MonoBehaviour
     {
         IsAttacking = false;
         isDashing   = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
-        anim?.SetBool(isAttacking, false);
-        anim?.SetBool(isSpecialAttack, false);
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.speed = 1.0f;  // Reset animation speed
+        anim.SetBool(isAttacking, false);
+        anim.SetBool(isSpecialAttack, false);
     }
 
     // ATTACK DECISION
 
     void Update()
     {
-        if (!isDashing) controller?.SetDesiredVelocity(Vector2.zero);
+        if (!isDashing) controller.SetDesiredVelocity(Vector2.zero);
         if (!target) return;
 
         Vector2 to = (Vector2)target.position - (Vector2)transform.position;
@@ -97,22 +87,21 @@ public class GRS_State_Attack : MonoBehaviour
         if (IsAttacking) return;
 
         // Gates
-        bool inInner       = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
-        bool specialReady  = Time.time >= nextSpecialReadyAt;
-        float inner        = attackRange * 1.2f;
-        float outer        = attackRange + TimeReach;
-        bool inSpecialDist = Mathf.Abs(dx) >= inner && Mathf.Abs(dx) <= outer;
-        bool alignedY      = Mathf.Abs(dy) <= yHardCap;
-        bool canAttackNow  = Time.time >= nextAttackReadyAt;
+        bool inNormalRange  = Physics2D.OverlapCircle((Vector2)transform.position, attackRange, playerLayer);
+        bool specialReady   = Time.time >= nextSpecialReadyAt;
+        bool canAttackNow   = Time.time >= nextAttackReadyAt;
+        bool alignedY       = Mathf.Abs(dy) <= yHardCap;
+        
+        bool inSpecialRange = d <= detectionRange && d > attackRange;
 
         // Priority: Special > Normal
-        if (canAttackNow)
+        if (canAttackNow && alignedY)
         {
-            if (specialReady && alignedY && inSpecialDist)
+            if (specialReady && inSpecialRange)
             {
                 StartCoroutine(SpecialRoutine(dir));
             }
-            else if (alignedY && inInner)
+            else if (inNormalRange)
             {
                 StartCoroutine(NormalRoutine(dir));
             }
@@ -122,16 +111,17 @@ public class GRS_State_Attack : MonoBehaviour
     // CONTROLLER HOOKS
     public void SetTarget(Transform t) => target = t;
 
-    public void SetRanges(float attackRange) => this.attackRange = attackRange;
+    public void SetRanges(float attackRange, float detectionRange)
+    {
+        this.attackRange = attackRange;
+        this.detectionRange = detectionRange;
+    }
 
     public bool CanSpecialNow(Vector2 bossPos, Vector2 playerPos)
     {
         if (Time.time < nextSpecialReadyAt || Time.time < nextAttackReadyAt) return false;
-        float dx = Mathf.Abs(playerPos.x - bossPos.x);
-        float dy = Mathf.Abs(playerPos.y - bossPos.y);
-        float inner = attackRange * 1.2f;
-        float outer = attackRange + TimeReach;
-        return dy <= yHardCap && dx >= inner && dx <= outer;
+        float distance = Vector2.Distance(bossPos, playerPos);
+        return distance <= detectionRange;
     }
 
     // ATTACK ROUTINES
@@ -140,6 +130,7 @@ public class GRS_State_Attack : MonoBehaviour
         IsAttacking = true;
         anim.SetBool(isSpecialAttack, false);
         anim.SetBool(isAttacking, true);
+        anim.speed = 1.0f;  // Normal attack doesn't use dash, keep normal speed
 
         if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         anim.SetFloat("atkX", lastFace.x);
@@ -148,7 +139,7 @@ public class GRS_State_Attack : MonoBehaviour
 
         yield return new WaitForSeconds(hitDelay);
 
-        activeWeapon?.Attack(lastFace);
+        activeWeapon.Attack(lastFace);
 
         yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
 
@@ -162,6 +153,7 @@ public class GRS_State_Attack : MonoBehaviour
         IsAttacking = true;
         anim.SetBool(isAttacking, false);
         anim.SetBool(isSpecialAttack, true);
+        anim.speed = 1.0f;  // Start at normal speed
 
         if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
         anim.SetFloat("atkX", lastFace.x);
@@ -169,67 +161,83 @@ public class GRS_State_Attack : MonoBehaviour
         UpdateIdleFacing(lastFace);
 
         float t = 0f;
-        float endMoveTime = specialHitDelay + ComputedMoveWindow;
 
-        // A) Charge
-        while (t < specialHitDelay) { t += Time.deltaTime; yield return null; }
+        // 1/ Charging phase (normal speed)
+        while (t < specialHitDelay) 
+        { 
+            t += Time.deltaTime; 
+            yield return null; 
+        }
 
-        // B) Gap-close to face spot
-        BeginDash();
-        while (t < endMoveTime)
+        // 2/ Calculate and apply dash animation speed
+        float dashPhaseTime = specialClipLength - specialHitDelay;
+        float dashDistance = specialDashSpeed * dashPhaseTime;
+        float animSpeed = dashPhaseTime / (dashDistance / specialDashSpeed);
+        
+        anim.speed = animSpeed;  // Change speed for dash phase only
+
+        // 3/ Begin dash toward player
+        BeginDash(specialDashSpeed, dashDistance);
+        
+        // 4/ Dash until clip ends
+        while (t < specialClipLength)
         {
             t += Time.deltaTime;
-            if (ReachedDashDest()) break;
             yield return null;
         }
         StopDash();
 
-        // C) Hit + quick follow-up
-        while (t < hitTime) { t += Time.deltaTime; yield return null; }
-        activeWeapon?.Attack(lastFace);
+        // 5/ First hit right after dash ends
+        activeWeapon.Attack(lastFace);
 
-        float t2 = 0f;
-        while (t2 < followupGap) { t2 += Time.deltaTime; yield return null; }
-        activeWeapon?.Attack(lastFace);
-
-        // D) Finish clip
-        while (t < specialClipLength) { t += Time.deltaTime; yield return null; }
+        // 6/ Quick follow-up second hit
+        yield return new WaitForSeconds(followupGap);
+        activeWeapon.Attack(lastFace);
 
         nextAttackReadyAt  = Time.time + attackCooldown;
         nextSpecialReadyAt = Time.time + specialCooldown;
 
         IsAttacking = false;
+        anim.speed = 1.0f;  // Reset to normal
         anim.SetBool(isSpecialAttack, false);
     }
 
     // DASH SYSTEM
 
-    void BeginDash()
+    float CalculateDashDistance()
     {
+        // Distance = speed × time
+        float dashPhaseTime = specialClipLength - specialHitDelay;
+        return specialDashSpeed * dashPhaseTime;
+    }
+
+    void BeginDash(float dashSpeed, float dashDistance)
+    {
+        if (!target) return;
+
         Vector2 start = transform.position;
-        Vector2 p     = target ? (Vector2)target.position : start;
+        Vector2 targetPos = target.position;
+        
+        // Direction toward player (simple vector to player position)
+        Vector2 toPlayer = targetPos - start;
+        dashDir = toPlayer.sqrMagnitude > 0f ? toPlayer.normalized : lastFace;
+        dashDest = start + dashDir * dashDistance;
+        currentDashSpeed = dashSpeed;
 
-        int sign = (p.x - start.x) >= 0f ? +1 : -1;
-        Vector2 faceSpot = new Vector2(p.x - sign * stopShortOffset, p.y);
-
-        Vector2 toFace   = faceSpot - start;
-        float distToFace = toFace.magnitude;
-
-        float travel = Mathf.Min(distToFace, TimeReach);
-        dashDir  = toFace.sqrMagnitude > 0f ? toFace / distToFace : new Vector2(sign, 0f);
-        dashDest = start + dashDir * travel;
-
-        controller?.SetDesiredVelocity(dashDir * dashSpeed);
+        controller.SetDesiredVelocity(dashDir * dashSpeed);
         isDashing = true;
 
-        afterimage?.StartBurst(ComputedMoveWindow, sr.sprite, sr.flipX, sr.flipY);
+        // Calculate actual travel time for afterimage
+        float travelTime = dashDistance / dashSpeed;
+        afterimage.StartBurst(travelTime, sr.sprite, sr.flipX, sr.flipY);
     }
 
     void StopDash()
     {
+        if (!isDashing) return;
         isDashing = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
     }
 
     bool ReachedDashDest()
@@ -256,39 +264,35 @@ public class GRS_State_Attack : MonoBehaviour
 
         Vector3 p = transform.position;
 
-        // Attack range (red)
-        Gizmos.color = Color.red;
+        // 1/ Normal attack range (orange)
+        Gizmos.color = new Color(1f, 0.5f, 0f);  // Orange
         Gizmos.DrawWireSphere(p, attackRange);
 
-        if (!target) return;
+        // 2/ Special attack range (red)
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(p, detectionRange);
 
-        // Special attack range visualization
-        float inner = attackRange * 1.2f;
-        float outer = attackRange + TimeReach;
-        Vector3 tp = target.position;
-        float dx = Mathf.Abs(tp.x - p.x);
-        float dy = Mathf.Abs(tp.y - p.y);
-
-        bool inSpecialDist = dx >= inner && dx <= outer;
-        bool alignedY = dy <= yHardCap;
-
-        // Inner threshold (yellow)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(p, inner);
-
-        // Outer reach (magenta)
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(p, outer);
-
-        // Y-gate lines (cyan)
-        Gizmos.color = Color.cyan;
-        float lineX = 4f;
-        Gizmos.DrawLine(p + new Vector3(-lineX, yHardCap, 0f), p + new Vector3(lineX, yHardCap, 0f));
-        Gizmos.DrawLine(p + new Vector3(-lineX, -yHardCap, 0f), p + new Vector3(lineX, -yHardCap, 0f));
-
-        // Target indicator
-        bool validSpecial = inSpecialDist && alignedY;
-        Gizmos.color = validSpecial ? Color.green : Color.red;
-        Gizmos.DrawWireSphere(tp, 0.3f);
+        // 3/ Target indicator: red = can use special attack, orange = normal attack only
+        if (target)
+        {
+            Vector3 tp = target.position;
+            float dist = Vector3.Distance(p, tp);
+            bool canUseSpecial = dist <= detectionRange && dist > attackRange;
+            Gizmos.color = canUseSpecial ? Color.red : new Color(1f, 0.5f, 0f);  // Red or orange
+            Gizmos.DrawWireSphere(tp, 0.3f);
+            
+            // 4/ Cyan line showing dash trajectory (special attack only)
+            if (canUseSpecial)
+            {
+                Vector2 toPlayer = (Vector2)(tp - p);
+                Vector2 dashDirection = toPlayer.normalized;
+                float dashPhaseTime = specialClipLength - specialHitDelay;
+                float dashDistance = specialDashSpeed * dashPhaseTime;
+                Vector3 dashEnd = p + (Vector3)(dashDirection * dashDistance);
+                
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(p, dashEnd);
+            }
+        }
     }
 }

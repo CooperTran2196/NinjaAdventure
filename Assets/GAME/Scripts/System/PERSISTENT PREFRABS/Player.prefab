@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e3e871d6697774da9043adff344fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::W_Melee
-  weaponData: {fileID: 11400000, guid: c350d1be209bc4735ab77a1ba5681df7, type: 2}
+  weaponData: {fileID: 11400000, guid: 75144ae3672c14dacb8aa402fee99de1, type: 2}
   owner: {fileID: 4290728090841259575}
   targetMask:
     serializedVersion: 2
@@ -525,7 +525,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0024929047, y: -0.0299263}
+  m_Offset: {x: -0.0024929047, y: -0.10462403}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -535,7 +535,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7356529, y: 0.6907654}
+  m_Size: {x: 0.7356529, y: 0.5413699}
   m_EdgeRadius: 0
 --- !u!95 &9212602258907453368
 Animator:
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7695cc333434368acf0afa63faf9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Stats
-  AD: 1
+  AD: 5
   AP: 0
   MS: 5
   maxHP: 1000

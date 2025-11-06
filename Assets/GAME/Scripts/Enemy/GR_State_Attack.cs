@@ -17,20 +17,21 @@ public class GR_State_Attack : MonoBehaviour
     [Header("Normal Attack (Charge)")]
                     public float attackCooldown   = 1.10f;
                     public float attackClipLength = 2.35f;
-                    public float attackHitDelay   = 2.00f;   // Telegraph duration
+                    public float attackHitDelay   = 2.00f;   // Charging duration
+                    public float attackDashSpeed  = 9.0f;    // Constant dash velocity
 
     [Header("Special Attack (Jump)")]
                     public float specialCooldown       = 8.0f;
                     public float specialClipLength     = 5.0f;
-                    public float specialHitDelay       = 3.0f;   // Telegraph duration
+                    public float specialHitDelay       = 3.0f;   // Charging duration
+                    public float specialDashSpeed      = 12.0f;  // Constant dash velocity (can be different)
                     public float specialAoERadius      = 1.8f;
                     public float specialAoEOffsetY     = -1f;
                     public int   specialDamage         = 25;
                     public float specialKnockbackForce = 8f;
 
     [Header("Dash Settings")]
-                    public float preHitStopBias  = 0.02f;
-                    public float stopShortOffset = 0.96f;
+                    public float stopShortOffset = 0.96f;    // Distance kept in front of player
 
     // Animator params
     const string isAttacking     = "isAttacking";
@@ -48,12 +49,9 @@ public class GR_State_Attack : MonoBehaviour
     // Dash runtime
     Vector2 dashDest;
     Vector2 dashDir;
+    float   currentDashSpeed;
 
     public bool IsAttacking { get; private set; }
-
-    // Computed move windows
-    float AttackComputedMoveWindow  => Mathf.Max(0f, attackClipLength - attackHitDelay - preHitStopBias);
-    float SpecialComputedMoveWindow => Mathf.Max(0f, specialClipLength - specialHitDelay - preHitStopBias);
 
     void Awake()
     {
@@ -76,17 +74,18 @@ public class GR_State_Attack : MonoBehaviour
     {
         IsAttacking = false;
         isDashing   = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
-        anim?.SetBool(isAttacking, false);
-        anim?.SetBool(isSpecialAttack, false);
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
+        anim.speed = 1.0f;  // Reset animation speed
+        anim.SetBool(isAttacking, false);
+        anim.SetBool(isSpecialAttack, false);
     }
 
     // ATTACK DECISION
 
     void Update()
     {
-        if (!isDashing) controller?.SetDesiredVelocity(Vector2.zero);
+        if (!isDashing) controller.SetDesiredVelocity(Vector2.zero);
         if (!target) return;
 
         Vector2 to = (Vector2)target.position - (Vector2)transform.position;
@@ -139,6 +138,7 @@ public class GR_State_Attack : MonoBehaviour
         // Set animator bools
         anim.SetBool(isSpecialAttack, isSpecial);
         anim.SetBool(isAttacking, !isSpecial);
+        anim.speed = 1.0f;  // Start at normal speed
 
         // Set facing direction
         if (dirAtStart.sqrMagnitude > 0f) lastFace = dirAtStart.normalized;
@@ -146,34 +146,48 @@ public class GR_State_Attack : MonoBehaviour
         anim.SetFloat("atkY", lastFace.y);
         UpdateIdleFacing(lastFace);
 
-        // Select timing based on attack type
+        // Select parameters based on attack type
         float clipLength = isSpecial ? specialClipLength : attackClipLength;
         float hitDelay   = isSpecial ? specialHitDelay   : attackHitDelay;
-        float moveWindow = isSpecial ? SpecialComputedMoveWindow : AttackComputedMoveWindow;
+        float dashSpeed  = isSpecial ? specialDashSpeed  : attackDashSpeed;
+        float maxRange   = isSpecial ? specialRange      : attackRange;
 
         float t = 0f;
 
-        // A) Telegraph phase
-        while (t < hitDelay) { t += Time.deltaTime; yield return null; }
+        // 1/ Charging phase (normal speed)
+        while (t < hitDelay) 
+        { 
+            t += Time.deltaTime; 
+            yield return null; 
+        }
 
-        // B) Dash toward player
-        BeginDash(moveWindow);
+        // 2/ Calculate and apply dash animation speed
+        float dashPhaseTime = clipLength - hitDelay;
+        float actualDashDist = CalculateDashDistance(maxRange);
+        float timeNeeded = actualDashDist / dashSpeed;
+        float animSpeed = dashPhaseTime / timeNeeded;
+        
+        anim.speed = animSpeed;  // Change speed for dash phase only
+
+        // 3/ Begin dash
+        BeginDash(dashSpeed, actualDashDist);
         
         // Normal attack: enable weapon hitbox during dash
         if (!isSpecial)
         {
-            activeWeapon?.Attack(lastFace);
+            activeWeapon.Attack(lastFace);
         }
         
+        // 4/ Dash phase
         while (t < clipLength)
         {
             t += Time.deltaTime;
-            if (ReachedDashDest()) StopDash();
+            if (ReachedDashDest()) break;
             yield return null;
         }
         StopDash();
         
-        // C) Special attack: AoE damage at landing
+        // 5/ Special attack: AoE damage at landing
         if (isSpecial)
         {
             ApplyAoEDamageKnockback();
@@ -187,6 +201,7 @@ public class GR_State_Attack : MonoBehaviour
         }
 
         IsAttacking = false;
+        anim.speed = 1.0f;  // Reset to normal
         anim.SetBool(isSpecialAttack, false);
         anim.SetBool(isAttacking, false);
     }
@@ -199,28 +214,33 @@ public class GR_State_Attack : MonoBehaviour
         if (!hit || !hit.CompareTag("Player")) return;
         
         C_Health playerHealth = hit.GetComponent<C_Health>();
-        if (!playerHealth) return;
+        P_Controller pc = hit.GetComponent<P_Controller>();
+        
+        if (!playerHealth || !pc) return;
         
         playerHealth.ApplyDamage(specialDamage, 0, 0, 0, 0, 0);
         
-        // Radial knockback from AoE center
         Vector2 knockbackDir = ((Vector2)hit.transform.position - aoeCenter).normalized;
-        P_Controller pc = hit.GetComponent<P_Controller>();
-        
-        if (pc)
-        {
-            pc.ReceiveKnockback(knockbackDir * specialKnockbackForce);
-        }
-        else
-        {
-            Rigidbody2D playerRb = hit.GetComponent<Rigidbody2D>();
-            playerRb?.AddForce(knockbackDir * specialKnockbackForce, ForceMode2D.Impulse);
-        }
+        pc.ReceiveKnockback(knockbackDir * specialKnockbackForce);
     }
 
     // DASH SYSTEM
 
-    void BeginDash(float moveWindow)
+    float CalculateDashDistance(float maxRange)
+    {
+        if (!target) return 0f;
+        
+        Vector2 start = transform.position;
+        Vector2 targetPos = target.position;
+        int sign = (targetPos.x - start.x) >= 0f ? +1 : -1;
+        Vector2 faceSpot = new Vector2(targetPos.x - sign * stopShortOffset, targetPos.y);
+        
+        float distToFaceSpot = Vector2.Distance(start, faceSpot);
+        // Always dash to player position (no maxRange limit - will reach player unless they dodge)
+        return distToFaceSpot;
+    }
+
+    void BeginDash(float dashSpeed, float actualDashDist)
     {
         if (!target) return;
 
@@ -229,23 +249,25 @@ public class GR_State_Attack : MonoBehaviour
         int     sign      = (targetPos.x - start.x) >= 0f ? +1 : -1;
         Vector2 faceSpot  = new Vector2(targetPos.x - sign * stopShortOffset, targetPos.y);
         Vector2 toFace    = faceSpot - start;
-        
-        float dashSpeed = (moveWindow > 0f) ? (toFace.magnitude / moveWindow) : 0f;
 
         dashDir  = toFace.sqrMagnitude > 0f ? toFace.normalized : new Vector2(sign, 0f);
-        dashDest = faceSpot;
+        dashDest = start + dashDir * actualDashDist;
+        currentDashSpeed = dashSpeed;
 
-        controller?.SetDesiredVelocity(dashDir * dashSpeed);
+        controller.SetDesiredVelocity(dashDir * dashSpeed);
         isDashing = true;
 
-        afterimage?.StartBurst(moveWindow, sr.sprite, sr.flipX, sr.flipY);
+        // Calculate actual travel time for afterimage
+        float travelTime = actualDashDist / dashSpeed;
+        afterimage.StartBurst(travelTime, sr.sprite, sr.flipX, sr.flipY);
     }
 
     void StopDash()
     {
+        if (!isDashing) return;
         isDashing = false;
-        controller?.SetDesiredVelocity(Vector2.zero);
-        if (rb) rb.linearVelocity = Vector2.zero;
+        controller.SetDesiredVelocity(Vector2.zero);
+        rb.linearVelocity = Vector2.zero;
     }
 
     bool ReachedDashDest()
@@ -273,12 +295,36 @@ public class GR_State_Attack : MonoBehaviour
         if (!Application.isPlaying) return;
 
         Vector3 p = transform.position;
-        Vector3 aoeCenter = p + new Vector3(0f, specialAoEOffsetY, 0f);
 
-        // AoE radius (red) - jump attack damage area with Y offset
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f); // Semi-transparent red
-        Gizmos.DrawSphere(aoeCenter, specialAoERadius);
+        // 1/ Normal attack range (orange)
+        Gizmos.color = new Color(1f, 0.5f, 0f);  // Orange
+        Gizmos.DrawWireSphere(p, attackRange);
+
+        // 2/ Special attack range (red)
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(aoeCenter, specialAoERadius);
+        Gizmos.DrawWireSphere(p, specialRange);
+
+        // 3/ Target indicator: red = can use special attack, orange = normal attack only
+        if (target)
+        {
+            Vector3 tp = target.position;
+            float dist = Vector3.Distance(p, tp);
+            bool canUseSpecial = dist <= specialRange && dist > attackRange;
+            Gizmos.color = canUseSpecial ? Color.red : new Color(1f, 0.5f, 0f);  // Red or orange
+            Gizmos.DrawWireSphere(tp, 0.3f);
+            
+            // 4/ Cyan line showing dash trajectory (special attack only)
+            if (canUseSpecial)
+            {
+                Vector2 toPlayer = (Vector2)(tp - p);
+                Vector2 dashDirection = toPlayer.normalized;
+                float dashPhaseTime = specialClipLength - specialHitDelay;
+                float dashDistance = specialDashSpeed * dashPhaseTime;
+                Vector3 dashEnd = p + (Vector3)(dashDirection * dashDistance);
+                
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(p, dashEnd);
+            }
+        }
     }
 }

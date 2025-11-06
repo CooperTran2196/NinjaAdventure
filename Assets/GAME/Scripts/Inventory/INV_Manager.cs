@@ -175,6 +175,10 @@ public class INV_Manager : MonoBehaviour
                 slot.weaponSO = weaponSO;
                 slot.type     = INV_Slots.SlotType.Weapon;
                 slot.UpdateUI();
+                
+                // Play weapon pickup sound
+                SYS_GameManager.Instance.sys_SoundManager.PlayItemPickup(2); // Tier 2 for weapons
+                
                 return true;
             }
         }

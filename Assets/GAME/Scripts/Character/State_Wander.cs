@@ -33,8 +33,8 @@ public class State_Wander : MonoBehaviour
         anim       = GetComponentInChildren<Animator>();
         controller = (I_Controller)(GetComponent<E_Controller>() ??
                         (Component)GetComponent<NPC_Controller>() ??
-                        (Component)GetComponent<B_Controller>() ??
-                        (Component)GetComponent<MB_Controller>());
+                        (Component)GetComponent<GRS_Controller>() ??
+                        (Component)GetComponent<GR_Controller>());
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }

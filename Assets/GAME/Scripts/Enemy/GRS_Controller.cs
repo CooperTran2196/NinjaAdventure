@@ -53,7 +53,7 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         if (rb) rb.linearVelocity = Vector2.zero;
 
         chase?.SetRanges(attackRange);
-        attack?.SetRanges(attackRange);
+        attack?.SetRanges(attackRange, detectionRange);
         SwitchState(defaultState);
     }
 
@@ -126,7 +126,7 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         else if (s == GRSState.Attack)
         {
             attack?.SetTarget(target);
-            attack?.SetRanges(attackRange);
+            attack?.SetRanges(attackRange, detectionRange);
             desiredVelocity = Vector2.zero;
         }
         else desiredVelocity = Vector2.zero;
