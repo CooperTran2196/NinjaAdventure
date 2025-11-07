@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -9,6 +10,7 @@ using UnityEngine;
 [RequireComponent(typeof(State_Wander))]
 [RequireComponent(typeof(GR_State_Chase))]
 [RequireComponent(typeof(GR_State_Attack))]
+
 public class GR_Controller : MonoBehaviour, I_Controller
 {
     public enum GRState { Idle, Wander, Chase, Attack }
@@ -54,56 +56,53 @@ public class GR_Controller : MonoBehaviour, I_Controller
     void OnEnable()
     {
         desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        c_Health.OnDied += OnDiedHandler;
 
-        // Subscribe to death event
-        if (c_Health) c_Health.OnDied += OnDiedHandler;
-
-        chase?.SetRanges(attackRange);
-        attack?.SetRanges(attackRange, detectionRange);
+        chase.SetRanges(attackRange);
+        attack.SetRanges(attackRange, detectionRange);
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        // Unsubscribe from death event
-        if (c_Health) c_Health.OnDied -= OnDiedHandler;
+        c_Health.OnDied -= OnDiedHandler;
 
-        if (idle)   idle.enabled   = false;
-        if (wander) wander.enabled = false;
-        if (chase)  chase.enabled  = false;
-        if (attack) attack.enabled = false;
+        idle.enabled = false;
+        wander.enabled = false;
+        chase.enabled = false;
+        attack.enabled = false;
 
         desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 
     void OnDiedHandler()
     {
-        // Handle death: disable states, play animation, fade, then destroy
-        if (idle)   idle.enabled   = false;
-        if (wander) wander.enabled = false;
-        if (chase)  chase.enabled  = false;
-        if (attack) attack.enabled = false;
-        
-        desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
-        
         StartCoroutine(HandleDeath());
     }
     
-    System.Collections.IEnumerator HandleDeath()
+    IEnumerator HandleDeath()
     {
-        // Play death animation (assuming animator has "Die" trigger)
-        var anim = GetComponent<Animator>();
-        if (anim) anim.SetTrigger("Die");
+        // Disable all states
+        idle.enabled = false;
+        wander.enabled = false;
+        chase.enabled = false;
+        attack.enabled = false;
+        
+        // Stop all movement (keep zeroing velocity in FixedUpdate)
+        desiredVelocity = Vector2.zero;
+        
+        // Disable colliders (stop collision damage)
+        var colliders = GetComponents<Collider2D>();
+        foreach (var col in colliders) col.enabled = false;
+        
+        // Play death animation
+        GetComponent<Animator>().SetTrigger("Die");
         
         yield return new WaitForSeconds(1.5f);
-        
-        // Fade out sprite
         yield return StartCoroutine(c_FX.FadeOut());
         
-        // Destroy boss
         Destroy(gameObject);
     }
 
@@ -112,7 +111,6 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
     void FixedUpdate()
     {
-        if (!rb) return;
         rb.linearVelocity = desiredVelocity;
     }
 
@@ -149,21 +147,21 @@ public class GR_Controller : MonoBehaviour, I_Controller
     {
         current = s;
 
-        if (idle)   idle.enabled   = (s == GRState.Idle);
-        if (wander) wander.enabled = (s == GRState.Wander);
-        if (chase)  chase.enabled  = (s == GRState.Chase);
-        if (attack) attack.enabled = (s == GRState.Attack);
+        idle.enabled = (s == GRState.Idle);
+        wander.enabled = (s == GRState.Wander);
+        chase.enabled = (s == GRState.Chase);
+        attack.enabled = (s == GRState.Attack);
 
         if (s == GRState.Chase)
         {
-            chase?.SetTarget(target);
-            chase?.SetRanges(attackRange);
+            chase.SetTarget(target);
+            chase.SetRanges(attackRange);
             desiredVelocity = Vector2.zero;
         }
         else if (s == GRState.Attack)
         {
-            attack?.SetTarget(target);
-            attack?.SetRanges(attackRange, detectionRange);
+            attack.SetTarget(target);
+            attack.SetRanges(attackRange, detectionRange);
             desiredVelocity = Vector2.zero;
         }
         else desiredVelocity = Vector2.zero;
@@ -172,7 +170,7 @@ public class GR_Controller : MonoBehaviour, I_Controller
     // COLLISION DAMAGE
     void OnCollisionStay2D(Collision2D collision)
     {
-        if (!c_Health || !c_Health.IsAlive) return;
+        if (!c_Health.IsAlive) return;
 
         // Filter to only player layer
         if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
@@ -187,8 +185,6 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
         var playerHealth = collision.collider.GetComponent<C_Health>();
         if (!playerHealth || !playerHealth.IsAlive) return;
-
-        if (!c_Stats) return;
 
         playerHealth.ChangeHealth(-c_Stats.collisionDamage);
         contactTimer = c_Stats.collisionTick;

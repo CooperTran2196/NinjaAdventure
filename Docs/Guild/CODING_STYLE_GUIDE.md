@@ -1,4 +1,4 @@
-# NinjaAdventure - Coding Style Guide (v3.1)
+# NinjaAdventure - Coding Style Guide (v3.2)
 
 **CRITICAL:** This file establishes project-wide coding conventions based on actual codebase patterns. **NEVER DELETE THIS FILE.**
 
@@ -16,6 +16,15 @@
 ---
 
 ## 📋 Quick Reference
+
+### Using Directives
+```csharp
+using System.Collections;  // For IEnumerator coroutines
+using UnityEngine;
+
+// NO System.Collections.IEnumerator in methods - import namespace at top
+IEnumerator MyCoroutine() { yield return null; }
+```
 
 ### Field Order Template
 ```csharp
@@ -261,7 +270,7 @@ void Start()
 **Critical Rules:**
 - ✅ **Awake()**: GetComponent (same GameObject), validate Inspector refs, create input
 - ✅ **Start()**: FindFirstObjectByType, singleton access, scene-wide setup
-- ✅ **RequireComponent types**: Use `=` (not `??=`) since they're guaranteed to exist
+- ✅ **RequireComponent types**: Use `=` (not `??=`) since they're guaranteed to exist - NO null checks
 - ✅ **Optional components**: Use `??=` with LogWarning if needed
 - ✅ All assignments aligned
 - ✅ All validations aligned
@@ -271,8 +280,9 @@ void Start()
 - ❌ **NEVER `??=` for FindFirstObjectByType** - always explicit assignment
 - ❌ **NEVER `??=` for P_InputActions** - always `= new P_InputActions()`
 - ❌ **NEVER `??=` for "MUST wire MANUALLY" fields** - only validate
-- ❌ **NEVER null-check guaranteed components** (Camera.main in persistent objects, RequireComponent refs)
+- ❌ **NEVER null-check guaranteed components** (Camera.main in persistent objects, RequireComponent refs in Update/FixedUpdate/methods)
 - ❌ **NEVER add style guide comments in production code** (e.g., "RequireComponent guarantees...")
+- ❌ **NEVER use `System.Collections.IEnumerator`** - import `using System.Collections;` at top, use `IEnumerator`
 
 **Error vs Warning:**
 ```csharp
