@@ -115,7 +115,6 @@ public class ENV_Destructible : MonoBehaviour
             _                  => null
         };
         
-        if (breakSound != null)
-            AudioSource.PlayClipAtPoint(breakSound, transform.position, 0.7f);
+        AudioSource.PlayClipAtPoint(breakSound, transform.position, 0.7f);
     }
 }

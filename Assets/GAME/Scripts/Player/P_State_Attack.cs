@@ -77,7 +77,6 @@ public class P_State_Attack : MonoBehaviour
 
         anim.SetFloat("atkX", attackDir.x);
         anim.SetFloat("atkY", attackDir.y);
-        anim.Play("Attack", -1, 0f);
 
         StartCoroutine(AttackRoutine());
     }
