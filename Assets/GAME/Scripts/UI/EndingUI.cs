@@ -20,14 +20,6 @@ public class EndingUI : MonoBehaviour
     [SerializeField] private C_Health playerHealth;     // show Game Over on player death (with delay)
     [SerializeField] private C_Health finalBossHealth;  // show Victory on boss death (no delay)
 
-    [Header("Next Scene (optional)")]
-    [Tooltip("If empty, reloads current scene; otherwise loads this scene (e.g., \"Level2\").")]
-    [SerializeField] private string nextSceneName = "";
-
-    [Header("Timing")]
-    [Tooltip("Delay after player death before the Ending UI appears (realtime seconds).")]
-    [SerializeField] private float gameOverDelay = 2f;  // realtime seconds
-
     [Header("Data")]
     [SerializeField] private P_Exp playerExp;
 

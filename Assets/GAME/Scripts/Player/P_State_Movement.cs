@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class P_State_Movement : MonoBehaviour
 {
     // Cache

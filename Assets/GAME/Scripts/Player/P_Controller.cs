@@ -149,10 +149,8 @@ public class P_Controller : MonoBehaviour
     // Converts mouse screen position to world direction from player
     public Vector2 ReadMouseAim()
     {
-        Vector2 m   = Mouse.current.position.ReadValue();
-        var     cam = Camera.main;
-        if (!cam) return Vector2.zero;
-        
+        Vector2 m     = Mouse.current.position.ReadValue();
+        var     cam   = Camera.main;
         Vector3 world = cam.ScreenToWorldPoint(new Vector3(m.x, m.y, -cam.transform.position.z));
         Vector2 dir   = (Vector2)world - (Vector2)transform.position;
         
@@ -242,7 +240,7 @@ public class P_Controller : MonoBehaviour
                 break;
 
             case PState.Dodge:
-                dodge.enabled = true;
+                dodge.enabled   = true;
                 isDodging     = true;
                 dodgeCooldown = c_Stats.dodgeCooldown;
                 dodge.Dodge(lastMove);
@@ -255,7 +253,7 @@ public class P_Controller : MonoBehaviour
 
             case PState.Idle:
                 desiredVelocity = Vector2.zero;
-                isDead          = false;  // Clear dead flag (for revival)
+                isDead          = false;  // Clear dead flag for revival
                 isAttacking     = false;
                 isStunned       = false;
                 isDodging       = false;
@@ -282,7 +280,7 @@ public class P_Controller : MonoBehaviour
     // COMBAT EFFECTS
 
     // Stuns player for duration (extends if longer stun applied)
-    public IEnumerator StunFor(float duration)
+    public IEnumerator SetStunTime(float duration)
     {
         if (duration <= 0f) yield break;
 
@@ -295,7 +293,7 @@ public class P_Controller : MonoBehaviour
     }
 
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    public void ReceiveKnockback(Vector2 knockback) => this.knockback += knockback;
+    public void SetKnockback(Vector2 knockback) => this.knockback += knockback;
     
     // Called by P_State_Attack when attack animation ends
     public void SetAttacking(bool value)
@@ -327,13 +325,13 @@ public class P_Controller : MonoBehaviour
     // WEAPON SYSTEM
 
     // Swaps equipped weapon, returns old weapon for inventory management
-    public W_SO EquipWeapon(W_SO newWeaponData)
+    public W_SO SetWeapon(W_SO newWeaponData)
     {
         if (newWeaponData == null) { Debug.LogError($"{name}: Cannot equip null weapon!", this); return null; }
 
-        bool   isMelee      = newWeaponData.type == WeaponType.Melee;
+        bool   isMelee       = newWeaponData.type == WeaponType.Melee;
         W_SO   oldWeaponData = isMelee ? currentMeleeData : currentRangedData;
-        W_Base weaponSlot   = isMelee ? meleeWeapon : rangedWeapon;
+        W_Base weaponSlot    = isMelee ? meleeWeapon : rangedWeapon;
         
         if (isMelee) currentMeleeData  = newWeaponData;
         else         currentRangedData = newWeaponData;
@@ -352,49 +350,46 @@ public class P_Controller : MonoBehaviour
         return oldWeaponData;
     }
 
-    public W_SO GetCurrentMeleeWeaponSO()  => currentMeleeData;
-    public W_SO GetCurrentRangedWeaponSO() => currentRangedData;
-    
+    public W_SO GetMeleeWeapon()  => currentMeleeData;
+    public W_SO GetRangedWeapon() => currentRangedData;
+
     // REVIVAL & ZONE TRACKING
-    
+
     public void Revive(Vector3 spawnPosition)
     {
-        // Heal to full
+        // 1/ Heal to full
         c_Stats.currentHP = c_Stats.maxHP;
-        
-        // Reset physics
+
+        // 2/ Reset physics
         rb.linearVelocity = Vector2.zero;
         knockback = Vector2.zero;
-        
-        // Position at spawn
+
+        // 3/ Position at spawn
         transform.position = spawnPosition;
-        
-        // Reset animator
+
+        // 4/ Reset animator
         anim.Rebind();
         anim.Update(0f);
-        
-        // Reset to Idle state (clears isDead flag)
+
+        // 5/ Reset to Idle state (clears isDead flag)
         SwitchState(PState.Idle);
-        
-        // Restore sprite alpha
+
+        // 6/ Restore sprite alpha
         c_FX.ResetAlpha();
     }
     
+    // Tutorial death zone tracking
     void OnTriggerEnter2D(Collider2D col)
     {
-        // Tutorial death zone tracking
-        if (col.GetComponent<TutorialDeathZone>())
-            isInTutorialZone = true;
+        if (col.GetComponent<TutorialDeathZone>()) isInTutorialZone = true;
     }
-    
+
     void OnTriggerExit2D(Collider2D col)
-    {
-        // Tutorial death zone tracking
-        if (col.GetComponent<TutorialDeathZone>())
-            isInTutorialZone = false;
+    { 
+        if (col.GetComponent<TutorialDeathZone>()) isInTutorialZone = false;
     }
-    // LADDER SYSTEM
     
+    // LADDER SYSTEM
     public void EnterLadder(ENV_Ladder ladder) => currentLadder = ladder;
     public void ExitLadder() => currentLadder = null;
     public Vector2 ApplyLadderModifiers(Vector2 velocity) => currentLadder ? currentLadder.ApplyLadderSpeed(velocity) : velocity;

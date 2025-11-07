@@ -35,14 +35,14 @@ public class WeaponUI : MonoBehaviour
         {
             P_Controller.OnMeleeWeaponChanged += UpdateDisplay;
             
-            W_SO currentWeapon = player.GetCurrentMeleeWeaponSO();
+            W_SO currentWeapon = player.GetMeleeWeapon();
             if (currentWeapon != null) UpdateDisplay(currentWeapon);
         }
         else
         {
             P_Controller.OnRangedWeaponChanged += UpdateDisplay;
             
-            W_SO currentWeapon = player.GetCurrentRangedWeaponSO();
+            W_SO currentWeapon = player.GetRangedWeapon();
             if (currentWeapon != null) UpdateDisplay(currentWeapon);
         }
     }

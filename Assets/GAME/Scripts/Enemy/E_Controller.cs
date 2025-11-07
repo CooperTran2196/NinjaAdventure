@@ -207,7 +207,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     // COMBAT EFFECTS
 
     // Stuns enemy for duration (extends if longer stun applied)
-    public IEnumerator StunFor(float duration)
+    public IEnumerator SetStunTime(float duration)
     {
         if (duration <= 0f) yield break;
 
@@ -234,7 +234,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     }
 
     public void SetDesiredVelocity(Vector2 desiredVelocity) => this.desiredVelocity = desiredVelocity;
-    public void ReceiveKnockback(Vector2 impulse) => knockback += impulse;
+    public void SetKnockback(Vector2 impulse) => knockback += impulse;
     public Transform GetTarget() => currentTarget;
     public float GetAttackRange() => attackRange;
     

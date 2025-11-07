@@ -246,11 +246,11 @@ public abstract class W_Base : MonoBehaviour
             
             if (ec != null)
             {
-                ec.ReceiveKnockback(dir * weaponData.knockbackForce);
+                ec.SetKnockback(dir * weaponData.knockbackForce);
             }
             else if (pc != null)
             {
-                pc.ReceiveKnockback(dir * weaponData.knockbackForce);
+                pc.SetKnockback(dir * weaponData.knockbackForce);
             }
             else
             {
@@ -274,11 +274,11 @@ public abstract class W_Base : MonoBehaviour
             
             if (ec != null)
             {
-                ec.StartCoroutine(ec.StunFor(finalStunTime));
+                ec.StartCoroutine(ec.SetStunTime(finalStunTime));
             }
             else if (pc != null)
             {
-                pc.StartCoroutine(pc.StunFor(finalStunTime));
+                pc.StartCoroutine(pc.SetStunTime(finalStunTime));
             }
         }
     }

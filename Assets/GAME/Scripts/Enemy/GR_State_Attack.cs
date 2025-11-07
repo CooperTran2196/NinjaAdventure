@@ -221,7 +221,7 @@ public class GR_State_Attack : MonoBehaviour
         playerHealth.ApplyDamage(specialDamage, 0, 0, 0, 0, 0);
         
         Vector2 knockbackDir = ((Vector2)hit.transform.position - aoeCenter).normalized;
-        pc.ReceiveKnockback(knockbackDir * specialKnockbackForce);
+        pc.SetKnockback(knockbackDir * specialKnockbackForce);
     }
 
     // DASH SYSTEM

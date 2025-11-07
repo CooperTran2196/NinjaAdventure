@@ -148,7 +148,7 @@ public class INV_Manager : MonoBehaviour
     }
 
     // Equip weapon from inventory slot (swaps with currently equipped weapon)
-    public void EquipWeapon(INV_Slots slot)
+    public void SetWeapon(INV_Slots slot)
     {
         if (slot.weaponSO == null) return;
 
@@ -158,7 +158,7 @@ public class INV_Manager : MonoBehaviour
         // Play weapon change sound
         SYS_GameManager.Instance.sys_SoundManager.PlayWeaponChange();
 
-        W_SO oldWeapon = p_Controller.EquipWeapon(slot.weaponSO);
+        W_SO oldWeapon = p_Controller.SetWeapon(slot.weaponSO);
 
         slot.weaponSO = oldWeapon;
         slot.type     = INV_Slots.SlotType.Weapon;

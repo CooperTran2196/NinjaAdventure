@@ -54,7 +54,7 @@ public class INV_HotbarInput : MonoBehaviour
         // Equip weapon if slot contains a weapon
         else if (slot.type == INV_Slots.SlotType.Weapon)
         {
-            inv_Manager.EquipWeapon(slot);
+            inv_Manager.SetWeapon(slot);
         }
     }
 }

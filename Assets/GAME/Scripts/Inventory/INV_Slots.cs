@@ -123,7 +123,7 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
             if (type == SlotType.Item)
                 inv_Manager.UseItem(this);
             else if (type == SlotType.Weapon)
-                inv_Manager.EquipWeapon(this);
+                inv_Manager.SetWeapon(this);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
