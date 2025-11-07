@@ -47,9 +47,9 @@ public abstract class W_Base : MonoBehaviour
         sprite.enabled   = false;
         hitbox.enabled   = false;
 
-        // Owner references
-        owner               = transform.root;
-        ownerAnimator       ??= owner ? owner.GetComponent<Animator>() : null;
+        // Owner references (use parent, not root, to support nested hierarchies)
+        owner               = transform.parent;
+        ownerAnimator       ??= owner ? owner.GetComponentInChildren<Animator>() : null;
         c_Stats             ??= owner ? owner.GetComponent<C_Stats>() : null;
 
         if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base",this);
