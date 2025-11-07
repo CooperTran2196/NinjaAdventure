@@ -19,6 +19,12 @@ public class SYS_GameManager : MonoBehaviour
     public string initialSceneName = "Level0";
     public string initialSpawnId   = "Start";
 
+    [Header("Tutorial Defeat Settings")]
+    public string SceneAfterTuto  = "Level2";
+    public string PosAfterTuto    = "PosAfterTuto";
+    public float  DeathAnimDur    = 1.5f;  // Time to show death animation
+    public float  gameOverDelay   = 2f;    // Delay before showing Game Over UI
+
     [Header("Audio Settings")]
     public float fadeDuration = 1.5f;
 
@@ -79,6 +85,60 @@ public class SYS_GameManager : MonoBehaviour
             Object.Destroy(root);
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(initialSceneName);
+    }
+
+    // PLAYER DEATH HANDLING
+    
+    public void HandlePlayerDeath(P_Controller player)
+    {
+        StartCoroutine(player.isInTutorialZone 
+            ? TutorialDeathSequence(player) 
+            : NormalDeathSequence());
+    }
+    
+    IEnumerator NormalDeathSequence()
+    {
+        // Wait for death animation to play
+        yield return new WaitForSeconds(gameOverDelay);
+        
+        // Show Game Over UI
+        var endingUI = FindFirstObjectByType<EndingUI>();
+        if (endingUI) endingUI.Show(false);
+        else Debug.LogError("SYS_GameManager: EndingUI not found!");
+    }
+    
+    IEnumerator TutorialDeathSequence(P_Controller player)
+    {
+        // Let death animation play
+        yield return new WaitForSeconds(DeathAnimDur);
+        
+        // Fade to black
+        if (sys_Fader)
+        {
+            sys_Fader.FadeToScene(SceneAfterTuto);
+            yield return new WaitForSeconds(sys_Fader.fadeTime);
+        }
+        
+        // Load Level2 (all DDOL objects come along automatically)
+        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneAfterTuto);
+        yield return new WaitForSeconds(0.3f);
+        
+        // Find spawn point in new scene
+        var spawnPoint = GameObject.Find(PosAfterTuto);
+        if (!spawnPoint)
+        {
+            Debug.LogError($"SYS_GameManager: Spawn point '{PosAfterTuto}' not found in {SceneAfterTuto}!");
+            yield break;
+        }
+        
+        // Revive player at spawn point
+        player.Revive(spawnPoint.transform.position);
+        
+        // Fade in
+        if (sys_Fader)
+        {
+            yield return new WaitForSeconds(sys_Fader.fadeTime);
+        }
     }
 
     // Play music clip instantly without fading

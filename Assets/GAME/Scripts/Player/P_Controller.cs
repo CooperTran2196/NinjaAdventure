@@ -26,6 +26,7 @@ public class P_Controller : MonoBehaviour
     P_State_Dodge    dodge;
     C_Stats          c_Stats;
     C_Health         c_Health;
+    C_FX             c_FX;
 
     [Header("State")]
     public PState defaultState = PState.Idle;
@@ -47,6 +48,9 @@ public class P_Controller : MonoBehaviour
     bool    isDead, isStunned, isAttacking, isDodging;
     float   stunUntil, attackCooldown, dodgeCooldown;
     
+    // Tutorial death zone tracking
+    public bool isInTutorialZone;
+    
     // Weapon system
     W_Base currentWeapon;
     W_SO   currentMeleeData;
@@ -63,6 +67,7 @@ public class P_Controller : MonoBehaviour
         anim     = GetComponent<Animator>();
         c_Stats  = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
+        c_FX     = GetComponent<C_FX>();
         idle     = GetComponent<P_State_Idle>();
         move     = GetComponent<P_State_Movement>();
         attack   = GetComponent<P_State_Attack>();
@@ -108,7 +113,12 @@ public class P_Controller : MonoBehaviour
 
     void OnDestroy() => input?.Dispose();
 
-    void OnDiedHandler() => SwitchState(PState.Dead);
+    void OnDiedHandler()
+    {
+        SwitchState(PState.Dead);
+        // Let GameManager handle death outcome (normal vs tutorial)
+        SYS_GameManager.Instance.HandlePlayerDeath(this);
+    }
 
     void Update()
     {
@@ -245,6 +255,10 @@ public class P_Controller : MonoBehaviour
 
             case PState.Idle:
                 desiredVelocity = Vector2.zero;
+                isDead          = false;  // Clear dead flag (for revival)
+                isAttacking     = false;
+                isStunned       = false;
+                isDodging       = false;
                 idle.enabled    = true;
                 idle.SetIdleFacing(lastMove);
                 break;
@@ -341,6 +355,44 @@ public class P_Controller : MonoBehaviour
     public W_SO GetCurrentMeleeWeaponSO()  => currentMeleeData;
     public W_SO GetCurrentRangedWeaponSO() => currentRangedData;
     
+    // REVIVAL & ZONE TRACKING
+    
+    public void Revive(Vector3 spawnPosition)
+    {
+        // Heal to full
+        c_Stats.currentHP = c_Stats.maxHP;
+        
+        // Reset physics
+        rb.linearVelocity = Vector2.zero;
+        knockback = Vector2.zero;
+        
+        // Position at spawn
+        transform.position = spawnPosition;
+        
+        // Reset animator
+        anim.Rebind();
+        anim.Update(0f);
+        
+        // Reset to Idle state (clears isDead flag)
+        SwitchState(PState.Idle);
+        
+        // Restore sprite alpha
+        c_FX.ResetAlpha();
+    }
+    
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // Tutorial death zone tracking
+        if (col.GetComponent<TutorialDeathZone>())
+            isInTutorialZone = true;
+    }
+    
+    void OnTriggerExit2D(Collider2D col)
+    {
+        // Tutorial death zone tracking
+        if (col.GetComponent<TutorialDeathZone>())
+            isInTutorialZone = false;
+    }
     // LADDER SYSTEM
     
     public void EnterLadder(ENV_Ladder ladder) => currentLadder = ladder;

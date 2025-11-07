@@ -5,9 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
+[RequireComponent(typeof(C_FX))]
 [RequireComponent(typeof(State_Idle))]
 [RequireComponent(typeof(State_Wander))]
 [RequireComponent(typeof(State_Chase))]
+
 
 public class E_Controller : MonoBehaviour, I_Controller
 {
@@ -19,6 +21,7 @@ public class E_Controller : MonoBehaviour, I_Controller
     Animator     anim;
     C_Stats      c_Stats;
     C_Health     c_Health;
+    C_FX         c_FX;
     State_Idle   idle;
     State_Wander wander;
     State_Chase  chase;
@@ -47,9 +50,10 @@ public class E_Controller : MonoBehaviour, I_Controller
     void Awake()
     {
         rb       = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
+        anim     = GetComponentInChildren<Animator>();
         c_Stats  = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
+        c_FX     = GetComponent<C_FX>();
         idle     = GetComponent<State_Idle>();
         wander   = GetComponent<State_Wander>();
         chase    = GetComponent<State_Chase>();
@@ -75,7 +79,24 @@ public class E_Controller : MonoBehaviour, I_Controller
         if (attack != null) attack.enabled = false;
     }
 
-    void OnDiedHandler() => SwitchState(EState.Dead);
+    void OnDiedHandler()
+    {
+        SwitchState(EState.Dead);
+        // Handle death: play animation, fade, then destroy
+        StartCoroutine(HandleDeath());
+    }
+    
+    IEnumerator HandleDeath()
+    {
+        // Play death animation
+        yield return new WaitForSeconds(1.5f);
+        
+        // Fade out sprite
+        yield return StartCoroutine(c_FX.FadeOut());
+        
+        // Destroy enemy
+        Destroy(gameObject);
+    }
 
     void Update()
     {

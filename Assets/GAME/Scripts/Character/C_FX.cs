@@ -40,7 +40,8 @@ public class C_FX : MonoBehaviour
         sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, a);
     }
 
-    public IEnumerator FadeAndDestroy(GameObject go)
+    // Visual fade effect only - caller decides what happens after (Destroy, Disable, etc.)
+    public IEnumerator FadeOut()
     {
         float t = 0f;
         var c = sr.color;
@@ -51,12 +52,13 @@ public class C_FX : MonoBehaviour
             sr.color = new Color(c.r, c.g, c.b, k);
             yield return null;
         }
-        if (destroySelfOnDeath) Destroy(go);
-        else
-        {
-            // Player path: restore full alpha so it's ready when re-enabled on restart
-            sr.color = new Color(c.r, c.g, c.b, 1f);
-            go.SetActive(false);
-        }
+        // Fully transparent
+        sr.color = new Color(c.r, c.g, c.b, 0f);
+    }
+    
+    // Restore full alpha (for revival/restart)
+    public void ResetAlpha()
+    {
+        sr.color = new Color(baseRGB.r, baseRGB.g, baseRGB.b, 1f);
     }
 }

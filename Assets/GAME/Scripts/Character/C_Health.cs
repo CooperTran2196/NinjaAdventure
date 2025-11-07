@@ -25,7 +25,6 @@ public class C_Health : MonoBehaviour
 
     Action<int> fxDamagedHandler;
     Action<int> fxHealedHandler;
-    Action      fxDiedHandler;
 
     int         CurrentHP  { get => c_Stats.currentHP; set => c_Stats.currentHP = value; }
     public bool IsAlive    => CurrentHP > 0;
@@ -51,11 +50,10 @@ public class C_Health : MonoBehaviour
 
         fxDamagedHandler = _ => c_FX.FlashOnDamaged();
         fxHealedHandler  = _ => c_FX.FlashOnHealed();
-        fxDiedHandler    = () => StartCoroutine(c_FX.FadeAndDestroy(gameObject));
 
         OnDamaged += fxDamagedHandler;
         OnHealed  += fxHealedHandler;
-        OnDied    += fxDiedHandler;
+        // OnDied NOT subscribed here - controllers handle death logic
     }
 
     void OnDisable()
@@ -64,7 +62,6 @@ public class C_Health : MonoBehaviour
 
         OnDamaged -= fxDamagedHandler;
         OnHealed  -= fxHealedHandler;
-        OnDied    -= fxDiedHandler;
     }
 
     void OnDestroy()

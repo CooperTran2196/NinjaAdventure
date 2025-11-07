@@ -60,13 +60,12 @@ public class EndingUI : MonoBehaviour
         cg.interactable   = false;
         cg.blocksRaycasts = false;
 
-        if (playerHealth)    playerHealth.OnDied    += OnPlayerDied;
+        // Only subscribe to boss death (player death handled by GameManager)
         if (finalBossHealth) finalBossHealth.OnDied += OnBossDied;
     }
 
     void OnDisable()
     {
-        if (playerHealth)    playerHealth.OnDied    -= OnPlayerDied;
         if (finalBossHealth) finalBossHealth.OnDied -= OnBossDied;
     }
 
@@ -74,19 +73,8 @@ public class EndingUI : MonoBehaviour
 
     void OnBossDied() => Show(true);
 
-    void OnPlayerDied()
-    {
-        if (shown) return;
-        StartCoroutine(ShowGameOverAfterDelay());
-    }
-
-    IEnumerator ShowGameOverAfterDelay()
-    {
-        yield return new WaitForSecondsRealtime(gameOverDelay);
-        Show(false);
-    }
-
-    void Show(bool win)
+    // Called directly by GameManager (no delay, no event)
+    public void Show(bool win)
     {
         if (shown) return;
         shown = true;

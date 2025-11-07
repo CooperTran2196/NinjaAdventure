@@ -16,6 +16,7 @@ public class GRS_Controller : MonoBehaviour, I_Controller
     Rigidbody2D rb;
     C_Stats     c_Stats;
     C_Health    c_Health;
+    C_FX        c_FX;
 
     [Header("States")]
     State_Idle         idle;
@@ -41,6 +42,7 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         rb       ??= GetComponent<Rigidbody2D>();
         c_Stats  ??= GetComponent<C_Stats>();
         c_Health ??= GetComponent<C_Health>();
+        c_FX     ??= GetComponent<C_FX>();
         idle     ??= GetComponent<State_Idle>();
         wander   ??= GetComponent<State_Wander>();
         chase    ??= GetComponent<GRS_State_Chase>();
@@ -52,6 +54,9 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         desiredVelocity = Vector2.zero;
         if (rb) rb.linearVelocity = Vector2.zero;
 
+        // Subscribe to death event
+        if (c_Health) c_Health.OnDied += OnDiedHandler;
+
         chase?.SetRanges(attackRange);
         attack?.SetRanges(attackRange, detectionRange);
         SwitchState(defaultState);
@@ -59,6 +64,9 @@ public class GRS_Controller : MonoBehaviour, I_Controller
 
     void OnDisable()
     {
+        // Unsubscribe from death event
+        if (c_Health) c_Health.OnDied -= OnDiedHandler;
+
         if (idle)   idle.enabled   = false;
         if (wander) wander.enabled = false;
         if (chase)  chase.enabled  = false;
@@ -66,6 +74,35 @@ public class GRS_Controller : MonoBehaviour, I_Controller
 
         desiredVelocity = Vector2.zero;
         if (rb) rb.linearVelocity = Vector2.zero;
+    }
+
+    void OnDiedHandler()
+    {
+        // Handle death: disable states, play animation, fade, then destroy
+        if (idle)   idle.enabled   = false;
+        if (wander) wander.enabled = false;
+        if (chase)  chase.enabled  = false;
+        if (attack) attack.enabled = false;
+        
+        desiredVelocity = Vector2.zero;
+        if (rb) rb.linearVelocity = Vector2.zero;
+        
+        StartCoroutine(HandleDeath());
+    }
+    
+    System.Collections.IEnumerator HandleDeath()
+    {
+        // Play death animation (assuming animator has "Die" trigger)
+        var anim = GetComponent<Animator>();
+        if (anim) anim.SetTrigger("Die");
+        
+        yield return new WaitForSeconds(1.5f);
+        
+        // Fade out sprite
+        yield return StartCoroutine(c_FX.FadeOut());
+        
+        // Destroy boss
+        Destroy(gameObject);
     }
 
     // I_CONTROLLER
