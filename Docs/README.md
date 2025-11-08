@@ -1,12 +1,13 @@
 # NinjaAdventure - Documentation
-**Last Updated:** October 18, 2025  
-**Current Week:** Week 10 (Oct 21-25, 2025)
+**Last Updated:** November 8, 2025  
+**Current Week:** Week 11 (Nov 4-8, 2025)
 
 ---
 
 ## 📋 Quick Navigation
 
-- **[Week 10 - Latest](Week_10_Oct21-25/README.md)** ⭐ **COMPLETE**
+- **[Week 11 - Latest](Week_11_Nov4-8/)** ⭐ **IN PROGRESS**
+- **[Week 10 - Environment & Audio](Week_10_Oct21-25/README.md)** ✅ **COMPLETE**
 - **[Week 9 - All Core Systems](Week_9_Oct14-18/README.md)** ✅ **COMPLETE**
 - **[Guild - References](Guild/)** 📚 **LIVING DOCS**
 - **[TODO - Future Features](#-todo-incomplete-features)** 🚧
@@ -15,7 +16,32 @@
 
 ## ✅ What's Complete
 
-### **Week 10 (Oct 21-25, 2025)** - Environment & Audio Systems ⭐ **LATEST**
+### **Week 11 (Nov 4-8, 2025)** - Boss Systems ⭐ **LATEST**
+**Location:** `Week_11_Nov4-8/` folder
+
+**Systems Completed:**
+1. **GR (Giant Raccoon)** - Charger boss with normal charge + special jump AoE
+2. **GRS (Giant Raccoon Shaman)** - Melee boss with double-hit dash special
+3. **GS2 (Giant Slime Phase 2)** - Summoner boss with phase system & retreat mechanics
+
+**Key Features:**
+- Controller + State architecture with clean death handling
+- Collision damage system (all 3 bosses)
+- Dynamic animation speed syncing for dash attacks
+- Phase-based AI (GS2: chase → retreat/stop cycle at 20% HP)
+- Enemy spawning system with circular spread pattern
+- Proper coroutine management (no dash continuation on death)
+
+**Technical Highlights:**
+- `StopAllCoroutines()` before disabling states (critical for death)
+- Dash distance calculation with animation speed sync
+- Multi-phase attack routines (charge, dash, AoE, double-hit)
+- Retreat behavior with vulnerability windows
+- Special attack telegraph system (idle delay + animation)
+
+👉 **[BOSS_SYSTEMS_COMPLETE.md](Week_11_Nov4-8/BOSS_SYSTEMS_COMPLETE.md)** for full technical documentation
+
+### **Week 10 (Oct 21-25, 2025)** - Environment & Audio Systems
 **Location:** `Week_10_Oct21-25/` folder
 
 **Systems Completed:**

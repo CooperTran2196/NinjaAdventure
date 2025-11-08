@@ -29,25 +29,27 @@ public class GS2_Controller : MonoBehaviour, I_Controller
     public float     detectionRange = 12f;
     public LayerMask playerLayer;
 
-    [Header("Special Attack (Summon)")]
+    [Header("Special Attack (Spawn Enemies)")]
     public GameObject enemyPrefab;              // Regular enemy prefab (no weapon)
-    public int        normalSummonCount = 3;    // 2-3 enemies per summon
-    public int        emergencySummonCount = 5; // 4-5 enemies at phase 2 start
+    public int        normalSpawnCount = 3;     // 2-3 enemies per special
+    public int        emergencySpawnCount = 5;  // 4-5 enemies at phase 2 start
     public float      specialCooldown   = 12f;
+    public float      specialIdleDelay  = 1.0f; // Idle before animation starts
+    public float      specialAnimLength = 2.5f; // Length of special attack animation
     public float      spawnSpreadRadius = 2.5f;
 
     [Header("Phase 2 Settings")]
     [Range(0f, 1f)] public float phase2Threshold = 0.20f; // 20% HP
-    public float retreatDistance = 4f;   // Start retreating when player < 4 units
-    public float retreatDuration = 3f;   // Retreat for 3 seconds
-    public float retreatCooldown = 2f;   // Stop for 2 seconds (vulnerable window)
+                    public float retreatDistance = 4f;   // Start retreating when player < 4 units
+                    public float retreatDuration = 3f;   // Retreat for 3 seconds
+                    public float retreatCooldown = 2f;   // Stop for 2 seconds (vulnerable window)
 
     // Runtime state
     Vector2   desiredVelocity;
     Transform target;
     GS2State  current;
     float     contactTimer, nextSpecialTime, retreatEndTime, retreatCooldownEndTime;
-    bool      isPhase2, hasTriggeredPhase2, isRetreating;
+    bool      isPhase2, hasTriggeredPhase2, isRetreating, isDoingSpecialAtk;
 
     void Awake()
     {
@@ -80,6 +82,7 @@ public class GS2_Controller : MonoBehaviour, I_Controller
 
         desiredVelocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isSpecialAttack", false);
     }
 
     void OnDiedHandler()
@@ -185,14 +188,14 @@ public class GS2_Controller : MonoBehaviour, I_Controller
         hasTriggeredPhase2 = true;
         isPhase2 = true;
 
-        // Emergency summon (bonus enemies)
-        int emergencyCount = Random.Range(emergencySummonCount - 1, emergencySummonCount + 1);
+        // Emergency spawn (bonus enemies)
+        int emergencyCount = Random.Range(emergencySpawnCount - 1, emergencySpawnCount + 1);
         SpawnEnemies(emergencyCount);
 
         // Start retreat cycle
         StartRetreat();
 
-        Debug.Log($"{name}: Entered Phase 2! Emergency summon triggered.");
+        Debug.Log($"{name}: Entered Phase 2! Emergency spawn triggered.");
     }
 
     void UpdateRetreatBehavior()
@@ -232,19 +235,45 @@ public class GS2_Controller : MonoBehaviour, I_Controller
 
     public bool IsRetreating() => isPhase2 && isRetreating;
     public bool IsInRetreatCooldown() => isPhase2 && !isRetreating && Time.time < retreatCooldownEndTime;
+    public bool IsDoingSpecialAtk() => isDoingSpecialAtk;
 
-    // SPECIAL ATTACK (SUMMON)
+    // SPECIAL ATTACK (SPAWN ENEMIES)
     bool CanSpecialNow()
     {
+        if (isDoingSpecialAtk) return false;
         if (Time.time < nextSpecialTime) return false;
         return true;
     }
 
     void TriggerSpecial()
     {
-        nextSpecialTime = Time.time + specialCooldown;
-        int spawnCount = Random.Range(normalSummonCount - 1, normalSummonCount + 1);
+        StartCoroutine(SpecialAtkRoutine());
+    }
+
+    IEnumerator SpecialAtkRoutine()
+    {
+        isDoingSpecialAtk = true;
+        
+        // Stop movement and idle for delay
+        desiredVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        
+        yield return new WaitForSeconds(specialIdleDelay);
+        
+        // Play special attack animation
+        anim.SetBool("isSpecialAttack", true);
+        
+        // Wait for animation to play
+        yield return new WaitForSeconds(specialAnimLength);
+        
+        // Spawn enemies
+        int spawnCount = Random.Range(normalSpawnCount - 1, normalSpawnCount + 1);
         SpawnEnemies(spawnCount);
+        
+        // Reset state
+        anim.SetBool("isSpecialAttack", false);
+        nextSpecialTime = Time.time + specialCooldown;
+        isDoingSpecialAtk = false;
     }
 
     public void SpawnEnemies(int count)

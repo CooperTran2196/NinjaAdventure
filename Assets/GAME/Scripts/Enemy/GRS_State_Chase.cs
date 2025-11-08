@@ -91,9 +91,9 @@ public class GRS_State_Chase : MonoBehaviour
     void UpdateFloats(Vector2 move)
     {
         if (move.sqrMagnitude > 0f) lastMove = move.normalized;
-        anim?.SetFloat("moveX", move.x);
-        anim?.SetFloat("moveY", move.y);
-        anim?.SetFloat("idleX", lastMove.x);
-        anim?.SetFloat("idleY", lastMove.y);
+        anim.SetFloat("moveX", move.x);
+        anim.SetFloat("moveY", move.y);
+        anim.SetFloat("idleX", lastMove.x);
+        anim.SetFloat("idleY", lastMove.y);
     }
 }

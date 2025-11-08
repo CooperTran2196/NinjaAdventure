@@ -23,6 +23,7 @@ public class State_Idle : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         controller?.SetDesiredVelocity(Vector2.zero);
+        anim.SetBool("isIdle", true);
         anim.SetBool("isMoving", false);
         anim.SetBool("isWandering", false);
         // Don't set isAttacking here - let attack state manage it
