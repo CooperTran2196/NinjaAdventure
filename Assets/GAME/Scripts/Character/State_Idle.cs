@@ -11,15 +11,10 @@ public class State_Idle : MonoBehaviour
 
     void Awake()
     {
-        rb     = GetComponent<Rigidbody2D>();
-        anim   = GetComponent<Animator>();
-        stats  = GetComponent<C_Stats>();
-
-        // Make this work for Enemy, NPC, or Boss (GR/GRS)
-        controller = (I_Controller)(GetComponent<E_Controller>() ??
-                        (Component)GetComponent<NPC_Controller>() ??
-                        (Component)GetComponent<GR_Controller>() ??
-                        (Component)GetComponent<GRS_Controller>());
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        stats      = GetComponent<C_Stats>();
+        controller = GetComponent<I_Controller>();
 
         if (!rb) Debug.LogError($"{name}: Rigidbody2D is missing in State_Idle");
     }

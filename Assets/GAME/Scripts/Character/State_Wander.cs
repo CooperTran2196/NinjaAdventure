@@ -31,10 +31,7 @@ public class State_Wander : MonoBehaviour
     {
         rb         = GetComponent<Rigidbody2D>();
         anim       = GetComponentInChildren<Animator>();
-        controller = (I_Controller)(GetComponent<E_Controller>() ??
-                        (Component)GetComponent<NPC_Controller>() ??
-                        (Component)GetComponent<GRS_Controller>() ??
-                        (Component)GetComponent<GR_Controller>());
+        controller = GetComponent<I_Controller>();
 
         if (startCenter == Vector2.zero) startCenter = (Vector2)transform.position;
     }
