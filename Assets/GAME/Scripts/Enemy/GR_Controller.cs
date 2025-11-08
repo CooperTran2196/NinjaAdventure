@@ -37,8 +37,9 @@ public class GR_Controller : MonoBehaviour, I_Controller
     Vector2   desiredVelocity;
     Transform target;
     float     inRangeTimer;
-    float     contactTimer;   // Collision damage cooldown
     GRState   current;
+    
+    // NOTE: Collision damage now handled by B_WeaponCollider on Sprite child
 
     void Awake()
     {
@@ -174,28 +175,8 @@ public class GR_Controller : MonoBehaviour, I_Controller
         else desiredVelocity = Vector2.zero;
     }
 
-    // COLLISION DAMAGE
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if (!c_Health.IsAlive) return;
-
-        // Filter to only player layer
-        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
-            return;
-
-        // Cooldown using physics timestep
-        if (contactTimer > 0f)
-        {
-            contactTimer -= Time.fixedDeltaTime;
-            return;
-        }
-
-        var playerHealth = collision.collider.GetComponent<C_Health>();
-        if (!playerHealth || !playerHealth.IsAlive) return;
-
-        playerHealth.ChangeHealth(-c_Stats.collisionDamage);
-        contactTimer = c_Stats.collisionTick;
-    }
+    // NOTE: Collision damage removed - now handled by B_WeaponCollider on Sprite child
+    // This prevents duplicate damage systems and ensures universal boss behavior
 
     // GIZMOS
     void OnDrawGizmosSelected()

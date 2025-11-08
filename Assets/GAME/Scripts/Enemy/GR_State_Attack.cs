@@ -9,7 +9,7 @@ public class GR_State_Attack : MonoBehaviour
     I_Controller        controller;
     SpriteRenderer      sr;
     C_AfterimageSpawner afterimage;
-    W_Base              activeWeapon;
+    B_WeaponCollider    weaponCollider;
 
     [Header("Target")]
     public LayerMask playerLayer;
@@ -55,12 +55,12 @@ public class GR_State_Attack : MonoBehaviour
 
     void Awake()
     {
-        rb           = GetComponent<Rigidbody2D>();
-        anim         = GetComponent<Animator>();
-        controller   = GetComponent<I_Controller>();
-        activeWeapon = GetComponentInChildren<W_Base>();
-        sr           = GetComponentInChildren<SpriteRenderer>();
-        afterimage   = GetComponent<C_AfterimageSpawner>();
+        rb             = GetComponent<Rigidbody2D>();
+        anim           = GetComponent<Animator>();
+        controller     = GetComponent<I_Controller>();
+        weaponCollider = GetComponentInChildren<B_WeaponCollider>();
+        sr             = GetComponentInChildren<SpriteRenderer>();
+        afterimage     = GetComponent<C_AfterimageSpawner>();
     }
 
     void OnEnable()
@@ -76,9 +76,12 @@ public class GR_State_Attack : MonoBehaviour
         isDashing   = false;
         controller.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
-        anim.speed = 1.0f;  // Reset animation speed
+        anim.speed = 1.0f;
         anim.SetBool(isAttacking, false);
         anim.SetBool(isSpecialAttack, false);
+        
+        // Disable weapon damage mode
+        if (weaponCollider) weaponCollider.DisableWeaponMode();
     }
 
     // ATTACK DECISION
@@ -172,10 +175,10 @@ public class GR_State_Attack : MonoBehaviour
         // 3/ Begin dash
         BeginDash(dashSpeed, actualDashDist);
         
-        // Normal attack: enable weapon hitbox during dash
+        // Normal attack: enable weapon damage during dash
         if (!isSpecial)
         {
-            activeWeapon.Attack(lastFace);
+            if (weaponCollider) weaponCollider.EnableWeaponMode();
         }
         
         // 4/ Dash phase
@@ -186,6 +189,9 @@ public class GR_State_Attack : MonoBehaviour
             yield return null;
         }
         StopDash();
+        
+        // Disable weapon damage after dash
+        if (!isSpecial && weaponCollider) weaponCollider.DisableWeaponMode();
         
         // 5/ Special attack: AoE damage at landing
         if (isSpecial)

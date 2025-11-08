@@ -35,8 +35,9 @@ public class GS2_Controller : MonoBehaviour, I_Controller
     public int        emergencySpawnCount = 5;  // 4-5 enemies at phase 2 start
     public float      specialCooldown   = 12f;
     public float      specialIdleDelay  = 1.0f; // Idle before animation starts
-    public float      specialAnimLength = 2.5f; // Length of special attack animation
-    public float      spawnSpreadRadius = 2.5f;
+    public float      specialAnimLength = 2.5f; // Wait for slam animation, then spawn
+    public float      minSpawnRadius    = 2f; // Circle radius to spawn enemies on (prevents collision)
+    public float      launchSpeed       = 6f;   // Initial force applied to spawned enemies
 
     [Header("Phase 2 Settings")]
     [Range(0f, 1f)] public float phase2Threshold = 0.20f; // 20% HP
@@ -188,14 +189,10 @@ public class GS2_Controller : MonoBehaviour, I_Controller
         hasTriggeredPhase2 = true;
         isPhase2 = true;
 
-        // Emergency spawn (bonus enemies)
-        int emergencyCount = Random.Range(emergencySpawnCount - 1, emergencySpawnCount + 1);
-        SpawnEnemies(emergencyCount);
-
-        // Start retreat cycle
+        // Start retreat cycle (no immediate spawn - just change behavior)
         StartRetreat();
 
-        Debug.Log($"{name}: Entered Phase 2! Emergency spawn triggered.");
+        Debug.Log($"{name}: Entered Phase 2! Now using emergency spawn count ({emergencySpawnCount}).");
     }
 
     void UpdateRetreatBehavior()
@@ -260,14 +257,15 @@ public class GS2_Controller : MonoBehaviour, I_Controller
         
         yield return new WaitForSeconds(specialIdleDelay);
         
-        // Play special attack animation
+        // Play special attack animation (jump + slam)
         anim.SetBool("isSpecialAttack", true);
         
-        // Wait for animation to play
+        // Wait for full animation (slam completes)
         yield return new WaitForSeconds(specialAnimLength);
         
-        // Spawn enemies
-        int spawnCount = Random.Range(normalSpawnCount - 1, normalSpawnCount + 1);
+        // Spawn enemies after slam
+        // Use emergency count in Phase 2, normal count otherwise
+        int spawnCount = isPhase2 ? emergencySpawnCount : normalSpawnCount;
         SpawnEnemies(spawnCount);
         
         // Reset state
@@ -284,22 +282,33 @@ public class GS2_Controller : MonoBehaviour, I_Controller
             return;
         }
 
+        Vector2 centerPos = transform.position;
+
         for (int i = 0; i < count; i++)
         {
-            // Circular spread pattern
-            float angle = (360f / count) * i + Random.Range(-20f, 20f);
-            float radius = Random.Range(1.5f, spawnSpreadRadius);
-
-            Vector2 offset = new Vector2(
-                Mathf.Cos(angle * Mathf.Deg2Rad) * radius,
-                Mathf.Sin(angle * Mathf.Deg2Rad) * radius
+            // Random angle (360 degrees)
+            float angle = Random.Range(0f, 360f);
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
             );
 
-            Vector2 spawnPos = (Vector2)transform.position + offset;
-            Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+            // Spawn ON the circle perimeter (not at center - prevents collision)
+            Vector2 spawnOffset = direction * minSpawnRadius;
+            Vector2 spawnPos = centerPos + spawnOffset;
+
+            GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+
+            // Launch outward using enemy's knockback system (works with enemy's FixedUpdate)
+            E_Controller enemyController = enemy.GetComponent<E_Controller>();
+            if (enemyController)
+            {
+                // Use SetKnockback - integrates with enemy's physics naturally
+                enemyController.SetKnockback(direction * launchSpeed);
+            }
         }
 
-        Debug.Log($"{name}: Spawned {count} enemies.");
+        Debug.Log($"{name}: Spawned {count} enemies on circle perimeter (volcano style).");
     }
 
     // COLLISION DAMAGE
@@ -342,8 +351,8 @@ public class GS2_Controller : MonoBehaviour, I_Controller
             Gizmos.DrawWireSphere(p, retreatDistance);
         }
 
-        // Enemy spawn radius (yellow)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(p, spawnSpreadRadius);
+        // Enemy spawn circle (yellow/orange - volcano ring)
+        Gizmos.color = new Color(1f, 0.8f, 0f, 0.8f);
+        Gizmos.DrawWireSphere(p, minSpawnRadius);
     }
 }

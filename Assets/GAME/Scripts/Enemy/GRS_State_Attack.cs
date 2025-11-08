@@ -10,6 +10,7 @@ public class GRS_State_Attack : MonoBehaviour
     SpriteRenderer      sr;
     C_AfterimageSpawner afterimage;
     W_Base              activeWeapon;
+    B_WeaponCollider    weaponCollider;
 
     [Header("Target")]
     public LayerMask playerLayer;
@@ -51,12 +52,13 @@ public class GRS_State_Attack : MonoBehaviour
 
     void Awake()
     {
-        rb           = GetComponent<Rigidbody2D>();
-        anim         = GetComponent<Animator>();
-        controller   = GetComponent<I_Controller>();
-        activeWeapon = GetComponentInChildren<W_Base>();
-        sr           = GetComponentInChildren<SpriteRenderer>();
-        afterimage   = GetComponent<C_AfterimageSpawner>();
+        rb              = GetComponent<Rigidbody2D>();
+        anim            = GetComponent<Animator>();
+        controller      = GetComponent<I_Controller>();
+        activeWeapon    = GetComponentInChildren<W_Base>();
+        sr              = GetComponentInChildren<SpriteRenderer>();
+        afterimage      = GetComponent<C_AfterimageSpawner>();
+        weaponCollider  = GetComponentInChildren<B_WeaponCollider>();
     }
 
     void OnDisable()
@@ -68,6 +70,9 @@ public class GRS_State_Attack : MonoBehaviour
         anim.speed = 1.0f;  // Reset animation speed
         anim.SetBool(isAttacking, false);
         anim.SetBool(isSpecialAttack, false);
+        
+        // Disable weapon mode when state disabled
+        if (weaponCollider) weaponCollider.DisableWeaponMode();
     }
 
     // ATTACK DECISION
@@ -139,9 +144,13 @@ public class GRS_State_Attack : MonoBehaviour
 
         yield return new WaitForSeconds(hitDelay);
 
-        activeWeapon.Attack(lastFace);
+        // Enable weapon damage mode (no charging - full attack)
+        if (weaponCollider) weaponCollider.EnableWeaponMode();
 
         yield return new WaitForSeconds(Mathf.Max(0f, attackDuration - hitDelay));
+
+        // Disable weapon damage mode
+        if (weaponCollider) weaponCollider.DisableWeaponMode();
 
         nextAttackReadyAt = Time.time + attackCooldown;
         IsAttacking = false;
@@ -162,7 +171,7 @@ public class GRS_State_Attack : MonoBehaviour
 
         float t = 0f;
 
-        // 1/ Charging phase (normal speed)
+        // 1/ Charging phase (normal speed) - NO weapon damage during charge
         while (t < specialHitDelay) 
         { 
             t += Time.deltaTime; 
@@ -176,10 +185,13 @@ public class GRS_State_Attack : MonoBehaviour
         
         anim.speed = animSpeed;  // Change speed for dash phase only
 
-        // 3/ Begin dash toward player
+        // 3/ Enable weapon damage mode (first hit starts)
+        if (weaponCollider) weaponCollider.EnableWeaponMode();
+
+        // 4/ Begin dash toward player
         BeginDash(specialDashSpeed, dashDistance);
         
-        // 4/ Dash until clip ends
+        // 5/ Dash until clip ends (first hit active during dash)
         while (t < specialClipLength)
         {
             t += Time.deltaTime;
@@ -187,12 +199,14 @@ public class GRS_State_Attack : MonoBehaviour
         }
         StopDash();
 
-        // 5/ First hit right after dash ends
-        activeWeapon.Attack(lastFace);
-
-        // 6/ Quick follow-up second hit
+        // 6/ Gap between first and second hit (weapon still active)
         yield return new WaitForSeconds(followupGap);
-        activeWeapon.Attack(lastFace);
+
+        // 7/ Second hit window
+        yield return new WaitForSeconds(hitDelay);
+
+        // 8/ Disable weapon damage mode after second hit
+        if (weaponCollider) weaponCollider.DisableWeaponMode();
 
         nextAttackReadyAt  = Time.time + attackCooldown;
         nextSpecialReadyAt = Time.time + specialCooldown;
