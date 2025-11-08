@@ -206,6 +206,52 @@ bool isOnLadder;
 
 ## 🔧 2. Awake() vs Start() - The Critical Split
 
+### Controller Pattern (RequireComponent Architecture)
+
+**Controllers** (e.g., `P_Controller`, `E_Controller`, `GR_Controller`) should use `[RequireComponent]` attributes to declare ALL dependencies at the class level. **State scripts** can then safely use `=` (not `??=`) in their `Awake()` since the controller guarantees component existence.
+
+```csharp
+// Example: GR_Controller.cs
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(C_Stats))]
+[RequireComponent(typeof(C_Health))]
+[RequireComponent(typeof(C_FX))]
+[RequireComponent(typeof(State_Idle))]
+[RequireComponent(typeof(GR_State_Attack))]
+public class GR_Controller : MonoBehaviour
+{
+    void Awake()
+    {
+        // Use = for RequireComponent types (guaranteed to exist)
+        rb       = GetComponent<Rigidbody2D>();
+        c_Stats  = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+        // ...
+    }
+}
+
+// Example: GR_State_Attack.cs (State script)
+public class GR_State_Attack : MonoBehaviour
+{
+    void Awake()
+    {
+        // Use = (not ??=) - controller's RequireComponent guarantees existence
+        rb         = GetComponent<Rigidbody2D>();
+        anim       = GetComponent<Animator>();
+        controller = GetComponent<I_Controller>();
+        sr         = GetComponentInChildren<SpriteRenderer>();
+        // ...
+    }
+}
+```
+
+**Rules:**
+- ✅ **Controllers**: Use `[RequireComponent]` for ALL dependencies
+- ✅ **State scripts**: Use `=` (not `??=`) for components guaranteed by controller
+- ✅ **GetComponentInChildren**: Use `=` when child structure is guaranteed by prefab
+- ❌ **NEVER use `??=` in state scripts** - if component might be missing, controller should handle it
+
 ### Awake() - Same GameObject Only
 ```csharp
 void Awake()
@@ -403,19 +449,18 @@ void OnDestroy()
 ### Section Comments for Methods
 ```csharp
 // LADDER SYSTEM
-
 public void EnterLadder(ENV_Ladder ladder) { ... }
 public void ExitLadder() { ... }
 
 // WEAPON SYSTEM
-
 public W_SO SetWeapon(W_SO newWeapon) { ... }
 ```
 
 **Rules:**
 - ✅ Use **ALL CAPS** section comments (e.g., `// LADDER SYSTEM`, `// WEAPON SYSTEM`) to group related methods
 - ✅ Blank line before section comment
-- ✅ No blank line after section comment (methods start immediately)
+- ✅ **NO blank line after section comment** - Methods start immediately on next line
+- ❌ NEVER add blank line between section comment and first method
 
 ### Function Comments (Selective)
 ```csharp

@@ -401,7 +401,7 @@ GameObject:
   - component: {fileID: 533308930955140019}
   - component: {fileID: 5690680241701484464}
   - component: {fileID: 3614725371582186023}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: E_HealthBarSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +448,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 724366543
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &8061738015187843481
@@ -526,7 +526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4588062878542346754}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 1311545593204493347}
   - component: {fileID: 4951378039900987104}
   - component: {fileID: 1050491627850171060}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1778747365488359110}
   - component: {fileID: 1608440280201039710}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 3882169223000063170}
   - component: {fileID: 2384598990959027090}
   - component: {fileID: 6874938565652704880}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

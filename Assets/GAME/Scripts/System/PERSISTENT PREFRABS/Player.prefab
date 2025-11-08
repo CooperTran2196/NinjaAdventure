@@ -525,7 +525,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0024929047, y: -0.10462403}
+  m_Offset: {x: -0.0017414093, y: -0.031755924}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -535,7 +535,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.7356529, y: 0.5413699}
+  m_Size: {x: 0.87537766, y: 0.9425192}
   m_EdgeRadius: 0
 --- !u!95 &9212602258907453368
 Animator:
@@ -574,8 +574,8 @@ MonoBehaviour:
   AD: 5
   AP: 0
   MS: 5
-  maxHP: 1000
-  currentHP: 100
+  maxHP: 100
+  currentHP: 1
   AR: 0
   MR: 0
   maxMP: 100
@@ -705,6 +705,7 @@ MonoBehaviour:
   meleeWeapon: {fileID: 788822334993277513}
   rangedWeapon: {fileID: 9165694127855322997}
   autoKill: 0
+  isInTutorialZone: 0
 --- !u!114 &1993199309945380321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,6 +732,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::P_State_Attack
   activeWeapon: {fileID: 0}
   attackDir: {x: 0, y: 0}
+  attackAnimDuration: 0.45
+  hitDelay: 0.15
   comboIndex: 0
   comboInputWindow: 1
   comboWindowTimer: 0

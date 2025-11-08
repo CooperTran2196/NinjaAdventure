@@ -19,7 +19,7 @@ public class C_FX : MonoBehaviour
 
     void Awake()
     {
-        sr ??= GetComponent<SpriteRenderer>();
+        sr ??= GetComponentInChildren<SpriteRenderer>();
 
         if (!sr) { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
 

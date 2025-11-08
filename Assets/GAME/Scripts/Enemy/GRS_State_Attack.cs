@@ -15,16 +15,16 @@ public class GRS_State_Attack : MonoBehaviour
     public LayerMask playerLayer;
 
     [Header("Normal Attack")]
-    public float attackCooldown  = 1.10f;
-    public float attackDuration  = 0.45f;
-    public float hitDelay        = 0.25f;
+    public float attackCooldown = 1.10f;
+    public float attackDuration = 0.45f;
+    public float hitDelay       = 0.25f;
 
     [Header("Special (single clip flow)")]
-    public float specialCooldown   = 8.0f;
+    public float specialCooldown  = 8.0f;
     public float specialClipLength = 1.50f;
-    public float specialHitDelay   = 0.50f;   // Charging duration
-    public float specialDashSpeed  = 9.0f;    // Constant dash velocity
-    public float followupGap       = 0.14f;   // Gap between first and second hit
+    public float specialHitDelay  = 0.50f;   // Charging duration
+    public float specialDashSpeed = 9.0f;    // Constant dash velocity
+    public float followupGap      = 0.14f;   // Gap between first and second hit
 
     [Header("Alignment Gate")]
     public float yHardCap = 0.55f;            // Must be within this to attack
@@ -51,12 +51,12 @@ public class GRS_State_Attack : MonoBehaviour
 
     void Awake()
     {
-        rb           ??= GetComponent<Rigidbody2D>();
-        anim         ??= GetComponentInChildren<Animator>();
-        controller   ??= GetComponent<I_Controller>();
-        activeWeapon ??= GetComponentInChildren<W_Base>();
-        sr           ??= GetComponentInChildren<SpriteRenderer>();
-        afterimage   ??= sr ? sr.GetComponent<C_AfterimageSpawner>() : null;
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponent<Animator>();
+        controller   = GetComponent<I_Controller>();
+        activeWeapon = GetComponentInChildren<W_Base>();
+        sr           = GetComponentInChildren<SpriteRenderer>();
+        afterimage   = GetComponent<C_AfterimageSpawner>();
     }
 
     void OnDisable()

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3948668133179933565}
   - component: {fileID: 8831460572986694836}
   - component: {fileID: 5278748833336411110}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4216317126973436883}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2948940970910816335}
   - component: {fileID: 7047275259947318614}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 129670465415553899}
   - component: {fileID: 5727306097528135447}
   - component: {fileID: 8307737282302544243}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: E_HealthBarSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 724366543
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &6982946191662637181
@@ -328,11 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebe36921889d4cb5976dfb915a9382c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_HealthBarSlider
-  e_Health: {fileID: 0}
-  slider: {fileID: 7047275259947318614}
   worldOffset: {x: 0, y: 0.82, z: 0}
   visibleTime: 10
-  startHidden: 1
 --- !u!1 &6628361083862184794
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +341,7 @@ GameObject:
   - component: {fileID: 2806726038294395472}
   - component: {fileID: 3492609913509851456}
   - component: {fileID: 936460375589761269}
-  m_Layer: 7
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

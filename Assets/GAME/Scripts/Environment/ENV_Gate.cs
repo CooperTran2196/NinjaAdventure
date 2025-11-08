@@ -1,9 +1,9 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class ENV_Gate : MonoBehaviour
 {
-    [Header("Gate opens when entity dies, then self-destructs to reveal open gate underneath")]
+    [Header("Gate fades out and self-destructs when target dies")]
     [Header("MUST wire MANUALLY in Inspector")]
     public C_Health targetHealth;
 
@@ -11,25 +11,23 @@ public class ENV_Gate : MonoBehaviour
     public float fadeDuration = 1.5f;
 
     // Runtime state
-    SpriteRenderer[] spriteRenderers;
+    SpriteRenderer sr;
 
     void Awake()
     {
-        if (!targetHealth) { Debug.LogError($"{name}: targetHealth is missing!", this); return; }
+        sr = GetComponent<SpriteRenderer>();
 
-        spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        if (!targetHealth) { Debug.LogError($"{name}: targetHealth is missing!", this); return; }
+        if (!sr)           { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
     }
 
-    void OnEnable()  => targetHealth.OnDied += OpenGate;
-    void OnDisable() => targetHealth.OnDied -= OpenGate;
+    void OnEnable()  => targetHealth.OnDied += DestroyGate;
+    void OnDisable() => targetHealth.OnDied -= DestroyGate;
 
-    void OpenGate()
+    void DestroyGate()
     {
-        // Play gate break sound
-        AudioClip breakSound = SYS_GameManager.Instance?.sys_SoundManager?.GetRandomObjectBreak();
+        AudioClip breakSound = SYS_GameManager.Instance.sys_SoundManager.GetRandomObjectBreak();
         AudioSource.PlayClipAtPoint(breakSound, transform.position);
-
-        Debug.Log($"{name}: Gate opening! Target defeated.");
 
         StartCoroutine(FadeOutAndDestroy());
     }
@@ -37,37 +35,26 @@ public class ENV_Gate : MonoBehaviour
     IEnumerator FadeOutAndDestroy()
     {
         float elapsed = 0f;
+        Color originalColor = sr.color;
 
-        // Store original colors
-        Color[] originalColors = new Color[spriteRenderers.Length];
-        for (int i = 0; i < spriteRenderers.Length; i++)
-            originalColors[i] = spriteRenderers[i].color;
-
-        // Fade out all sprites
+        // Fade out sprite
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
             float alpha = 1f - (elapsed / fadeDuration);
 
-            for (int i = 0; i < spriteRenderers.Length; i++)
-            {
-                Color newColor = originalColors[i];
-                newColor.a = alpha;
-                spriteRenderers[i].color = newColor;
-            }
+            Color newColor = originalColor;
+            newColor.a = alpha;
+            sr.color = newColor;
 
             yield return null;
         }
 
         // Ensure fully transparent
-        foreach (var sr in spriteRenderers)
-        {
-            Color color = sr.color;
-            color.a = 0f;
-            sr.color = color;
-        }
+        Color finalColor = originalColor;
+        finalColor.a = 0f;
+        sr.color = finalColor;
 
-        // Destroy this GameObject (reveals LDtk open gate underneath)
         Destroy(gameObject);
     }
 }

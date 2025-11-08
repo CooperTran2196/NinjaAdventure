@@ -5172,12 +5172,7 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 97627034e3f3d6e46b4baae341569a2a
-    spriteOutline:
-    - shape:
-      - {x: 8, y: 8}
-      - {x: -8, y: 8}
-      - {x: -8, y: 1}
-      - {x: 8, y: 1}
+    spriteOutline: []
     tessellationDetail: 0
   - name: TilesetHouse_255
     originalName: 

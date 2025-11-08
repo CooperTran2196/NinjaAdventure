@@ -12,26 +12,26 @@ public class GR_State_Attack : MonoBehaviour
     W_Base              activeWeapon;
 
     [Header("Target")]
-                    public LayerMask playerLayer;
+    public LayerMask playerLayer;
 
     [Header("Normal Attack (Charge)")]
-                    public float attackCooldown   = 1.10f;
-                    public float attackClipLength = 2.35f;
-                    public float attackHitDelay   = 2.00f;   // Charging duration
-                    public float attackDashSpeed  = 9.0f;    // Constant dash velocity
+    public float attackCooldown   = 1.10f;
+    public float attackClipLength = 2.35f;
+    public float attackHitDelay   = 2.00f;   // Charging duration
+    public float attackDashSpeed  = 9.0f;    // Constant dash velocity
 
     [Header("Special Attack (Jump)")]
-                    public float specialCooldown       = 8.0f;
-                    public float specialClipLength     = 5.0f;
-                    public float specialHitDelay       = 3.0f;   // Charging duration
-                    public float specialDashSpeed      = 12.0f;  // Constant dash velocity (can be different)
-                    public float specialAoERadius      = 1.8f;
-                    public float specialAoEOffsetY     = -1f;
-                    public int   specialDamage         = 25;
-                    public float specialKnockbackForce = 8f;
+    public float specialCooldown       = 8.0f;
+    public float specialClipLength     = 5.0f;
+    public float specialHitDelay       = 3.0f;   // Charging duration
+    public float specialDashSpeed      = 12.0f;  // Constant dash velocity (can be different)
+    public float specialAoERadius      = 1.8f;
+    public float specialAoEOffsetY     = -1f;
+    public int   specialDamage         = 25;
+    public float specialKnockbackForce = 8f;
 
     [Header("Dash Settings")]
-                    public float stopShortOffset = 0.96f;    // Distance kept in front of player
+    public float stopShortOffset = 0.96f;    // Distance kept in front of player
 
     // Animator params
     const string isAttacking     = "isAttacking";
@@ -55,19 +55,19 @@ public class GR_State_Attack : MonoBehaviour
 
     void Awake()
     {
-        rb           ??= GetComponent<Rigidbody2D>();
-        anim         ??= GetComponentInChildren<Animator>();
-        controller   ??= GetComponent<I_Controller>();
-        activeWeapon ??= GetComponentInChildren<W_Base>();
-        sr           ??= GetComponentInChildren<SpriteRenderer>();
-        afterimage   ??= sr ? sr.GetComponent<C_AfterimageSpawner>() : null;
+        rb           = GetComponent<Rigidbody2D>();
+        anim         = GetComponent<Animator>();
+        controller   = GetComponent<I_Controller>();
+        activeWeapon = GetComponentInChildren<W_Base>();
+        sr           = GetComponentInChildren<SpriteRenderer>();
+        afterimage   = GetComponent<C_AfterimageSpawner>();
     }
 
     void OnEnable()
     {
-        anim?.SetBool("isIdle", false);
-        anim?.SetBool("isMoving", false);
-        anim?.SetBool("isWandering", false);
+        anim.SetBool("isIdle", false);
+        anim.SetBool("isMoving", false);
+        anim.SetBool("isWandering", false);
     }
 
     void OnDisable()

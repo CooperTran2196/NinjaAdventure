@@ -14,7 +14,7 @@ public class C_AfterimageSpawner : MonoBehaviour
 
     void Awake()
     {
-        sr ??= GetComponent<SpriteRenderer>();
+        sr ??= GetComponentInChildren<SpriteRenderer>();
 
         if (!sr) { Debug.LogError($"{name}: SpriteRenderer is missing!", this); return; }
     }
@@ -43,8 +43,8 @@ public class C_AfterimageSpawner : MonoBehaviour
     {
         // Create new GameObject for afterimage
         var g = new GameObject("Afterimage");
-        g.transform.SetPositionAndRotation(transform.position, transform.rotation);
-        g.transform.localScale = transform.localScale;
+        g.transform.SetPositionAndRotation(sr.transform.position, sr.transform.rotation);
+        g.transform.localScale = sr.transform.lossyScale;
 
         // Setup sprite renderer with same properties as original
         var gsr = g.AddComponent<SpriteRenderer>();

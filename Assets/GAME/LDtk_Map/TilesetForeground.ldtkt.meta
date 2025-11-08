@@ -5172,7 +5172,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 30505e94d2081c04d85e3f207f08d45c
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -6}
+      - {x: -8, y: -6}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_320
     originalName: 
@@ -5202,7 +5207,12 @@ ScriptedImporter:
       width: 16
       height: 16
     spriteID: 3524b8a332a51114d87f3dd44d16f979
-    spriteOutline: []
+    spriteOutline:
+    - shape:
+      - {x: 8, y: -6}
+      - {x: -8, y: -6}
+      - {x: -8, y: -8}
+      - {x: 8, y: -8}
     tessellationDetail: 0
   - name: TilesetForeground_322
     originalName: 

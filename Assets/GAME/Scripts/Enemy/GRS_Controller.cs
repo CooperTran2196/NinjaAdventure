@@ -1,122 +1,128 @@
+using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
+[RequireComponent(typeof(C_FX))]
 [RequireComponent(typeof(State_Idle))]
 [RequireComponent(typeof(State_Wander))]
 [RequireComponent(typeof(GRS_State_Chase))]
 [RequireComponent(typeof(GRS_State_Attack))]
+
 public class GRS_Controller : MonoBehaviour, I_Controller
 {
     public enum GRSState { Idle, Wander, Chase, Attack }
 
     [Header("References")]
-    Rigidbody2D rb;
-    C_Stats     c_Stats;
-    C_Health    c_Health;
-    C_FX        c_FX;
-
-    [Header("States")]
+    Rigidbody2D        rb;
+    Animator           anim;
+    C_Stats            c_Stats;
+    C_Health           c_Health;
+    C_FX               c_FX;
     State_Idle         idle;
     State_Wander       wander;
     GRS_State_Chase    chase;
     GRS_State_Attack   attack;
 
     [Header("Detection")]
-                public GRSState  defaultState = GRSState.Idle;
-    [Min(0.1f)] public float     detectionRange = 10f;
-    [Min(0.1f)] public float     attackRange = 1.6f;
-                public LayerMask playerLayer;
-                public float     attackStartBuffer = 0.20f;
+    public GRSState  defaultState       = GRSState.Idle;
+    public float     detectionRange     = 10f;
+    public float     attackRange        = 1.6f;
+    public LayerMask playerLayer;
+    public float     attackStartBuffer  = 0.20f;
 
     // Runtime state
     Vector2   desiredVelocity;
     Transform target;
     float     inRangeTimer;
+    float     contactTimer;   // Collision damage cooldown
     GRSState  current;
 
     void Awake()
     {
-        rb       ??= GetComponent<Rigidbody2D>();
-        c_Stats  ??= GetComponent<C_Stats>();
-        c_Health ??= GetComponent<C_Health>();
-        c_FX     ??= GetComponent<C_FX>();
-        idle     ??= GetComponent<State_Idle>();
-        wander   ??= GetComponent<State_Wander>();
-        chase    ??= GetComponent<GRS_State_Chase>();
-        attack   ??= GetComponent<GRS_State_Attack>();
+        rb       = GetComponent<Rigidbody2D>();
+        anim     = GetComponent<Animator>();
+        c_Stats  = GetComponent<C_Stats>();
+        c_Health = GetComponent<C_Health>();
+        c_FX     = GetComponent<C_FX>();
+        idle     = GetComponent<State_Idle>();
+        wander   = GetComponent<State_Wander>();
+        chase    = GetComponent<GRS_State_Chase>();
+        attack   = GetComponent<GRS_State_Attack>();
     }
 
     void OnEnable()
     {
         desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        c_Health.OnDied += OnDiedHandler;
 
-        // Subscribe to death event
-        if (c_Health) c_Health.OnDied += OnDiedHandler;
-
-        chase?.SetRanges(attackRange);
-        attack?.SetRanges(attackRange, detectionRange);
+        chase.SetRanges(attackRange);
+        attack.SetRanges(attackRange, detectionRange);
         SwitchState(defaultState);
     }
 
     void OnDisable()
     {
-        // Unsubscribe from death event
-        if (c_Health) c_Health.OnDied -= OnDiedHandler;
+        c_Health.OnDied -= OnDiedHandler;
 
-        if (idle)   idle.enabled   = false;
-        if (wander) wander.enabled = false;
-        if (chase)  chase.enabled  = false;
-        if (attack) attack.enabled = false;
+        idle.enabled   = false;
+        wander.enabled = false;
+        chase.enabled  = false;
+        attack.enabled = false;
 
         desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 
     void OnDiedHandler()
     {
-        // Handle death: disable states, play animation, fade, then destroy
-        if (idle)   idle.enabled   = false;
-        if (wander) wander.enabled = false;
-        if (chase)  chase.enabled  = false;
-        if (attack) attack.enabled = false;
-        
-        desiredVelocity = Vector2.zero;
-        if (rb) rb.linearVelocity = Vector2.zero;
-        
+        // Immediately stop all coroutines in states (prevents dash continuation)
+        idle.StopAllCoroutines();
+        wander.StopAllCoroutines();
+        chase.StopAllCoroutines();
+        attack.StopAllCoroutines();
+
+        // Immediately disable all states to prevent any further actions
+        idle.enabled   = false;
+        wander.enabled = false;
+        chase.enabled  = false;
+        attack.enabled = false;
+
         StartCoroutine(HandleDeath());
     }
     
-    System.Collections.IEnumerator HandleDeath()
+    IEnumerator HandleDeath()
     {
-        // Play death animation (assuming animator has "Die" trigger)
-        var anim = GetComponent<Animator>();
-        if (anim) anim.SetTrigger("Die");
+        // Stop all movement
+        desiredVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+
+        // Disable colliders (stop collision damage)
+        var colliders = GetComponentsInChildren<Collider2D>();
+        foreach (var col in colliders) col.enabled = false;
+        
+        // Play death animation
+        anim.SetTrigger("Die");
         
         yield return new WaitForSeconds(1.5f);
-        
-        // Fade out sprite
         yield return StartCoroutine(c_FX.FadeOut());
         
-        // Destroy boss
         Destroy(gameObject);
     }
 
     // I_CONTROLLER
-
     public void SetDesiredVelocity(Vector2 v) => desiredVelocity = v;
 
     void FixedUpdate()
     {
-        if (!rb) return;
         rb.linearVelocity = desiredVelocity;
     }
 
     // STATE MACHINE
-
     void Update()
     {
         Vector2 pos = transform.position;
@@ -149,28 +155,50 @@ public class GRS_Controller : MonoBehaviour, I_Controller
     {
         current = s;
 
-        if (idle)   idle.enabled   = (s == GRSState.Idle);
-        if (wander) wander.enabled = (s == GRSState.Wander);
-        if (chase)  chase.enabled  = (s == GRSState.Chase);
-        if (attack) attack.enabled = (s == GRSState.Attack);
+        idle.enabled   = (s == GRSState.Idle);
+        wander.enabled = (s == GRSState.Wander);
+        chase.enabled  = (s == GRSState.Chase);
+        attack.enabled = (s == GRSState.Attack);
 
         if (s == GRSState.Chase)
         {
-            chase?.SetTarget(target);
-            chase?.SetRanges(attackRange);
+            chase.SetTarget(target);
+            chase.SetRanges(attackRange);
             desiredVelocity = Vector2.zero;
         }
         else if (s == GRSState.Attack)
         {
-            attack?.SetTarget(target);
-            attack?.SetRanges(attackRange, detectionRange);
+            attack.SetTarget(target);
+            attack.SetRanges(attackRange, detectionRange);
             desiredVelocity = Vector2.zero;
         }
         else desiredVelocity = Vector2.zero;
     }
 
-    // GIZMOS
+    // COLLISION DAMAGE
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!c_Health.IsAlive) return;
 
+        // Filter to only player layer
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
+            return;
+
+        // Cooldown using physics timestep
+        if (contactTimer > 0f)
+        {
+            contactTimer -= Time.fixedDeltaTime;
+            return;
+        }
+
+        var playerHealth = collision.collider.GetComponent<C_Health>();
+        if (!playerHealth || !playerHealth.IsAlive) return;
+
+        playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+        contactTimer = c_Stats.collisionTick;
+    }
+
+    // GIZMOS
     void OnDrawGizmosSelected()
     {
         Vector3 p = transform.position;

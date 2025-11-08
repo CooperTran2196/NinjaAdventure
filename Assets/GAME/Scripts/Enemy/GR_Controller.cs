@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-[DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(C_Stats))]
 [RequireComponent(typeof(C_Health))]
 [RequireComponent(typeof(C_FX))]
@@ -16,23 +16,22 @@ public class GR_Controller : MonoBehaviour, I_Controller
     public enum GRState { Idle, Wander, Chase, Attack }
 
     [Header("References")]
-    Rigidbody2D rb;
-    C_Stats     c_Stats;
-    C_Health    c_Health;
-    C_FX        c_FX;
-
-    [Header("States")]
+    Rigidbody2D     rb;
+    Animator        anim;
+    C_Stats         c_Stats;
+    C_Health        c_Health;
+    C_FX            c_FX;
     State_Idle      idle;
     State_Wander    wander;
     GR_State_Chase  chase;
     GR_State_Attack attack;
 
     [Header("Detection")]
-                public GRState   defaultState = GRState.Idle;
-    [Min(0.1f)] public float     detectionRange = 10f;   // Chase + special attack range
-    [Min(0.1f)] public float     attackRange = 3f;       // Normal attack trigger range
-                public LayerMask playerLayer;
-                public float     attackStartBuffer = 0.20f;
+    public GRState   defaultState       = GRState.Idle;
+    public float     detectionRange     = 10f;   // Chase + special attack range
+    public float     attackRange        = 3f;    // Normal attack trigger range
+    public LayerMask playerLayer;
+    public float     attackStartBuffer  = 0.20f;
 
     // Runtime state
     Vector2   desiredVelocity;
@@ -44,6 +43,7 @@ public class GR_Controller : MonoBehaviour, I_Controller
     void Awake()
     {
         rb       = GetComponent<Rigidbody2D>();
+        anim     = GetComponent<Animator>();
         c_Stats  = GetComponent<C_Stats>();
         c_Health = GetComponent<C_Health>();
         c_FX     = GetComponent<C_FX>();
@@ -79,26 +79,33 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
     void OnDiedHandler()
     {
+        // Immediately stop all coroutines in states (prevents dash continuation)
+        idle.StopAllCoroutines();
+        wander.StopAllCoroutines();
+        chase.StopAllCoroutines();
+        attack.StopAllCoroutines();
+
+        // Immediately disable all states to prevent any further actions
+        idle.enabled   = false;
+        wander.enabled = false;
+        chase.enabled  = false;
+        attack.enabled = false;
+
         StartCoroutine(HandleDeath());
     }
     
     IEnumerator HandleDeath()
     {
-        // Disable all states
-        idle.enabled = false;
-        wander.enabled = false;
-        chase.enabled = false;
-        attack.enabled = false;
-        
-        // Stop all movement (keep zeroing velocity in FixedUpdate)
+        // Stop all movement
         desiredVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         
         // Disable colliders (stop collision damage)
         var colliders = GetComponents<Collider2D>();
         foreach (var col in colliders) col.enabled = false;
         
         // Play death animation
-        GetComponent<Animator>().SetTrigger("Die");
+        anim.SetTrigger("Die");
         
         yield return new WaitForSeconds(1.5f);
         yield return StartCoroutine(c_FX.FadeOut());
