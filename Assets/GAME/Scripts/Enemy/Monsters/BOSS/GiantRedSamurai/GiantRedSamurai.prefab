@@ -33,7 +33,7 @@ RectTransform:
   m_Father: {fileID: 3709267977979100854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.542, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -233,7 +233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5752323899373260951
 Transform:
   m_ObjectHideFlags: 0
@@ -489,16 +489,15 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  attackCooldown: 1.1
+  attackCooldown: 2
   attackDuration: 0.45
   hitDelay: 0.25
-  attackRecoveryTime: 0.5
+  attackRecoveryTime: 2
   specialCooldown: 5
   specialClipLength: 2.25
   specialHitDelay: 1.3
-  specialDashSpeed: 9
-  followupGap: 0.14
-  specialRecoveryTime: 1.5
+  specialDashSpeed: 13
+  specialRecoveryTime: 2.5
   yHardCap: 5.5
 --- !u!114 &8820112017867854994
 MonoBehaviour:

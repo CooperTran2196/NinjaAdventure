@@ -218,7 +218,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  enemyPrefab: {fileID: 5334573721691676162, guid: 59a216c39853344a29cca966f93e726d, type: 3}
+  enemyPrefab: {fileID: 188959956576159371, guid: 8396ac0fcbd0a0a4a8aa80ca5f0d5c98, type: 3}
   normalSpawnCount: 2
   emergencySpawnCount: 2
   specialCooldown: 5
@@ -556,6 +556,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1966012539032861733}
   - component: {fileID: 5185130376766616284}
+  - component: {fileID: 1898147261959206610}
+  - component: {fileID: 2089629867639375497}
   m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
@@ -636,6 +638,73 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &1898147261959206610
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6973915717800493046}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.875, y: 3.25}
+    newSize: {x: 3.75, y: 3.75}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.6875, y: 0.25}
+      - {x: -1.0625, y: 0.25}
+      - {x: -1.375, y: -0.4375}
+      - {x: -1.375, y: -1.125}
+      - {x: -0.9375, y: -1.375}
+      - {x: 0.9375, y: -1.375}
+      - {x: 1.375, y: -1}
+      - {x: 1.375, y: -0.25}
+  m_UseDelaunayMesh: 0
+--- !u!114 &2089629867639375497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6973915717800493046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187838ac106934161bf835571fdf8659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_UpdateColliderShape
 --- !u!1 &7846634218094179492
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981d607f85e597c439eb0e48bdb87b3f, type: 3}
   m_Name: Young Lord Room
   m_EditorClassIdentifier: Assembly-CSharp::D_LocationSO
-  locationID: 
-  displayName: 
+  locationID: younglordroom
+  displayName: Young Lord Room
