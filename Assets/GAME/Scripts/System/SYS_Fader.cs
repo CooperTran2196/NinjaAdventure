@@ -12,9 +12,10 @@ public class SYS_Fader : MonoBehaviour
 
     void Awake()
     {
-        anim ??= GetComponentInChildren<Animator>(true);
-
-        if (!anim) { Debug.LogError($"{name}: Animator is missing!", this); return; }
+        anim = GetComponentInChildren<Animator>();
+        
+        // Make animator work during Time.timeScale = 0 (for resurrection/pause effects)
+        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
 
     // Fade to a new scene with fade out/in transition
@@ -31,5 +32,11 @@ public class SYS_Fader : MonoBehaviour
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         yield return new WaitForSeconds(fadeTime);
         anim.Play("FadeIn");      // reveal
+    }
+
+    // Play fade animation (works even during Time.timeScale = 0)
+    public void PlayFade(string animationName)
+    {
+        anim.Play(animationName);
     }
 }

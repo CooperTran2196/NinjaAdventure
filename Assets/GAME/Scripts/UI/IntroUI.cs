@@ -8,9 +8,8 @@ public class IntroUI : MonoBehaviour
     [SerializeField] private CanvasGroup cg;
     [SerializeField] private Button      normalButton;
     [SerializeField] private Button      easyButton;
-
-    [Header("Timing (realtime seconds)")]
-    [SerializeField] private float showDelay = 2f;
+    [SerializeField] private P_Exp       p_Exp;
+    [SerializeField] private INV_Manager inv_Manager;
 
     void Awake()
     {
@@ -19,17 +18,6 @@ public class IntroUI : MonoBehaviour
 
     void OnEnable()
     {
-        cg.alpha          = 0f;
-        cg.interactable   = false;
-        cg.blocksRaycasts = false;
-
-        StartCoroutine(ShowAfterDelay());
-    }
-
-    IEnumerator ShowAfterDelay()
-    {
-        yield return new WaitForSecondsRealtime(showDelay);
-
         Time.timeScale    = 0f;
         cg.alpha          = 1f;
         cg.interactable   = true;
@@ -45,7 +33,7 @@ public class IntroUI : MonoBehaviour
     public void OnEasyClicked()
     {
         SYS_GameManager.Instance.SetDifficulty(Difficulty.Easy);
-        SYS_GameManager.Instance.ApplyEasyModeBonuses();
+        SYS_GameManager.Instance.ApplyEasyModeBonuses(p_Exp, inv_Manager);
         StartGame();
     }
 

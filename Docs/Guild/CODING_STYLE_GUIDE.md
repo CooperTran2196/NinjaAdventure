@@ -339,6 +339,38 @@ if (!c_Health) { Debug.LogError($"{name}: C_Health is missing!", this); return; 
 if (!audioSource) Debug.LogWarning($"{name}: AudioSource is missing!", this);
 ```
 
+**Single-line if statements:**
+```csharp
+// ✅ DO remove braces for single-line statements:
+if (hasResurrection)
+    StartCoroutine(ResurrectionSequence());
+else if (isInTutorial)
+    StartCoroutine(TutorialSequence());
+else
+    StartCoroutine(NormalSequence());
+
+// Also applies to simple operations:
+void MarkPersistentObjects()
+{
+    foreach (GameObject obj in persistentObjects)
+        if (obj)
+            DontDestroyOnLoad(obj);
+}
+
+// ❌ DON'T use braces unnecessarily:
+if (hasResurrection)
+{
+    StartCoroutine(ResurrectionSequence());  // NO - single line doesn't need braces
+}
+
+// ✅ DO use braces for multi-line blocks:
+if (hasResurrection)
+{
+    Debug.Log("Resurrecting...");
+    StartCoroutine(ResurrectionSequence());
+}
+```
+
 ---
 
 ## 🔄 3. Event Subscription Patterns

@@ -36,6 +36,7 @@ public class SYS_SoundManager : MonoBehaviour
     public AudioClip[] grassBreak;
     public AudioClip[] vaseBreak;
     public AudioClip[] objectBreak;
+    public AudioClip   resurrectionSFX;
 
     [Header("Volume Settings")]
     [Range(0f, 1f)] public float masterVolume    = 0.7f;
@@ -159,4 +160,10 @@ public class SYS_SoundManager : MonoBehaviour
     public AudioClip GetRandomGrassBreak()  => GetRandom(grassBreak);
     public AudioClip GetRandomVaseBreak()   => GetRandom(vaseBreak);
     public AudioClip GetRandomObjectBreak() => GetRandom(objectBreak);
+    
+    // RESURRECTION
+    public void PlayResurrectionSFX()
+    {
+        PlaySound(resurrectionSFX, 1f);
+    }
 }

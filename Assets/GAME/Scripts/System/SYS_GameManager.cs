@@ -15,8 +15,9 @@ public class SYS_GameManager : MonoBehaviour
     public D_HistoryTracker d_HistoryTracker;
     public SHOP_Manager     shop_Manager;
     public INV_ItemInfo     inv_ItemInfo;
-    public AudioSource      audioSource;
-    public Animator         fadeAnimator;
+    public AudioSource      musicSource;
+    
+    EndingUI endingUI;
 
     [Header("Restart Settings")]
     public string initialSceneName = "Level0";
@@ -32,22 +33,19 @@ public class SYS_GameManager : MonoBehaviour
     public float fadeDuration = 1.5f;
 
     [Header("Resurrection System")]
-    public bool      hasResurrection     = false;
-    public float     resurrectionDelay   = 1.5f;
-    public float     resurrectionPause   = 2.0f;
-    public AudioClip resurrectionSFX;
+    public bool  hasResurrection          = false;
+    public float resurrectionDeathAnimDur = 1.5f;  // Wait for death anim before fadeout
+    public float resurrectionClipLength   = 2.0f;  // Length of resurrection SFX (during blackout)
 
     [Header("Difficulty Settings")]
-    public Difficulty currentDifficulty    = Difficulty.Normal;
-    public int        easyBonusSkillPoints = 10;
-    public int        easyBonusMaxHP       = 100;
-    public int        easyBonusAD          = 5;
-    public int        easyBonusMaxMP       = 5;
+    public Difficulty   currentDifficulty    = Difficulty.Normal;
+    public int          easyBonusSkillPoints = 10;
+    public INV_ItemSO   easyBonusItem;  // Item to give player in easy mode
 
     [Header("MUST wire MANUALLY in Inspector")]
     public GameObject[] persistentObjects;
 
-    Coroutine currentFade;
+    Coroutine currentMusicFade;
 
     void Awake()
     {
@@ -68,7 +66,8 @@ public class SYS_GameManager : MonoBehaviour
         sys_Fader        ??= FindFirstObjectByType<SYS_Fader>();
         sys_SoundManager ??= FindFirstObjectByType<SYS_SoundManager>();
         inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
-        audioSource      ??= GetComponent<AudioSource>();
+        endingUI         ??= FindFirstObjectByType<EndingUI>();
+        musicSource      ??= GetComponent<AudioSource>();
 
         if (!d_Manager)        { Debug.LogWarning($"{name}: D_Manager is missing!", this); }
         if (!d_HistoryTracker) { Debug.LogWarning($"{name}: D_HistoryTracker is missing!", this); }
@@ -76,16 +75,16 @@ public class SYS_GameManager : MonoBehaviour
         if (!sys_Fader)        { Debug.LogWarning($"{name}: SYS_Fader is missing!", this); }
         if (!sys_SoundManager) { Debug.LogWarning($"{name}: SYS_SoundManager is missing!", this); }
         if (!inv_ItemInfo)     { Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this); }
-        if (!audioSource)      { Debug.LogWarning($"{name}: AudioSource is missing!", this); }
         
         inv_ItemInfo?.Hide();
 
-        if (audioSource)
+        if (!musicSource)
         {
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-            audioSource.volume = 0.7f;
+            musicSource = gameObject.AddComponent<AudioSource>();
         }
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.volume = 0.7f;
     }
 
     // Restart the game by clearing all DDOL objects and loading the initial scene
@@ -108,52 +107,49 @@ public class SYS_GameManager : MonoBehaviour
     public void HandlePlayerDeath(P_Controller player)
     {
         if (hasResurrection)
-        {
             StartCoroutine(ResurrectionSequence(player));
-        }
         else if (player.isInTutorialZone)
-        {
             StartCoroutine(TutorialDeathSequence(player));
-        }
         else
-        {
             StartCoroutine(NormalDeathSequence());
-        }
     }
     
     IEnumerator ResurrectionSequence(P_Controller player)
     {
         hasResurrection = false;
         
-        yield return new WaitForSeconds(resurrectionDelay);
+        // Fade music out during death animation
+        yield return StartCoroutine(FadeMusicVolume(0f, resurrectionDeathAnimDur));
         
+        // Freeze game
         Time.timeScale = 0f;
         
-        fadeAnimator.Play("FadeOut");
+        // Fade out to black
+        sys_Fader.PlayFade("FadeOut");
         yield return new WaitForSecondsRealtime(sys_Fader.fadeTime);
         
-        yield return new WaitForSecondsRealtime(resurrectionPause);
+        // Play resurrection SFX and wait for it to finish
+        sys_SoundManager.PlayResurrectionSFX();
+        yield return new WaitForSecondsRealtime(resurrectionClipLength);
         
-        if (resurrectionSFX)
-        {
-            audioSource.PlayOneShot(resurrectionSFX);
-        }
-        
-        fadeAnimator.Play("FadeIn");
-        yield return new WaitForSecondsRealtime(sys_Fader.fadeTime);
-        
+        // Revive player
         player.Revive(player.transform.position);
         
+        // Fade in from black
+        sys_Fader.PlayFade("FadeIn");
+        yield return new WaitForSecondsRealtime(sys_Fader.fadeTime);
+        
+        // Unfreeze game
         Time.timeScale = 1f;
+        
+        // Fade music volume back
+        yield return StartCoroutine(FadeMusicVolume(0.7f, 1f));
     }
     
     IEnumerator NormalDeathSequence()
     {
         yield return new WaitForSeconds(gameOverDelay);
-        
-        var endingUI = FindFirstObjectByType<EndingUI>();
-        if (endingUI) endingUI.Show(false);
-        else Debug.LogError("SYS_GameManager: EndingUI not found!");
+        endingUI.Show(false);
     }
     
     IEnumerator TutorialDeathSequence(P_Controller player)
@@ -162,11 +158,8 @@ public class SYS_GameManager : MonoBehaviour
         yield return new WaitForSeconds(DeathAnimDur);
         
         // Fade to black
-        if (sys_Fader)
-        {
-            sys_Fader.FadeToScene(SceneAfterTuto);
-            yield return new WaitForSeconds(sys_Fader.fadeTime);
-        }
+        sys_Fader.FadeToScene(SceneAfterTuto);
+        yield return new WaitForSeconds(sys_Fader.fadeTime);
         
         // Load Level2 (all DDOL objects come along automatically)
         UnityEngine.SceneManagement.SceneManager.LoadScene(SceneAfterTuto);
@@ -183,76 +176,59 @@ public class SYS_GameManager : MonoBehaviour
         // Revive player at spawn point
         player.Revive(spawnPoint.transform.position);
         
-        if (sys_Fader)
-        {
-            yield return new WaitForSeconds(sys_Fader.fadeTime);
-        }
+        yield return new WaitForSeconds(sys_Fader.fadeTime);
         
         hasResurrection = true;
     }
 
-    // Play music clip instantly without fading
-    public void PlayMusic(AudioClip clip)
-    {
-        if (audioSource.clip != clip)
-        {
-            audioSource.Stop();
-            audioSource.clip = clip;
-            audioSource.Play();
-        }
-    }
-
-    // Fade smoothly from current music to new clip, stops any existing fade
+    // MUSIC MANAGEMENT
+    
+    // Fade smoothly from current music to new clip
     public void PlayMusicWithFade(AudioClip newClip)
     {
-        // Don't fade if already playing this clip
-        if (audioSource.clip == newClip && audioSource.isPlaying)
-            return;
+        if (musicSource.clip == newClip && musicSource.isPlaying) return;
 
-        // Stop current fade to prevent conflicts
-        if (currentFade != null)
+        if (currentMusicFade != null)
         {
-            StopCoroutine(currentFade);
-            currentFade = null;
+            StopCoroutine(currentMusicFade);
         }
-
-        currentFade = StartCoroutine(FadeToNewMusic(newClip));
+        currentMusicFade = StartCoroutine(FadeToNewMusic(newClip));
     }
 
+    // Fade music volume to target over duration
+    IEnumerator FadeMusicVolume(float targetVolume, float duration)
+    {
+        float startVolume = musicSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            musicSource.volume = Mathf.Lerp(startVolume, targetVolume, t);
+            yield return null;
+        }
+        musicSource.volume = targetVolume;
+    }
+
+    // Fade out current music, swap clip, fade in new music
     IEnumerator FadeToNewMusic(AudioClip newClip)
     {
-        float elapsed      = 0f;
+        float startVolume  = musicSource.volume;
         float halfDuration = fadeDuration * 0.5f;
-        float startVolume  = audioSource.volume;
 
-        // Fade out current music
-        while (elapsed < halfDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t       = Mathf.Clamp01(elapsed / halfDuration);
-            float smoothT = t * t * (3f - 2f * t);
-            audioSource.volume = Mathf.Lerp(startVolume, 0f, smoothT);
-            yield return null;
-        }
+        // Fade out
+        yield return StartCoroutine(FadeMusicVolume(0f, halfDuration));
 
         // Swap clips
-        audioSource.Stop();
-        audioSource.clip = newClip;
-        audioSource.Play();
+        musicSource.Stop();
+        musicSource.clip = newClip;
+        musicSource.Play();
 
-        // Fade in new music
-        elapsed = 0f;
-        while (elapsed < halfDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t       = Mathf.Clamp01(elapsed / halfDuration);
-            float smoothT = t * t * (3f - 2f * t);
-            audioSource.volume = Mathf.Lerp(0f, startVolume, smoothT);
-            yield return null;
-        }
-
-        audioSource.volume = startVolume;
-        currentFade        = null;
+        // Fade in
+        yield return StartCoroutine(FadeMusicVolume(startVolume, halfDuration));
+        
+        currentMusicFade = null;
     }
 
     public void SetDifficulty(Difficulty difficulty)
@@ -260,32 +236,18 @@ public class SYS_GameManager : MonoBehaviour
         currentDifficulty = difficulty;
     }
 
-    public void ApplyEasyModeBonuses()
+    public void ApplyEasyModeBonuses(P_Exp p_Exp, INV_Manager inv_Manager)
     {
         if (currentDifficulty != Difficulty.Easy) return;
 
-        var player = FindFirstObjectByType<P_Exp>();
-        if (!player)
-        {
-            Debug.LogWarning("SYS_GameManager: P_Exp not found for easy mode bonuses!");
-            return;
-        }
+        // Apply skill points bonus
+        p_Exp.AddSkillPoints(easyBonusSkillPoints);
+        
+        // Give easy mode item
+        if (easyBonusItem)
+            inv_Manager.AddItem(easyBonusItem, 1);
 
-        var c_Stats = player.GetComponent<C_Stats>();
-        if (!c_Stats)
-        {
-            Debug.LogWarning("SYS_GameManager: C_Stats not found on player!");
-            return;
-        }
-
-        player.AddSkillPoints(easyBonusSkillPoints);
-        c_Stats.maxHP += easyBonusMaxHP;
-        c_Stats.currentHP = c_Stats.maxHP;
-        c_Stats.AD += easyBonusAD;
-        c_Stats.maxMP += easyBonusMaxMP;
-        c_Stats.currentMP = c_Stats.maxMP;
-
-        Debug.Log($"Easy Mode bonuses applied: +{easyBonusSkillPoints} SP, +{easyBonusMaxHP} HP, +{easyBonusAD} AD, +{easyBonusMaxMP} MP");
+        Debug.Log($"Easy Mode bonuses applied: +{easyBonusSkillPoints} SP, item: {easyBonusItem?.itemName}");
     }
 
     void MarkPersistentObjects()
