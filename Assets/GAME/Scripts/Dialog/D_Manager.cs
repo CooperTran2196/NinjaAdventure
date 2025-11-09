@@ -126,7 +126,17 @@ public class D_Manager : MonoBehaviour
         for (int i = 0; i < rewards.Length; i++)
         {
             var reward = rewards[i];
-            INV_Manager.Instance.AddItem(reward.itemSO, reward.quantity);
+            
+            // Grant weapon if specified
+            if (reward.weaponSO != null)
+            {
+                INV_Manager.Instance.AddWeapon(reward.weaponSO);
+            }
+            // Otherwise grant item if specified
+            else if (reward.itemSO != null)
+            {
+                INV_Manager.Instance.AddItem(reward.itemSO, reward.quantity);
+            }
         }
     }
 

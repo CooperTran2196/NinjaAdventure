@@ -5,8 +5,11 @@ using System.Linq;
 [System.Serializable]
 public class LootDrop
 {
+    [Header("Reward Type (set ONE)")]
     public INV_ItemSO item;
-    [Header("How many of this item to drop.")]
+    public W_SO       weapon;
+    
+    [Header("Quantity (items only)")]
     public int quantity = 1;
 }
 
@@ -20,6 +23,7 @@ public class E_Reward : MonoBehaviour
 
     [Header("Loot")]
                     public GameObject      lootPrefab;
+                    public GameObject      weaponPrefab;
                     public float           dropSpread    = 0.75f;
     [Range(0, 100)] public float           dropChance    = 50f;
                     public int             numberOfDrops = 1;
@@ -83,13 +87,30 @@ public class E_Reward : MonoBehaviour
     // Spawns loot at random position within dropSpread
     void SpawnLoot(LootDrop lootDrop)
     {
-        if (lootDrop == null || lootDrop.item == null || lootDrop.quantity <= 0) return;
+        if (lootDrop == null) return;
+        
+        // Validate that at least one reward type is set
+        if (lootDrop.weapon == null && lootDrop.item == null) return;
+        if (lootDrop.item != null && lootDrop.quantity <= 0) return;
 
         float randomX = Random.Range(-dropSpread, dropSpread);
         Vector2 spawnPos = new Vector2(transform.position.x + randomX, transform.position.y);
 
-        GameObject lootGO = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
-        INV_Loot loot = lootGO.GetComponent<INV_Loot>();
-        loot?.Initialize(lootDrop.item, lootDrop.quantity);
+        // Spawn weapon if specified
+        if (lootDrop.weapon != null)
+        {
+            if (weaponPrefab == null) return;
+            GameObject lootGO = Instantiate(weaponPrefab, spawnPos, Quaternion.identity);
+            INV_Loot loot = lootGO.GetComponent<INV_Loot>();
+            loot?.InitializeWeapon(lootDrop.weapon);
+        }
+        // Otherwise spawn item if specified
+        else if (lootDrop.item != null)
+        {
+            if (lootPrefab == null) return;
+            GameObject lootGO = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
+            INV_Loot loot = lootGO.GetComponent<INV_Loot>();
+            loot?.Initialize(lootDrop.item, lootDrop.quantity);
+        }
     }
 }

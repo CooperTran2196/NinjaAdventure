@@ -31,7 +31,8 @@ MonoBehaviour:
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: Understood.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
-    text: "Also, you\u2019re hurt- take this and mend yourself."
+    text: "Also, you\u2019re hurt- take this and mend yourself. Also take my blade
+      with you, you will need it."
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: My honor.
   - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
@@ -42,6 +43,10 @@ MonoBehaviour:
   requiredItems: []
   autoRewards:
   - itemSO: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    weaponSO: {fileID: 0}
+    quantity: 1
+  - itemSO: {fileID: 0}
+    weaponSO: {fileID: 11400000, guid: 75144ae3672c14dacb8aa402fee99de1, type: 2}
     quantity: 1
   removeAfterPlay: 1
   removeTheseOnPlay: []

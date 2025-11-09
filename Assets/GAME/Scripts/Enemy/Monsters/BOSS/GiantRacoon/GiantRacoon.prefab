@@ -704,6 +704,7 @@ GameObject:
   - component: {fileID: 3519765349200833066}
   - component: {fileID: 667372961441021014}
   - component: {fileID: 2708953151966360670}
+  - component: {fileID: 760959301194635728}
   m_Layer: 7
   m_Name: GiantRacoon
   m_TagString: Enemy
@@ -949,6 +950,28 @@ MonoBehaviour:
   ghostLifetime: 0.2
   ghostTint: {r: 0.7, g: 0.7, b: 0.7, a: 0.7}
   sortingOrderOffset: -1
+--- !u!114 &760959301194635728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8273029760021090776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::E_Reward
+  expReward: 10
+  lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  weaponPrefab: {fileID: 808787959670156516, guid: ca3e987ed3c964f4db9832753ed647f4, type: 3}
+  dropSpread: 0.75
+  dropChance: 100
+  numberOfDrops: 1
+  lootTable:
+  - item: {fileID: 0}
+    weapon: {fileID: 11400000, guid: f2d439dbd28434396981bfe103023ad4, type: 2}
+    quantity: 0
 --- !u!1 &8808604542620809767
 GameObject:
   m_ObjectHideFlags: 0

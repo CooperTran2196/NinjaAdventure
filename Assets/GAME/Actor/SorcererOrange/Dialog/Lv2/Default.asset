@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
-    text: I'm so glad that you made it to here. Please hurry, the pricess is still
+    text: I'm so glad that you made it to here. Please hurry, the princess is still
       waiting for you!
   optionList: []
   requiredNPCs: []

@@ -99,11 +99,16 @@ public class D_Option
 }
 
 // <summary>
-// Automatically grants specified items when a particular dialog node ends.
+// Automatically grants specified items or weapons when a particular dialog node ends.
+// Can grant either an item (with quantity) OR a weapon (quantity ignored).
 // </summary>
 [System.Serializable]
 public class D_AutoReward
 {
+    [Header("Reward Type (set ONE)")]
     public INV_ItemSO itemSO;
+    public W_SO       weaponSO;
+    
+    [Header("Quantity (items only)")]
     public int quantity = 1;
 }
