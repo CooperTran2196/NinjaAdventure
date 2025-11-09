@@ -28,8 +28,8 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
     [Header("Detection")]
     public GRState   defaultState       = GRState.Idle;
-    public float     detectionRange     = 10f;   // Chase + special attack range
-    public float     attackRange        = 3f;    // Normal attack trigger range
+    public float     detectionRange     = 16f;   // Chase + special attack range
+    public float     attackRange        = 5f;    // Normal attack trigger range
     public LayerMask playerLayer;
     public float     attackStartBuffer  = 0.20f;
 
@@ -37,9 +37,8 @@ public class GR_Controller : MonoBehaviour, I_Controller
     Vector2   desiredVelocity;
     Transform target;
     float     inRangeTimer;
+    float     contactTimer;   // Collision damage cooldown
     GRState   current;
-    
-    // NOTE: Collision damage now handled by B_WeaponCollider on Sprite child
 
     void Awake()
     {
@@ -140,9 +139,11 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
         bool readySpecial = attack && target && attack.CanSpecialNow(transform.position, target.position);
         bool attackingNow = attack && attack.IsAttacking;
+        bool recovering   = attack && attack.IsRecovering;
 
         var desired =
             attackingNow ? GRState.Attack :
+            recovering   ? GRState.Idle   :  // Vulnerable window after attack
             readySpecial ? GRState.Attack :
             readyMelee   ? GRState.Attack :
             inDetect     ? GRState.Chase  :
@@ -175,8 +176,26 @@ public class GR_Controller : MonoBehaviour, I_Controller
         else desiredVelocity = Vector2.zero;
     }
 
-    // NOTE: Collision damage removed - now handled by B_WeaponCollider on Sprite child
-    // This prevents duplicate damage systems and ensures universal boss behavior
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!c_Health.IsAlive) return;
+        if (attack && attack.IsAttacking) return;  // No contact damage during attacks
+
+        if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0) return;
+
+        C_Health playerHealth = collision.collider.GetComponent<C_Health>();
+        if (!playerHealth || !playerHealth.IsAlive) return;
+
+        if (contactTimer <= 0f)
+        {
+            playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+            contactTimer = c_Stats.collisionTick;
+        }
+        else
+        {
+            contactTimer -= Time.fixedDeltaTime;
+        }
+    }
 
     // GIZMOS
     void OnDrawGizmosSelected()
