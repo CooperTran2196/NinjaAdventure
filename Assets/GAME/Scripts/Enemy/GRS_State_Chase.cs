@@ -8,9 +8,9 @@ public class GRS_State_Chase : MonoBehaviour
     C_Stats      c_Stats;
     I_Controller controller;
 
-    [Header("Tuning")]
+    [Header("Chase Settings")]
     public float stopBuffer = 0.10f;
-    public float yAlignBand = 0.35f;   // Shrink |dy| toward this during chase
+    public float yAlignBand = 0.35f;
 
     // Runtime state
     Transform target;
@@ -29,7 +29,8 @@ public class GRS_State_Chase : MonoBehaviour
 
     void OnEnable()
     {
-        anim.SetBool("isMoving", false);
+        anim.SetBool("isMoving", true);
+        anim.SetBool("isIdle", false);
     }
 
     void OnDisable()
@@ -38,6 +39,8 @@ public class GRS_State_Chase : MonoBehaviour
         controller.SetDesiredVelocity(Vector2.zero);
         rb.linearVelocity = Vector2.zero;
         anim.SetBool("isMoving", false);
+        anim.SetBool("isIdle", true);
+        UpdateFloats(Vector2.zero);
     }
 
     void Update()
@@ -56,7 +59,6 @@ public class GRS_State_Chase : MonoBehaviour
         float dy = toTarget.y;
         float distance = toTarget.magnitude;
 
-        // Horizontal-first chase with vertical alignment bias
         Vector2 desired = Vector2.zero;
         if (Mathf.Abs(dy) > yAlignBand)
         {

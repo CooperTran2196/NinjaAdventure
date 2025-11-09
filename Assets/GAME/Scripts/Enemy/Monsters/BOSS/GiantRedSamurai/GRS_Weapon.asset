@@ -20,7 +20,7 @@ MonoBehaviour:
   offsetRadius: 0.7
   AD: 0
   AP: 0
-  knockbackForce: 5
+  knockbackForce: 13
   thrustDistance: 0.61
   maxAttackSpeed: 0
   onlyThrustKnocksBack: 0

@@ -79,13 +79,11 @@ public class GR_Controller : MonoBehaviour, I_Controller
 
     void OnDiedHandler()
     {
-        // Immediately stop all coroutines in states (prevents dash continuation)
         idle.StopAllCoroutines();
         wander.StopAllCoroutines();
         chase.StopAllCoroutines();
         attack.StopAllCoroutines();
 
-        // Immediately disable all states to prevent any further actions
         idle.enabled   = false;
         wander.enabled = false;
         chase.enabled  = false;
@@ -96,20 +94,17 @@ public class GR_Controller : MonoBehaviour, I_Controller
     
     IEnumerator HandleDeath()
     {
-        // Stop all movement
         desiredVelocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
-        
-        // Disable colliders (stop collision damage)
-        var colliders = GetComponents<Collider2D>();
+
+        var colliders = GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders) col.enabled = false;
-        
-        // Play death animation
+
         anim.SetTrigger("Die");
-        
+
         yield return new WaitForSeconds(1.5f);
         yield return StartCoroutine(c_FX.FadeOut());
-        
+
         Destroy(gameObject);
     }
 
@@ -124,6 +119,8 @@ public class GR_Controller : MonoBehaviour, I_Controller
     // STATE MACHINE
     void Update()
     {
+        if (!c_Health.IsAlive) return;
+
         Vector2 pos = transform.position;
 
         var cAtk = Physics2D.OverlapCircle(pos, attackRange, playerLayer);

@@ -34,11 +34,10 @@ public class GRS_Controller : MonoBehaviour, I_Controller
     public LayerMask playerLayer;
     public float     attackStartBuffer  = 0.20f;
 
-    // Runtime state
     Vector2   desiredVelocity;
     Transform target;
     float     inRangeTimer;
-    float     contactTimer;   // Collision damage cooldown
+    float     contactTimer;
     GRSState  current;
 
     void Awake()
@@ -80,13 +79,11 @@ public class GRS_Controller : MonoBehaviour, I_Controller
 
     void OnDiedHandler()
     {
-        // Immediately stop all coroutines in states (prevents dash continuation)
         idle.StopAllCoroutines();
         wander.StopAllCoroutines();
         chase.StopAllCoroutines();
         attack.StopAllCoroutines();
 
-        // Immediately disable all states to prevent any further actions
         idle.enabled   = false;
         wander.enabled = false;
         chase.enabled  = false;
@@ -97,20 +94,17 @@ public class GRS_Controller : MonoBehaviour, I_Controller
     
     IEnumerator HandleDeath()
     {
-        // Stop all movement
         desiredVelocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
 
-        // Disable colliders (stop collision damage)
         var colliders = GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders) col.enabled = false;
-        
-        // Play death animation
+
         anim.SetTrigger("Die");
-        
+
         yield return new WaitForSeconds(1.5f);
         yield return StartCoroutine(c_FX.FadeOut());
-        
+
         Destroy(gameObject);
     }
 
@@ -125,6 +119,8 @@ public class GRS_Controller : MonoBehaviour, I_Controller
     // STATE MACHINE
     void Update()
     {
+        if (!c_Health.IsAlive) return;
+
         Vector2 pos = transform.position;
 
         var cAtk = Physics2D.OverlapCircle(pos, attackRange, playerLayer);
@@ -135,14 +131,15 @@ public class GRS_Controller : MonoBehaviour, I_Controller
 
         if (inDetect) target = cDet.transform;
 
-        inRangeTimer = inAttack ? inRangeTimer + Time.deltaTime : 0f;
-        bool readyMelee = inAttack && inRangeTimer >= attackStartBuffer;
-
+        inRangeTimer     = inAttack ? inRangeTimer + Time.deltaTime : 0f;
+        bool readyMelee  = inAttack && inRangeTimer >= attackStartBuffer;
         bool readySpecial = attack && target && attack.CanSpecialNow(transform.position, target.position);
         bool attackingNow = attack && attack.IsAttacking;
+        bool recovering   = attack && attack.IsRecovering;
 
         var desired =
             attackingNow ? GRSState.Attack :
+            recovering   ? GRSState.Idle   :
             readySpecial ? GRSState.Attack :
             readyMelee   ? GRSState.Attack :
             inDetect     ? GRSState.Chase  :
@@ -175,40 +172,25 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         else desiredVelocity = Vector2.zero;
     }
 
-    // COLLISION DAMAGE
     void OnCollisionStay2D(Collision2D collision)
     {
         if (!c_Health.IsAlive) return;
+        if (attack && attack.IsAttacking) return;
 
-        // Filter to only player layer
         if ((playerLayer.value & (1 << collision.collider.gameObject.layer)) == 0)
             return;
-
-        // Cooldown using physics timestep
-        if (contactTimer > 0f)
-        {
-            contactTimer -= Time.fixedDeltaTime;
-            return;
-        }
 
         var playerHealth = collision.collider.GetComponent<C_Health>();
         if (!playerHealth || !playerHealth.IsAlive) return;
 
-        playerHealth.ChangeHealth(-c_Stats.collisionDamage);
-        contactTimer = c_Stats.collisionTick;
-    }
-
-    // GIZMOS
-    void OnDrawGizmosSelected()
-    {
-        Vector3 p = transform.position;
-
-        // Detection range (orange)
-        Gizmos.color = new Color(1f, 0.65f, 0f);
-        Gizmos.DrawWireSphere(p, detectionRange);
-
-        // Attack range (red)
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(p, attackRange);
+        if (contactTimer <= 0f)
+        {
+            playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+            contactTimer = c_Stats.collisionTick;
+        }
+        else
+        {
+            contactTimer -= Time.fixedDeltaTime;
+        }
     }
 }
