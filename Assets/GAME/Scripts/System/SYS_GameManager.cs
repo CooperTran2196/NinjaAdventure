@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+public enum Difficulty { Normal, Easy }
+
 public class SYS_GameManager : MonoBehaviour
 {
     public static SYS_GameManager Instance;
@@ -34,6 +36,13 @@ public class SYS_GameManager : MonoBehaviour
     public float     resurrectionDelay   = 1.5f;
     public float     resurrectionPause   = 2.0f;
     public AudioClip resurrectionSFX;
+
+    [Header("Difficulty Settings")]
+    public Difficulty currentDifficulty    = Difficulty.Normal;
+    public int        easyBonusSkillPoints = 10;
+    public int        easyBonusMaxHP       = 100;
+    public int        easyBonusAD          = 5;
+    public int        easyBonusMaxMP       = 5;
 
     [Header("MUST wire MANUALLY in Inspector")]
     public GameObject[] persistentObjects;
@@ -244,6 +253,39 @@ public class SYS_GameManager : MonoBehaviour
 
         audioSource.volume = startVolume;
         currentFade        = null;
+    }
+
+    public void SetDifficulty(Difficulty difficulty)
+    {
+        currentDifficulty = difficulty;
+    }
+
+    public void ApplyEasyModeBonuses()
+    {
+        if (currentDifficulty != Difficulty.Easy) return;
+
+        var player = FindFirstObjectByType<P_Exp>();
+        if (!player)
+        {
+            Debug.LogWarning("SYS_GameManager: P_Exp not found for easy mode bonuses!");
+            return;
+        }
+
+        var c_Stats = player.GetComponent<C_Stats>();
+        if (!c_Stats)
+        {
+            Debug.LogWarning("SYS_GameManager: C_Stats not found on player!");
+            return;
+        }
+
+        player.AddSkillPoints(easyBonusSkillPoints);
+        c_Stats.maxHP += easyBonusMaxHP;
+        c_Stats.currentHP = c_Stats.maxHP;
+        c_Stats.AD += easyBonusAD;
+        c_Stats.maxMP += easyBonusMaxMP;
+        c_Stats.currentMP = c_Stats.maxMP;
+
+        Debug.Log($"Easy Mode bonuses applied: +{easyBonusSkillPoints} SP, +{easyBonusMaxHP} HP, +{easyBonusAD} AD, +{easyBonusMaxMP} MP");
     }
 
     void MarkPersistentObjects()

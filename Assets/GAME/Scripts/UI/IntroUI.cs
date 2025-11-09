@@ -6,15 +6,15 @@ public class IntroUI : MonoBehaviour
 {
     [Header("Wiring")]
     [SerializeField] private CanvasGroup cg;
-    [SerializeField] private Button      startButton;
+    [SerializeField] private Button      normalButton;
+    [SerializeField] private Button      easyButton;
 
     [Header("Timing (realtime seconds)")]
     [SerializeField] private float showDelay = 2f;
 
     void Awake()
     {
-        cg          ??= GetComponent<CanvasGroup>();
-        startButton ??= GetComponentInChildren<Button>();
+        cg ??= GetComponent<CanvasGroup>();
     }
 
     void OnEnable()
@@ -36,7 +36,20 @@ public class IntroUI : MonoBehaviour
         cg.blocksRaycasts = true;
     }
 
-    public void StartClicked()
+    public void OnNormalClicked()
+    {
+        SYS_GameManager.Instance.SetDifficulty(Difficulty.Normal);
+        StartGame();
+    }
+
+    public void OnEasyClicked()
+    {
+        SYS_GameManager.Instance.SetDifficulty(Difficulty.Easy);
+        SYS_GameManager.Instance.ApplyEasyModeBonuses();
+        StartGame();
+    }
+
+    void StartGame()
     {
         Time.timeScale    = 1f;
         cg.interactable   = false;

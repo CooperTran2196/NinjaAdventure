@@ -77,17 +77,21 @@ public class P_Exp : MonoBehaviour
     // Return true if successfully spent points
     public bool TrySpendSkillPoints(int amount)
     {
-        // return false if not enough points
         if (amount <= 0) return false;
         if (skillPoints < amount) return false;
 
-        // spend points and return true
         skillPoints -= amount;
         OnSPChanged?.Invoke(skillPoints);
         return true;
     }
 
-    // XP required for next level
+    public void AddSkillPoints(int amount)
+    {
+        if (amount <= 0) return;
+        skillPoints += amount;
+        OnSPChanged?.Invoke(skillPoints);
+    }
+
     public int GetXPRequiredForNext()
     {
         int n = Mathf.Max(1, level);
