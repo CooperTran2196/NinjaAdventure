@@ -14,6 +14,7 @@ public class SYS_GameManager : MonoBehaviour
     public SHOP_Manager     shop_Manager;
     public INV_ItemInfo     inv_ItemInfo;
     public AudioSource      audioSource;
+    public Animator         fadeAnimator;
 
     [Header("Restart Settings")]
     public string initialSceneName = "Level0";
@@ -27,6 +28,12 @@ public class SYS_GameManager : MonoBehaviour
 
     [Header("Audio Settings")]
     public float fadeDuration = 1.5f;
+
+    [Header("Resurrection System")]
+    public bool      hasResurrection     = false;
+    public float     resurrectionDelay   = 1.5f;
+    public float     resurrectionPause   = 2.0f;
+    public AudioClip resurrectionSFX;
 
     [Header("MUST wire MANUALLY in Inspector")]
     public GameObject[] persistentObjects;
@@ -91,17 +98,50 @@ public class SYS_GameManager : MonoBehaviour
     
     public void HandlePlayerDeath(P_Controller player)
     {
-        StartCoroutine(player.isInTutorialZone 
-            ? TutorialDeathSequence(player) 
-            : NormalDeathSequence());
+        if (hasResurrection)
+        {
+            StartCoroutine(ResurrectionSequence(player));
+        }
+        else if (player.isInTutorialZone)
+        {
+            StartCoroutine(TutorialDeathSequence(player));
+        }
+        else
+        {
+            StartCoroutine(NormalDeathSequence());
+        }
+    }
+    
+    IEnumerator ResurrectionSequence(P_Controller player)
+    {
+        hasResurrection = false;
+        
+        yield return new WaitForSeconds(resurrectionDelay);
+        
+        Time.timeScale = 0f;
+        
+        fadeAnimator.Play("FadeOut");
+        yield return new WaitForSecondsRealtime(sys_Fader.fadeTime);
+        
+        yield return new WaitForSecondsRealtime(resurrectionPause);
+        
+        if (resurrectionSFX)
+        {
+            audioSource.PlayOneShot(resurrectionSFX);
+        }
+        
+        fadeAnimator.Play("FadeIn");
+        yield return new WaitForSecondsRealtime(sys_Fader.fadeTime);
+        
+        player.Revive(player.transform.position);
+        
+        Time.timeScale = 1f;
     }
     
     IEnumerator NormalDeathSequence()
     {
-        // Wait for death animation to play
         yield return new WaitForSeconds(gameOverDelay);
         
-        // Show Game Over UI
         var endingUI = FindFirstObjectByType<EndingUI>();
         if (endingUI) endingUI.Show(false);
         else Debug.LogError("SYS_GameManager: EndingUI not found!");
@@ -134,11 +174,12 @@ public class SYS_GameManager : MonoBehaviour
         // Revive player at spawn point
         player.Revive(spawnPoint.transform.position);
         
-        // Fade in
         if (sys_Fader)
         {
             yield return new WaitForSeconds(sys_Fader.fadeTime);
         }
+        
+        hasResurrection = true;
     }
 
     // Play music clip instantly without fading
