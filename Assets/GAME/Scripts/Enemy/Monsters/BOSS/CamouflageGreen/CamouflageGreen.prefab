@@ -621,19 +621,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
-  expReward: 400
+  expReward: 250
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  weaponPrefab: {fileID: 0}
   dropSpread: 0.75
   dropChance: 100
   numberOfDrops: 2
   lootTable:
   - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
+    weapon: {fileID: 0}
     quantity: 10
   - item: {fileID: 11400000, guid: 79266f5bfc918ca4481ad77a13899096, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
   - item: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
   - item: {fileID: 11400000, guid: 2444f233efa7f1e4f9df9a8c2e2df6a6, type: 2}
+    weapon: {fileID: 0}
     quantity: 3
 --- !u!1 &6170859415266030845
 GameObject:

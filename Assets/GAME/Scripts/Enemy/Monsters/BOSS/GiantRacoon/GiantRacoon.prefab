@@ -791,11 +791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7695cc333434368acf0afa63faf9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Stats
-  AD: 5
+  AD: 22
   AP: 0
   MS: 2
-  maxHP: 500
-  currentHP: 500
+  maxHP: 800
+  currentHP: 800
   AR: 0
   MR: 0
   maxMP: 0
@@ -810,7 +810,7 @@ MonoBehaviour:
   stunTimeBonus: 0
   thrustDistanceBonus: 0
   attackCooldown: 0
-  collisionDamage: 5
+  collisionDamage: 10
   collisionTick: 1
   dodgeSpeed: 0
   dodgeDistance: 0
@@ -873,7 +873,7 @@ MonoBehaviour:
   specialClipLength: 3.44
   specialHitDelay: 3
   specialDashSpeed: 20
-  specialDamage: 20
+  specialDamage: 30
   specialRecoveryTime: 2
 --- !u!114 &8223950156215462241
 MonoBehaviour:
@@ -962,7 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
-  expReward: 10
+  expReward: 200
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
   weaponPrefab: {fileID: 808787959670156516, guid: ca3e987ed3c964f4db9832753ed647f4, type: 3}
   dropSpread: 0.75

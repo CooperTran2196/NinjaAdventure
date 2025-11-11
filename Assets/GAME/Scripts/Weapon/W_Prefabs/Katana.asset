@@ -18,7 +18,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: dca399bdb02e89248b8185c55cd0ff20, type: 3}
   image: {fileID: 21300000, guid: dca399bdb02e89248b8185c55cd0ff20, type: 3}
   offsetRadius: 0.35
-  AD: 2
+  AD: 3
   AP: 0
   knockbackForce: 4
   thrustDistance: 0.25
@@ -30,8 +30,8 @@ MonoBehaviour:
   - 0.45
   - 0.45
   comboDamageMultipliers:
-  - 1.2
-  - 1.2
+  - 1.5
+  - 1.5
   - 2
   comboMovePenalties:
   - 0.5

@@ -1,0 +1,20 @@
+{
+    "asset": "0cf2d952230d84fbd84131ab9468de29",
+    "fileName": "019a71b8-82fb-7e23-83ab-8210c49b09be.png",
+    "prompt": "",
+    "negativePrompt": "",
+    "model": "",
+    "modelName": "",
+    "customSeed": -1,
+    "w3CTraceId": "2208a123aeb6e0bc8dd390beb6c85990",
+    "refinementMode": "RemoveBackground",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

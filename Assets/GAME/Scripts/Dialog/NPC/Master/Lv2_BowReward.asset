@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
+  m_Name: Lv2_BowReward
+  m_EditorClassIdentifier: Assembly-CSharp::D_SO
+  lines:
+  - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
+    text: "You\u2019ve been through a tough battle, my student. Rest a moment, your
+      wounds are deep."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: "Thank you, Master\u2026 but I can\u2019t stay. The princess still needs
+      me."
+  - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
+    text: "Always rushing forward\u2026 sighs Your spirit is strong, but even steel
+      breaks when pushed too far."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: "I\u2019ll be careful. I won\u2019t fail again."
+  - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
+    text: Then take this. An old bow from my days as a warrior. It may not look like
+      much, but it never misses its mark.
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: "I\u2026 I don\u2019t know what to say. Thank you, Master."
+  - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
+    text: Go. Save her. And remember - strength means nothing without purpose.
+  optionList: []
+  requiredNPCs: []
+  requiredLocations: []
+  requiredItems: []
+  autoRewards:
+  - itemSO: {fileID: 0}
+    weaponSO: {fileID: 11400000, guid: 5dffb245dd6ec4db9918217e715d20d0, type: 2}
+    quantity: 1
+  removeAfterPlay: 1
+  removeTheseOnPlay: []

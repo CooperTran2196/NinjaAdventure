@@ -657,7 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7695cc333434368acf0afa63faf9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Stats
-  AD: 8
+  AD: 0
   AP: 0
   MS: 2.5
   maxHP: 120
@@ -803,19 +803,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
   expReward: 120
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  weaponPrefab: {fileID: 0}
   dropSpread: 0.75
-  dropChance: 80
+  dropChance: 50
   numberOfDrops: 2
   lootTable:
   - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
+    weapon: {fileID: 0}
     quantity: 5
   - item: {fileID: 11400000, guid: 2444f233efa7f1e4f9df9a8c2e2df6a6, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
   - item: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
   - item: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
   - item: {fileID: 11400000, guid: 3997a4bf7ee277748b1de2ec7ca67924, type: 2}
+    weapon: {fileID: 0}
     quantity: 1
 --- !u!1 &5431999760977769152
 GameObject:

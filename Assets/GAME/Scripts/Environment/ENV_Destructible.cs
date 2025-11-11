@@ -17,11 +17,12 @@ public class ENV_Destructible : MonoBehaviour
     ParticleSystem breakParticleSystem;
 
     [Header("Loot Settings")]
-                    public GameObject     lootPrefab;
-                    public float          dropSpread    = 0.75f;
+    public GameObject     lootPrefab;
+    public GameObject     weaponPrefab;
+    public float          dropSpread    = 0.75f;
     [Range(0, 100)] public float          dropChance    = 50f;
-                    public int            numberOfDrops = 1;
-                    public List<LootDrop> lootTable;
+    public int            numberOfDrops = 1;
+    public List<LootDrop> lootTable;
 
     bool isDead;
 
@@ -93,13 +94,30 @@ public class ENV_Destructible : MonoBehaviour
 
     void SpawnLoot(LootDrop lootDrop)
     {
-        // Randomize spawn position within spread range
+        if (lootDrop == null) return;
+        // Validate that at least one reward type is set
+        if (lootDrop.weapon == null && lootDrop.item == null) return;
+        if (lootDrop.item != null && lootDrop.quantity <= 0) return;
+
         float randomX = Random.Range(-dropSpread, dropSpread);
         Vector2 spawnPos = new Vector2(transform.position.x + randomX, transform.position.y);
 
-        GameObject lootGO = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
-        INV_Loot loot = lootGO.GetComponent<INV_Loot>();
-        loot.Initialize(lootDrop.item, lootDrop.quantity);
+        // Spawn weapon if specified
+        if (lootDrop.weapon != null)
+        {
+            if (weaponPrefab == null) return;
+            GameObject lootGO = Instantiate(weaponPrefab, spawnPos, Quaternion.identity);
+            INV_Loot loot = lootGO.GetComponent<INV_Loot>();
+            loot?.InitializeWeapon(lootDrop.weapon);
+        }
+        // Otherwise spawn item if specified
+        else if (lootDrop.item != null)
+        {
+            if (lootPrefab == null) return;
+            GameObject lootGO = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
+            INV_Loot loot = lootGO.GetComponent<INV_Loot>();
+            loot?.Initialize(lootDrop.item, lootDrop.quantity);
+        }
     }
 
     void SpawnBreakParticles()

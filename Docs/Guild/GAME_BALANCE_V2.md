@@ -39,7 +39,7 @@
 
 | # | Skill Name       | Stat                | Per Level | Max   | Total      |
 |---|------------------|---------------------|-----------|-------|------------|
-| 1 | MaxHP            | MaxHealth           | +15 HP    | 5     | +75 HP     |
+| 1 | MaxHP            | MaxHealth           | +20 HP    | 5     | +100 HP    |
 | 2 | AD               | AttackDamage        | +2 AD     | 5     | +10 AD     |
 | 3 | AR               | Armor               | +10 AR    | 5     | +50 AR     |
 | 4 | MS               | MoveSpeed           | +0.5 MS   | 3     | +1.5 MS    |
@@ -66,7 +66,7 @@
 **Utility (14 SP):** Stunning Blow 5/5, Extended Reach 5/5, Mana 4/5
 
 **Player Stats at Level 21:**
-- HP: 100 + 75 = **175 HP**
+- HP: 100 + 100 = **200 HP**
 - AD: 5 + 10 = **15 AD** (base, before weapon)
 - AR: 0 + 50 = **50 AR**
 - Lifesteal: 25%
@@ -81,14 +81,15 @@
 | Weapon   | Available | Type   | AD | KB | Thrust | Arc° | Speed | Combos      | Player<br>AD | Total Combo<br>Damage| Base<br>MP | MP per<br>Combo | Notes            |
 |----------|-----------|--------|----|----|--------|------|-------|-------------|--------------|----------------------|------------|-----------------|------------------|
 | Stick    | Lvl 1     | Melee  | 1  | 3  | 0.50   | 60   | +3    | 1.0/1.2/2.0 | 5            | 25.2                 | -          | 0               | Starter          |
-| Katana   | Lvl 1     | Melee  | 2  | 4  | 0.25   | 90   | 0     | 1.2/1.2/2.0 | 5            | 29.4                 | -          | 0               | NPC gift         |
+| Katana   | Lvl 1     | Melee  | 3  | 4  | 0.25   | 90   | 0     | 1.5/1.5/2.0 | 5            | 40.0                 | -          | 0               | NPC gift         |
 | Lance    | Lvl 2     | Melee  | 6  | 5  | 0.70   | 130  | -5    | 1.2/1.5/2.0 | 11           | 79.9                 | -          | 0               | Boss drop        |
-| Bow      | Lvl 2     | Ranged | 1  | 4  | 0.25   | 45   | 0     | 1.0/1.2/2.0 | 11           | 50.4                 | 100        | 5               | Safe ranged      |
-| Shuriken | Lvl 2     | Ranged | 1  | 5  | 0.25   | 45   | 0     | 1.0/1.2/2.0 | 11           | 50.4                 | 100        | 10              | Homing, powerful |
-| Axe      | Lvl 3     | Melee  | 10 | 5  | 0.25   | 120  | -6    | 1.2/1.5/1.0 | 15           | 92.5                 | -          | 0               | Highest damage   |
+| Bow      | Lvl 2     | Ranged | 10 | 4  | 0.25   | 45   | 0     | Single Hit  | 11           | 21.0                 | 100        | 5               | Safe ranged      |
+| Shuriken | Lvl 2     | Ranged | 20 | 5  | 0.25   | 45   | 0     | Single Hit  | 11           | 31.0                 | 100        | 10              | Homing, powerful |
+| Axe      | Lvl 3     | Melee  | 10 | 5  | 0.25   | 120  | -6    | 1.7/1.7/1.0 | 15           | 110.0                | -          | 0               | Highest damage   |
 
 **Damage Formula:** `(Player_AD + Weapon_AD) × Combo_Multiplier`  
-**Total Combo Damage = Sum of all 3 hits at typical player AD for that level**
+**Total Combo Damage = Sum of all 3 hits at typical player AD for that level**  
+**Ranged Weapons (Bow/Shuriken) = Single projectile hit, no combo**
 
 **Player AD Progression:**
 - **Level 1:** Base 5 AD (0 skill points in AD)
@@ -96,9 +97,10 @@
 - **Level 21:** 5 + 10 = 15 AD (AD skill 5/5)
 
 **Mana System:**
-- Base MP: 100 (20 bow combos / 10 shuriken combos)
+- Base MP: 100 (20 bow shots / 10 shuriken throws)
 - With Mana 5/5: 150 MP (30 bow / 15 shuriken)
-- **Note:** Bow and Shuriken have same AD (1), shuriken costs double mana (10 vs 5)
+- **Bow:** 10 AD, single hit, 5 mana per shot
+- **Shuriken:** 18 AD, single hit (homing), 10 mana per throw
 
 **Acquisition:**
 - **Stick:** Starter
@@ -113,12 +115,12 @@
 
 ### Enemy Composition
 
-| Enemy Type         | Count | HP    | AD  | MS  | XP  | Notes                        |
-|--------------------|-------|-------|-----|-----|-----|------------------------------|
-| **No-Weapon**      | 6     | 34    | 5   | 2.5 | 30  | Collision damage             |
-| **With-Weapon**    | 6     | 170   | 10  | 2.0 | 60  | Single melee hit             |
-| **CamouflageGreen**| 1     | 425   | 15  | 1.8 | 250 | Mini-boss                    |
-| **GRS (Encounter)**| 1     | 2,475 | 25  | 1.5 | 0   | Unbeatable, tutorial death   |
+| Enemy Type         | Count | HP    | AD  | MS  | XP  | Total XP | Notes                        |
+|--------------------|-------|-------|-----|-----|-----|----------|------------------------------|
+| **No-Weapon**      | 6     | 35    | 5   | 2.5 | 30  | 180      | Collision damage             |
+| **With-Weapon**    | 6     | 170   | 10  | 2.0 | 60  | 360      | Single melee hit             |
+| **CamouflageGreen**| 1     | 425   | 15  | 1.8 | 250 | 250      | Mini-boss                    |
+| **GRS (Encounter)**| 1     | 2,000 | 25  | 1.5 | 0   | 0        | Unbeatable, tutorial death   |
 
 **Total XP:** 790 (180 + 360 + 250) → Level 1 → 7 (12 SP, 22% coverage)
 
@@ -126,19 +128,16 @@
 
 ### Hits-to-Kill (Player AD=5, Katana best weapon, 3 hits = 1 combo)
 
-**Stick Combo Damage:** (5+1) × (1.0 + 1.2 + 2.0) = 6 × 4.2 = **25.2 per combo**  
-**Katana Combo Damage:** (5+2) × (1.2 + 1.2 + 2.0) = 7 × 4.4 = **30.8 per combo**
-
-| Weapon | No-Weapon (34 HP) | With-Weapon (170 HP) | Green (425 HP)  | GRS (2,475 HP)           |
-|--------|-------------------|----------------------|-----------------|--------------------------|
-| Stick  | 9 hits (3 combos) | 27 hits (9 combos)   | 68 hits (23 combos) | 393 hits (131 combos)|
-| Katana | 8 hits (3 combos) | 17 hits (6 combos)   | 42 hits (14 combos) | 241 hits (81 combos) |
+| Weapon | Combo<br>Damage | No-Weapon<br>(35 HP) | With-Weapon<br>(170 HP) | Green<br>(425 HP) | GRS<br>(2,000 HP) |
+|--------|-----------------|----------------------|-------------------------|-------------------|-------------------|
+| Stick  | 25.2            | 9 hits (3 combos)    | 27 hits (9 combos)      | 68 hits (23 combos) | 318 hits (106 combos)|
+| Katana | 40.0            | 6 hits (2 combos)    | 13 hits (5 combos)      | 32 hits (11 combos) | 150 hits (50 combos) |
 
 **Enemy Threat:** No-Weapon (20 hits), With-Weapon (10 hits), Green (7 hits), **GRS (4 hits)**
 
 **Why GRS is Unbeatable:**
-- GRS has **SAME STATS as Level 3 final boss** (2,475 HP, 25 AD)
-- Player needs 81 Katana combos (241 individual hits) - impossible at Level 1
+- GRS has **SAME STATS as Level 3 final boss** (2,000 HP, 25 AD)
+- Player needs 50 Katana combos (150 individual hits) - impossible at Level 1
 - GRS kills player in 4 hits
 - Player has no skills, low damage, weak weapon
 - **Guarantees tutorial death mechanic**
@@ -149,29 +148,24 @@
 
 ### Enemy Composition
 
-| Enemy Type          | Count | HP  | AD  | MS  | XP  | Notes                   |
-|---------------------|-------|-----|-----|-----|-----|-------------------------|
-| **No-Weapon**       | 29    | 48  | 7   | 2.5 | 12  | Tougher collision       |
-| **With-Weapon**     | 19    | 290 | 13  | 2.0 | 22  | Elite guards            |
-| **CamouflageRed**   | 1     | 483 | 18  | 1.8 | 183 | Mini-boss               |
-| **GiantRaccoon**    | 1     | 966 | 22  | 1.6 | 183 | Boss, drops Lance       |
+| Enemy Type          | Count | HP  | AD  | MS  | XP  | Total XP | Notes                   |
+|---------------------|-------|-----|-----|-----|-----|----------|-------------------------|
+| **No-Weapon**       | 29    | 48  | 7   | 2.5 | 12  | 348      | Tougher collision       |
+| **With-Weapon**     | 19    | 290 | 13  | 2.0 | 22  | 418      | Elite guards            |
+| **CamouflageRed**   | 1     | 400 | 18  | 1.8 | 183 | 183      | Mini-boss               |
+| **GiantRaccoon**    | 1     | 800 | 22  | 1.6 | 183 | 183      | Boss, drops Lance       |
 
 **Total XP:** 1,110 (348 + 418 + 366) → Level 7 → 14 (26 SP, 47% coverage)  
-**Player @ Lvl 7:** ~125 HP, 9 AD (MaxHP 2/5 + AD 2/5), Katana (AD 2)
+**Player @ Lvl 7:** ~130 HP, 11 AD (MaxHP 2/5 + AD 3/5), Katana (AD 3)
 
 ### Hits-to-Kill (Player AD=11, Lance best weapon, 3 hits = 1 combo)
 
-**Katana Combo:** (11+2) × 4.4 = **57.2 per combo**  
-**Lance Combo:** (11+6) × (1.2 + 1.5 + 2.0) = 17 × 4.7 = **79.9 per combo**  
-**Bow Combo:** (11+1) × 4.2 = **50.4 per combo**  
-**Shuriken Combo:** (11+1) × 4.2 = **50.4 per combo**
-
-| Weapon   | No-Weapon (48 HP) | With-Weapon (290 HP) | Red (483 HP)     | Raccoon (966 HP)      |
-|----------|-------------------|----------------------|------------------|-----------------------|
-| Katana   | 9 hits (3 combos) | 15 hits (5 combos)   | 26 hits (9 combos)  | 51 hits (17 combos)|
-| Lance    | 6 hits (2 combos) | 11 hits (4 combos)   | 19 hits (7 combos)  | 37 hits (13 combos)|
-| Bow      | 9 hits (3 combos) | 18 hits (6 combos)   | 29 hits (10 combos) | 58 hits (20 combos)|
-| Shuriken | 9 hits (3 combos) | 18 hits (6 combos)   | 29 hits (10 combos) | 58 hits (20 combos)|
+| Weapon   | Combo<br>Damage | No-Weapon<br>(48 HP) | With-Weapon<br>(290 HP) | Red<br>(400 HP) | Raccoon<br>(800 HP) |
+|----------|-----------------|----------------------|-------------------------|-----------------|---------------------|
+| Katana   | 70.0            | 7 hits (3 combos)    | 13 hits (5 combos)      | 18 hits (6 combos) | 35 hits (12 combos)|
+| Lance    | 79.9            | 6 hits (2 combos)    | 11 hits (4 combos)      | 15 hits (5 combos) | 31 hits (11 combos)|
+| Bow      | 21.0            | 48 hits (48 shots)   | 290 hits (290 shots)    | 400 hits (400 shots)| 800 hits (800 shots)|
+| Shuriken | 31.0            | 48 hits (48 throws)  | 290 hits (290 throws)   | 400 hits (400 throws)| 800 hits (800 throws)|
 
 **Enemy Threat:** No-Weapon (18 hits), With-Weapon (10 hits), Red (7 hits), Raccoon (6 hits)
 
@@ -184,47 +178,42 @@
 
 ### Enemy Composition
 
-| Enemy Type          | Count | HP    | AD  | MS  | XP  | Notes                   |
-|---------------------|-------|-------|-----|-----|-----|-------------------------|
-| **No-Weapon**       | 8     | 66    | 10  | 2.5 | 8   | Elite collision         |
-| **With-Weapon**     | 39    | 495   | 16  | 2.0 | 18  | Elite guards            |
-| **CamouflageGreen** | 1     | 825   | 15  | 1.8 | 75  | Easy mini-boss          |
-| **CamouflageRed**   | 1     | 825   | 20  | 1.8 | 75  | Easy mini-boss          |
-| **GiantSlime2**     | 1     | 1,650 | 25  | 1.5 | 250 | Mini-boss, drops Axe    |
-| **GRS (Final)**     | 1     | 2,475 | 25  | 1.5 | 240 | Final boss (beatable!)  |
+| Enemy Type          | Count | HP    | AD  | MS  | XP   | Total XP | Notes                   |
+|---------------------|-------|-------|-----|-----|------|----------|-------------------------|
+| **No-Weapon**       | 8     | 66    | 10  | 2.5 | 18   | 144      | Elite collision         |
+| **With-Weapon**     | 18    | 495   | 16  | 2.0 | 35   | 630      | Elite guards            |
+| **CamouflageGreen** | 1     | 600   | 15  | 1.8 | 75   | 75       | Easy mini-boss          |
+| **CamouflageRed**   | 1     | 600   | 20  | 1.8 | 75   | 75       | Easy mini-boss          |
+| **GiantSlime2**     | 1     | 1,200 | 25  | 1.5 | 250  | 250      | Mini-boss, drops Axe    |
+| **GRS (Final)**     | 1     | 2,000 | 25  | 1.5 | 1000 | 1000     | Final boss (beatable!)  |
 
-**Total XP:** 1,350 (64 + 702 + 75 + 75 + 250 + 240) → Level 14 → 23 (44 SP at Lvl 21)  
-**Player @ Lvl 14:** ~150 HP, 13 AD (MaxHP 4/5 + AD 4/5), Lance (AD 6), 26 SP
+**Total XP:** 2,174 (144 + 630 + 75 + 75 + 250 + 1000) → Level 14 → 25+ (50+ SP at Lvl 25)  
+**GRS XP:** 1000 (awarded after ending UI, game complete!)  
+**Player @ Lvl 14:** ~160 HP, 13 AD (MaxHP 4/5 + AD 4/5), Lance (AD 6), 26 SP
 
 ### Hits-to-Kill (Player AD=15 at Level 21, Axe best weapon, 3 hits = 1 combo)
 
-**Katana Combo:** (15+2) × 4.4 = **74.8 per combo**  
-**Lance Combo:** (15+6) × 4.7 = **98.7 per combo**  
-**Bow Combo:** (15+1) × 4.2 = **67.2 per combo**  
-**Shuriken Combo:** (15+1) × 4.2 = **67.2 per combo**  
-**Axe Combo:** (15+10) × (1.2 + 1.5 + 1.0) = 25 × 3.7 = **92.5 per combo**
-
-| Weapon   | No-Weapon (66 HP) | With-Weapon (495 HP) | Green (825 HP)     | Red (825 HP)       | Slime2 (1,650 HP)   | GRS (2,475 HP)      |
-|----------|-------------------|----------------------|--------------------|--------------------|---------------------|---------------------|
-| Katana   | 9 hits (3 combos) | 20 hits (7 combos)   | 34 hits (12 combos)| 34 hits (12 combos)| 67 hits (23 combos) | 100 hits (34 combos)|
-| Lance    | 7 hits (3 combos) | 15 hits (5 combos)   | 26 hits (9 combos) | 26 hits (9 combos) | 51 hits (17 combos) | 76 hits (26 combos) |
-| Bow      | 10 hits (4 combos)| 22 hits (8 combos)   | 37 hits (13 combos)| 37 hits (13 combos)| 74 hits (25 combos) | 111 hits (37 combos)|
-| Shuriken | 10 hits (4 combos)| 22 hits (8 combos)   | 37 hits (13 combos)| 37 hits (13 combos)| 74 hits (25 combos) | 111 hits (37 combos)|
-| Axe      | 8 hits (3 combos) | 16 hits (6 combos)   | 27 hits (9 combos) | 27 hits (9 combos) | 54 hits (18 combos) | 81 hits (27 combos) |
+| Weapon   | Combo<br>Damage | No-Weapon<br>(66 HP) | With-Weapon<br>(495 HP) | Green<br>(600 HP) | Red<br>(600 HP) | Slime2<br>(1,200 HP) | GRS<br>(2,000 HP) |
+|----------|-----------------|----------------------|-------------------------|-------------------|-----------------|----------------------|-------------------|
+| Katana   | 90.0            | 8 hits (3 combos)    | 17 hits (6 combos)      | 20 hits (7 combos)| 20 hits (7 combos)| 40 hits (14 combos)| 67 hits (23 combos)|
+| Lance    | 98.7            | 7 hits (3 combos)    | 15 hits (5 combos)      | 19 hits (7 combos)| 19 hits (7 combos)| 37 hits (13 combos)| 61 hits (21 combos)|
+| Bow      | 25.0            | 66 hits (66 shots)   | 495 hits (495 shots)    | 600 hits (600 shots)| 600 hits (600 shots)| 1,200 hits (1,200 shots)| 2,000 hits (2,000 shots)|
+| Shuriken | 35.0            | 66 hits (66 throws)  | 495 hits (495 throws)   | 600 hits (600 throws)| 600 hits (600 throws)| 1,200 hits (1,200 throws)| 2,000 hits (2,000 throws)|
+| Axe      | 110.0           | 6 hits (2 combos)    | 14 hits (5 combos)      | 17 hits (6 combos)| 17 hits (6 combos)| 33 hits (11 combos)| 55 hits (19 combos)|
 
 **Enemy Threat:** No-Weapon (18 hits), With-Weapon (11 hits), Green (12 hits), Red (9 hits), Slime2 (7 hits), **GRS (7 hits)**
 
-**Boss Gauntlet:** Green (9 combos) → Red (9 combos) → Slime2 (18 combos, get Axe) → GRS (27 combos, final)
+**Boss Gauntlet:** Green (6 combos) → Red (6 combos) → Slime2 (11 combos, get Axe) → GRS (19 combos, final)
 
-**Enemy Distribution:** 8 No-Weapon + 39 With-Weapon + 2 Easy Mini + 1 Slime2 + 1 GRS = 51 total
+**Enemy Distribution:** 8 No-Weapon + 18 With-Weapon + 2 Easy Mini + 1 Slime2 + 1 GRS = 30 total
 
 **Why GRS is Now Beatable:**
 - Player AD: 5 → 15 (+200%)
-- Player HP: 100 → 175 (+75%)
+- Player HP: 100 → 200 (+100%)
 - Player has 50 AR, 25% lifesteal
-- Axe combo: 92.5 damage vs Katana: 30.8 damage (Level 1)
-- Only needs 27 Axe combos (81 hits) vs 81 Katana combos (241 hits) at Level 1
-- **GRS has SAME STATS both encounters (2,475 HP, 25 AD) - impossible at L1, beatable at L21**
+- Axe combo: 110.0 damage vs Katana: 40.0 damage (Level 1)
+- Only needs 19 Axe combos (55 hits) vs 50 Katana combos (150 hits) at Level 1
+- **GRS has SAME STATS both encounters (2,000 HP, 25 AD) - impossible at L1, beatable at L21**
 
 ---
 
@@ -233,33 +222,35 @@
 | Metric           | Level 1 | Level 2 | Level 3 | Total  |
 |------------------|---------|---------|---------|--------|
 | No-Weapon        | 6       | 29      | 8       | 43     |
-| With-Weapon      | 6       | 19      | 39      | 64     |
+| With-Weapon      | 6       | 19      | 18      | 43     |
 | Mini-Bosses      | 1       | 2       | 3       | 6      |
 | Final Boss       | 1 (fake)| 0       | 1 (real)| 1      |
-| **Total Enemies**| **14**  | **50**  | **51**  | **115**|
-| **XP Available** | **790** |**1,110**|**1,350**|**3,250**|
-| **Player Level** | 1 → 7   | 7 → 14  | 14 → 23 | 1 → 23 |
-| **SP Gained**    | 12      | 14      | 18      | 44     |
+| **Total Enemies**| **14**  | **50**  | **30**  | **94** |
+| **XP Available** | **790** |**1,110**|**2,174**|**4,074**|
+| **Player Level** | 1 → 7   | 7 → 14  | 14 → 25+| 1 → 25+|
+| **SP Gained**    | 12      | 14      | 22+     | 48+    |
 
 ### Player Power Curve
 
 | Level | HP  | AD | Weapon | SP | Key Stats                             | Combo Damage |
 |-------|-----|----|--------|----|---------------------------------------|--------------|
-| 1     | 100 | 5  | Katana | 0  | Base stats                            | 30.8         |
-| 7     | 125 | 11 | Lance  | 12 | +25 HP, +6 AD, +10% lifesteal         | 79.9         |
-| 14    | 150 | 13 | Axe    | 26 | +50 HP, +8 AD, +20% lifesteal, +30 AR | 85.1         |
-| 21    | 175 | 15 | Axe    | 44 | +75 HP, +10 AD, +25% lifesteal, +50 AR| 92.5         |
+| 1     | 100 | 5  | Katana | 0  | Base stats                            | 40.0         |
+| 7     | 140 | 11 | Lance  | 12 | +40 HP, +6 AD, +10% lifesteal         | 79.9         |
+| 14    | 180 | 13 | Axe    | 26 | +80 HP, +8 AD, +20% lifesteal, +30 AR | 101.2        |
+| 21    | 200 | 15 | Axe    | 44 | +100 HP, +10 AD, +25% lifesteal, +50 AR| 110.0       |
+| 25+   | 200 | 15 | Axe    | 50+| Max skills                            | 110.0        |
 
 ### GRS Boss Evolution
 
 | Stat      | Level 1 (Tutorial)   | Level 3 (Final)      | Change               |
 |-----------|----------------------|----------------------|----------------------|
-| HP        | 2,475                | 2,475                | **IDENTICAL STATS**  |
+| HP        | 2,000                | 2,000                | **IDENTICAL STATS**  |
 | AD        | 25                   | 25                   | **IDENTICAL STATS**  |
-| Threat    | 4-shots player       | 7-shots player       | Player much tankier  |
-| Player    | 5 AD, Katana, 0 SP   | 15 AD, Axe, 44 SP    | 3x AD, 3x combo dmg  |
-| Hits      | 241 hits (81 combos) | 81 hits (27 combos)  | 67% fewer combos     |
+| Threat    | 4-shots player       | 8-shots player       | Player much tankier  |
+| Player    | 5 AD, Katana, 0 SP   | 15 AD, Axe, 44 SP    | 3x AD, 2.75x combo dmg|
+| Hits      | 150 hits (50 combos) | 55 hits (19 combos)  | 62% fewer combos     |
 | Result    | **GUARANTEED LOSS**  | Skill-based victory  | Same boss, stronger player|
+| Reward    | 0 XP (tutorial death)| 1000 XP (game complete!)| Massive XP reward |
 
 ---
 

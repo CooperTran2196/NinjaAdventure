@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LocationSO", menuName = "Dialogue/LocationSO")]
+[CreateAssetMenu(fileName = "LocationSO", menuName = "Dialog/LocationSO")]
 public class D_LocationSO : ScriptableObject
 {
     [Header("Unique ID for this location")]

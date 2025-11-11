@@ -52,10 +52,20 @@ MonoBehaviour:
   d_HistoryTracker: {fileID: 0}
   shop_Manager: {fileID: 0}
   inv_ItemInfo: {fileID: 0}
-  audioSource: {fileID: 8894136543161484865}
+  musicSource: {fileID: 8894136543161484865}
   initialSceneName: Level0
   initialSpawnId: Start
+  SceneAfterTuto: Level2
+  PosAfterTuto: PosAfterTuto
+  DeathAnimDur: 1.5
+  gameOverDelay: 2
   fadeDuration: 3
+  hasResurrection: 1
+  resurrectionDeathAnimDur: 1.5
+  resurrectionClipLength: 11
+  currentDifficulty: 0
+  easyBonusSkillPoints: 10
+  easyBonusItem: {fileID: 11400000, guid: f34f57984abf0e04c86f415f7699fdaf, type: 2}
   persistentObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -128,6 +138,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d579f2e19bf3ca54c8994ed37c10e948, type: 3}
   - {fileID: 8300000, guid: deb418023aab0d4419d342b9da27586d, type: 3}
   - {fileID: 8300000, guid: 5cc8881624eeb5848b7220de446809af, type: 3}
+  resurrectionSFX: {fileID: 8300000, guid: fecb6ffdb76a6804189ecce522bc64bc, type: 3}
   masterVolume: 0.8
   combatVolume: 1
   uiVolume: 0.8

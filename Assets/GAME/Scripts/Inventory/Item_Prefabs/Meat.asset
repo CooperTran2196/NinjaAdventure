@@ -23,11 +23,11 @@ MonoBehaviour:
   unlocksSkill: 0
   skillIDToUnlock: 
   StatEffectList:
-  - statName: 15
-    Value: 5
-    Duration: 5
-    IsOverTime: 1
   - statName: 16
-    Value: 2
-    Duration: 5
+    Value: 5
+    Duration: 10
+    IsOverTime: 1
+  - statName: 17
+    Value: 3
+    Duration: 10
     IsOverTime: 1
