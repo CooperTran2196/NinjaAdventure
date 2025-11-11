@@ -1,0 +1,41 @@
+Title: Development of a 2D Top-Down Action RPG in Unity
+
+Author: Cuong Tran
+
+---
+
+Abstract
+
+Keywords: 2D Game, Unity, Top-Down RPG, Game Development, Artificial Intelligence, State Machine, Inventory, Skill Tree, Ultimate System
+
+I. Introduction
+
+II. Literature Review
+
+III. Game Design and Architecture
+
+IV. System Implementation
+A. Project Structure and Tools
+B. Core Systems
+C. Artificial Intelligence
+D. Combat and Skills
+E. Inventory and Loot
+F. User Interface and Experience
+   - Health/Mana and stats UI
+   - Inventory UI
+   - Dialog system
+   - Shop interface
+   - Skill tree and upgrade UI
+G. Scene Management and Persistence
+
+V. Results and Discussion
+
+VI. Limitations and Future Work
+
+VII. Conclusion
+
+References
+
+Appendix (if needed)
+
+[Note: Insert images/screenshots in relevant sections during MS Office formatting.]
