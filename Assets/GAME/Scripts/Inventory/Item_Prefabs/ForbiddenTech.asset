@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ForbiddenTech
   m_EditorClassIdentifier: Assembly-CSharp::I_ItemSO
   id: forbiddentech
-  itemName: Kunai
-  description: Light throwing blade
+  itemName: ForbiddenTech
+  description: forbidden technique!!!
   image: {fileID: 21300000, guid: e2bf0ad6d6d94404589b68fa9393f9ae, type: 3}
   stackSize: 1
   price: 100
@@ -31,15 +31,11 @@ MonoBehaviour:
     Value: 100
     Duration: 0
     IsOverTime: 0
-  - statName: 4
-    Value: 1
-    Duration: 0
-    IsOverTime: 0
-  - statName: 4
+  - statName: 17
     Value: 100
     Duration: 0
     IsOverTime: 0
   - statName: 17
-    Value: 100
-    Duration: 0
+    Value: 50
+    Duration: 1
     IsOverTime: 0

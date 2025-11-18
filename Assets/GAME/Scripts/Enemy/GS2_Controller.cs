@@ -107,10 +107,12 @@ public class GS2_Controller : MonoBehaviour, I_Controller
         var colliders = GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders) col.enabled = false;
 
+        // Play death animation AND fade simultaneously
         anim.SetTrigger("Die");
-
-        yield return new WaitForSeconds(1.5f);
-        yield return StartCoroutine(c_FX.FadeOut());
+        StartCoroutine(c_FX.FadeOut());
+        
+        // Wait for fade to complete
+        yield return new WaitForSeconds(c_FX.deathFadeTime);
 
         Destroy(gameObject);
     }
@@ -329,6 +331,7 @@ public class GS2_Controller : MonoBehaviour, I_Controller
         if (!playerHealth || !playerHealth.IsAlive) return;
 
         playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+        SYS_GameManager.Instance.sys_SoundManager.PlayPlayerHit();
         contactTimer = c_Stats.collisionTick;
     }
 

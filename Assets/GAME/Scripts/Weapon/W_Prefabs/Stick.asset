@@ -18,21 +18,21 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
   image: {fileID: 21300000, guid: f0b34333fa9730240987201a5418895c, type: 3}
   offsetRadius: 0.3
-  AD: 1
+  AD: 0
   AP: 0
-  knockbackForce: 3
+  knockbackForce: 2
   thrustDistance: 0.5
-  maxAttackSpeed: 3
+  maxAttackSpeed: 0
   onlyThrustKnocksBack: 1
   slashArcDegrees: 60
   comboShowTimes:
-  - 0.3
-  - 0.3
-  - 0.2
+  - 0.45
+  - 0.45
+  - 0.45
   comboDamageMultipliers:
   - 1
-  - 1.2
-  - 2
+  - 1
+  - 1
   comboMovePenalties:
   - 0.6
   - 0.5

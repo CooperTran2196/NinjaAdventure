@@ -575,11 +575,11 @@ MonoBehaviour:
   AP: 0
   MS: 5
   maxHP: 100
-  currentHP: 1
+  currentHP: 100
   AR: 0
   MR: 0
-  maxMP: 100
-  currentMP: 100
+  maxMP: 50
+  currentMP: 50
   KR: 10
   lifesteal: 0
   armorPen: 0
@@ -648,7 +648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::P_Exp
   level: 1
   currentExp: 0
-  skillPoints: 50
+  skillPoints: 0
   totalKills: 0
   playTime: 0
   xpBase: 60

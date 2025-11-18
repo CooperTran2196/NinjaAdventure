@@ -16,8 +16,8 @@ MonoBehaviour:
   itemName: Calamari
   description: Chewy ninja fuel.
   image: {fileID: 21300000, guid: 27638683c5d3bd34da30be1c561d2207, type: 3}
-  stackSize: 3
-  price: 1
+  stackSize: 5
+  price: 5
   itemTier: 1
   isGold: 0
   unlocksSkill: 0

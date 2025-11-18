@@ -17,7 +17,7 @@ MonoBehaviour:
   description: All your Ninja is asking for.
   image: {fileID: 21300000, guid: 132729c9fadf54e4f9fc9c49bd2faeab, type: 3}
   stackSize: 3
-  price: 1
+  price: 25
   itemTier: 2
   isGold: 0
   unlocksSkill: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
   - statName: 3
     Value: 10
     Duration: 0
-    IsOverTime: 0
+    IsOverTime: 1
   - statName: 4
     Value: 10
     Duration: 0

@@ -88,11 +88,19 @@ public class E_Controller : MonoBehaviour, I_Controller
     
     IEnumerator HandleDeath()
     {
-        // Play death animation
-        yield return new WaitForSeconds(1.5f);
+        desiredVelocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+
+        // Disable all colliders immediately (allows player to pass through)
+        var colliders = GetComponentsInChildren<Collider2D>();
+        foreach (var col in colliders) col.enabled = false;
+
+        // Play death animation AND fade simultaneously
+        anim.SetTrigger("Die");
+        StartCoroutine(c_FX.FadeOut());
         
-        // Fade out sprite
-        yield return StartCoroutine(c_FX.FadeOut());
+        // Wait for fade to complete
+        yield return new WaitForSeconds(c_FX.deathFadeTime);
         
         // Destroy enemy
         Destroy(gameObject);
@@ -230,6 +238,7 @@ public class E_Controller : MonoBehaviour, I_Controller
         if (!playerHealth.IsAlive) return;
 
         playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+        SYS_GameManager.Instance.sys_SoundManager.PlayPlayerHit();
         contactTimer = c_Stats.collisionTick;
     }
 

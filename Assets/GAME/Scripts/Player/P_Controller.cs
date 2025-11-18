@@ -266,7 +266,11 @@ public class P_Controller : MonoBehaviour
     // Initiates attack without disabling movement state (allows attack while moving)
     void TriggerAttack()
     {
-        if (currentWeapon == null) return;
+        if (currentWeapon == null || currentWeapon.weaponData == null)
+        {
+            Debug.LogWarning("Cannot attack: weapon or weaponData is null");
+            return;
+        }
         
         currentState   = PState.Attack;
         attack.enabled = true;

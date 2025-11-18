@@ -72,6 +72,15 @@ public class P_State_Attack : MonoBehaviour
     // Attack with weapon and direction (called by controller)
     public void Attack(W_Base activeWeapon, Vector2 attackDir)
     {
+        // Validate weapon and weaponData before starting attack
+        if (activeWeapon == null || activeWeapon.weaponData == null)
+        {
+            Debug.LogError("P_State_Attack: Cannot attack with null weapon or weaponData");
+            controller.SetAttacking(false);
+            enabled = false;
+            return;
+        }
+        
         this.activeWeapon = activeWeapon;
         this.attackDir    = attackDir;
 

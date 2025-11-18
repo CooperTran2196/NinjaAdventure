@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Emergency kit - patch up fast, back to the fight.
   image: {fileID: 21300000, guid: 6d9248d3f4b4e484cbbfcf156bed6df8, type: 3}
   stackSize: 3
-  price: 1
+  price: 20
   itemTier: 2
   isGold: 0
   unlocksSkill: 0
@@ -26,4 +26,4 @@ MonoBehaviour:
   - statName: 16
     Value: 5
     Duration: 20
-    IsOverTime: 0
+    IsOverTime: 1

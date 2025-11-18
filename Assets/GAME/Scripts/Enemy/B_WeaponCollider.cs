@@ -87,6 +87,7 @@ public class B_WeaponCollider : MonoBehaviour
         }
 
         playerHealth.ChangeHealth(-c_Stats.collisionDamage);
+        SYS_GameManager.Instance.sys_SoundManager.PlayPlayerHit();
         contactTimer = c_Stats.collisionTick;
     }
 

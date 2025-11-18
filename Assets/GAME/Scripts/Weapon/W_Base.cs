@@ -55,7 +55,7 @@ public abstract class W_Base : MonoBehaviour
         if (!owner)         Debug.LogError($"{name}: owner is missing in W_Base",this);
         if (!ownerAnimator) Debug.LogError($"{name}: ownerAnimator is missing in W_Base",this);
         if (!c_Stats)       Debug.LogError($"{name}: C_Stats is missing in W_Base",this);
-        if (!weaponData)    Debug.LogError($"{name}: weaponData is missing in W_Base", this);
+        if (!weaponData)    Debug.LogWarning($"{name}: weaponData is missing in W_Base (weapon will be unusable)", this);
 
         // Visual + hitbox auto-sizing
         if (weaponData && sprite) sprite.sprite = weaponData.sprite;

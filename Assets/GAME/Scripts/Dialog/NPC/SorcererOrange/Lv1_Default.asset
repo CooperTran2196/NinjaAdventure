@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
-    text: I hope you find something usefull.
+    text: I hope you find something usefull. (Press P to open the SHOP)
   optionList: []
   requiredNPCs: []
   requiredLocations: []
