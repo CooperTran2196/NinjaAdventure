@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 743731207999903014}
   - component: {fileID: 469408150768936824}
   - component: {fileID: 8725669562343860701}
+  - component: {fileID: 6453688356154761122}
   m_Layer: 5
   m_Name: ST/Stats Toggle
   m_TagString: Untagged
@@ -338,6 +339,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 5
+--- !u!114 &6453688356154761122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646548037345351295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 673051e5c49f4488b80edce6fa9f97ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillsAndStatsToggle
+  buttonImage: {fileID: 3348491751936115227}
+  p_Exp: {fileID: 0}
+  blinkSpeed: 0.8
+  minAlpha: 0.1
+  maxAlpha: 1
 --- !u!1 &1803761875416576288
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,7 +676,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2b21fa211dcce5c4db12daf9bcd3f4f9, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1019,8 +1037,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028edcc3b13e54a22a8a45e386b8b266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponUI
-  weaponSlot: 1
   weaponImage: {fileID: 5838829575915894200}
+  weaponSlot: 1
 --- !u!1 &4777248955801980608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,8 +1414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028edcc3b13e54a22a8a45e386b8b266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponUI
-  weaponSlot: 0
   weaponImage: {fileID: 4410482048838265231}
+  weaponSlot: 0
 --- !u!1 &6731376490591571348
 GameObject:
   m_ObjectHideFlags: 0

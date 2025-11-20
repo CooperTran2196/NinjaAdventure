@@ -350,11 +350,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b281a76158b8e4d18b49b21dfa2ae284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::INV_InventoryManager
-  p_statsManager: {fileID: 0}
   goldText: {fileID: 8632192411640450327}
   lootPrefab: {fileID: 1737156473391923313, guid: 0536293144b9d4f40bba8bb8dd02b23f, type: 3}
   player: {fileID: 0}
-  gold: 20
+  gold: 0
   inv_Slots:
   - {fileID: 2540425418384919651}
   - {fileID: 1393733824987577639}

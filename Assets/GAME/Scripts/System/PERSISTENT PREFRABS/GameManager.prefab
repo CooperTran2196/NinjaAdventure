@@ -60,7 +60,7 @@ MonoBehaviour:
   DeathAnimDur: 1.5
   gameOverDelay: 2
   fadeDuration: 3
-  hasResurrection: 1
+  hasResurrection: 0
   resurrectionDeathAnimDur: 1.5
   resurrectionClipLength: 11
   currentDifficulty: 0

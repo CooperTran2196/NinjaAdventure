@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(P_State_Movement))]
 [RequireComponent(typeof(P_State_Attack))]
 [RequireComponent(typeof(P_State_Dodge))]
-
+[RequireComponent(typeof(C_FX))]
 public class P_Controller : MonoBehaviour
 {
     public enum PState { Idle, Move, Attack, Dodge, Dead }

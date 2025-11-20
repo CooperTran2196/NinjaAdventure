@@ -16,6 +16,8 @@ public class SYS_GameManager : MonoBehaviour
     public SHOP_Manager     shop_Manager;
     public INV_ItemInfo     inv_ItemInfo;
     public AudioSource      musicSource;
+    public P_Exp            p_Exp;
+    public INV_Manager      inv_Manager;
     
     EndingUI endingUI;
 
@@ -91,6 +93,9 @@ public class SYS_GameManager : MonoBehaviour
     public void FreshBoot()
     {
         Time.timeScale = 1f;
+
+        // Reset IntroUI static flag so it shows again
+        IntroUI.Reset();
 
         var temp = new GameObject("DDOL_Cleaner");
         DontDestroyOnLoad(temp);
@@ -236,7 +241,7 @@ public class SYS_GameManager : MonoBehaviour
         currentDifficulty = difficulty;
     }
 
-    public void ApplyEasyModeBonuses(P_Exp p_Exp, INV_Manager inv_Manager)
+    public void ApplyEasyModeBonuses()
     {
         if (currentDifficulty != Difficulty.Easy) return;
 

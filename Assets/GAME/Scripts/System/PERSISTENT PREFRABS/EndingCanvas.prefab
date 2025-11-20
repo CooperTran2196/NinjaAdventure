@@ -248,7 +248,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972144022719521616}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -274,8 +274,6 @@ MonoBehaviour:
   timeText: {fileID: 4394165156410186709}
   playerHealth: {fileID: 0}
   finalBossHealth: {fileID: 0}
-  nextSceneName: 
-  gameOverDelay: 2
   playerExp: {fileID: 0}
 --- !u!1 &3652426564312925360
 GameObject:
@@ -514,7 +512,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 300, y: 70}
+  m_CellSize: {x: 400, y: 70}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2

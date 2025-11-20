@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,16 +7,20 @@ public class IntroUI : MonoBehaviour
     [SerializeField] private CanvasGroup cg;
     [SerializeField] private Button      normalButton;
     [SerializeField] private Button      easyButton;
-    [SerializeField] private P_Exp       p_Exp;
-    [SerializeField] private INV_Manager inv_Manager;
 
     static bool hasShown = false;
+
+    // Reset the static flag (called by SYS_GameManager.FreshBoot)
+    public static void Reset()
+    {
+        hasShown = false;
+    }
 
     void Awake()
     {
         cg ??= GetComponent<CanvasGroup>();
         
-        // If already shown, disable this GameObject
+        // If already shown -> disable this GameObject
         if (hasShown)
         {
             gameObject.SetActive(false);
@@ -27,7 +30,6 @@ public class IntroUI : MonoBehaviour
 
     void OnEnable()
     {
-        Time.timeScale    = 0f;
         cg.alpha          = 1f;
         cg.interactable   = true;
         cg.blocksRaycasts = true;
@@ -42,17 +44,16 @@ public class IntroUI : MonoBehaviour
     public void OnEasyClicked()
     {
         SYS_GameManager.Instance.SetDifficulty(Difficulty.Easy);
-        SYS_GameManager.Instance.ApplyEasyModeBonuses(p_Exp, inv_Manager);
+        SYS_GameManager.Instance.ApplyEasyModeBonuses();
         StartGame();
     }
 
     void StartGame()
     {
-        Time.timeScale    = 1f;
         cg.interactable   = false;
         cg.blocksRaycasts = false;
         
-        // Mark as shown and disable
+        // Mark as shown and disable immediately
         hasShown = true;
         gameObject.SetActive(false);
     }

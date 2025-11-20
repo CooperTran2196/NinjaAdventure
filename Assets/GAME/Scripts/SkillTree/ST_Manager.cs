@@ -19,11 +19,6 @@ public class ST_Manager : MonoBehaviour
 
     void Awake()
     {
-        p_Exp                 ??= FindFirstObjectByType<P_Exp>();
-        statsManager          ??= FindFirstObjectByType<P_StatsManager>();
-        skillsCanvas          ??= GetComponent<CanvasGroup>();
-        skillPointsText       ??= GetComponentInChildren<TMP_Text>();
-
         if (!p_Exp)           Debug.LogError("ST_Manager: P_Exp is missing.");
         if (!statsManager)    Debug.LogError("ST_Manager: P_StatsManager is missing.");
         if (!skillsCanvas)    Debug.LogError("ST_Manager: skillsCanvas is missing.");
@@ -32,8 +27,10 @@ public class ST_Manager : MonoBehaviour
         input = new P_InputActions();
         input.UI.ToggleSkillTree.Enable();
 
-        // start closed
-        SetOpen(panelToggle);
+        // Initialize canvas state without calling SetOpen (avoid timeScale change before Start)
+        skillsCanvas.alpha          = 0f;
+        skillsCanvas.interactable   = false;
+        skillsCanvas.blocksRaycasts = false;
     }
 
     void OnEnable()
@@ -64,9 +61,11 @@ public class ST_Manager : MonoBehaviour
     // Initialize skill buttons and UI state
     void Start()
     {
-        foreach (var slot in st_Slots)
+        // Use for loop with index to avoid closure issues in builds
+        for (int i = 0; i < st_Slots.Length; i++)
         {
-            slot.skillButton.onClick.AddListener(() => TryToUpgrade(slot));
+            int index = i; // Capture index
+            st_Slots[i].skillButton.onClick.AddListener(() => TryToUpgrade(st_Slots[index]));
         }
 
         // Initial UI state
@@ -96,6 +95,10 @@ public class ST_Manager : MonoBehaviour
             SYS_GameManager.Instance.sys_SoundManager.PlayOpenSkillTree();
         else
             SYS_GameManager.Instance.sys_SoundManager.PlayClosePanel();
+
+        // Refresh skill points display when opening
+        if (open)
+            HandleSPChanged(p_Exp.skillPoints);
 
         Time.timeScale              = open ? 0f : 1f;
         skillsCanvas.alpha          = open ? 1f : 0f;

@@ -1,1089 +1,199 @@
-Development of a 2D Top-Down Action RPG in Unity
-
-Cuong Tran
-Computer Science Department
-Texas Christian University
-Fort Worth, Texas, USA
-
-================================================================================
-
-ABSTRACT
-
-This paper presents the comprehensive design and implementation of NinjaAdventure, a 2D top-down action role-playing game (RPG) developed in Unity. The project demonstrates modern game development practices through the integration of advanced systems including state-driven character controllers, modular artificial intelligence, sophisticated inventory and loot management, branching dialog, skill progression trees, and ultimate ability systems. The architecture emphasizes clean separation of concerns, modularity, and maintainability while delivering responsive real-time combat and engaging player progression. This work documents the complete development process from initial system design through implementation, testing, and optimization, providing detailed technical insights into each major system. The project serves as both a practical demonstration of industry-standard game development patterns and a comprehensive educational reference for students and developers interested in creating complex 2D games with Unity.
-
-Keywords: 2D Game Development, Unity Engine, Top-Down RPG, Game Architecture, Artificial Intelligence, State Machine Pattern, Controller Pattern, Inventory System, Skill Tree, Combat System, LDtk Level Design
-
-================================================================================
-
-I. INTRODUCTION
-
-A. Background and Motivation
-
-The 2D action role-playing game (RPG) genre has maintained enduring popularity in the video game industry, offering players immersive worlds, strategic combat encounters, and meaningful character progression systems. Classic titles in this genre established fundamental design patterns that continue to influence modern game development. With the accessibility and power of contemporary game engines like Unity, independent developers and small teams can now create feature-rich games with production quality previously limited to large studios.
-
-NinjaAdventure represents a complete 2D action RPG built from the ground up using Unity 2023, demonstrating the implementation of professional-grade systems and architecture patterns. The project integrates real-time combat mechanics, enemy artificial intelligence with state-driven behaviors, comprehensive inventory and equipment management, character progression through skill trees, branching dialog systems, and multiple boss encounters with unique mechanics. The development process spanned approximately twelve weeks, progressing through iterative refinement cycles that gradually built complexity while maintaining code quality and system stability.
-
-B. Project Objectives
-
-The primary objective of this project was to create a complete, playable 2D action RPG that demonstrates mastery of modern game development practices and Unity-specific techniques. Specific goals included:
-
-1. Implementing a robust, extensible controller and state machine architecture that can handle player input, enemy AI, and NPC behaviors through a unified interface
-2. Creating responsive, satisfying combat mechanics with both melee and ranged weapons, incorporating combo systems, dodge mechanics with invincibility frames, and dynamic aiming
-3. Developing modular AI systems for enemies and bosses that support varying complexity levels, from simple chase-and-attack patterns to multi-phase boss behaviors with special attacks
-4. Building comprehensive progression systems including experience gain, leveling, skill trees with prerequisite unlocking, and stat modification
-5. Implementing inventory management with drag-and-drop functionality, item stacking, equipment swapping, and integration with a shop system
-6. Designing intuitive user interfaces for all systems that provide clear feedback and maintain visual consistency
-7. Creating smooth scene transitions with proper data persistence across level changes
-8. Establishing a complete audio system with context-appropriate sound effects and background music
-
-C. Paper Organization
-
-This paper is organized as follows: Section II reviews relevant literature and existing work in 2D game development and Unity-based RPG systems. Section III describes the overall game design philosophy and architectural decisions. Section IV provides detailed technical documentation of each major system implementation, including code structure and design patterns. Section V presents development results, performance analysis, and design reflections. Section VI discusses current limitations and outlines planned future enhancements. Section VII concludes with lessons learned and final observations.
-
-================================================================================
-
-II. LITERATURE REVIEW
-
-The development of 2D action RPGs using Unity builds upon established research in game design patterns, artificial intelligence for games, and user interface design. Several key areas of prior work informed the design decisions for NinjaAdventure.
-
-A. Game Architecture Patterns
-
-Game architecture design has evolved significantly with the increasing complexity of modern games. The Model-View-Controller (MVC) pattern and its variations have become fundamental to organizing game code. The Entity-Component-System (ECS) architecture, popularized by Unity's GameObject-Component model, provides flexibility and modularity by separating data from behavior. For NinjaAdventure, a controller-state pattern was adopted, where controllers manage state transitions and physics, while individual state scripts handle specific behaviors. This pattern is documented in "Game Programming Patterns" and has been successfully applied in numerous commercial Unity projects.
-
-The state machine pattern, particularly Finite State Machines (FSM), provides a robust foundation for managing game entity behaviors. Research in "Development of a 2D Game using Artificial Intelligence in Unity" demonstrates the application of FSM for enemy AI in Unity-based 2D games, showing clear benefits in code organization and behavior predictability. NinjaAdventure extends this approach by implementing a hierarchical state system where player, enemy, and boss controllers share a common interface but maintain specialized state implementations.
-
-B. Combat System Design
-
-Combat mechanics in action RPGs require careful balancing between player agency, challenge, and satisfaction. The implementation of combo systems, as seen in various action games, provides depth while maintaining accessibility. Research on animation-driven combat emphasizes the importance of tight coupling between animation events and gameplay mechanics. NinjaAdventure implements this through Unity's Animation Event system, where weapon activation and damage application are precisely timed with animation frames.
-
-Invincibility frames (i-frames) during dodge actions are a well-established mechanic for giving players defensive options without trivializing combat. The implementation requires careful tuning of dodge distance, speed, cooldown, and i-frame duration to maintain balance. The afterimage visual effect during dodges, implemented through sprite pooling and fade coroutines, provides clear visual feedback that enhances player understanding of game mechanics.
-
-C. Inventory and Loot Systems
-
-Inventory management systems in RPGs must balance complexity with usability. "Infinite Loot Box: A Platform for Simulating Video Game Loot Boxes" explores the psychology and implementation of loot and reward systems in games. While NinjaAdventure does not implement loot boxes specifically, it adopts similar principles for random drop tables and rarity systems. The unified slot architecture supporting both items and weapons reduces UI complexity while maintaining functionality.
-
-The drag-and-drop inventory interface has become standard in PC games, requiring implementation of Unity's event interfaces (IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler). The hotbar quick-access system, mapped to number keys 1-9, provides experienced players with rapid item usage while remaining accessible to newcomers through mouse interaction.
-
-D. Skill Tree and Progression Systems
-
-Character progression through skill trees creates meaningful player choice and customization. Research on skill tree design emphasizes the importance of prerequisite systems that create logical progression paths while preventing overwhelming choice at early levels. NinjaAdventure implements a prerequisite-based skill tree where nodes become unlockable only when all parent skills reach maximum level, ensuring players build foundational abilities before accessing advanced options.
-
-The integration of passive stat bonuses (permanent modifications) and active abilities (ultimate skills with cooldowns) provides variety in player builds. The stat effect system, supporting duration-based modifiers (instant, permanent, and timed effects), allows for flexible implementation of items, skills, and temporary buffs through a unified code path.
-
-E. NPC and Dialog Systems
-
-Non-playable character (NPC) systems in RPGs serve multiple purposes: quest giving, exposition delivery, and world-building. Dialog systems range from simple linear conversations to complex branching narratives with conditional logic. NinjaAdventure implements a ScriptableObject-based dialog system that supports branching through player choice buttons, conditional display based on dialog history, and automatic reward granting upon conversation completion.
-
-The state-based NPC behavior system allows NPCs to transition between idle, wander, and talk states seamlessly, creating believable ambient life while remaining responsive to player interaction. This approach is documented in research on believable NPC behaviors in games, emphasizing the importance of smooth transitions and appropriate context-aware responses.
-
-F. Boss Design and AI
-
-Boss encounters in action games require unique mechanics that distinguish them from regular enemies while remaining fair and learnable. Multi-phase boss fights, where behavior changes based on health thresholds, maintain engagement throughout prolonged encounters. NinjaAdventure implements three distinct boss types: a charger with AoE jump attacks (Giant Raccoon), a melee specialist with double-hit dash combos (Giant Red Samurai), and a summoner with phase-based retreat mechanics (Giant Summoner).
-
-Research on game AI emphasizes the importance of readable behaviors where players can learn patterns through observation and repetition. The implementation of telegraph animations before attacks, clear audio-visual feedback, and consistent timing windows allows players to develop mastery through practice rather than memorization of arbitrary patterns.
-
-================================================================================
-
-III. GAME DESIGN AND ARCHITECTURE
-
-A. Game Concept and Core Mechanics
-
-NinjaAdventure is designed as a single-player, top-down action RPG featuring exploration, real-time combat, and character progression. The player controls a ninja character navigating through interconnected levels, defeating enemies, collecting loot, upgrading abilities, and ultimately confronting powerful bosses. The core gameplay loop consists of:
-
-1. Combat: Engaging enemies using melee and ranged weapons with combo attacks, dodge rolls with i-frames, and special ultimate abilities
-2. Exploration: Discovering new areas, interacting with NPCs, triggering dialogs, and finding secret locations
-3. Progression: Gaining experience from defeated enemies, leveling up to earn skill points, and upgrading stats and abilities through the skill tree
-4. Economy: Collecting gold and items, shopping at NPC vendors, managing limited inventory space, and optimizing equipment loadout
-5. Story: Advancing through dialog conversations, receiving quest objectives, and experiencing narrative progression
-
-The design philosophy emphasizes responsive controls, clear visual feedback, and meaningful player choice. Combat encounters require both strategic planning (equipment selection, skill allocation) and tactical execution (positioning, timing, resource management).
-
-B. Architecture Overview
-
-The project architecture follows a modular, feature-based organization where related scripts are grouped by system (Player, Enemy, Character, Weapon, Inventory, Dialog, SkillTree, UI, System, Environment). This structure facilitates code navigation and reduces coupling between systems.
-
-[Insert Figure 1: High-level system architecture diagram showing relationships between major systems]
-
-The core architectural pattern is a controller-state system where controllers manage state transitions and physics, while state scripts implement specific behaviors. Controllers implement a common interface (I_Controller) that provides methods for setting velocity, knockback, and stun, ensuring consistency across player, enemy, and NPC implementations.
-
-Key architectural decisions include:
-
-1. ScriptableObject-based data architecture: All game data (weapons, items, skills, dialogs) are stored as ScriptableObject assets, providing designer-friendly editing in the Unity Inspector and clean separation between code and content
-2. Event-driven communication: Systems communicate through C# events rather than direct references, reducing coupling and improving modularity
-3. Centralized managers: Singleton managers handle cross-scene concerns (GameManager, SoundManager, scene transitions) while feature-specific managers remain scoped to their systems
-4. Component-based character system: Shared character components (C_Stats, C_Health, C_Mana, C_FX) are reused across player, enemies, and NPCs, reducing code duplication
-
-C. Level Design and World Building
-
-Levels are designed using LDtk, an open-source 2D level editor that exports tilemap data and entity placements to Unity. This workflow allows for rapid iteration on level layouts without requiring Unity Editor rebuilds. Level design follows principles of spatial clarity, enemy placement rhythm, and visual composition to guide player attention and pacing.
-
-The game world consists of three main levels:
-- Level 1 (Tutorial Zone): Introduces basic controls and mechanics with low-threat enemies and explicit instruction dialogs
-- Level 2: Expands combat challenge with varied enemy types, introduces the shop system and skill tree, features the Giant Raccoon miniboss
-- Level 3: Culminates in multi-phase boss encounters (Giant Summoner and Giant Red Samurai) requiring mastery of all mechanics
-
-Scene transitions use trigger volumes that initiate fade-out effects, load target scenes asynchronously, and position the player at designated spawn points. Persistent GameObjects (marked DontDestroyOnLoad) maintain inventory, progression, and audio state across scene changes.
-
-D. Art and Animation Pipeline
-
-Visual assets use a consistent pixel art style sourced from asset packs, with custom modifications and additions as needed. Character sprites are organized in sprite sheets with multiple animation directions (4 or 8 directions depending on character complexity). The animation pipeline follows Unity's Animator Controller system with blend trees for directional movement and state-based transitions for actions (idle, move, attack, dodge, die).
-
-Animation events are placed at critical frames to trigger gameplay effects:
-- Attack animations fire events at the precise frame when weapon hitboxes should activate
-- Footstep sounds trigger during walk cycle mid-points
-- Visual effects (dust clouds, impact flashes) spawn at appropriate timing points
-
-Visual feedback systems enhance player understanding of game state:
-- Damage flash: Entities briefly tint red when taking damage
-- Heal flash: Green tint indicates healing
-- Afterimages: Sprite copies fade out during dodge rolls and boss dashes
-- Health bars: Enemies display floating health bars that update in real-time
-- Hit stop: Brief pause on impact for melee attacks (currently not implemented but planned)
-
-================================================================================
-
-IV. SYSTEM IMPLEMENTATION
-
-A. Project Structure and Tools
-
-The project is organized with the following folder structure:
-- Assets/GAME/Scripts/ - All C# scripts organized by feature
-  - Player/ - Player-specific controllers and states
-  - Enemy/ - Enemy and boss AI scripts
-  - Character/ - Shared character components (Stats, Health, Mana, FX)
-  - Weapon/ - Weapon base classes and specific implementations
-  - Inventory/ - Inventory, loot, and shop systems
-  - Dialog/ - Dialog system and NPC interaction
-  - SkillTree/ - Skill tree management and UI
-  - UI/ - All UI controllers and displays
-  - System/ - Global managers and scene management
-  - Environment/ - Ladders, gates, traps, destructibles
-
-Development tools and technologies:
-- Unity 2023.2 (LTS) - Game engine
-- C# (.NET Standard 2.1) - Programming language
-- Unity Input System - Modern input handling with action maps
-- LDtk 1.5.3 - Level design tool with Unity integration package
-- Visual Studio 2022 - IDE with Unity integration
-- Git - Version control
-
-The Unity Input System replaces the legacy Input Manager with an asset-based configuration (P_InputActions.inputactions) that defines action maps, bindings, and control schemes. Input actions are code-generated as C# classes and instantiated at runtime, providing type-safe access to player inputs.
-
-B. Core Systems
-
-1) Controller and State Pattern
-
-The controller-state pattern forms the foundation of character behavior in NinjaAdventure. This architecture separates concerns: controllers handle physics, state management, and input processing, while states implement specific behaviors.
-
-Controller responsibilities:
-- Managing Rigidbody2D physics and velocity application
-- Processing inputs (player) or AI logic (enemies)
-- Switching between states based on conditions
-- Applying knockback and stun effects
-- Handling death sequences
-
-State responsibilities:
-- Computing desired movement direction and speed
-- Executing attack sequences with proper timing
-- Managing animation parameters
-- Communicating state changes back to controller
-
-The player controller (P_Controller) implements a priority-based input system:
-1. Death: Overrides all inputs, disables control
-2. Dodge: Cancels combos, provides i-frames
-3. Attack: Triggers combo or queues next attack
-4. Movement: Sets velocity, updates facing
-5. Idle: Default state when no input detected
-
-States are implemented as separate MonoBehaviour components that are enabled/disabled by the controller. When a state is enabled, its OnEnable method initializes necessary values and sets animation parameters. When disabled, OnDisable cleans up (stops coroutines, resets flags). This pattern ensures states don't execute logic when inactive and prevents Update methods from running unnecessarily.
-
-The I_Controller interface provides a unified API for external systems (weapons, effects) to interact with any controller:
-```
-public interface I_Controller
-{
-    void SetDesiredVelocity(Vector2 v);
-    void SetKnockback(Vector2 kb);
-    IEnumerator SetStunTime(float duration);
-}
-```
-
-2) Stats, Health, and Mana Management
-
-Character attributes are managed through three core components:
-
-C_Stats: Stores base values and calculates final values after modifiers
-- Base stats: maxHP, maxMP, attackDamage, abilityPower, armor, magicResist, moveSpeed
-- Current stats: currentHP, currentMP
-- Derived stats: attackSpeed, critChance, lifesteal
-- Dodge stats: dodgeSpeed, dodgeDistance, dodgeCooldown
-- Stat modifiers applied by items, skills, and temporary effects
-
-C_Health: Handles damage, healing, and death
-- ApplyDamage method calculates actual damage after armor/penetration
-- Supports flat and percentage-based armor penetration
-- Fires events: OnDamaged, OnHealed, OnDied
-- Provides invincibility flag for dodge i-frames and ultimate abilities
-- Kill method for instant death (used in testing and environmental hazards)
-
-C_Mana: Manages mana consumption for abilities
-- ConsumeMana method returns bool (success/fail) for validation
-- Fires OnManaChanged event for UI updates
-- Supports mana regeneration (currently passive, planned for active regen)
-
-The damage calculation formula implements industry-standard armor mechanics:
-```
-effectiveArmor = armor * (1 - armorPenetrationPercent) - armorPenetrationFlat
-damageReduction = effectiveArmor / (effectiveArmor + 100)
-finalDamage = rawDamage * (1 - damageReduction)
-```
-
-This formula ensures armor provides diminishing returns (no invincibility at high armor values) while allowing penetration stats to maintain effectiveness.
-
-3) Stats Manager and Stat Effects
-
-The P_StatsManager serves as the centralized entry point for all stat modifications, implementing a recalculation system that ensures stat values remain synchronized across all systems.
-
-Stat effect types:
-- Instant: Applied once immediately (healing, mana restoration)
-- Permanent: Added to base stats permanently (skill tree upgrades, equipment)
-- Timed: Applied for duration then removed (buff/debuff items, area effects)
-
-The recalculation flow:
-1. Stat change requested (item used, skill upgraded, timer expired)
-2. Manager recalculates all final stats from base + all active modifiers
-3. If maxHP changed, current HP is clamped to new maximum
-4. Fire OnStatsUpdated event
-5. All UI elements listening to event refresh displays
-
-This architecture prevents desynchronization bugs where different systems have conflicting views of character stats. All stat-affecting systems (inventory, skill tree, dialog rewards) route through the stats manager rather than modifying C_Stats directly.
-
-Over-time healing (heal-over-time effects) is implemented as a timed stat effect with per-second tick logic. The manager tracks active timers and applies healing each second until the duration expires, then fires recalculation to remove the temporary maxHP boost if one was applied.
-
-[Insert Figure 2: State machine diagram showing player states and transitions]
-
-C. Artificial Intelligence
-
-Enemy and boss AI systems in NinjaAdventure are built on the same controller-state foundation as the player, but with AI logic replacing input processing.
-
-1) Regular Enemy AI
-
-Standard enemies use a simple but effective AI system built on detection zones and state-driven behaviors:
-
-State_Idle: Default state when no target detected
-- Sets animator to idle
-- No movement
-
-State_Wander: Ambient movement for visual variety
-- Picks random direction at intervals
-- Walks slowly (60% of normal speed)
-- Returns to idle after duration
-
-State_Chase: Pursuit behavior when player detected
-- Calculates direction to player
-- Moves at full speed
-- Updates facing direction for animation
-- Stops at attackRange distance to maintain spacing
-
-State_Attack: Melee or ranged attack execution
-- Locks facing direction for attack duration
-- Enables weapon hitbox at precise timing (animation event driven)
-- Returns to Chase after attack completes
-- Respects attack cooldown before next attack
-
-Enemy AI decision logic (processed in controller Update):
-```
-if (player in attackRange AND facing correctly AND cooldown ready):
-    TriggerAttack()
-else if (player in detectionRange):
-    SwitchState(Chase)
-else:
-    SwitchState(default wander/idle)
-```
-
-2) Boss AI Systems
-
-Boss encounters feature specialized AI implementations that extend the base enemy pattern with unique mechanics.
-
-Giant Raccoon (GR) - Charger Boss:
-- Normal Attack: Charges at player, dashes with weapon hitbox active
-- Special Attack: Jump animation followed by AoE ground pound with radial knockback
-- Attack selection: Randomly chooses special when in range and cooldown ready
-- Collision damage: Deals contact damage on physics collision (cooldown-gated)
-- Chase pattern: Direct path to player with stopBuffer for positioning
-
-Implementation highlights:
-- Unified attack coroutine handles both normal charge and special jump
-- Dash mechanics use physics prediction: dashSpeed × animationLength = dashDistance
-- AoE damage uses Physics2D.OverlapCircleAll with knockback applied radially from impact point
-- Afterimage system during dash provides visual clarity for player dodging
-
-Giant Red Samurai (GRS) - Melee/Dash Boss:
-- Normal Attack: Weapon-based melee strike
-- Special Attack: Double-hit dash combo (first hit on dash start, second hit after brief gap)
-- Y-Alignment Gate: Must be vertically aligned within threshold (yHardCap = 0.55f) to attack
-- Chase pattern: Horizontal-first movement with Y-axis alignment bias
-- No collision damage (final boss design choice for fairness)
-
-The Y-alignment requirement creates tactical positioning gameplay where the boss must "set up" attacks by moving into proper alignment, telegraphing intentions and giving players reaction windows. The chase state implements a blended movement pattern:
-```
-if (abs(deltaY) > yAlignBand):
-    prioritize vertical alignment (move mostly Y, some X)
-else:
-    prioritize horizontal chase (move mostly X, some Y)
-```
-
-The special attack double-hit combo uses precise timing:
-1. Charge animation (0.5s delay)
-2. Begin dash toward player
-3. Enable weapon hitbox (first hit)
-4. Continue dash for duration
-5. Brief gap (0.14s)
-6. Enable weapon hitbox again (second hit)
-7. End attack, apply cooldown
-
-This creates a dodge-timing challenge where players must avoid both hits or use i-frames strategically.
-
-Giant Summoner (GS2) - Two-Phase Boss:
-- Phase 1 (100% → 20% HP): Aggressive chase, periodic enemy spawning
-- Phase 2 (<20% HP): Defensive retreat behavior, increased spawn frequency
-- No direct attacks: Relies entirely on summoned minions
-- Spawn mechanics: Circular spawn pattern around boss with outward launch velocity
-
-Phase transition logic:
-```
-void CheckPhaseTransition():
-    if (not phase2 yet AND currentHP <= 20% maxHP):
-        trigger emergency spawn (4-5 enemies)
-        set phase2 flag true
-        enter retreat mode
-```
-
-Phase 2 retreat behavior:
-- If player within 4 units: retreat away for 3 seconds
-- After retreat: vulnerable period (2 seconds) before next retreat possible
-- Creates kiting gameplay where player must capitalize on vulnerable windows
-
-Enemy spawn implementation uses circle perimeter math:
-```
-for i in range(spawnCount):
-    angle = (i / spawnCount) × 360°
-    position = boss.position + (sin(angle), cos(angle)) × spawnRadius
-    spawn enemy at position with outward velocity
-```
-
-Spawned enemies are launched with initial force (6f) to create visual impact and prevent immediate clustering.
-
-3) NPC Behaviors
-
-NPCs share the controller-state architecture but implement a different state set:
-
-State_Idle: Standing still, idle animation
-State_Wander: Random movement for ambient life
-State_Talk: Dialog interaction with player
-- Locks NPC facing toward player
-- Disables movement during conversation
-- Restores previous facing direction when dialog ends
-
-NPC interaction is trigger-based: when player enters talk trigger zone, an interaction prompt appears. Pressing the talk key (F) initiates dialog through the Dialog Manager, which handles conversation flow and choice branching.
-
-D. Combat and Skills
-
-1) Weapon System
-
-The weapon system is data-driven through ScriptableObjects (W_SO) that define weapon properties:
-- Sprite and visual data
-- Damage values (attackDamage, abilityPower)
-- Attack timing (attackDuration, hitDelay)
-- Special properties (knockback force, stun duration, pierce count)
-- Weapon-specific settings (thrust distance for melee, projectile speed for ranged)
-
-All weapons derive from W_Base, which provides shared functionality:
-- Attack method: Activates weapon, positions sprite, enables collider
-- ApplyHitEffects: Unified damage application with knockback and stun
-- Polar positioning: Places weapon at angle relative to owner
-- Hit tracking: Prevents multi-hit on same target per attack (melee) or respects pierce count (ranged)
-
-Weapon specializations:
-
-W_Melee: Close-range weapons with collider-based detection
-- Attack activates collider for duration
-- OnTriggerEnter2D calls ApplyHitEffects for each unique target
-- Thrust mechanic: Owner moves forward slightly during attack for range extension
-- Supports combo index for multi-swing patterns
-
-W_Ranged: Projectile-based weapons
-- Attack spawns projectile GameObject with velocity
-- Projectile travels until hitting target or reaching max distance
-- Pierce mechanic: Projectile continues through targets until pierce count exhausted
-- Homing variant: Projectile curves toward nearest enemy after initial straight flight
-
-W_ProjectileHoming: Advanced projectile with three-phase behavior
-- Phase 1: Spawn fade-in (visual polish)
-- Phase 2: Straight flight in spawn direction
-- Phase 3: Homing toward nearest enemy with turn rate limit
-
-The damage application order is consistent across all weapon types:
-1. Calculate damage with armor/penetration
-2. Apply damage to target (C_Health.ApplyDamage)
-3. Calculate lifesteal healing for attacker
-4. Apply knockback to target (controller.SetKnockback)
-5. Apply stun to target (controller.SetStunTime)
-
-This ordering ensures lifesteal triggers on dealt damage (not raw damage) and effects apply after damage confirmation.
-
-2) Combo System
-
-The player attack system supports a three-stage combo that chains attacks when timed correctly:
-
-Combo logic (implemented in P_State_Attack):
-- comboIndex: Current combo stage (0, 1, or 2)
-- comboInputWindow: Time window after attack start during which next input can queue
-- comboWindowTimer: Countdown timer for input window
-- comboInputQueued: Flag indicating player pressed attack during window
-
-Attack flow with combo:
-1. Player presses attack → Attack state enabled, comboIndex = 0
-2. Animation starts, comboWindowTimer begins countdown
-3. If player presses attack while timer > 0: comboInputQueued = true
-4. When attack animation completes:
-   - If comboInputQueued AND comboIndex < 2: increment comboIndex, start next attack
-   - Else: reset comboIndex = 0, return to previous state (move or idle)
-
-The combo system uses Animator layers to blend attack animations smoothly, with transitions timed to match input windows. Each combo stage uses the appropriate attack animation (Attack1, Attack2, Attack3) with increasing damage multipliers.
-
-Combo interruption: Dodge cancels combo immediately (sets comboIndex = 0, comboInputQueued = false) to prioritize defensive actions over offensive commitment.
-
-3) Skill Tree System
-
-The skill tree provides character progression through stat upgrades and ability unlocks. The system is built on ScriptableObject-based skill definitions (ST_SkillSO) that declare:
-- Skill name and icon for UI display
-- Maximum level (1 for binary unlocks, higher for scaling upgrades)
-- Stat effects applied per level (list of P_StatEffect)
-- Prerequisite requirements (which skills must be maxed to unlock this skill)
-- Cost per level (skill points required to upgrade)
-
-Skill types:
-- Stat upgrades: Permanent bonuses to character stats (MaxHP +20, AttackDamage +5)
-- Lifesteal: Percentage of damage dealt returned as healing
-- Ultimate abilities: Active skills with cooldowns (planned system, documented in ULTIMATE_SKILLS_SYSTEM.md)
-
-The ST_Manager coordinates skill tree operation:
-- TryToUpgrade: Validates skill points, prerequisite completion, level cap
-- ApplySkillEffects: Routes stat effects to P_StatsManager for recalculation
-- HandleSkillUpgraded: Updates UI, unlocks dependent skills, deducts skill points
-- HandleSkillMaxed: Enables child skills when prerequisites met
-
-Prerequisite system:
-- Each skill declares prerequisite skill references (List<ST_Slots>)
-- CanUnlock checks if all prerequisites are at maxLevel
-- When skill reaches maxLevel, ST_Manager traverses child skills to enable newly unlocked options
-
-This creates a progression path where foundational skills (tier 1) must be completed before accessing advanced options (tier 2, 3), preventing overwhelming choice while maintaining build variety.
-
-Skill points are earned through leveling (P_Exp component tracks XP and level). Each level grants configurable skill points (default: 2 points per level). The UI displays available skill points and visually indicates which skills are affordable, locked, or maxed.
-
-[Insert Figure 3: Skill tree UI showing prerequisite connections and lock states]
-
-E. Inventory and Loot
-
-1) Inventory System
-
-The inventory is implemented as a 9-slot unified system that holds both items and weapons. Each slot (INV_Slots) tracks:
-- SlotType: Empty, Item, or Weapon
-- itemSO: Reference to INV_ItemSO if slot contains item
-- weaponSO: Reference to W_SO if slot contains weapon
-- quantity: Stack count for items (weapons don't stack)
-
-Core inventory operations:
-
-AddItem(itemSO, quantity): Attempts to stack into existing slots first, then fills empty slots, drops overflow as loot
-- Stacking logic: Find slots with same itemSO not at stackSize limit, add to those first
-- New slot logic: Find first empty slot, set type = Item, initialize with itemSO and quantity
-- Overflow logic: If no space available, spawn loot prefab at player position with remaining quantity
-
-UseItem(slot): Consumes item from inventory and applies effects
-- Validates slot contains item and quantity > 0
-- Routes stat effects to P_StatsManager for application
-- Decrements quantity, updates UI
-- If quantity reaches 0, clears slot (type = Empty)
-
-SetWeapon(slot): Equips weapon from inventory, swaps with currently equipped weapon
-- Validates slot contains weapon
-- Calls P_Controller.SetWeapon with weaponSO
-- Returns previously equipped weapon (or null)
-- Places returned weapon in inventory slot (swap logic)
-- Updates UI to reflect change
-
-DropItem/DropWeapon: Spawns loot prefab at player position
-- Instantiates unified loot prefab (INV_Loot)
-- Initializes with appropriate type and data
-- Removes from inventory, updates UI
-
-2) Loot System
-
-The loot system uses a single prefab (INV_Loot) with a LootType enum (Item, Weapon, Gold) to differentiate drop types. Each loot instance is configured with appropriate ScriptableObject reference and quantity.
-
-Loot pickup flow:
-1. Player enters trigger collider on loot GameObject
-2. INV_Loot fires static event: OnItemLooted(itemSO, quantity) or OnWeaponLooted(weaponSO)
-3. INV_Manager listens to events, routes to AddItem or AddWeapon
-4. If successfully added: play pickup sound, destroy loot GameObject
-5. If inventory full: loot remains on ground for later pickup
-
-Loot drops are triggered by enemy death (E_Reward component):
-- Configurable drop chance (0-100%)
-- Drop table with weighted entries (itemSO or weaponSO, quantity, weight)
-- On death: roll random value, if below chance, select random entry from drop table
-- Instantiate loot prefab at enemy position with slight randomized offset
-
-Gold is handled as special case:
-- Gold loot type adds directly to INV_Manager.gold without consuming inventory space
-- Gold text UI updates immediately
-- Gold pickup plays distinct sound effect for clear feedback
-
-3) Shop System
-
-The shop system enables item purchasing from NPC vendors. Key components:
-
-SHOP_Manager: Controls shop UI and transaction logic
-- PopulateShopItems: Fills shop slots with vendor's item list
-- TryBuyItem: Validates gold and inventory space, processes purchase
-- SellItem: Adds gold, removes item from inventory
-
-SHOP_Keeper: NPC interaction component
-- Defines location-specific item lists (different vendors sell different items)
-- Opens shop UI when player enters trigger and presses interact key
-- Pauses game while shop is open (Time.timeScale = 0)
-- Broadcasts shop open/close events for inventory slot behavior changes
-
-SHOP_Slot: Individual shop item display
-- Shows item icon, name, and price
-- Buy button triggers SHOP_Manager.TryBuyItem
-- Hover displays item info popup with stat effects
-
-Shop-inventory integration:
-- When shop is open: inventory right-click sells items instead of dropping
-- Inventory listens to shop open/close events to switch behavior
-- Weapons cannot be sold (design decision to prevent accidental equipment loss)
-
-The shop interface includes category filtering (Items, Weapons, Armor) though the current implementation focuses on items. The UI provides clear feedback for insufficient gold (grayed out buy button) and full inventory (warning message).
-
-[Insert Figure 4: Shop interface showing item grid, prices, and inventory integration]
-
-F. User Interface and Experience
-
-1) Health/Mana and Stats UI
-
-Character status displays are implemented as event-driven UI components that update only when underlying values change, avoiding per-frame polling.
-
-HealthUI: Displays HP bar and numeric text
-- Listens to C_Health.OnDamaged and C_Health.OnHealed events
-- Updates slider value (currentHP / maxHP) and text ("{current}/{max}")
-- Smooth lerp transition for bar fill (optional, currently instant for clarity)
-
-ManaUI: Displays MP bar and numeric text
-- Listens to C_Mana.OnManaChanged event
-- Updates slider value (currentMP / maxMP) and text
-
-StatsUI: Comprehensive character stat panel
-- Displays all stats from C_Stats (HP, MP, AD, AP, Armor, MagicResist, MS, AS, Crit, Lifesteal)
-- Listens to P_StatsManager.OnStatsUpdated event
-- Toggleable with hotkey (Tab) or UI button
-- Pauses game when open (Time.timeScale = 0)
-
-The event-driven architecture ensures UI updates are synchronized with game state changes without requiring manual update calls. When P_StatsManager recalculates stats, the single OnStatsUpdated event triggers all subscribed UI elements to refresh simultaneously.
-
-2) Inventory UI
-
-The inventory UI implements a grid of 9 slots with drag-and-drop functionality for reorganization.
-
-Slot interactions:
-- Left-click: Use item (applies effects) or equip weapon (swaps with equipped)
-- Right-click: Drop item/weapon (shop closed) or sell item (shop open)
-- Hover (1 second): Display info popup with item description and stat effects
-- Drag: Begin drag operation, display dragged item sprite following cursor
-- Drop on slot: Swap contents with target slot
-- Drop outside UI: Cancel drag, return item to original slot
-
-The drag-and-drop system uses Unity's event interfaces:
-- IBeginDragHandler: Start drag, store original slot reference, show dragged sprite
-- IDragHandler: Update dragged sprite position to follow cursor
-- IEndDragHandler: Complete drag, clear dragged sprite
-- IDropHandler: Handle drop onto slot, swap logic
-
-Hotbar functionality (number keys 1-9) provides quick access:
-- INV_HotbarInput component listens to Input System actions (Hotbar1-9)
-- Maps key presses to inventory slot indices (1 = slot 0, 2 = slot 1, etc.)
-- Triggers UseItem or SetWeapon based on slot contents
-
-Visual feedback:
-- Equipped weapon highlight: Slots containing currently equipped weapons show colored border
-- Empty slots: Transparent background, no icon
-- Item slots: Show item icon, quantity text in corner
-- Weapon slots: Show weapon icon, no quantity (weapons don't stack)
-
-3) Dialog System
-
-The dialog system presents conversations with NPCs through a UI panel with speaker name, dialog text, and optional choice buttons.
-
-Dialog flow:
-1. Player presses talk key (F) near NPC
-2. D_Manager receives D_SO (dialog ScriptableObject) and displays first line
-3. For each line: show speaker name, display text, wait for player input (Space or click)
-4. If dialog has choices: display up to 3 choice buttons with text
-5. Player clicks choice → loads nextDialog from selected D_Option
-6. If no choices: dialog ends, close panel
-7. If dialog has auto-rewards: grant items/weapons through INV_Manager
-
-Dialog system features:
-- Speaker system: D_ActorSO defines NPC name and portrait (portrait not implemented yet)
-- Branching: D_Option defines choice text and next dialog node
-- Conditions: Dialog can check history (D_HistoryTracker) to conditionally show/hide based on previous conversations
-- Rewards: D_AutoReward automatically grants items/weapons when dialog completes
-- One-time dialogs: Flag prevents dialog from repeating after first view
-
-Dialog history tracking:
-- Records which NPCs have been spoken to (by NPC GameObject name)
-- Records which locations have been visited (by D_LocationSO reference)
-- Provides query methods for conditional dialog checks
-
-The dialog UI uses TextMeshPro for text rendering with rich text support (bold, italics, color tags). The panel includes close button (X) and continue indicator (blinking arrow) for clear user guidance.
-
-4) Shop Interface
-
-The shop UI presents a grid of purchasable items with buy buttons, hover information, and category filtering.
-
-Shop UI elements:
-- Shop slots (SHOP_Slot): Display item icon, name, price
-- Buy buttons: Trigger SHOP_Manager.TryBuyItem when clicked
-- Item info popup: Shows item description and effects on hover
-- Category buttons: Filter shop contents by type (not fully implemented)
-- Close button: Exits shop, resumes game
-
-Purchase flow:
-1. SHOP_Keeper populates shop with location-specific item list
-2. Player views items and hovers for details
-3. Player clicks buy button on desired item
-4. SHOP_Manager validates: sufficient gold? AND inventory space available?
-5. If valid: deduct gold, add item to inventory, play sound
-6. If invalid: display message (insufficient gold or full inventory)
-
-Selling flow (from inventory while shop open):
-1. Player right-clicks item in inventory
-2. INV_Slots checks if shop is open (listens to SHOP_Keeper events)
-3. If shop open: call SHOP_Manager.SellItem instead of drop
-4. Manager adds item price to gold, inventory removes item
-
-The shop interface provides immediate visual feedback: gold display updates on purchase, inventory slots highlight when containing sellable items, and audio cues confirm transactions.
-
-5) Skill Tree and Upgrade UI
-
-The skill tree UI visualizes character progression options through a node-based layout with prerequisite connections.
-
-Skill tree elements:
-- Skill nodes (ST_Slots): Display skill icon, name, current level / max level
-- Upgrade button: Attempts upgrade when clicked (if affordable and unlocked)
-- Skill points display: Shows available points at top of panel
-- Prerequisite lines: Visual connections between parent and child skills (not dynamically drawn, part of UI layout)
-
-Skill node states:
-- Locked: Prerequisites not met, grayed out, button disabled
-- Unlocked but unaffordable: Prerequisites met but insufficient skill points, partially grayed
-- Unlocked and affordable: Prerequisites met and points available, full color, button enabled
-- Maxed: At max level, gold border, shows "MAX" instead of level
-
-Upgrade flow:
-1. Player clicks skill node button
-2. ST_Manager.TryToUpgrade validates:
-   - Sufficient skill points?
-   - Prerequisites completed (all parent skills at max level)?
-   - Not already at max level?
-3. If valid:
-   - Increment skill level
-   - Apply stat effects through P_StatsManager
-   - Deduct skill points
-   - Update UI: current level, available points, unlock dependent skills
-   - Play upgrade sound
-4. If invalid: show message indicating reason
-
-The skill tree updates in real-time as skills are upgraded: when a skill reaches max level, child skills unlock (lock icon removed, button enabled) if all other prerequisites are also met. This provides clear visual feedback on progression paths and encourages experimentation with different build orders.
-
-[Insert Figure 5: Skill tree UI with locked, unlocked, and maxed states visible]
-
-G. Scene Management and Persistence
-
-Scene management ensures smooth transitions between levels while maintaining game state across scene changes.
-
-1) Scene Transition System
-
-Scene transitions use a choreographed sequence to avoid jarring cuts:
-
-Transition flow:
-1. Player enters SYS_SceneTeleport trigger volume
-2. Teleporter begins fade-out (SYS_Fader.FadeOut, 0.5 seconds)
-3. During fade: disable player input to prevent movement
-4. When fade complete: call SceneManager.LoadScene(targetScene)
-5. On scene load: player spawns at SYS_SpawnPoint with matching spawn ID
-6. SYS_Fader begins fade-in (0.5 seconds)
-7. Player input re-enabled, gameplay resumes
-
-The fade effect uses a full-screen black Image component with CanvasGroup alpha lerp. During fades, the CanvasGroup blocks raycasts to prevent UI interaction.
-
-Spawn point system:
-- Each scene contains SYS_SpawnPoint GameObjects with unique IDs
-- Teleporter specifies target scene and spawn ID
-- On scene load, SYS_SpawnManager finds matching spawn point and positions player
-- Default spawn point (ID: "Default") used if specified ID not found
-
-This approach supports multiple entry points per scene (e.g., entering from Level 1 vs. fast travel from town).
-
-2) Persistent Managers
-
-Certain GameObjects must persist across scene changes to maintain game state:
-
-Persistent objects (marked DontDestroyOnLoad):
-- GameManager: Centralized access to other managers, handles player death logic
-- SoundManager: Audio source pools, plays SFX and music
-- Player: Character GameObject with all components, inventory, stats, progression
-- Canvas (UI Root): All UI panels to maintain state
-
-Persistence implementation:
-```
-void Awake()
-{
-    if (Instance == null)
-    {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-    else
-    {
-        Destroy(gameObject); // Destroy duplicate from new scene
-    }
-}
-```
-
-This singleton pattern ensures only one instance of each manager exists. When a new scene loads containing a duplicate, the duplicate self-destructs, preserving the original persistent instance.
-
-3) Camera Confinement
-
-The camera follows the player but must remain within level bounds to avoid showing empty space beyond the tilemap.
-
-Camera confinement implementation:
-- Each scene contains an invisible PolygonCollider2D defining level bounds
-- SYS_ConfinerFinder finds this collider on scene load
-- Cinemachine Confiner extension constrains camera position to within collider bounds
-- Camera smoothly damps toward player position while respecting boundaries
-
-This system allows arbitrary level shapes (not just rectangles) and automatically adapts to each scene's layout. The confiner updates immediately on scene load, preventing any camera drift into empty areas during spawn.
-
-================================================================================
-
-V. RESULTS AND DISCUSSION
-
-A. Development Results
-
-The NinjaAdventure project successfully implements a complete, playable 2D action RPG with all planned core systems functional and integrated. Development spanned approximately twelve weeks (late August through mid-November 2024), progressing through seven major weekly milestones:
-
-Week 2-3: Foundation (Player/Enemy movement, basic combat, stats)
-Week 4: Weapon system (Free-aim, melee/ranged, combo)
-Week 5: Skill tree and stat progression
-Week 6: Inventory and shop systems
-Week 7: NPC, dialog, scene transitions
-Week 8-9: Boss AI implementations
-Week 10: Audio system and polish
-Week 11: Boss refinements and optimization
-
-The final build includes:
-- 3 playable levels with distinct environments and enemy configurations
-- 10+ unique enemy types with varying behaviors and stats
-- 3 boss encounters with specialized mechanics
-- 15+ weapons (melee and ranged varieties)
-- 25+ items with stat effects and consumables
-- 12-node skill tree with prerequisite unlocking
-- Complete UI suite for inventory, stats, shop, dialog, skill tree
-- Full audio implementation with 30+ sound effects and background music
-- Smooth scene transitions with persistence across levels
-
-B. Technical Performance
-
-Performance testing on target hardware (Intel i5-12400F, NVIDIA GTX 1660, 16GB RAM) demonstrates stable frame rates throughout gameplay:
-
-- Average FPS: 58-60 (vsync enabled, 60 FPS target)
-- Frame drops: None observed during normal gameplay
-- Load times: < 1 second for scene transitions
-- Memory usage: ~450 MB total, stable (no leaks detected)
-
-The modular architecture contributes to performance stability by minimizing per-frame overhead:
-- Event-driven UI updates avoid redundant recalculations
-- State enable/disable pattern prevents inactive scripts from executing
-- Object pooling for projectiles and afterimages reduces garbage collection pressure
-- Efficient collision detection through layer-based filtering
-
-Profiling reveals the most expensive operations are:
-1. Unity's internal rendering (expected, unavoidable)
-2. Physics2D collision detection (optimized via layer collision matrix)
-3. Animator state machine updates (necessary for animation quality)
-4. UI canvas rebuilds (minimized through event-driven updates)
-
-No custom code appears in top performance bottlenecks, indicating efficient implementation.
-
-C. Gameplay Experience
-
-Informal playtesting with peers provided valuable feedback on game feel and balance:
-
-Positive feedback:
-- Combat feels responsive, dodge timing is satisfying
-- Visual feedback clearly communicates damage, effects, cooldowns
-- UI is intuitive, information is easy to find
-- Boss patterns are learnable, difficulty is fair
-- Progression through skill tree feels meaningful
-
-Areas for improvement:
-- Enemy variety could be greater (more attack patterns, behaviors)
-- Level layouts feel similar, need more environmental diversity
-- Some items are clearly optimal, reducing build variety
-- Tutorial could be more explicit about combo timing
-- Boss difficulty spikes sharply, mid-tier challenge missing
-
-Balancing adjustments were made iteratively:
-- Dodge cooldown increased (0.8s → 1.2s) to prevent spam
-- Boss attack cooldowns tuned for readability (players need time to react)
-- Lifesteal values reduced (was too strong, made player unkillable)
-- Item prices adjusted to create meaningful economic choices
-
-D. Design Reflections
-
-Several key lessons emerged from the development process:
-
-1. State machine architecture scales well: The controller-state pattern proved highly extensible. Adding new enemy types required only implementing new state behaviors, not refactoring core systems. Bosses naturally extended enemy patterns without code duplication.
-
-2. Event-driven communication reduces coupling: Using C# events for system communication (health changes, item pickups, skill upgrades) made systems modular and easier to debug. When issues arose, the event-driven architecture made it clear which system was responsible.
-
-3. ScriptableObjects enable rapid iteration: Storing all game data (weapons, items, skills, dialogs) as ScriptableObject assets allowed balance changes and content additions without touching code. Designers (or the solo developer wearing designer hat) can adjust values in Unity Inspector and see results immediately.
-
-4. Animation-driven combat feels better than frame-perfect timing: Initially, weapon activation used fixed timers. Switching to animation events produced tighter coupling between visuals and mechanics, making attacks feel more responsive and eliminating sync issues.
-
-5. UI feedback is critical for polish: Adding subtle touches (hover delays, sound effects, fade transitions) dramatically improved perceived quality. Players respond to clear visual/audio cues more than numerical accuracy.
-
-6. Boss design benefits from clear telegraphs: Early boss iterations felt unfair because attacks happened too quickly. Adding charge-up animations and clear audio cues before attacks made patterns learnable and fair, even when difficult.
-
-E. Code Quality and Maintainability
-
-The project maintains high code quality standards throughout:
-
-- Consistent naming conventions (prefix system: P_ for Player, E_ for Enemy, etc.)
-- XML documentation comments on all public methods and complex logic
-- RequireComponent attributes ensure component dependencies are met
-- Inspector field validation with Range attributes and header labels
-- Defensive programming with null checks and error logging
-- Event cleanup (subscribe in OnEnable, unsubscribe in OnDisable)
-
-The codebase consists of approximately:
-- 7,500 lines of gameplay code (Player, Enemy, Character, Weapon systems)
-- 4,200 lines of UI code (Inventory, Shop, Dialog, SkillTree)
-- 2,800 lines of management code (System, Scene transitions, Audio)
-- 1,500 lines of environment code (Ladders, Gates, Traps, Destructibles)
-- Total: ~16,000 lines of C# (excluding auto-generated input actions)
-
-Code organization follows consistent patterns:
-- Fields grouped by category with [Header] attributes
-- Methods ordered: Unity lifecycle → public API → private implementation
-- Coroutines clearly named with Routine suffix
-- Event handlers named Handle[EventName] for clarity
-
-[Insert Figure 6: In-game screenshot showing combat encounter with UI elements visible]
-
-================================================================================
-
-VI. LIMITATIONS AND FUTURE WORK
-
-A. Current Limitations
-
-Despite comprehensive implementation of core systems, several features remain incomplete or could be improved:
-
-1) Quest System: Currently, progression is linear (defeat boss, move to next level). A proper quest system would add:
-- Quest log UI tracking active objectives
-- Quest giver NPCs with repeatable tasks
-- Rewards tied to quest completion
-- Side quests for optional content
-
-2) Ultimate Skills: The system architecture is designed (documented in ULTIMATE_SKILLS_SYSTEM.md) but not fully implemented. Planned features include:
-- Active abilities with cooldowns (Dagger Barrage, Divine Intervention)
-- Ultimate-specific UI with cooldown displays
-- Unlock items obtained through quests or dialog
-- Separate animation layer for ultimate effects
-
-3) Save/Load System: Currently, game state resets on application close. A save system would persist:
-- Inventory contents and equipped weapons
-- Character level, skill points, and unlocked skills
-- Dialog history and quest progress
-- Visited locations and defeated bosses
-
-4) Enemy Variety: Current enemies use limited behavior patterns. Additional variety could include:
-- Ranged enemies that maintain distance and fire projectiles
-- Support enemies that buff allies or heal
-- Elite variants with enhanced stats and special attacks
-- Environmental-specific enemies (flying, swimming, climbing)
-
-5) Environmental Interaction: Current environment is mostly static. Planned additions:
-- Pushable blocks for puzzle elements
-- Pressure plates triggering doors or traps
-- Breakable walls revealing secrets
-- Interactive objects (levers, chests, signs)
-
-B. Planned Enhancements
-
-Future development will focus on several key areas:
-
-1) Tutorial System Expansion:
-- Dedicated tutorial level with step-by-step guidance
-- Pop-up tooltips explaining mechanics on first encounter
-- Practice areas with dummy enemies for combo training
-- Gradual introduction of systems (combat → inventory → skills → shop)
-
-2) Boss Encounter Variety:
-- Additional boss types with unique mechanics (ranged boss, swarm boss, puzzle boss)
-- Multi-phase transitions with arena changes
-- Boss telegraphs and attack patterns expansion
-- Optional difficulty modifiers for replay value
-
-3) Visual Polish:
-- Particle effects for ability activations
-- Screen shake and hit stop on critical hits
-- Weather effects and ambient animations
-- Improved lighting with dynamic shadows
-
-4) Audio Refinement:
-- Context-aware music transitions (calm exploration vs. combat intensity)
-- Positional audio for environmental sounds
-- Voice synthesis for dialog (text-to-speech with pitch/speed variation)
-- Adaptive music system responding to player health and situation
-
-5) Accessibility Options:
-- Colorblind modes for UI and effects
-- Adjustable UI scaling and font sizes
-- Rebindable controls with gamepad support
-- Difficulty modes (health scaling, damage adjustments, cooldown modifiers)
-
-C. Long-Term Vision
-
-The long-term vision for NinjaAdventure includes expanding beyond the current scope:
-
-Multiplayer Potential:
-- Local co-op with drop-in/drop-out
-- Shared inventory and quest progress
-- Scaling enemy difficulty based on player count
-- Cooperative boss encounters requiring teamwork
-
-Procedural Generation:
-- Randomized dungeon layouts for replayability
-- Procedural enemy placement based on difficulty curves
-- Random item drops with stat ranges
-- Challenge modes with modifiers and leaderboards
-
-Modding Support:
-- Custom weapon creation tools
-- Dialog editor for user-generated conversations
-- Level editor based on LDtk workflow
-- Script hooks for custom behaviors
-
-These enhancements would transform NinjaAdventure from a learning project into a content-rich, replayable experience suitable for commercial release.
-
-================================================================================
-
-VII. CONCLUSION
-
-The development of NinjaAdventure demonstrates the successful application of modern game development practices to create a complete 2D action RPG in Unity. The project integrates complex systems—state-driven AI, data-driven weapon mechanics, progression through skill trees, comprehensive inventory management, and branching dialog—while maintaining code quality and performance.
-
-Key achievements include:
-
-Technical Execution:
-- Robust controller-state architecture enabling code reuse across player, enemies, bosses, and NPCs
-- Event-driven communication reducing system coupling and improving maintainability
-- ScriptableObject-based data architecture separating code from content
-- Comprehensive UI system with drag-and-drop inventory, real-time stat displays, and clear feedback
-
-Gameplay Design:
-- Responsive combat with satisfying dodge mechanics and combo systems
-- Meaningful progression through skill trees and equipment upgrades
-- Engaging boss encounters with learnable patterns and fair difficulty
-- Clear visual and audio feedback enhancing player understanding
-
-Development Process:
-- Iterative refinement through weekly milestones
-- Consistent code organization and documentation
-- Performance optimization through profiling and architecture decisions
-- Regular playtesting informing balance adjustments
-
-The project serves multiple purposes: as a portfolio piece demonstrating technical competency, as an educational resource documenting implementation details of common game systems, and as a foundation for continued development toward a commercial-quality product.
-
-Personal reflections on the development process highlight the importance of planning architecture early, maintaining code quality throughout development, and iterating based on playtesting feedback. The modular design proved invaluable when adding new features, and the event-driven communication pattern simplified debugging complex interactions between systems.
-
-Future developers undertaking similar projects can learn from this work: invest time in solid architecture before building features, embrace data-driven design for flexibility, and prioritize player feedback over theoretical correctness. Game development is iterative, and maintaining clean, modular code enables that iteration without technical debt accumulation.
-
-NinjaAdventure represents approximately 300 hours of development work over twelve weeks, resulting in a playable, polished experience that demonstrates comprehensive understanding of Unity game development, C# programming, and RPG system design.
-
-================================================================================
-
+Development of a 2D Top-Down Action role-playing game in Unity 
+ 
+Cooper Tran
+Senior Student of Computer Science
+UHD Texas
+Houston, USA
+cuongtran2196@gmail.com
+  
+ 
+ 
+ 
+Abstract—This paper presents the design and development of Ninja Adventure, a 2D top-down action role-playing game (RPG) created using the Unity game engine. The game features a ninja character who battles enemies, collects items, upgrades abilities, and faces powerful bosses. This project demonstrates how to build a complete game with multiple interconnected systems: intelligent enemy behaviors, real-time combat with combos and dodging, inventory management, character progression through skill trees, dialog conversations with NPCs, and boss battles with unique mechanics. The game was developed over approximately twelve weeks, with each week adding new features and refinements. This paper explains how each major system works. The goal is to provide a clear guide that helps other game developers understand how to create similar 2D action RPGs, regardless of their technical background.
+Keywords—2D Game Development, Unity Engine, Top-Down RPG, Game Design, Artificial Intelligence, State Machine, Inventory System, Skill Tree, Combat System, Boss Design
+I.	INTRODUCTION
+A.	Background and Motivation
+Video games have been entertaining people for decades, and among all the different types of games, 2D action role-playing games (RPGs) remain incredibly popular. Games like The Legend of Zelda and classic arcade action games showed us that simple 2D graphics can create exciting adventures with memorable characters and challenging gameplay. Today, with powerful game engines like Unity available for free, anyone with dedication and creativity can make their own games.
+Ninja Adventure is a complete 2D action RPG where players control a ninja warrior exploring a dangerous world filled with enemies, treasures, and powerful bosses. The game was built from scratch using Unity 2025. During development, the project grew from a simple moving character to a full game with combat combos, enemy artificial intelligence, an inventory system for managing items and weapons, skill trees for character upgrades, conversations with non-playable characters (NPCs), many different type of enemies and three unique boss fights.
+The motivation behind this project was to learn how professional games are made by building one from the ground up. Rather than just studying game development theory, this project involved solving real problems: How do you make enemies that chase and attack the player intelligently? How do you create satisfying combat that feels responsive? How do you manage player progression so it stays interesting? Each challenge was tackled one system at a time, building a complete playable game.
+B.	Project Objectives
+The main goal of this project was to create a fun, complete 2D action RPG while learning professional game development practices. The project focused on nine core objectives that together form a cohesive gameplay experience.
+1)	The player controls needed to feel smooth and responsive, allowing the character to move, attack with various weapons, and dodge enemy attacks with precise timing.
+2)	AI systems would make enemies patrol designated areas, detect the player when nearby, chase and attack at appropriate moments.
+3)	The combat system would deliver satisfying gameplay through both melee and ranged weapons, combo attack chains, dodge rolls granting temporary invincibility, and clear visual feedback confirming successful hits.
+4)	Three unique boss encounters would challenge players with distinct attack patterns and special mechanics that reward learning and skill development.
+5)	Character progression systems would allow players to gain experience from defeated enemies, level up to unlock skill points, and strategically upgrade their abilities through a skill tree.
+6)	Inventory and shopping mechanics would let players collect items from fallen enemies, manage limited inventory space, visit shops to buy and sell equipment, and swap between different weapons.
+7)	A dialog system would facilitate conversations with NPCs, supporting branching choices that lead to different outcomes and automatic reward distribution.
+8)	The user interface would provide clear information displays ensuring players always understand their current health, mana reserves, inventory contents, and available skills without confusion.
+9)	World building through multiple interconnected levels created with a dedicated level editor would enable smooth transitions between areas while maintaining game state persistence.
+C.	Paper Organization
+This paper is structured to provide comprehensive coverage of both theoretical foundations and practical implementation details. Section II examines existing research in game development, reviewing architectural patterns for code organization, combat system design principles, inventory management approaches, character progression mechanisms, dialog interaction frameworks, and boss encounter design philosophies that informed Ninja Adventure's development. Section III presents the complete system implementation, beginning with overall game architecture and project structure, then proceeding through detailed explanations of core systems including character controllers and state management, artificial intelligence for enemies and NPCs, combat mechanics and weapon systems, inventory and economy implementations, dialog and narrative frameworks, user interface designs, and scene transition management with persistent state handling. Section IV analyzes development outcomes, discusses implementation limitations, and proposes future enhancements that would extend gameplay depth and player experience. Section V concludes by synthesizing technical accomplishments, gameplay achievements, and lessons learned throughout the twelve-week development cycle.
+II.	LITERATURE REVIEW
+A.	Game Architecture and Organization
+As games become more complex, developers need better ways to organize their code. Just like building a house requires a blueprint, building a game requires a plan for how all the pieces fit together. Unity uses a component-based system where game objects (like the player or enemies) can have different components attached to them (like health, movement, or graphics). Ninja Adventure uses a "controller-state" pattern, which is like giving each character a brain (controller) that can switch between different modes (states) - for example, an enemy might switch between "patrolling," "chasing," and "attacking" states.
+Contemporary research on Unity game development demonstrates the effectiveness of Finite State Machines (FSM) for organizing behavioral complexity in character-driven games. FSMs provide a structured approach where entities transition between discrete behavioral states based on conditional triggers, creating predictable and maintainable AI logic. Each state encapsulates specific behaviors and transition rules, allowing developers to visualize character decision-making as directed graphs where nodes represent states and edges represent transition conditions. Ninja Adventure adopts this proven architecture but extends its application beyond traditional enemy AI to encompass all interactive characters including the player controller, various enemy archetypes, boss entities, and non-playable characters. This unified approach enables code reuse across character types while maintaining behavioral flexibility, as the same state machine framework supports both simple patrol behaviors in basic enemies and complex multi-phase attack patterns in boss encounters. The architecture's modularity facilitates rapid prototyping of new character types by composing existing state components in novel configurations.
+B.	Combat Systems
+Good combat in action games requires balancing challenge with player satisfaction. Combo systems (where attacking multiple times in sequence performs different moves) add depth while staying accessible to new players. The key is making combat feel responsive - when players press attack, something should happen immediately, and when they hit an enemy, it should look and feel impactful.
+The dodge roll with invincibility frames (i-frames) is a common mechanic in action games. During a dodge, the player can't be hurt for a brief moment, giving skilled players a way to avoid damage by timing their dodges correctly. The visual "afterimage" effect (where ghostly copies of the character fade out behind them) helps players understand when they're invincible. Ninja Adventure carefully balances dodge distance, speed, and cooldown to make it useful without being too powerful. 
+C.	Inventory and Item Management
+RPGs need systems for collecting, storing, and using items. The inventory must be easy to understand and use - players should not struggle to find their health potions in the middle of a fight. Ninja Adventure uses a 9-slot inventory where each slot can hold one weapon or multiple copies of the same item (stacking). Players can drag items between slots with the mouse or use number keys (1-9) for quick access during combat.
+The shop system lets players buy items with gold earned from defeating enemies and sell unwanted items for half their purchase price. This creates interesting decisions: Should I save gold for better equipment later, or buy health potions now?
+D.	Character Progression
+Leveling up and gaining new abilities keeps players engaged over long play sessions. Skill trees present players with choices about how to develop their character. Ninja Adventure's skill tree uses a prerequisite system - certain powerful skills can only be unlocked after maxing out simpler skills first. This guides new players toward building a solid foundation before accessing advanced abilities.
+The skill system supports both passive enhancements, such as permanently increasing health, and active abilities that improve weapon handling, like faster attack speed. This flexibility is achieved through a unified code structure that accommodates both types seamlessly.
+E.	Dialog and NPC Interaction
+NPCs bring game worlds to life by giving players someone to talk to and learn from. Dialog systems range from simple text boxes to complex branching conversations where player choices matter. Ninja Adventure's dialog system supports branching - NPCs can offer multiple response options, and different choices can lead to different outcomes and rewards.
+NPCs also need behaviors beyond just standing still. Ninja Adventure's NPCs can idle, wander around their area, and stop to talk when the player approaches. This makes the world feel more alive and believable. 
+F.	Boss Design
+Boss battles are designed to be memorable milestones that challenge players to apply all the skills they have learned throughout the game. A well-crafted boss encounter should feature clear and predictable attack patterns that players can recognize and counter through observation and practice. Adding multiple phases, where the boss changes tactics as its health decreases, keeps the fight engaging and prevents it from feeling repetitive, ensuring that the tension remains high until the end.
+In Ninja Adventure, three unique bosses showcase this design philosophy. The Giant Raccoon uses a powerful jump attack that pushes the player toward the edge of the screen; stepping outside the map border results in health loss, so players must learn proper positioning to survive. The Giant Summoner introduces complexity with a two-phase battle, starting by spawning waves of minions and later switching to a defensive stance when its health is low. Finally, the Giant Red Samurai serves as the ultimate challenge, relentlessly chasing the player and executing rapid dash-forward combos with double strikes, demanding precise timing and quick reactions. Each boss encourages strategic thinking and adaptability, creating a rewarding and unforgettable experience.
+III.	PLAYER SYSTEM IMPLEMENTATION
+A.	Game Architecture
+Ninja Adventure is a single-player top-down action RPG where players control a ninja exploring dangerous environments while fighting enemies and collecting items. The game emphasizes responsive controls, clear visual feedback, and meaningful player choices in character development. Development spanned twelve weeks using Unity 2025 as the primary engine, with code organized into feature-based modules to maintain clarity and scalability.
+The architecture employs a controller-state pattern as its core organizational principle. Each character type including players, enemies, and NPCs implements a controller component that manages state transitions. States represent distinct behaviors such as idle, patrol, chase, attack, and death. Only one state executes at any given time, preventing conflicting behaviors. Controllers evaluate conditions each frame to determine appropriate state transitions, creating responsive and predictable character behaviors.
+Event-driven communication connects independent systems without creating tight coupling. When significant game events occur, such as a character taking damage or collecting an item, the source system broadcasts an event notification. Other systems subscribe to relevant events and respond appropriately. For example, when the health component fires an "OnDamaged" event, the UI system updates health bar displays, the audio system plays hurt sounds, and the visual effects system triggers damage flash animations. This architecture allows new features to integrate without modifying existing code.
+Scriptable Object data containers store game content separately from code logic. Weapons, items, skills, and dialog conversations exist as data assets that designers can modify through Unity's editor without programming knowledge. This separation accelerates iteration cycles for balancing gameplay values and adding content variations.
+TABLE I. 	PROJECT STRUCTURE
+Folder Name	Purpose
+Player	Player character movement, attacks, and dodging
+Enemy	Enemy and boss AI behaviors
+Character	Health, mana, and stats shared by all characters
+Weapon	Different weapon types and damage systems
+Inventory	Picking up, storing, and using items
+Dialog	Conversations with NPCs
+SkillTree	Upgrading abilities
+UI	All menus, health bars, and on-screen displays
+System	Global managers for scene loading and audio
+Environment	Ladders, gates, traps, and breakable objects
+
+The development process relied on a suite of tools and technologies. Unity 2025 served as the core game engine, while C# handled gameplay programming.. LDtk supported level design with seamless Unity integration, and LibreSprite facilitated pixel art creation and animation. Visual Studio Code was used for coding, and Git ensured robust version control throughout the project.
+B.	Core Systems
+1)	Character controllers and state management
+Every character in Ninja Adventure employs a controller component that manages behavioral transitions through discrete states. Each state represents a distinct behavioral mode such as idle, movement, attack, or dodge. The controller maintains responsibility for physics integration, state transition evaluation, knockback responses, and death sequence management. Meanwhile, individual states determine movement intentions, execute attack sequences with proper animation timing, and configure animation parameters appropriate to their behavior.
+The player controller uses a structured priority system to handle conflicting inputs predictably:
+a)	Death State – Takes absolute precedence. When the character is defeated, all other inputs are ignored.
+b)	Dodge State – Overrides every other action when available, allowing defensive maneuvers to interrupt ongoing attacks.
+c)	Attack State – Holds third priority, initiating combo sequences when the attack button is pressed.
+d)	Movement State – Translating directional input into character motion.
+e)	Idle State – Activates when no inputs are detected, playing ambient standing.
+2)	Health, mana, and stats
+Every character in the game has three interrelated components that work together to manage attributes and resources, forming a cohesive character stat system. These components function similarly to a character sheet in tabletop role-playing games, tracking numerical values that determine combat effectiveness and survivability.
+The C_Stats component stores all attributes defining a character's capabilities. This includes offensive statistics like attack damage for physical attacks and ability power for magical attacks, along with critical hit chance for bonus damage opportunities. Defensive attributes include maximum health pool, armor for physical damage reduction, and magic resistance for magical damage mitigation. Resource management tracks maximum mana capacity. Mobility characteristics determine movement speed, dodge roll distance traveled, and cooldown duration between dodges. Survivability features encompass life steal percentage converting damage dealt to healing and health regeneration over time.
+The C_Health component manages all damage and healing transactions for the character. When damage is received, this component calculates the effective damage after armor mitigation using the diminishing returns formula described below. It announces damage events through an event system, allowing other systems to respond appropriately - the UI updates health bars, the audio system plays hurt sounds, and visual effects trigger damage flashes. This component also tracks temporary invincibility states during dodge rolls or ultimate abilities, preventing damage during these windows. For environmental hazards like drowning zones or fatal falls, it provides instant-kill functionality that bypasses normal damage calculations.
+The C_Mana component handles magical resource management for abilities. Before any mana-consuming action executes, this component validates sufficient mana availability and returns a Boolean success indicator. It announces mana changes through events so the UI can update the mana bar display in real-time.
+The armor system uses a straightforward approach: each point of armor reduces incoming damage by a fixed percentage. For example, 50 armor can cut damage in half. To prevent players from becoming overpowered, armor is capped and tied to skill progression. Each defense skill upgrade adds 5% armor, allowing players to gradually improve protection while maintaining game balance. This design ensures progression feels rewarding without removing the challenge.
+3)	Stat manager for player
+The Stats Manager serves as a central coordinator that ensures all stat-related information remains synchronized across the game systems. When any stat-modifying event occurs, such as using an item, leveling up, or activating a skill tree upgrade, the transaction must pass through the Stats Manager to maintain data consistency and prevent synchronization bugs where different systems hold conflicting values for the same stat.
+The system recognizes three distinct stat effect durations. Instant effects apply once immediately and then expire, such as healing potions that restore 50 health points. Permanent effects remain active indefinitely until explicitly removed, such as skill tree upgrades that increase maximum health by 20 points. Timed effects stay active for a specified duration and then automatically expire, such as strength buffs that add 15 attack damage for 10 seconds.
+When a stat change request arrives, the manager executes a synchronized update sequence consisting of four stages.
+a)	First, the system recalculates all final stat values by summing base statistics with equipment bonuses and temporary effect modifiers.
+b)	Next, the system validates resource pools to ensure current health does not exceed the new maximum health value, preventing over healing.
+c)	Then, the system broadcasts change notifications through the event system so that all listening systems can respond appropriately.
+d)	Finally, registered listeners including user interface panels, visual effect systems, and gameplay logic receive the notifications and refresh their displays or states accordingly.
+ This approach prevents common bugs such as health bar displays showing different values than actual health pools, which occur when systems update at different times or when synchronization events are missed.
+C.	Artificial Intelligence
+1)	Regular enemy AI
+Regular enemies implement four distinct behavioral states that manage their decision-making processes through a finite state machine architecture.
+The Idle state represents the enemy's default resting behavior where it stands stationary playing an idle animation cycle. This state activates when no player is detected nearby and serves as the baseline behavior between patrol movements. This state also activates when the enemy reaches the edge of its wandering area, creating the impression that it is pausing to decide where to patrol next. If the player enters detection range during idle, the state immediately switches to Chase.
+The Wander state implements ambient movement that makes levels feel populated even when the player is distant. The enemy selects a random direction, moves slowly for a short duration, then selects a new random direction when reach the border of wandering area. This creates natural-looking patrol behavior without requiring explicitly defined patrol paths. Detection range constantly monitors for player presence, transitioning to Chase immediately upon detection regardless of current wander direction.
+The Chase state calculates the direction vector toward the player's current position each frame and moves at full speed along that vector. Rather than running directly into the player and overlapping, the state maintains a minimum distance equal to the attack range, stopping just outside melee distance. This positioning prepares the enemy for attack execution while preventing visual collision overlap. The state continuously tracks player movement, updating the direction vector in real-time to follow evasive maneuvers. When the player exits detection range, Chase returns to Wander. When the player enters attack range and the enemy is facing the correct direction, the state transitions to Attack.
+The Attack state executes the complete attack sequence including animation, hitbox timing, and cooldown management. The enemy faces the player, triggers the attack animation, and enables the weapon hitbox at the precise moment calculated using time-based animation synchronization. After the attack completes, a cooldown period prevents immediate re-attacking, creating combat patterns that players can learn to exploit. Once cooldown expires, the state returns to Chase to reposition for the next attack opportunity.
+The controller continuously evaluates state transition conditions every frame. The evaluation follows a priority hierarchy where attack opportunities take over movement decisions. If the player is within attack range AND the enemy is facing the correct direction AND the attack cooldown has expired, the Attack state activates immediately. Otherwise, if the player is within detection range, Chase state maintains pursuit. In the absence of player detection, the enemy alternates between Idle and Wander states based on default setting.
+Detection range implements a circular area around the enemy. When the player's position enters this circle, the enemy "sees" them and begins pursuit. This creates the classic aggro behavior familiar in action RPGs where walking near enemies triggers combat encounters. Detection range typically exceeds attack range by a significant margin, giving enemies time to close distance before engaging.
+2)	Boss AI
+Bosses represent special enemies with unique mechanics designed to create memorable combat encounters that test player mastery of game systems. Unlike regular enemies that share a common AI template, each boss implements specialized behavior patterns and attack sequences.
+ 
+The Giant Raccoon boss, designated as the mini boss encounter in Map 2, implements a charger archetype with two distinct attack patterns. The normal attack executes a bull-like charge where the boss becomes a mobile hitbox dealing collision damage. Using the time-based animation system, the attack waits for the charge animation to complete, then initiates a high-speed dash. During the dash, an afterimage trail spawns to provide visual feedback of the rapid movement path. The special attack features a jumping ground slam mechanic where the boss leaps into the air, then impacts the ground creating an area-of-effect. This deals damage to player and applies knockback force pushing characters outward from the impact center. The boss randomly selects between normal charge and special jump attacks when within attack range and cooldown permits. Additionally, the boss maintains collision damage separate from weapon hitboxes - physical contact with the moving boss deals damage with an independent cooldown timer.
+ 
+The Giant Summoner boss introduces a two-phase encounter where behavior patterns change dramatically based on remaining health percentage. Phase 1 activates from 100% to 20% health (can be tune in inspector) and implements aggressive chase behavior combined with periodic minion spawning. Every X seconds, the boss summons X enemy minions. The summoning process renders the boss vulnerable. The boss will be idle for X seconds when casting, giving the player a chance to attack back. When spawning minions, the boss uses circular distribution mathematics to spread spawns evenly around its position. Each spawned minion receives an initial outward velocity impulse to visually separate them from overlapping positions. Phase 2 activates when health drops to 20% or below and completely changes behavior to defensive retreat mode. When the player approaches within X units distance, the boss retreats away from the player for X seconds, then enters a X seconds vulnerable cooldown before retreat ability recharges. The phase transition triggers an emergency spawn of X minions immediately. This phase shift creates kiting gameplay where players must chase the retreating boss and maximize damage output during vulnerable windows while managing spawned minions that accumulate over time.
+ 
+The Giant Red Samurai boss serves as the final encounter and implements the most mechanically complex behavior in the game. The normal attack executes a standard weapon slash at close range. The special attack delivers the boss's signature double-dash combo sequence which proceeds as follows: first, a X seconds charge animation provides clear visual telegraph for the incoming attack; second, the boss dashes toward the player at high speed with weapon hitbox active for the initial hit; third, the dash continues for X seconds total with afterimage effects enhancing visibility; fourth, a brief X seconds gap occurs where the hitbox briefly deactivates; fifth, the weapon hitbox reactivates for the second hit while maintaining dash momentum; sixth, the attack concludes and a lengthy cooldown period begins. This double-hit mechanic creates a timing puzzle where dodging only the first strike leaves the player vulnerable to the second strike. Players must either time invincibility frames to cover both hits simultaneously. The chase behavior prioritizes vertical alignment first before horizontal approach, making the boss's intentions highly readable to observant players.
+3)	Non-playable characters (NPC) AI
+NPCs that facilitate dialog interactions implement a simplified version of the controller-state architecture optimized for conversational scenarios rather than combat. These characters serve as quest givers, merchants, and story deliveries throughout the game world.
+ 
+NPC controllers manage three distinct behavioral states. The Idle state represents the default stationary behavior where NPCs stand in designated positions playing idle animation loops. This state activates when no player interaction is occurring and the NPC has not entered wander mode. The Wander state implements localized ambient movement where NPCs walk randomly within a small radius around their spawn point. This creates the appearance of living, breathing characters rather than static objects. The Talk state activates when players press the interact button while positioned within the NPC's trigger zone. Upon activation, the NPC immediately stops all movement, rotates to face the player character, and hands control to the Dialog Manager which displays conversation UI and manages branching dialog trees. When the conversation concludes, whether through normal completion or player cancellation, the NPC restores its previous facing direction and returns to either Idle or Wander behavior depending on its configuration.
+The interaction system uses trigger-based detection where each NPC maintains a circular collider zone around itself. When the player character enters this zone, an interaction prompt appears on screen indicating the ability to initiate conversation. Pressing the designated talk key (F by default) fires an interaction event that the NPC controller receives, triggering the state transition to Talk mode. The Dialog Manager then takes over, displaying conversation text, managing choice button inputs, and processing branching logic. This separation of concerns allows NPC controllers to focus purely on physical behavior and interaction detection while avoiding complex conversation logic to the specialized Dialog Manager system.
+D.	Combat and Weapons
+1)	Weapon system architecture
+The weapon system employs a data-driven design where all weapon attributes exist as Scriptable Object assets independent of code logic. Each weapon asset defines its visual appearance, damage values, attack speed, knockback force, stun duration, and special properties such as projectile piercing. This separation allows rapid iteration on weapon balance without code recompilation and enables designers without programming knowledge to create weapon variations through Unity's inspector interface.
+ 
+Two primary weapon archetypes implement distinct combat mechanics. Melee weapons activate a collision zone during the attack animation window, dealing damage to any enemy contacting the hitbox during that period. The weapon sprite rotates to the player's facing direction, and a slight forward thrust at final move in the combo to extend attack reach. Each swing registers damage only once per enemy regardless of hitbox contact duration, preventing multi-hit exploits. Ranged weapons spawn projectile game objects that travel in straight trajectories at constant velocity. Upon collision with enemy entities, projectiles apply damage and decrement their pierce count. Projectiles with remaining pierce count continue through enemies, while depleted projectiles destroy themselves after X seconds. Advanced projectile variants implement homing behavior after traveling a minimum distance, curving toward the nearest target within detection range.
+When any weapon successfully strikes an enemy, a standardized damage sequence executes to ensure consistent combat feel. The system calculates effective damage by subtracting enemy armor from weapon attack power. It then applies this damage value to the enemy health component. If the attacking character possesses life steal, they receive healing equal to the damage dealt multiplied by life steal percentage. The struck enemy experiences knockback force pushing them away from the attacker in the impact direction. Finally, the enemy enters a stunned state for the weapon's configured stun duration, temporarily preventing movement and attacks. This execution order ensures life steal calculations use post-mitigation damage values rather than raw attack power.
+2)	Combo system implementation
+The combat system features a three-stage combo chain that rewards timing. Pressing the attack button initiates the first attack animation, which deals base weapon damage and opens a brief input window during the animation's recovery frames. If the player presses attack again during this window, the attack queues and automatically executes upon the current attack's completion, transitioning into the second combo stage. Each stage uses a distinct animation with progressively increasing damage multipliers.
+Combo continuation requires precise timing - pressing attack too early before the input window opens has no effect, while waiting too long after the window closes resets the combo to stage one. Players can intentionally cancel combo sequences by executing a dodge roll, which immediately interrupts the attack state and transitions to the dodge state. This mechanic creates strategic decision points where players must weigh completing high-damage combos against dodging incoming enemy attacks. The combo count resets to stage one after the third attack completes, after successful dodge cancellation, or after the input window expires without additional input.
+3)	Character progression and skill trees
+The skill tree system provides permanent character upgrades through a prerequisite-gated progression structure. Each skill node defines a maximum level, skill point cost per level, prerequisite skill requirements, and stat effects applied upon unlocking. Skills occupy nodes in a tree visualization where connecting lines indicate prerequisite relationships. Players acquire skill points through character level advancement, with each level up awarding a X number of points for allocation.
+Skill nodes exist in one of three states based on progression. Locked skills display grayed visuals with lock icons and cannot be purchased until all prerequisite skills reach maximum level. Available skills show full-color visuals and can be purchased if the player possesses sufficient skill points. The user interface updates dynamically as players invest points, recalculating which skills become available based on newly maxed prerequisites.
+Skills provide passive effects that apply permanent stat modifications to enhance player capabilities. These passive skills increase base statistics such as maximum health by a fixed amount per level or add flat damage to all attacks. Additionally, the skill tree includes specialized nodes that improve weapon-specific statistics, such as slash arc angle, attack speed, movement penalty reduction, stun time bonus, and thrust distance bonus. The skill tree's prerequisite structure guides players toward building foundational improvements before accessing powerful high-tier upgrades, creating a sense of character growth and specialization over the play session.
+E.	Inventory and Economy Systems
+1)	Inventory management
+The inventory system implements a nine-slot grid interface where each slot accommodates either stackable consumable items or single equipment pieces. Consumable items such as healing potions and food utilize stack mechanics, allowing multiple units of identical items to occupy a single slot up to a configurable maximum limit. Equipment items including weapons do not stack, with each weapon requiring dedicated slot allocation. Players interact with inventory through mouse-based drag-and-drop operations or numerical hotkey bindings mapped to slots one through nine for rapid combat access.
+ 
+Item acquisition follows an automated management sequence. When the player collects a new item, the system first searches existing inventory slots for matching item types with available stack capacity. If a compatible stack exists, the new item increments that stack's quantity. Otherwise, the system locates the first empty slot and creates a new stack. If all slots contain items at maximum capacity, the system rejects the pickup. This automatic organization reduces manual inventory management overhead during exploration and combat scenarios.
+Item consumption decrements stack quantities while applying the item's configured effects. Healing consumables restore health points, while buff items apply temporary stat modifications through the stat effect system described previously. When a stack's quantity reaches zero, the slot clears and becomes available for new items. Weapon equipping implements a swapping mechanic where selecting a weapon from inventory unequips the currently held weapon and places it in the selected inventory slot, then equips the newly selected weapon. This prevents weapon loss during equipment changes and maintains total inventory consistency.
+The hot bar provides combat-optimized item access without menu navigation. Pressing numerical keys one through nine directly triggers use or equip actions for the corresponding inventory slot. During intense combat encounters, players rely heavily on hot bar bindings to consume healing items or switch weapons without interrupting movement and combat awareness by opening full inventory menus.
+2)	Loot distribution system
+Enemy defeat triggers probabilistic loot generation based on configured drop rates and item tables. Upon death, each enemy rolls a random value between zero and one hundred, comparing this roll against its drop chance percentage. Successful rolls select a random entry from the enemy's configured loot table and spawn a pickup object at the enemy's death position with slight random offset to prevent exact overlap when multiple enemies die simultaneously.
+Loot pickup objects implement trigger zone detection, automatically collecting themselves when player contact occurs. Consumable items announce their collection through the event system, prompting the inventory manager to add the item and trigger visual and audio feedback. Weapon pickups follow identical mechanics, adding the weapon to the first available inventory. Gold drops bypass inventory slot requirements entirely, directly incrementing the player's currency counter without limitations.
+3)	Shop and trading system
+Shop interfaces provide item purchasing and selling functionality through merchant NPC interactions. Initiating conversation with designated merchant characters opens the shop user interface displaying available items with their prices. The merchant's inventory is populated from location-specific item lists stored in the SHOP_Keeper component. Selecting items in the shop panel attempts a purchase transaction that validates both sufficient gold and available inventory space before executing. Successful purchases deduct the item's cost from gold reserves, add the item to inventory, and provide audiovisual confirmation. Failed purchases display contextual error messages indicating insufficient gold or inventory capacity limitations.
+ 
+Item selling follows a direct transaction mechanism where players transfer items from their inventory slots to the merchant for gold compensation. Sell prices use the same value as purchase prices, creating a risk-free buying and selling economy that encourages experimentation with different equipment and consumables. Different merchant NPCs maintain distinct inventory tables based on their location and role. Town merchants offer basic consumables and entry-level equipment, while specialized vendors in remote locations provide rare items and powerful weapons. This distribution encourages world exploration to locate optimal shopping opportunities for specific player needs.
+F.	Dialog and narrative systems
+The dialog system facilitates player interaction with non-playable characters through conversation interfaces supporting both linear narrative delivery and branching choice-driven conversations. When players approach NPCs designated with interaction markers and press the configured talk key, the system transitions from gameplay to conversation mode. This transition disables player movement controls, activates the dialog user interface overlay, and transfers control to the dialog manager component.
+ 
+Dialog content structures as sequences of text lines associated with speaker metadata. Each line displays the speaking NPC's name, portrait icon, and dialog text in the conversation panel. Players advance through linear dialog sequences using mouse clicks, progressing to each subsequent line until the conversation concludes. Branching conversations extend this foundation by presenting multiple response options at decision points. The interface displays up to three choice buttons with distinct text options. Selecting different choices routes the conversation through different dialog branches, potentially leading to alternative outcomes, rewards, or follow-up conversations.
+The system maintains persistent conversation state through history tracking components that record which NPCs the player has conversed with and which locations have been visited. This persistence enables conditional dialog that varies based on prior interactions. For example, an NPC might offer a quest during the first conversation, acknowledge quest completion during subsequent interactions, and provide different dialog after the quest concludes. One-time important conversations utilize completion flags preventing repetition of major story moments.
+Automatic reward distribution integrates with conversation conclusions, granting items, weapons, or currency directly to the player without requiring separate interaction. When conversations containing reward definitions complete successfully, the dialog manager invokes the inventory system's add item methods. This streamlined approach eliminates the manual claim interactions common in many RPGs, maintaining narrative momentum after conversation-based quest resolutions.
+G.	User Interface Systems
+The user interface provides continuous player feedback through multiple specialized subsystems that maintain game state awareness without obscuring gameplay visibility. All UI elements utilize event-driven updates that respond to state changes rather than polling every frame, optimizing performance while ensuring timely visual feedback.
+The introduction interface appears at game start, pausing gameplay while presenting difficulty selection through two buttons. The normal difficulty option starts the game with standard parameters, while the easy difficulty option applies bonus stat modifiers to the player's experience system and inventory before beginning gameplay. Upon selection, the interface resumes time scale, disables interaction blocking, and removes itself from the scene to prevent interference with subsequent gameplay.
+The heads-up display occupies the top-left screen corner, presenting health and mana as horizontal fill bars with accompanying numerical readouts. Health displays as a green bar showing current hit points over maximum capacity, while mana appears as a blue bar representing available magical resources. These bars subscribe to health and mana change events, updating their fill percentage and text labels only when actual value changes occur. This approach prevents unnecessary recalculations while maintaining responsive visual feedback during combat damage and resource consumption.
+ 
+The experience progression display resides below the health and mana bars in the upper-left corner, showing current level and experience progress toward the next level threshold as a yellow fill bar. The system utilizes a slider component that subscribes to experience change and level-up events from the player experience system. When experience is gained through enemy defeats, the slider value updates to reflect progress within the current level range, resetting to zero upon level advancement while incrementing the displayed level number. Debug functionality allows testing experience gain through hotkey input when development tools are enabled.
+The weapon display system maintains two separate UI panels for melee and ranged weapon slots, each subscribing to weapon change events broadcast by the player controller. When weapon equipment changes occur through inventory interactions or hot bar switches, the appropriate panel receives the new weapon data and updates its image sprite to match the equipped weapon's visual representation. This dual-panel architecture allows simultaneous display of both weapon types, providing players with immediate awareness of their current combat loadout without requiring menu navigation.
+The character statistics panel activates through dedicated hotkey input and UI button, overlaying the gameplay view with a comprehensive attribute listing. This panel displays all character statistics including offensive capabilities, defensive values, and mobility characteristics. The panel implementation pauses gameplay during display, allowing players to examine statistics without combat pressure. All displayed values derive from the centralized stats system described previously, ensuring consistency between displayed information and actual gameplay values. The panel updates immediately when stat-modifying events occur, reflecting equipment changes, buff applications, or skill tree upgrades in real-time.
+The skill tree interface visualizes character progression through node-and-connector tree layouts. Each skill node presents its icon, name, current level progress, maximum level capacity, and skill point cost. Visual styling differentiates between locked skills awaiting prerequisite completion, available skills ready for purchase, and maximized skills Available skill point totals display prominently, updating immediately as players allocate points to skills.
+ 
+The ending interface displays upon game completion, showing either victory or defeat messaging based on final boss death or player death respectively. The system pauses gameplay while presenting final statistics including player level, total experience earned, enemy kills, and playtime formatted as hours, minutes, and seconds. The victory condition triggers immediately upon boss defeat without delay, while the game over condition is managed by the game manager's death sequence handler. A restart button allows players to replay the session, resetting to the initial game state.
+H.	Scene Transitions and Persistent State Management
+Level transitions implement a fade-based sequence that smoothly moves players between game areas while maintaining state consistency. When players enter designated transition zones such as doorways or level boundaries, the system initiates a fade-to-black screen overlay with a duration of approximately half a second. During this fade transition, player input controls disable to prevent unintended movement during the loading process. The system then loads the target scene in the background while the screen remains black. Upon completion, the player character spawns at the designated spawn point position within the new level. Finally, the screen fades back to full visibility over half a second while re-enabling player controls. All character attributes, inventory contents, equipped weapons, and progression data persist across these transitions, maintaining gameplay continuity throughout the experience.
+The architecture employs persistent manager objects that survive scene transitions through Unity's DontDestroyOnLoad mechanism. The Game Manager provides centralized access to other manager systems and orchestrates high-level game logic including player death handling and scene flow control. The Sound Manager maintains audio source pools for sound effects and manages background music playback, ensuring smooth audio continuity across scene boundaries. The player character object persists with all attached components including inventory data, statistical values, and progression states. The UI canvas hierarchy remains persistent to maintain interface state across transitions, preventing menu closures or setting losses during level changes.
+This persistence implementation utilizes a singleton pattern where each manager checks for existing instances during initialization. If no instance exists, the manager designates itself as the singleton and marks itself for persistence. If an instance already exists when a new scene loads a duplicate manager prefab, the duplicate immediately destroys itself, preserving the original persistent instance. This approach prevents manager duplication bugs while allowing scene prefabs to include manager references for standalone testing capabilities.
+Camera confinement ensures the viewport remains within playable boundaries without exposing empty space beyond tile map edges. Each scene contains an invisible polygon collider defining valid camera positions. The camera system samples this confiner geometry to constrain its position, smoothly damping toward the player character while respecting boundary limitations. This approach accommodates arbitrary level shapes beyond simple rectangles and automatically adapts to each scene's layout without manual configuration per scene. The confiner updates immediately upon scene load, preventing temporary camera drift during spawn-in sequences.
+I.	Environmental Interaction Systems
+Environmental objects enrich the game world by introducing interactive elements that expand traversal options, create hazards, and gate progression. These systems integrate with existing character controllers and health components through shared interfaces and event notifications.
+Ladder mechanics provide vertical traversal capabilities in multi-level environments. When the player character enters a ladder trigger zone, the system modifies movement behavior to enable vertical climbing along predefined paths. The implementation applies configurable speed multipliers to both vertical and horizontal movement during ladder traversal, allowing designers to tune climbing feel independently from ground movement. Players can mount ladders from bottom or top entry points and dismount at either end or by jumping away from the ladder surface. The ladder component communicates entry and exit events to the player controller through dedicated methods, ensuring smooth state transitions between ground movement and climbing behaviors.
+Gate objects implement progression barriers tied to boss encounter completion. Each gate links to a specific boss entity through inspector references. The gate monitors the linked boss's health component for death notifications through event subscription. Upon receiving the boss death event, the gate triggers a destruction sequence featuring visual effects, audio feedback, and collision removal. This design creates clear cause-and-effect relationships where defeating bosses immediately opens previously blocked pathways, providing tangible rewards for overcoming challenging encounters and naturally guiding players through intended progression sequences.
+Trap systems create environmental hazards that punish careless navigation while rewarding attentive players. Damage traps implement trigger zones that apply fixed damage values to any character entering their boundaries. Unlike weapon damage that calculates armor mitigation, environmental trap damage bypasses defensive statistics to maintain consistent threat levels regardless of character progression. Trap components enforce cooldown periods between damage applications preventing rapid repeated hits that could instantly defeat players. Visual and audio indicators telegraph trap locations, allowing skilled players to navigate hazardous areas through careful positioning and timing.
+ 
+Destructible objects add interactivity to level environments through breakable props that respond to weapon impacts. Each destructible object possesses configurable health values and subscribes to damage events similar to character entities. When accumulated damage exceeds the object's health threshold, destruction sequences activate including particle effects, sound effects, and prop removal. Some destructibles conceal rewards including consumable items, weapons, or gold pickups that spawn upon destruction. This mechanic encourages exploration and rewards players for investigating suspicious environmental elements, occasionally revealing hidden shortcuts or valuable resources behind destructible barriers.
+Drowning zones enforce strict boundaries on traversal by implementing instant-kill volumes in water regions and bottomless pits. These trigger zones detect player entry and immediately invoke the health component's kill functionality, triggering standard death sequences without damage calculation delays. Visual design clearly distinguishes deadly water from safe ground through color differentiation and animation effects, providing fair warning to players about environmental dangers.
+IV.	RESULT AND DISCUSSION
+A.	Development Outcomes
+Ninja Adventure successfully demonstrates a complete 2D action RPG implementation with all planned core systems functional. Development spanned approximately twelve weeks following an iterative milestone approach. The final build includes three playable levels with distinct environments, multiple enemy types with varying AI behaviors, three boss encounters featuring specialized mechanics, a comprehensive weapon system supporting both melee and ranged combat, an inventory management system with shopping functionality, character progression through experience and skill trees, and dialog interactions with non-playable characters.
+B.	Limitations and Future Improvements
+While Ninja Adventure successfully implements its core gameplay systems, several features remain unimplemented that would enhance the experience in future development iterations. The current implementation lacks a formal quest system, resulting in linear level progression from one boss encounter to the next without optional objectives or player choice in activity ordering. A comprehensive quest system would introduce a quest log interface tracking active objectives, NPC quest givers with specific completion goals, reward distribution upon quest completion, and optional side content providing additional character development opportunities.
+Ultimate abilities exist in design documentation but have not received implementation, representing a significant progression system gap. These planned abilities would function as powerful active skills with extended cooldown periods, featuring special visual effects and unlock mechanisms through quest completion or rare item acquisition. 
+The absence of a save and load system forces players to complete the game in single sessions, as closing the application resets all progress including inventory contents, equipment configurations, character levels, skill investments, and NPC conversation history.
+Tutorial implementation remains basic, relying on players to discover mechanics through experimentation. A dedicated tutorial level with progressive instruction sequences, contextual tooltip popups explaining new mechanics, practice areas featuring invulnerable training dummies, and gradual system introduction pacing would improve new player onboarding substantially. Boss variety could expand beyond the current three encounters to include ranged bosses executing projectile patterns, swarm bosses emphasizing minion management mechanics, puzzle bosses requiring environmental interaction for vulnerability phases, and multi-phase encounters featuring arena transformation between phases.
+V.	CONCLUSION
+Ninja Adventure successfully demonstrates the development of a complete 2D action role-playing game using Unity engine and contemporary game development techniques. The twelve-week development cycle produced a fully playable experience featuring responsive combat mechanics, intelligent enemy artificial intelligence, character progression systems, inventory management, narrative dialog interactions, and three distinct boss encounters with specialized mechanics.
+The project achieved significant technical accomplishments through architectural decisions that prioritized modularity and maintainability. The controller-state pattern provides a flexible foundation supporting players, enemies, bosses, and non-playable characters using shared code infrastructure, enabling rapid enemy type prototyping without extensive refactoring. Event-driven communication architecture eliminates tight system coupling while maintaining clean integration points for debugging and feature additions. Data-driven design through Scriptable Object assets enables rapid balance iteration, allowing gameplay value adjustments without code recompilation cycles. Time-based animation synchronization delivers reliable attack timing across all character types, while efficient performance optimization maintains stable frames per second execution with minimal load times.
+From a gameplay perspective, the implementation delivers responsive combat featuring combo chains, dodge mechanics with invincibility frames, and comprehensive visual feedback systems. Enemy AI demonstrates competent detection, pursuit, and attack sequencing behaviors that create engaging encounters. Three unique boss designs present learnable attack patterns with distinct mechanical challenges and phase transitions requiring player adaptation. Complete progression systems encompassing experience point accumulation, level advancement, and skill tree customization provide meaningful character development. Functional inventory interfaces, economic shopping systems, dialog conversation trees, and smooth level transitions with persistent game state management round out the feature set.
+The development process yielded valuable insights applicable to future projects. Investing in solid architectural foundations produces substantial returns - the modular state system enabled new enemy additions without legacy code disruption, event-driven design simplified debugging workflows, and asset-based data storage reduced balance iteration times from hours to seconds. Visual and audio feedback elements contribute disproportionately to perceived quality relative to implementation cost, with effects, color flash overlays, and impact sounds substantially enhancing player experience beyond technical polish. Boss encounter design benefits enormously from clear attack telegraphing through wind-up animations and audio cues, transforming potentially frustrating difficulty into fair challenges that players appreciate and learn to overcome through practice.
+The established systems provide robust foundations for future expansion. Quest system architecture and ultimate ability designs with detailed specifications remain ready for development. Save and load functionality can integrate straightforwardly with existing data structures. The codebase maintains organization, documentation, and modularity supporting continued feature additions without architectural debt accumulation.
+For students and aspiring developers pursuing similar 2D action RPG projects, Ninja Adventure demonstrates achievable scope through disciplined planning, modular system design, and iterative development methodologies. Beginning with core movement and combat mechanics, progressively adding individual systems, maintaining frequent testing cycles, and incorporating feedback produces complete, polished results. The experience confirms that comprehensive game projects remain within reach given appropriate planning, consistent effort, and architectural mindfulness.
+ACKNOWLEDGMENT
+The author would like to thank Dr. Ling Xu from the University of Houston-Downtown for her invaluable guidance and support throughout the development of this project. Her expertise and mentorship were instrumental in shaping the technical approach and ensuring the successful completion of Ninja Adventure.
 REFERENCES
-
-[1] Unity Technologies. "Unity User Manual 2023.2." Unity Documentation, 2023. Available: https://docs.unity3d.com/
-
-[2] Deepnight. "LDtk - Level Designer Toolkit." LDtk Documentation, 2023. Available: https://ldtk.io/docs/
-
-[3] Unity Technologies. "Input System Package." Unity Documentation, 2023. Available: https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/
-
-[4] R. Nystrom. "Game Programming Patterns." Genever Benning, 2014.
-
-[5] I. Millington and J. Funge. "Artificial Intelligence for Games," 2nd ed. CRC Press, 2009.
-
-[6] S. Rabin, ed. "Game AI Pro: Collected Wisdom of Game AI Professionals." CRC Press, 2013.
-
-[7] E. Lengyel. "Foundations of Game Engine Development, Volume 1: Mathematics." Terathon Software LLC, 2016.
-
-[8] J. Gregory. "Game Engine Architecture," 3rd ed. CRC Press, 2018.
-
-[9] T. Akenine-Möller, E. Haines, and N. Hoffman. "Real-Time Rendering," 4th ed. CRC Press, 2018.
-
-[10] Unity Technologies. "Unity Best Practices." Unity Learn, 2023. Available: https://learn.unity.com/
-
-[11] Microsoft. "C# Programming Guide." Microsoft Docs, 2023. Available: https://docs.microsoft.com/en-us/dotnet/csharp/
-
-[12] S. McConnell. "Code Complete," 2nd ed. Microsoft Press, 2004.
-
-================================================================================
-
-FIGURE CAPTIONS
-
-[Figure 1: High-level system architecture diagram showing relationships between major systems]
-- Place near Section III.B (Architecture Overview)
-- Should show: Player/Enemy/NPC Controllers, State Scripts, Character Components (Stats/Health/Mana), Weapon System, Inventory/Shop, Dialog, Skill Tree, UI, Managers
-
-[Figure 2: State machine diagram showing player states and transitions]
-- Place near Section IV.B.1 (Controller and State Pattern)
-- Should show: Idle, Movement, Attack, Dodge, Death states with transition arrows and priority labels
-
-[Figure 3: Skill tree UI showing prerequisite connections and lock states]
-- Place near Section IV.D.3 (Skill Tree System)
-- Should show: Multiple skill nodes in locked, unlocked, and maxed states, with visible prerequisite connections
-
-[Figure 4: Shop interface showing item grid, prices, and inventory integration]
-- Place near Section IV.E.3 (Shop System)
-- Should show: Shop slots with items, buy buttons, prices, and visible inventory panel for selling
-
-[Figure 5: Skill tree UI with locked, unlocked, and maxed states visible]
-- Place near Section IV.F.5 (Skill Tree and Upgrade UI)
-- Should show: Detailed view of skill nodes with different states, skill points display, and upgrade feedback
-
-[Figure 6: In-game screenshot showing combat encounter with UI elements visible]
-- Place near Section V.E (Code Quality and Maintainability) or Results section
-- Should show: Player fighting enemies or boss, with health bars, inventory hotbar, and skill cooldowns visible
-
-[Additional figures as needed for LDtk level design, weapon system diagrams, AI flowcharts, etc.]
-
-================================================================================
-
-WORD COUNT: ~8,150 words (excluding references and figure captions)
-
-================================================================================
+[1]	Unity Technologies, "Unity Real-Time Development Platform," 2025. [Online]. Available: https://unity.com/
+[2]	C. Guérin, "LDtk (Level Designer Toolkit) - 2D Level Editor," 2025. [Online]. Available: https://ldtk.io/
+[3]	Pixel-Boy and AAA, "Ninja Adventure Asset Pack," itch.io, 2025. [Online]. Available: https://pixel-boy.itch.io/ninja-adventure-asset-pack
+[4]	Stealthix, "Animated Traps," itch.io, 2025. [Online]. Available: https://stealthix.itch.io/animated-traps
+[5]	Matt (Night Run Studio), "Let's Make An Action RPG in Unity!" YouTube Playlist, 2025. [Online]. Available: https://www.youtube.com/watch?v=ZfTU67ZIK3Q&list=PLSR2vNOypvs5yLsbqZc0e6RdqNnP1eGIc
+[6]	LibreSprite Contributors, "LibreSprite - Animated Sprite Editor & Pixel Art Tool," GitHub, 2025. [Online]. Available: https://libresprite.github.io/
+[7]	Microsoft, "Visual Studio Code - Code Editing. Redefined," 2025. [Online]. Available: https://code.visualstudio.com/
+[8]	Git, "Git - Distributed Version Control System," 2025. [Online]. Available: https://git-scm.com/ 

@@ -27,16 +27,14 @@ public class ST_Slots : MonoBehaviour
 
     void Awake()
     {
-        SkillIcon            ??= GetComponentInChildren<Image>();
-        skillButton          ??= GetComponent<Button>();
-        skillLevelText       ??= GetComponentInChildren<TMP_Text>();
-
         if (!st_skillSO)     Debug.LogError("ST_Slots: ST_SkillSO is not assigned", this);
         if (!SkillIcon)      Debug.LogWarning("ST_Slots: SkillIcon is not assigned.", this);
         if (!skillButton)    Debug.LogWarning("ST_Slots: skillButton is not assigned.", this);
         if (!skillLevelText) Debug.LogWarning("ST_Slots: skillLevelText is not assigned.", this);
 
-        prerequisiteSkillSlots ??= new List<ST_Slots>();
+        // Initialize empty list if null (but don't overwrite Inspector data!)
+        if (prerequisiteSkillSlots == null)
+            prerequisiteSkillSlots = new List<ST_Slots>();
 
         UpdateUI();
     }
@@ -93,6 +91,10 @@ public class ST_Slots : MonoBehaviour
     // Update the UI elements based on the current state
     void UpdateUI()
     {
+        // Null check to prevent crashes in builds
+        if (!st_skillSO || !SkillIcon || !skillButton || !skillLevelText)
+            return;
+
         // Update icon and level text
         SkillIcon.sprite = st_skillSO.skillIcon;
 
