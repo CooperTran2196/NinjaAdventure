@@ -514,8 +514,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
   useDodgeIFrames: 0
-  takingDamageAmount: 1
-  healingAmount: 1
 --- !u!114 &158875178050831206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,7 +528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::E_Controller
   detectionRange: 4
   attackRange: 1.2
-  attackStartBuffer: 0.4
+  attackStartBuffer: 0.5
   playerLayer:
     serializedVersion: 2
     m_Bits: 64

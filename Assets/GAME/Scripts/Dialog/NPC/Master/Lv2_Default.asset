@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lv2_Default
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
-  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+  - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
     text: The road ahead is dangerous. Keep your heart steady.
   optionList: []
   requiredNPCs: []
