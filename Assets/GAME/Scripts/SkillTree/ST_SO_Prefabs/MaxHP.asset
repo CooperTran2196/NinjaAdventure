@@ -17,6 +17,7 @@ MonoBehaviour:
   skillIcon: {fileID: 21300000, guid: c2185e948824427468216e24d8658881, type: 3}
   maxLevel: 5
   StatEffectList:
-    - statName: 3
+  - statName: 3
     Value: 20
-    Duration: 0
+    Duration: 1
+    IsOverTime: 0

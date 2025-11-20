@@ -80,10 +80,10 @@ public class EndingUI : MonoBehaviour
         statsPanel.SetActive(true);
         if (playerExp)
         {
-            levelText.text = $"Level {playerExp.level}";
-            expText.text   = $"{playerExp.currentExp} XP";
-            killsText.text = playerExp.totalKills.ToString();
-            timeText.text  = FormatTime(playerExp.playTime);
+            levelText.text = $"Level      : {playerExp.level}";
+            expText.text   = $"Total XP   : {playerExp.currentExp}";
+            killsText.text = $"Total kills: {playerExp.totalKills.ToString()}";
+            timeText.text  = $"Play Time  : {FormatTime(playerExp.playTime)}";
         }
 
         cg.alpha          = 1f;

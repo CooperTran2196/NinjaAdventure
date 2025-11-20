@@ -11,12 +11,8 @@ public class ExpUI : MonoBehaviour
     public Slider   expSlider;
     public TMP_Text currentLevelText;
 
-    P_InputActions input;
-
     void Awake()
     {
-        input = new P_InputActions();
-
         expSlider        ??= GetComponentInChildren<Slider>();
         currentLevelText ??= GetComponentInChildren<TMP_Text>();
 
@@ -27,8 +23,6 @@ public class ExpUI : MonoBehaviour
 
     void OnEnable()
     {
-        input.Debug.Enable();
-
         if (p_Exp != null)
         {
             p_Exp.OnLevelUp   += HandleLevelUp;
@@ -39,25 +33,11 @@ public class ExpUI : MonoBehaviour
 
     void OnDisable()
     {
-        input.Debug.Disable();
-
         if (p_Exp != null)
         {
             p_Exp.OnLevelUp   -= HandleLevelUp;
             p_Exp.OnXPChanged -= HandleXPChanged;
         }
-    }
-
-    void OnDestroy()
-    {
-        input?.Dispose();
-    }
-
-    // Debug: Gain XP with input
-    void Update()
-    {
-        if (input.Debug.GainExp.WasPressedThisFrame())
-            p_Exp.AddDebugXP();
     }
 
     void HandleLevelUp(int newLevel) => UpdateUI();

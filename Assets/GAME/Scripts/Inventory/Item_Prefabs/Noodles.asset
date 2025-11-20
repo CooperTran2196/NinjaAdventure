@@ -32,10 +32,10 @@ MonoBehaviour:
     Duration: 10
     IsOverTime: 1
   - statName: 3
-    Value: 10
+    Value: 20
     Duration: 0
     IsOverTime: 1
   - statName: 4
-    Value: 10
+    Value: 20
     Duration: 0
     IsOverTime: 0

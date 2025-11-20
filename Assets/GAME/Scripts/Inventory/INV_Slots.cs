@@ -71,6 +71,9 @@ public class INV_Slots : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,
     // Update icon and amount text based on slot contents
     public void UpdateUI()
     {
+        // Safety check - UI components might not be initialized or may have been destroyed
+        if (!itemImage || !amountText) return;
+
         if (type == SlotType.Item && itemSO)
         {
             itemImage.enabled = true;

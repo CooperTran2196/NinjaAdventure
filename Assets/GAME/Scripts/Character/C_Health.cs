@@ -8,16 +8,11 @@ public class C_Health : MonoBehaviour
     C_Stats        c_Stats;
     P_State_Dodge  p_State_Dodge;
     C_FX           c_FX;
-    P_InputActions input;
     
     bool isPlayer; // Cache to determine which hit sound to play
 
     [Header("Allow Dodge/IFrames? (Only for Player)")]
     public bool useDodgeIFrames = true;
-
-    [Header("Debug Keys (N/B)")]
-    public int takingDamageAmount = 1;
-    public int healingAmount      = 1;
 
     public event Action<int> OnDamaged;
     public event Action<int> OnHealed;
@@ -45,9 +40,6 @@ public class C_Health : MonoBehaviour
 
     void OnEnable()
     {
-        input ??= new P_InputActions();
-        input.Debug.Enable();
-
         fxDamagedHandler = _ => c_FX.FlashOnDamaged();
         fxHealedHandler  = _ => c_FX.FlashOnHealed();
 
@@ -58,25 +50,8 @@ public class C_Health : MonoBehaviour
 
     void OnDisable()
     {
-        input.Debug.Disable();
-
         OnDamaged -= fxDamagedHandler;
         OnHealed  -= fxHealedHandler;
-    }
-
-    void OnDestroy()
-    {
-        input?.Dispose();
-    }
-
-    void Update()
-    {
-        // Debug keys
-        if (input.Debug.OnDamaged.WasPressedThisFrame())
-            ChangeHealth(-Mathf.Abs(takingDamageAmount));
-
-        if (input.Debug.OnHealed.WasPressedThisFrame())
-            ChangeHealth(Mathf.Abs(healingAmount));
     }
 
     // AD+AP combined calculation (armor/mres as % 0–100)

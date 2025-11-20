@@ -530,7 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::E_Controller
   detectionRange: 4
   attackRange: 1.2
-  attackStartBuffer: 0.2
+  attackStartBuffer: 0.4
   playerLayer:
     serializedVersion: 2
     m_Bits: 64

@@ -289,12 +289,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ENV_Destructible
   objectType: 2
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
+  weaponPrefab: {fileID: 0}
   dropSpread: 0.75
-  dropChance: 100
+  dropChance: 80
   numberOfDrops: 1
   lootTable:
   - item: {fileID: 11400000, guid: 3997a4bf7ee277748b1de2ec7ca67924, type: 2}
-    quantity: 1
+    weapon: {fileID: 0}
+    quantity: 3
+  - item: {fileID: 11400000, guid: 2444f233efa7f1e4f9df9a8c2e2df6a6, type: 2}
+    weapon: {fileID: 0}
+    quantity: 3
+  - item: {fileID: 11400000, guid: bc52df299ad6f4ab3b6ac88a977fb635, type: 2}
+    weapon: {fileID: 0}
+    quantity: 3
+  - item: {fileID: 11400000, guid: 19887ed582f364c48b88a72c7bbe3748, type: 2}
+    weapon: {fileID: 0}
+    quantity: 3
+  - item: {fileID: 11400000, guid: 8b71e3850953b974b9c8d78d51257d3c, type: 2}
+    weapon: {fileID: 0}
+    quantity: 3
 --- !u!1 &7624489429408253315
 GameObject:
   m_ObjectHideFlags: 0

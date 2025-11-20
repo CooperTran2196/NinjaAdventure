@@ -85,10 +85,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4642275767547935348, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: maxHP
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642275767547935348, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: currentHP
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5112124738406467692, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1781083973, guid: 2cd637046b5453f4882b6dc0fdf05981, type: 3}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: numberOfDrops
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[1].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 79266f5bfc918ca4481ad77a13899096, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[2].item
+      value: 
+      objectReference: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[3].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b71e3850953b974b9c8d78d51257d3c, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[4].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 19887ed582f364c48b88a72c7bbe3748, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[5].item
+      value: 
+      objectReference: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[0].quantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[1].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[2].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[3].quantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[4].quantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[5].quantity
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -151,10 +211,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4642275767547935348, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: maxHP
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642275767547935348, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: currentHP
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5112124738406467692, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -1413183103, guid: 2cd637046b5453f4882b6dc0fdf05981, type: 3}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: numberOfDrops
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[1].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 79266f5bfc918ca4481ad77a13899096, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[2].item
+      value: 
+      objectReference: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[3].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b71e3850953b974b9c8d78d51257d3c, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[4].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 19887ed582f364c48b88a72c7bbe3748, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[5].item
+      value: 
+      objectReference: {fileID: 11400000, guid: e953349de782ee04a9f09298229de1e7, type: 2}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[0].quantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[1].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[2].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[3].quantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[4].quantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795274649824501985, guid: 81e1f29789dbd493d8e3f2f20f408e8e, type: 3}
+      propertyPath: lootTable.Array.data[5].quantity
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -17,9 +17,6 @@ public class P_Exp : MonoBehaviour
     public int xpStep = 30;      // linear add per level
     public int skillPointsPerLevel = 2;
 
-    [Header("Debug")]
-    public int debugXPAmount = 20;
-
     public event Action<int>        OnLevelUp;
     public event Action<int,int>    OnXPChanged;
     public event Action<int>        OnSPChanged;
@@ -33,11 +30,6 @@ public class P_Exp : MonoBehaviour
     {
         // Track total time played
         playTime += Time.deltaTime;
-    }
-
-    public void AddDebugXP()
-    {
-        AddXP(debugXPAmount);
     }
 
     // Called by enemies when they die

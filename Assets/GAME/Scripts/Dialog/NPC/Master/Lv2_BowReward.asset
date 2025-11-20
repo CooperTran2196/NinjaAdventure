@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::D_SO
   lines:
   - speaker: {fileID: 11400000, guid: bfc0383368b7498478d8f7de6152c7f0, type: 2}
-    text: "You\u2019ve been through a tough battle, my student. Rest a moment, your
+    text: "You\u2019ve been through a tough battle, young man. Rest a moment, your
       wounds are deep."
   - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
     text: "Thank you, Master\u2026 but I can\u2019t stay. The princess still needs

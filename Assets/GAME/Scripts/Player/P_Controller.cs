@@ -36,9 +36,6 @@ public class P_Controller : MonoBehaviour
     public W_Base meleeWeapon;
     public W_Base rangedWeapon;
 
-    [Header("Debug")]
-    public bool autoKill;
-
     // Events for weapon UI updates
     public static event System.Action<W_SO> OnMeleeWeaponChanged;
     public static event System.Action<W_SO> OnRangedWeaponChanged;
@@ -126,8 +123,6 @@ public class P_Controller : MonoBehaviour
         
         if (attackCooldown > 0f) attackCooldown -= Time.deltaTime;
         if (dodgeCooldown > 0f)  dodgeCooldown  -= Time.deltaTime;
-
-        if (autoKill) { autoKill = false; c_Health.ChangeHealth(-c_Stats.maxHP); }
 
         ProcessInputs();
     }

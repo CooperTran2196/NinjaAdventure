@@ -11,9 +11,18 @@ public class IntroUI : MonoBehaviour
     [SerializeField] private P_Exp       p_Exp;
     [SerializeField] private INV_Manager inv_Manager;
 
+    static bool hasShown = false;
+
     void Awake()
     {
         cg ??= GetComponent<CanvasGroup>();
+        
+        // If already shown, disable this GameObject
+        if (hasShown)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
     }
 
     void OnEnable()
@@ -42,6 +51,9 @@ public class IntroUI : MonoBehaviour
         Time.timeScale    = 1f;
         cg.interactable   = false;
         cg.blocksRaycasts = false;
-        Destroy(gameObject);
+        
+        // Mark as shown and disable
+        hasShown = true;
+        gameObject.SetActive(false);
     }
 }

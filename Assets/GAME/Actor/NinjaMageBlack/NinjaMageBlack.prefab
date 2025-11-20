@@ -660,8 +660,8 @@ MonoBehaviour:
   AD: 0
   AP: 0
   MS: 2.5
-  maxHP: 120
-  currentHP: 120
+  maxHP: 150
+  currentHP: 150
   AR: 0
   MR: 0
   maxMP: 0
@@ -708,13 +708,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6f2d6692c908b43b82c48afb8fe156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Controller
-  detectionRange: 8
-  attackRange: 7
-  attackStartBuffer: 0.2
+  detectionRange: 16
+  attackRange: 12
+  attackStartBuffer: 0.5
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  defaultState: 1
+  defaultState: 0
   currentState: 0
 --- !u!114 &6402243215649648544
 MonoBehaviour:
@@ -801,7 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614421f8b058a44fab3b45aed901f6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Reward
-  expReward: 120
+  expReward: 60
   lootPrefab: {fileID: 1398600283293249095, guid: 7a0d7a1ea6e06ba4f8fa60d606726dd7, type: 3}
   weaponPrefab: {fileID: 0}
   dropSpread: 0.75
