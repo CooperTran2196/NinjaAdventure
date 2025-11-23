@@ -105,12 +105,16 @@ public class State_Talk : MonoBehaviour
 
     void CheckForNewDialog()
     {
+        Debug.Log($"[State_Talk] {name}: Checking {dialogs.Count} dialog(s) for valid conditions");
+        
         // scanning from start (your current priority order)
         for (int i = 0; i < dialogs.Count; i++)
         {
             var dialog = dialogs[i];
             if (dialog != null && dialog.IsConditionMet())
             {
+                Debug.Log($"[State_Talk] {name}: Selected dialog [{i}]: {dialog.name} (removeAfterPlay: {dialog.removeAfterPlay})");
+                
                 // Promote to current
                 currentDialog = dialog;
 
@@ -120,7 +124,10 @@ public class State_Talk : MonoBehaviour
                     for (int r = dialogs.Count - 1; r >= 0; r--)
                     {
                         if (dialogs[r] != null && dialog.removeTheseOnPlay.Contains(dialogs[r]))
+                        {
+                            Debug.Log($"[State_Talk] {name}: Removing obsolete dialog: {dialogs[r].name}");
                             dialogs.RemoveAt(r);
+                        }
                     }
                 }
 
@@ -129,12 +136,22 @@ public class State_Talk : MonoBehaviour
                 {
                     // find current index again safely (list may have shifted)
                     int idx = dialogs.IndexOf(dialog);
-                    if (idx >= 0) dialogs.RemoveAt(idx);
+                    if (idx >= 0)
+                    {
+                        Debug.Log($"[State_Talk] {name}: Removing one-time dialog: {dialog.name}");
+                        dialogs.RemoveAt(idx);
+                    }
                 }
 
                 break; // stop at first valid
             }
+            else
+            {
+                Debug.Log($"[State_Talk] {name}: Dialog [{i}] {(dialog ? dialog.name : "null")} - conditions NOT met or null");
+            }
         }
+        
+        Debug.Log($"[State_Talk] {name}: After check, {dialogs.Count} dialog(s) remaining");
     }
 
     // API for controller

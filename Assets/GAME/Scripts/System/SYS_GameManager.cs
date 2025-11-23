@@ -68,6 +68,8 @@ public class SYS_GameManager : MonoBehaviour
         sys_Fader        ??= FindFirstObjectByType<SYS_Fader>();
         sys_SoundManager ??= FindFirstObjectByType<SYS_SoundManager>();
         inv_ItemInfo     ??= FindFirstObjectByType<INV_ItemInfo>();
+        inv_Manager      ??= FindFirstObjectByType<INV_Manager>();
+        p_Exp            ??= FindFirstObjectByType<P_Exp>();
         endingUI         ??= FindFirstObjectByType<EndingUI>();
         musicSource      ??= GetComponent<AudioSource>();
 
@@ -77,6 +79,8 @@ public class SYS_GameManager : MonoBehaviour
         if (!sys_Fader)        { Debug.LogWarning($"{name}: SYS_Fader is missing!", this); }
         if (!sys_SoundManager) { Debug.LogWarning($"{name}: SYS_SoundManager is missing!", this); }
         if (!inv_ItemInfo)     { Debug.LogWarning($"{name}: INV_ItemInfo is missing!", this); }
+        if (!inv_Manager)      { Debug.LogWarning($"{name}: INV_Manager is missing!", this); }
+        if (!p_Exp)            { Debug.LogWarning($"{name}: P_Exp is missing!", this); }
         
         inv_ItemInfo?.Hide();
 

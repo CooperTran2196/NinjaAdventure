@@ -120,7 +120,21 @@ public class D_Manager : MonoBehaviour
     void GrantAutoRewards(D_SO dialog)
     {
         var rewards = dialog.autoRewards;
-        if (rewards == null || rewards.Length == 0) return;
+        if (rewards == null || rewards.Length == 0)
+        {
+            Debug.Log($"[D_Manager] No autoRewards for dialog: {dialog.name}");
+            return;
+        }
+
+        Debug.Log($"[D_Manager] Granting {rewards.Length} autoReward(s) from dialog: {dialog.name}");
+
+        // Get INV_Manager through GameManager for proper scene lifecycle handling
+        var inv_Manager = SYS_GameManager.Instance.inv_Manager;
+        if (!inv_Manager)
+        {
+            Debug.LogError($"[D_Manager] INV_Manager not found in GameManager! Cannot grant rewards.");
+            return;
+        }
 
         // Grant each reward
         for (int i = 0; i < rewards.Length; i++)
@@ -130,12 +144,15 @@ public class D_Manager : MonoBehaviour
             // Grant weapon if specified
             if (reward.weaponSO != null)
             {
-                INV_Manager.Instance.AddWeapon(reward.weaponSO);
+                Debug.Log($"[D_Manager] Granting weapon: {reward.weaponSO.id}");
+                bool success = inv_Manager.AddWeapon(reward.weaponSO);
+                Debug.Log($"[D_Manager] Weapon grant {(success ? "SUCCESS" : "FAILED - inventory full")}");
             }
             // Otherwise grant item if specified
             else if (reward.itemSO != null)
             {
-                INV_Manager.Instance.AddItem(reward.itemSO, reward.quantity);
+                Debug.Log($"[D_Manager] Granting item: {reward.itemSO.itemName} x{reward.quantity}");
+                inv_Manager.AddItem(reward.itemSO, reward.quantity);
             }
         }
     }

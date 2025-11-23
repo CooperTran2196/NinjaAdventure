@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8241be2c4c8ad9947826ddefb0d67fe5, type: 3}
+  m_Name: GRS_Weapon
+  m_EditorClassIdentifier: Assembly-CSharp::W_SO
+  id: GRS_weapon
+  description: 
+  type: 0
+  sprite: {fileID: 0}
+  image: {fileID: 0}
+  offsetRadius: 0.7
+  AD: 0
+  AP: 0
+  knockbackForce: 13
+  thrustDistance: 0.61
+  maxAttackSpeed: 0
+  onlyThrustKnocksBack: 0
+  slashArcDegrees: 45
+  comboShowTimes:
+  - 0.45
+  - 0.45
+  - 0.45
+  comboDamageMultipliers:
+  - 1
+  - 1
+  - 1
+  comboMovePenalties:
+  - 0
+  - 0
+  - 0
+  comboStunTimes:
+  - 0.5
+  - 0.5
+  - 0.5
+  showTime: 1
+  attackMovePenalty: 1
+  projectilePrefab: {fileID: 0}
+  manaCost: 0
+  projectileSpeed: 0
+  projectileLifetime: 0
+  stickOnHit: 0
+  pierceCount: 0

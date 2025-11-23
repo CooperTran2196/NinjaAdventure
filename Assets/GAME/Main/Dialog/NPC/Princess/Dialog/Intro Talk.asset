@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b056e8d044f5479fabac478497adc46, type: 3}
+  m_Name: Intro Talk
+  m_EditorClassIdentifier: Assembly-CSharp::D_SO
+  lines:
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: You did well to come here.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: It's been too long since the last time we met.
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: I've come here to free you
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: Do you remember that night at ...?
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: I don't remember it, my lord.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "I see. We\u2019ll speak of it later."
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "We must flee the Castle. There\u2019s a secret passage beneath the moat
+      - find it, then signal me with your reed whistle."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: Understood.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: "Also, you\u2019re hurt- take this and mend yourself. Also take my blade
+      with you, you will need it."
+  - speaker: {fileID: 11400000, guid: c4e365a1811d4794593d4227e6696ec5, type: 2}
+    text: My honor.
+  - speaker: {fileID: 11400000, guid: 4efdf44daacd3465e933adafb6a561e1, type: 2}
+    text: Go unseen.
+  optionList: []
+  requiredNPCs: []
+  requiredLocations: []
+  requiredItems: []
+  autoRewards:
+  - itemSO: {fileID: 11400000, guid: e9968a7dee72d9d46986e31fe65dbec8, type: 2}
+    weaponSO: {fileID: 0}
+    quantity: 1
+  - itemSO: {fileID: 0}
+    weaponSO: {fileID: 11400000, guid: 75144ae3672c14dacb8aa402fee99de1, type: 2}
+    quantity: 1
+  removeAfterPlay: 1
+  removeTheseOnPlay: []
