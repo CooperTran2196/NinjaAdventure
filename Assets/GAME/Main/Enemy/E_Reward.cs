@@ -102,7 +102,11 @@ public class E_Reward : MonoBehaviour
             if (weaponPrefab == null) return;
             GameObject lootGO = Instantiate(weaponPrefab, spawnPos, Quaternion.identity);
             INV_Loot loot = lootGO.GetComponent<INV_Loot>();
-            loot?.InitializeWeapon(lootDrop.weapon);
+            if (loot != null)
+            {
+                // InitializeWeapon already has 1.5f delay to ensure stable spawn before pickup
+                loot.InitializeWeapon(lootDrop.weapon);
+            }
         }
         // Otherwise spawn item if specified
         else if (lootDrop.item != null)
@@ -110,7 +114,11 @@ public class E_Reward : MonoBehaviour
             if (lootPrefab == null) return;
             GameObject lootGO = Instantiate(lootPrefab, spawnPos, Quaternion.identity);
             INV_Loot loot = lootGO.GetComponent<INV_Loot>();
-            loot?.Initialize(lootDrop.item, lootDrop.quantity);
+            if (loot != null)
+            {
+                // Initialize already has 1.5f delay to ensure stable spawn before pickup
+                loot.Initialize(lootDrop.item, lootDrop.quantity);
+            }
         }
     }
 }

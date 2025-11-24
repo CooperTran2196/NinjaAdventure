@@ -49,7 +49,7 @@ public class INV_Loot : MonoBehaviour
         
         RefreshAppearance();
         anim.SetTrigger("Drop");
-        StartCoroutine(EnablePickupAfterDelay(1f));
+        StartCoroutine(EnablePickupAfterDelay(1.5f)); // Longer delay to ensure stable spawn
     }
 
     // Called by INV_Manager when dropping weapons
@@ -62,7 +62,7 @@ public class INV_Loot : MonoBehaviour
         
         RefreshAppearance();
         anim.SetTrigger("Drop");
-        StartCoroutine(EnablePickupAfterDelay(1f));
+        StartCoroutine(EnablePickupAfterDelay(1.5f)); // Longer delay to ensure stable spawn
     }
 
     // Update sprite and name based on loot type
@@ -90,27 +90,21 @@ public class INV_Loot : MonoBehaviour
         // Handle based on loot type
         if (lootType == LootType.Item)
         {
+            // Add to inventory FIRST before destroying
             OnItemLooted?.Invoke(itemSO, quantity);
+            
+            // Play animation and destroy after ensuring pickup
             anim.SetTrigger("Pickup");
-            Destroy(gameObject, 0.5f); // MUST Match animation length
+            Destroy(gameObject, 0.7f); // Destroy after animation completes
         }
         else // Weapon
         {
-            // Try to add weapon to inventory
-            bool success = INV_Manager.Instance?.AddWeapon(weaponSO) ?? false;
+            // Fire event to add weapon to inventory (same pattern as items)
+            OnWeaponLooted?.Invoke(weaponSO);
             
-            if (success)
-            {
-                OnWeaponLooted?.Invoke(weaponSO);
-                anim.SetTrigger("Pickup");
-                Destroy(gameObject, 0.5f); // MUST Match animation length
-            }
-            else
-            {
-                // Inventory full - re-enable trigger so player can try again later
-                Debug.Log($"Inventory full! Cannot pick up {weaponSO.id}");
-                trigger.enabled = true;
-            }
+            // Play animation and destroy after ensuring pickup
+            anim.SetTrigger("Pickup");
+            Destroy(gameObject, 0.7f); // Destroy after animation completes
         }
     }
 

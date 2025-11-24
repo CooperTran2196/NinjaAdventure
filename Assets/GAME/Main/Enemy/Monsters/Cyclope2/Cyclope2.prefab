@@ -277,7 +277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eaee5f8cce64384b9deb09b8ca7311b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_Health
-  isFinalBoss: 0
   useDodgeIFrames: 0
 --- !u!114 &6829872320789771588
 MonoBehaviour:
@@ -291,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6f2d6692c908b43b82c48afb8fe156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::E_Controller
-  detectionRange: 4
+  detectionRange: 7
   attackRange: 0
   attackStartBuffer: 0.2
   playerLayer:

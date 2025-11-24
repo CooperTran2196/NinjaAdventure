@@ -19,9 +19,6 @@ MonoBehaviour:
   requiredNPCs: []
   requiredLocations: []
   requiredItems: []
-  autoRewards:
-  - itemSO: {fileID: 0}
-    weaponSO: {fileID: 11400000, guid: f2d439dbd28434396981bfe103023ad4, type: 2}
-    quantity: 1
+  autoRewards: []
   removeAfterPlay: 1
   removeTheseOnPlay: []

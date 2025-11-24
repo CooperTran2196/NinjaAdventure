@@ -36,8 +36,17 @@ public class INV_Manager : MonoBehaviour
         }
     }
 
-    void OnEnable()  => INV_Loot.OnItemLooted += AddItem;
-    void OnDisable() => INV_Loot.OnItemLooted -= AddItem;
+    void OnEnable()
+    {
+        INV_Loot.OnItemLooted   += AddItem;
+        INV_Loot.OnWeaponLooted += AddWeapon;
+    }
+    
+    void OnDisable()
+    {
+        INV_Loot.OnItemLooted   -= AddItem;
+        INV_Loot.OnWeaponLooted -= AddWeapon;
+    }
 
     // Update all slots & gold text at start
     void Start()
@@ -165,9 +174,15 @@ public class INV_Manager : MonoBehaviour
         slot.UpdateUI();
     }
 
-    // Add weapon to first empty inventory slot
-    public bool AddWeapon(W_SO weaponSO)
+    // Add weapon to first empty inventory slot (called via event or directly)
+    public void AddWeapon(W_SO weaponSO)
     {
+        if (!weaponSO)
+        {
+            Debug.LogWarning("INV_Manager: Attempted to add null weapon!");
+            return;
+        }
+
         foreach (INV_Slots slot in inv_Slots)
         {
             if (slot.type == INV_Slots.SlotType.Empty)
@@ -179,12 +194,13 @@ public class INV_Manager : MonoBehaviour
                 // Play weapon pickup sound
                 SYS_GameManager.Instance.sys_SoundManager.PlayItemPickup(2); // Tier 2 for weapons
                 
-                return true;
+                return;
             }
         }
 
-        Debug.Log($"Inventory full! Cannot add weapon: {weaponSO.id}");
-        return false;
+        // Inventory full - drop weapon at player position as overflow
+        Debug.Log($"Inventory full! Dropping weapon: {weaponSO.id}");
+        DropWeapon(weaponSO);
     }
 
     // Drop weapon as loot at player position

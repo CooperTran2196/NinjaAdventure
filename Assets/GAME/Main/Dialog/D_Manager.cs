@@ -145,8 +145,8 @@ public class D_Manager : MonoBehaviour
             if (reward.weaponSO != null)
             {
                 Debug.Log($"[D_Manager] Granting weapon: {reward.weaponSO.id}");
-                bool success = inv_Manager.AddWeapon(reward.weaponSO);
-                Debug.Log($"[D_Manager] Weapon grant {(success ? "SUCCESS" : "FAILED - inventory full")}");
+                inv_Manager.AddWeapon(reward.weaponSO);
+                // Note: If inventory full, weapon will be dropped at player position automatically
             }
             // Otherwise grant item if specified
             else if (reward.itemSO != null)
