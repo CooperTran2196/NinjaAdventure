@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Crunchy treat with a cryptic tip inside.
   image: {fileID: 21300000, guid: cf4fa894aa1eba046a58478a362f8275, type: 3}
   stackSize: 10
-  price: 5
+  price: 7
   itemTier: 1
   isGold: 0
   unlocksSkill: 0

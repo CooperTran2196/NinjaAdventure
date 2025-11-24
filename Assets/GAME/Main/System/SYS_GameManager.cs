@@ -49,6 +49,12 @@ public class SYS_GameManager : MonoBehaviour
 
     Coroutine currentMusicFade;
 
+    [Header("Tutorial Death Zone (set in Level1 only)")]
+    [Tooltip("Assign a trigger Collider2D for tutorial zone. When player enters it, next death transitions to Level2.")]
+    public Collider2D tutorialZoneTrigger;
+    
+    bool isPlayerInTutorialZone = false;
+
     void Awake()
     {
         // If an instance already exists, destroy this one
@@ -117,10 +123,16 @@ public class SYS_GameManager : MonoBehaviour
     {
         if (hasResurrection)
             StartCoroutine(ResurrectionSequence(player));
-        else if (player.isInTutorialZone)
+        else if (isPlayerInTutorialZone)
             StartCoroutine(TutorialDeathSequence(player));
         else
             StartCoroutine(NormalDeathSequence());
+    }
+    
+    // Called by tutorial zone trigger when player enters/exits
+    public void SetPlayerInTutorialZone(bool inZone)
+    {
+        isPlayerInTutorialZone = inZone;
     }
     
     IEnumerator ResurrectionSequence(P_Controller player)

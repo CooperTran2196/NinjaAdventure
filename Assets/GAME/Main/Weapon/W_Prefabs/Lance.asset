@@ -38,9 +38,9 @@ MonoBehaviour:
   - 0.5
   - 0.2
   comboStunTimes:
+  - 0.5
+  - 0.5
   - 1
-  - 1
-  - 1.5
   showTime: 0.45
   attackMovePenalty: 1
   projectilePrefab: {fileID: 0}

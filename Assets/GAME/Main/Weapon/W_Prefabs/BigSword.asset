@@ -20,15 +20,15 @@ MonoBehaviour:
   offsetRadius: 0.45
   AD: 0
   AP: 0
-  knockbackForce: 4
+  knockbackForce: 5
   thrustDistance: 0.5
-  maxAttackSpeed: -5
+  maxAttackSpeed: -6
   onlyThrustKnocksBack: 0
   slashArcDegrees: 90
   comboShowTimes:
-  - 0.45
-  - 0.45
-  - 0.4
+  - 0.5
+  - 0.5
+  - 0.6
   comboDamageMultipliers:
   - 1.2
   - 1.5
@@ -38,9 +38,9 @@ MonoBehaviour:
   - 0.4
   - 0.2
   comboStunTimes:
+  - 0.5
+  - 0.5
   - 1
-  - 1
-  - 1.5
   showTime: 0.32
   attackMovePenalty: 1
   projectilePrefab: {fileID: 0}

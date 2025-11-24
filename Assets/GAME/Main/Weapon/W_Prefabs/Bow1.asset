@@ -44,7 +44,7 @@ MonoBehaviour:
   showTime: 0.3
   attackMovePenalty: 1
   projectilePrefab: {fileID: 21886594188181845, guid: ef9fa45681caa4e7992c49d5990cfa7d, type: 3}
-  manaCost: 5
+  manaCost: 8
   projectileSpeed: 8
   projectileLifetime: 5
   stickOnHit: 3

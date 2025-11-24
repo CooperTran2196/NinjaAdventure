@@ -9,6 +9,8 @@ TagManager:
   - UI
   - NPC
   - Confiner
+  - Tuto
+  - EndingUI
   layers:
   - Default
   - TransparentFX

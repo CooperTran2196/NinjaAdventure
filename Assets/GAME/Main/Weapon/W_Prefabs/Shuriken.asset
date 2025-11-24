@@ -23,7 +23,7 @@ MonoBehaviour:
   knockbackForce: 5
   thrustDistance: 0.25
   maxAttackSpeed: 0
-  onlyThrustKnocksBack: 0
+  onlyThrustKnocksBack: 1
   slashArcDegrees: 45
   comboShowTimes:
   - 0.45
@@ -44,8 +44,8 @@ MonoBehaviour:
   showTime: 0.1
   attackMovePenalty: 0.5
   projectilePrefab: {fileID: 21886594188181845, guid: 43f853e670c38934097728e89c117650, type: 3}
-  manaCost: 10
-  projectileSpeed: 10
+  manaCost: 14
+  projectileSpeed: 8
   projectileLifetime: 1.5
   stickOnHit: 3
   pierceCount: 0

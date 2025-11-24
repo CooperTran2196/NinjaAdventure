@@ -103,7 +103,7 @@ public class INV_Loot : MonoBehaviour
             {
                 OnWeaponLooted?.Invoke(weaponSO);
                 anim.SetTrigger("Pickup");
-                Destroy(gameObject, 0.5f);
+                Destroy(gameObject, 0.5f); // MUST Match animation length
             }
             else
             {

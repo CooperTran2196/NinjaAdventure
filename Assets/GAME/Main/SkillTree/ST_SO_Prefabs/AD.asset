@@ -18,6 +18,6 @@ MonoBehaviour:
   maxLevel: 5
   StatEffectList:
   - statName: 0
-    Value: 5
+    Value: 3
     Duration: 0
     IsOverTime: 0

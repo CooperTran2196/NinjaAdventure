@@ -223,13 +223,13 @@ public abstract class W_Base : MonoBehaviour
 
         int dealtDamage = targetHealth.ApplyDamage(attackerAD, attackerAP, weaponAD, weaponAP, attackerArmorPen, attackerMagicPen);
 
-        // Lifesteal: heal attacker based on damage dealt
+        // Lifesteal: heal attacker based on damage dealt (lifesteal is in %, so 1 = 1%)
         if (dealtDamage > 0 && attackerStats.lifesteal > 0)
         {
             var attackerHealth = attackerStats.GetComponent<C_Health>();
             if (attackerHealth != null)
             {
-                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifesteal);
+                int healAmount = Mathf.RoundToInt(dealtDamage * attackerStats.lifesteal / 100f);
                 if (healAmount > 0)
                 {
                     attackerHealth.ChangeHealth(healAmount);

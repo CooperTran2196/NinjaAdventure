@@ -106,8 +106,32 @@ public class GRS_Controller : MonoBehaviour, I_Controller
         
         // Wait for fade to complete
         yield return new WaitForSeconds(c_FX.deathFadeTime);
+        
+        // Trigger victory screen (final boss defeated)
+        TriggerVictoryScreen();
 
         Destroy(gameObject);
+    }
+    
+    void TriggerVictoryScreen()
+    {
+        var endingUIObj = GameObject.FindGameObjectWithTag("EndingUI");
+        if (endingUIObj != null)
+        {
+            var endingUI = endingUIObj.GetComponent<EndingUI>();
+            if (endingUI != null)
+            {
+                endingUI.Show(true); // true = victory
+            }
+            else
+            {
+                Debug.LogError("GRS_Controller: EndingUI component not found on tagged object!");
+            }
+        }
+        else
+        {
+            Debug.LogError("GRS_Controller: No GameObject with tag 'EndingUI' found! Cannot show victory screen.");
+        }
     }
 
     // I_CONTROLLER

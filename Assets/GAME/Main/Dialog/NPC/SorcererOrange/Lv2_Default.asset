@@ -15,7 +15,7 @@ MonoBehaviour:
   lines:
   - speaker: {fileID: 11400000, guid: f4a44cd481f114e3cbdda4c8b6547d83, type: 2}
     text: I'm so glad that you made it to here. Please hurry, the princess is still
-      waiting for you!
+      waiting for you! (Press P to open/close the SHOP)
   optionList: []
   requiredNPCs: []
   requiredLocations: []

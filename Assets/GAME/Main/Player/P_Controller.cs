@@ -45,9 +45,6 @@ public class P_Controller : MonoBehaviour
     bool    isDead, isStunned, isAttacking, isDodging;
     float   stunUntil, attackCooldown, dodgeCooldown;
     
-    // Tutorial death zone tracking
-    public bool isInTutorialZone;
-    
     // Weapon system
     W_Base currentWeapon;
     W_SO   currentMeleeData;
@@ -375,17 +372,6 @@ public class P_Controller : MonoBehaviour
 
         // 6/ Restore sprite alpha
         c_FX.ResetAlpha();
-    }
-    
-    // Tutorial death zone tracking
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.GetComponent<TutorialDeathZone>()) isInTutorialZone = true;
-    }
-
-    void OnTriggerExit2D(Collider2D col)
-    { 
-        if (col.GetComponent<TutorialDeathZone>()) isInTutorialZone = false;
     }
     
     // LADDER SYSTEM

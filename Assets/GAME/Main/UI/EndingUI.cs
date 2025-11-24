@@ -18,7 +18,6 @@ public class EndingUI : MonoBehaviour
 
     [Header("End Triggers (optional)")]
     [SerializeField] private C_Health playerHealth;     // show Game Over on player death (with delay)
-    [SerializeField] private C_Health finalBossHealth;  // show Victory on boss death (no delay)
 
     [Header("Data")]
     [SerializeField] private P_Exp playerExp;
@@ -31,7 +30,7 @@ public class EndingUI : MonoBehaviour
         cg           ??= GetComponent<CanvasGroup>();
         replayButton ??= GetComponentInChildren<Button>(true);
         playerExp    ??= FindFirstObjectByType<P_Exp>();
-
+        
         var label = replayButton?.GetComponentInChildren<TMP_Text>(true);
         if (label) label.text = "Restart";
 
@@ -51,21 +50,14 @@ public class EndingUI : MonoBehaviour
         cg.alpha          = 0f;
         cg.interactable   = false;
         cg.blocksRaycasts = false;
-
-        // Only subscribe to boss death (player death handled by GameManager)
-        if (finalBossHealth) finalBossHealth.OnDied += OnBossDied;
     }
 
     void OnDisable()
     {
-        if (finalBossHealth) finalBossHealth.OnDied -= OnBossDied;
+        // Nothing to unsubscribe - boss death handled by GRS_Controller directly
     }
 
-
-
-    void OnBossDied() => Show(true);
-
-    // Called directly by GameManager (no delay, no event)
+    // Called directly by GRS_Controller (or GameManager for Game Over)
     public void Show(bool win)
     {
         if (shown) return;

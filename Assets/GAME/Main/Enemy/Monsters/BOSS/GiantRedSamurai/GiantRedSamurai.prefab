@@ -418,9 +418,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::C_Stats
   AD: 25
   AP: 0
-  MS: 2.5
-  maxHP: 2000
-  currentHP: 2000
+  MS: 3
+  maxHP: 2500
+  currentHP: 2500
   AR: 0
   MR: 0
   maxMP: 0

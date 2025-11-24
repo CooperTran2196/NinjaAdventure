@@ -8,7 +8,7 @@ public class C_Health : MonoBehaviour
     C_Stats        c_Stats;
     P_State_Dodge  p_State_Dodge;
     C_FX           c_FX;
-    
+
     bool isPlayer; // Cache to determine which hit sound to play
 
     [Header("Allow Dodge/IFrames? (Only for Player)")]
